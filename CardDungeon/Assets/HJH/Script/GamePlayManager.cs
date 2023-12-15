@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GamePlayManager : Singleton<GamePlayManager>
 {
+    public MainUI_HJH mainUi;
     public Player_HJH[] players;
     public int myIdx;
     public GameBoard_PCI gameBoard;
