@@ -13,6 +13,13 @@ MonoBehaviour:
   m_Name: Card Data
   m_EditorClassIdentifier: 
   cards:
+  - cardName: None
+    useMP: 0
+    cardType: {fileID: 0}
+    itemImage: {fileID: 0}
+    description: 
+    cardIdx: 0
+    enforceDescription: 
   - cardName: "\uC704\uB85C \uAE61\uCD1D"
     useMP: 0
     cardType: {fileID: 21300000, guid: f7f9f6a8ee85c91459fde09323579547, type: 3}
