@@ -11,7 +11,8 @@ public class GameBoard_PCI : MonoBehaviour
     private TileObject_PCI blockPrefab;
     [SerializeField]
     private const int width = 40, height = 40;
-    (int, int)[] offset = { (2, 2), (2, height/2), (2, height-2), (width/2, 2), (width/2, height-2), (width-2, 2), (width-2, height/2), (width-2, height-2) };
+    private const int padding = 4;
+    (int, int)[] offset = { (padding, padding), (padding, height/2), (padding, height- padding), (width/2, padding), (width/2, height- padding), (width- padding, padding), (width- padding, height/2), (width- padding, height- padding) };
 
     private Tile_PCI[,] board = new Tile_PCI[width,height];
 
@@ -58,6 +59,23 @@ public class GameBoard_PCI : MonoBehaviour
                 curPos = nextPos;
             }
         }
+        for (int i = 0; i < 8; i++)
+        {
+            (int, int) curPos = offset[i];
+            for (int x = -2; x <= 2; x++)
+            {
+                for (int y = -2; y <= 2; y++)
+                {
+                    if (Mathf.Abs(x + y) == 4) continue;
+                    try {
+                        tempBoard[curPos.Item1 + x, curPos.Item2 + y] = 1;
+                    }catch(Exception e)
+                    {
+                        Debug.Log(curPos);
+                    }
+                }
+            }
+        }
 
         // Render
         for (int i = 0; i < width; i++)
@@ -77,6 +95,36 @@ public class GameBoard_PCI : MonoBehaviour
 
     public bool IsPathable(Vector2Int target)
     {
+        return board[target.x, target.y].IsPahtable();
+    }
+
+    public bool IsDestructable(Vector2Int target)
+    {
+        foreach(var e in board[target.x, target.y].onTileObjects)
+        {
+            if (e.isDestructable) return true;
+        }
         return true;
+    }
+
+    public bool IsInteractable(Vector2Int target)
+    {
+        foreach(var e in board[target.x, target.y].onTileObjects)
+        {
+            if (e.isInteractable) return true;
+        }
+        return true;
+    }
+
+    public void Attack(Vector2Int target)
+    {
+        if (!IsDestructable(target)) return;
+        board[target.x, target.y].OnDamaged();
+    }
+
+    public void Interact(Vector2Int target)
+    {
+        if (!IsInteractable(target)) return;
+        board[target.x, target.y].OnInteracted();
     }
 }
