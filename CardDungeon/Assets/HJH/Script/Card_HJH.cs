@@ -24,7 +24,10 @@ public class Card_HJH : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
     {
         if (transform.position.y > 650)
         {
-            playerDeck.UseCard(handIdx);
+            if (!playerDeck.UseCard(handIdx))
+            {
+                transform.position = defaultPos;
+            }
         }
         else
         {

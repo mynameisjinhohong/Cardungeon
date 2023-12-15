@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Player_HJH : MonoBehaviour
 {
+    public int maxHp;
+    public int maxMp;
     int hp;
     public int HP
     {
@@ -14,6 +16,21 @@ public class Player_HJH : MonoBehaviour
         set
         {
             hp = value;
+            if (hp > maxHp)
+            {
+                hp = maxHp;
+            }
+            if(hp < 0)
+            {
+                if (myPlayer)
+                {
+                    GamePlayManager.Instance.GameOver();
+                }
+                else
+                {
+                    Destroy(gameObject);
+                }
+            }
         }
     }
 
@@ -42,14 +59,6 @@ public class Player_HJH : MonoBehaviour
     void Update()
     {
         
-    }
-
-    public void getDamage(int damage)
-    {
-        if(hp- damage > 0)
-        {
-
-        }
     }
 
 

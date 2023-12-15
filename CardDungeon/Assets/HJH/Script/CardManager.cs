@@ -9,7 +9,7 @@ public class CardManager : Singleton<CardManager>
     {
         switch (cardIdx)
         {
-            case 0:
+            case 1:
                 if (cardIdx < 0)
                 {
                     Idx0EnforceFunc(player);
@@ -19,7 +19,7 @@ public class CardManager : Singleton<CardManager>
                     Idx0Func(player);
                 }
                 break;
-            case 1:
+            case 2:
                 if (cardIdx < 0)
                 {
                     Idx1EnforceFunc(player);
@@ -29,7 +29,7 @@ public class CardManager : Singleton<CardManager>
                     Idx1Func(player);
                 }
                 break;
-            case 2:
+            case 3:
                 if (cardIdx < 0)
                 {
                     Idx2EnforceFunc(player);
@@ -39,7 +39,7 @@ public class CardManager : Singleton<CardManager>
                     Idx2Func(player);
                 }
                 break;
-            case 3:
+            case 4:
                 if (cardIdx < 0)
                 {
                     Idx3EnforceFunc(player);
@@ -58,42 +58,69 @@ public class CardManager : Singleton<CardManager>
     //플레이어 위로 1칸 이동
     void Idx0Func(Transform player)
     {
-        player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 1, player.transform.position.z);
+        if(GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x,(int)player.transform.position.y + 1)))
+        {
+            player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 1, player.transform.position.z);
+        }
     }
     //플레이어 위로 2칸 이동
     void Idx0EnforceFunc(Transform player)
     {
-        player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 2, player.transform.position.z);
+        if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y + 2)))
+        {
+            player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 2, player.transform.position.z);
+
+        }
     }
     //플레이어 오른쪽으로 1칸 이동
     void Idx1Func(Transform player)
     {
-        player.transform.position = new Vector3(player.transform.position.x + 1, player.transform.position.y, player.transform.position.z);
+        if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x+1, (int)player.transform.position.y)))
+        {
+            player.transform.position = new Vector3(player.transform.position.x + 1, player.transform.position.y, player.transform.position.z);
+
+        }
     }
     //플레이어 오른쪽으로 2칸 이동
     void Idx1EnforceFunc(Transform player)
     {
-        player.transform.position = new Vector3(player.transform.position.x + 2, player.transform.position.y, player.transform.position.z);
+        if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x + 2, (int)player.transform.position.y)))
+        {
+            player.transform.position = new Vector3(player.transform.position.x + 2, player.transform.position.y, player.transform.position.z);
+
+        }
     }
     //플레이어 왼쪽으로 1칸 이동
     void Idx2Func(Transform player)
     {
-        player.transform.position = new Vector3(player.transform.position.x - 1, player.transform.position.y, player.transform.position.z);
+        if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x -1 , (int)player.transform.position.y)))
+        {
+            player.transform.position = new Vector3(player.transform.position.x - 1, player.transform.position.y, player.transform.position.z);
+        }
     }
     //플레이어 왼쪽으로 2칸 이동
     void Idx2EnforceFunc(Transform player)
     {
-        player.transform.position = new Vector3(player.transform.position.x - 2, player.transform.position.y, player.transform.position.z);
+        if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x - 2, (int)player.transform.position.y)))
+        {
+            player.transform.position = new Vector3(player.transform.position.x - 2, player.transform.position.y, player.transform.position.z);
+        }
     }
     //플레이어 아래로 1칸 이동
     void Idx3Func(Transform player)
     {
-        player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y - 1, player.transform.position.z);
+        if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y - 1)))
+        {
+            player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y - 1, player.transform.position.z);
+        }
     }
     //플레이어 아래로 2칸 이동
     void Idx3EnforceFunc(Transform player)
     {
-        player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y - 2, player.transform.position.z);
+        if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y - 2)))
+        {
+            player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y - 2, player.transform.position.z);
+        }
     }
 
 }

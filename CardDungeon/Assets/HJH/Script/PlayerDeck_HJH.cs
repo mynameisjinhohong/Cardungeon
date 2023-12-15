@@ -118,13 +118,23 @@ public class PlayerDeck_HJH : MonoBehaviour
         DrawFirst();
     }
 
-    public void UseCard(int handIdx)
+    public bool UseCard(int handIdx)
     {
         int a = hand[handIdx];
-        GamePlayManager.Instance.CardGo(a);
-        hand.RemoveAt(handIdx);
-        trash.Add(a);
-        HandVisible();
+        if (GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].Mp >= CardManager.Instance.cardList.cards[a].useMP)
+        {
+            GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].Mp -= CardManager.Instance.cardList.cards[a].useMP;
+            GamePlayManager.Instance.CardGo(GamePlayManager.Instance.myIdx, a);
+            hand.RemoveAt(handIdx);
+            trash.Add(a);
+            HandVisible();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
     }
 
     public void TrashToDeck()
