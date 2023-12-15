@@ -126,15 +126,15 @@ public class GameBoard_PCI : MonoBehaviour
         return true;
     }
 
-    public void Attack(Vector2Int target)
+    public void Attack(Vector2Int target, Player_HJH player)
     {
         if (!IsDestructable(target)) return;
-        board[target.x, target.y].OnDamaged();
+        board[target.x, target.y].OnDamaged(player);
     }
 
-    public void Interact(Vector2Int target)
+    public void Interact(Vector2Int target, Player_HJH player)
     {
         if (!IsInteractable(target)) return;
-        board[target.x, target.y].OnInteracted();
+        board[target.x, target.y].OnInteracted(player);
     }
 }

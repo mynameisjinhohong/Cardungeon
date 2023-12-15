@@ -20,24 +20,25 @@ public class Tile_PCI : MonoBehaviour
         return true;
     }
 
-    public void OnDamaged()
+    public void OnDamaged(Player_HJH player)
     {
         foreach(var e in onTileObjects)
         {
             if (e.isDestructable)
             {
-                e.OnDamaged();
+                onTileObjects.Remove(e);
+                e.OnDamaged(player);
             }
         }
     }
 
-    public void OnInteracted()
+    public void OnInteracted(Player_HJH player)
     {
         foreach(var e in onTileObjects)
         {
             if (e.isInteractable)
             {
-                e.OnInteracted();
+                e.OnInteracted(player);
             }
         }
     }

@@ -7,11 +7,11 @@ public class TileObject_PCI : MonoBehaviour
     public bool isPathable;
     public bool isDestructable;
     public bool isInteractable;
-    public virtual void OnDamaged()
+    public virtual void OnDamaged(Player_HJH player)
     {
         Debug.Log($"Object Damaged : {gameObject.name}");
     }
-    public virtual void OnInteracted()
+    public virtual void OnInteracted(Player_HJH player)
     {
         Debug.Log($"Object Interacting : {gameObject.name}");
     }
