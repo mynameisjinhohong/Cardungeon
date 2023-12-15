@@ -15,7 +15,7 @@ public class Tile_PCI : MonoBehaviour
     {
         foreach (var e in onTileObjects)
         {
-            if (e.isPathable) return false;
+            if (!e.isPathable) return false;
         }
         return true;
     }
@@ -28,6 +28,7 @@ public class Tile_PCI : MonoBehaviour
             {
                 onTileObjects.Remove(e);
                 e.OnDamaged(player);
+                break;
             }
         }
     }
@@ -39,6 +40,7 @@ public class Tile_PCI : MonoBehaviour
             if (e.isInteractable)
             {
                 e.OnInteracted(player);
+                break;
             }
         }
     }

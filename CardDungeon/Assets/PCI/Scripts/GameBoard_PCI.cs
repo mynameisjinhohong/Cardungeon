@@ -10,6 +10,10 @@ public class GameBoard_PCI : MonoBehaviour
     [SerializeField]
     private TileObject_PCI blockPrefab;
     [SerializeField]
+    private Item_PCI itemPrefab;
+    [SerializeField]
+    private ItemDataList_PCI itemList;
+    [SerializeField]
     private const int width = 40, height = 40;
     private const int padding = 4;
     (int, int)[] offset = { (padding, padding), (padding, height/2), (padding, height- padding), (width/2, padding), (width/2, height- padding), (width- padding, padding), (width- padding, height/2), (width- padding, height- padding) };
@@ -86,8 +90,14 @@ public class GameBoard_PCI : MonoBehaviour
                 board[i, j] = newTile;
                 if(tempBoard[i, j] == 0)
                 {
-                    var newTileObject = Instantiate(blockPrefab, new Vector3(i, j, 0), Quaternion.identity, newTile.gameObject.transform);
+                    var newTileObject = Instantiate(blockPrefab, new Vector3(i, j, 0), Quaternion.identity, newTile.transform);
                     newTile.AddTileObject(newTileObject);
+                }
+                float rand = UnityEngine.Random.Range(0f, 1f);
+                if(rand < 0.03f)
+                {
+                    var newItemObject = Instantiate(itemPrefab, new Vector3(i, j, 0), Quaternion.identity, newTile.transform);
+                    newItemObject.SetData(itemList.itemDataList[0]);
                 }
             }
         }

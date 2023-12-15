@@ -5,16 +5,12 @@ using UnityEngine;
 public class Item_PCI : TileObject_PCI
 {
     ItemData_PCI _data;
+    public Sprite sprite;
 
-    private void Start()
-    {
-        isPathable = true;
-        isDestructable = false;
-        isInteractable = true;
-    }
     public void SetData(ItemData_PCI data)
     {
         _data = data;
+        //sprite = data.image;
     }
 
     public override void OnInteracted(Player_HJH player)
