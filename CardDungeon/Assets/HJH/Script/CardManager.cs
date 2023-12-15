@@ -5,6 +5,7 @@ using UnityEngine;
 public class CardManager : MonoBehaviour
 {
     public static CardManager instance;
+    public CardObject_HJH cardList;
     public GameObject player;
     private void Awake()
     {
