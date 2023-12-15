@@ -1,62 +1,97 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class CardManager : MonoBehaviour
+public class CardManager : Singleton<CardManager>
 {
-    public static CardManager instance;
     public CardObject_HJH cardList;
-    public GameObject player;
-    private void Awake()
+
+
+    public void OnCardStart(Transform player, int cardIdx)
     {
-        if(instance == null)
+        switch (cardIdx)
         {
-            instance = this;
+            case 0:
+                if (cardIdx < 0)
+                {
+                    Idx0EnforceFunc(player);
+                }
+                else
+                {
+                    Idx0Func(player);
+                }
+                break;
+            case 1:
+                if (cardIdx < 0)
+                {
+                    Idx1EnforceFunc(player);
+                }
+                else
+                {
+                    Idx1Func(player);
+                }
+                break;
+            case 2:
+                if (cardIdx < 0)
+                {
+                    Idx2EnforceFunc(player);
+                }
+                else
+                {
+                    Idx2Func(player);
+                }
+                break;
+            case 3:
+                if (cardIdx < 0)
+                {
+                    Idx3EnforceFunc(player);
+                }
+                else
+                {
+                    Idx3Func(player);
+                }
+                break;
+
         }
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
+
     }
 
+
     //플레이어 위로 1칸 이동
-    public void Idx0Func()
+    void Idx0Func(Transform player)
     {
-        player.transform.position = new Vector3(player.transform.position.x,player.transform.position.y + 1,player.transform.position.z);
+        player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 1, player.transform.position.z);
     }
     //플레이어 위로 2칸 이동
-    public void Idx0EnforceFunc()
+    void Idx0EnforceFunc(Transform player)
     {
         player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 2, player.transform.position.z);
     }
     //플레이어 오른쪽으로 1칸 이동
-    public void Idx1Func()
+    void Idx1Func(Transform player)
     {
         player.transform.position = new Vector3(player.transform.position.x + 1, player.transform.position.y, player.transform.position.z);
     }
     //플레이어 오른쪽으로 2칸 이동
-    public void Idx1EnforceFunc()
+    void Idx1EnforceFunc(Transform player)
     {
         player.transform.position = new Vector3(player.transform.position.x + 2, player.transform.position.y, player.transform.position.z);
     }
     //플레이어 왼쪽으로 1칸 이동
-    public void Idx2Func()
+    void Idx2Func(Transform player)
     {
-        player.transform.position = new Vector3(player.transform.position.x -1, player.transform.position.y, player.transform.position.z);
+        player.transform.position = new Vector3(player.transform.position.x - 1, player.transform.position.y, player.transform.position.z);
     }
     //플레이어 왼쪽으로 2칸 이동
-    public void Idx2EnforceFunc()
+    void Idx2EnforceFunc(Transform player)
     {
-        player.transform.position = new Vector3(player.transform.position.x -2 , player.transform.position.y, player.transform.position.z);
+        player.transform.position = new Vector3(player.transform.position.x - 2, player.transform.position.y, player.transform.position.z);
     }
     //플레이어 아래로 1칸 이동
-    public void Idx3Func()
+    void Idx3Func(Transform player)
     {
         player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y - 1, player.transform.position.z);
     }
     //플레이어 아래로 2칸 이동
-    public void Idx3EnforceFunc()
+    void Idx3EnforceFunc(Transform player)
     {
         player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y - 2, player.transform.position.z);
     }

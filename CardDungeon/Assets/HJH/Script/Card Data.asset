@@ -12,4 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce03e9d2f49730246a089d0959c05db5, type: 3}
   m_Name: Card Data
   m_EditorClassIdentifier: 
-  cards: []
+  cards:
+  - cardName: 
+    useMP: 0
+    cardType: 0
+    itemImage: {fileID: 0}
+    description: 
+    cardIdx: 0
+    enforceDescription: 

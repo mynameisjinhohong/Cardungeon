@@ -1,9 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class PlayerDeck_HJH : MonoBehaviour
 {
+
+
     //카드의 idx를 가지고 있도록
     public List<int> deck;
     public List<int> trash;
@@ -24,7 +29,31 @@ public class PlayerDeck_HJH : MonoBehaviour
     {
         
     }
+    #region 덱 관리 관련 스크립트
+    public void HandVisible() //핸드 업데이트 해주는 함수
+    {
+        for(int i = 0; i<cards.Length; i++)
+        {
+            if(i < hand.Count)
+            {
+                GameObject card = cards[i];
+                card.SetActive(true);
+                card.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[hand[i]].cardType;
+                card.GetComponent<Card_HJH>().handIdx = i;
+                card.GetComponent<Card_HJH>().cardIdx = hand[i];
+                card.GetComponent<Card_HJH>().playerDeck = this;
+                card.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[hand[i]].cardName;
+                card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[hand[i]].useMP.ToString(); //나중에 변경
 
+            }
+            else
+            {
+                GameObject card = cards[i];
+                card.SetActive(false);
+            }
+
+        }
+    }
 
     public void SuffelDeck()
     {
@@ -55,6 +84,7 @@ public class PlayerDeck_HJH : MonoBehaviour
                 i--;
             }
         }
+        HandVisible();
     }
     public void DrawOne()
     {
@@ -73,12 +103,13 @@ public class PlayerDeck_HJH : MonoBehaviour
             SuffelDeck();
             DrawOne();
         }
-
+        HandVisible();
     }
 
     public void Reroll()
     {
-        for(int i =0; i< hand.Count; i++)
+        int hd = hand.Count;
+        for(int i =0; i< hd; i++)
         {
             int a = hand[0];
             hand.RemoveAt(0);
@@ -87,13 +118,25 @@ public class PlayerDeck_HJH : MonoBehaviour
         DrawFirst();
     }
 
+    public void UseCard(int handIdx)
+    {
+        int a = hand[handIdx];
+        GamePlayManager.Instance.CardGo(a);
+        hand.RemoveAt(handIdx);
+        trash.Add(a);
+        HandVisible();
+    }
+
     public void TrashToDeck()
     {
-        for(int i =0; i<trash.Count; i++)
+        int tr = trash.Count;
+        for(int i =0; i<tr; i++)
         {
             int a = trash[0];
             trash.RemoveAt(0);
             deck.Add(a);
         }
     }
+    #endregion
+
 }
