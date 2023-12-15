@@ -16,16 +16,15 @@ public class BackendManager : Singleton<BackendManager>
     public string Nickname   = string.Empty;
     public string UID        = string.Empty;
     
-    public bool LoadChartList = false;
-    public bool LoadChartDataFromServer = false;
     public bool LoadServerTime = false;
-    public bool LoadChartDataFromLocal = false;
 
     public int checkLoginWayData = -1;
     public bool isInitialize = false;
-    public int initTimeCount = 0;
+    private int initTimeCount = 0;
     
     public int SuccessLoadDataCount = 0;
+
+    public LoginSceneController_HSW loginSceneController;
 
     void Start()
     {
@@ -69,18 +68,31 @@ public class BackendManager : Singleton<BackendManager>
                 Debug.Log("Device Access Denied");
             };
             
-            if (Application.platform == RuntimePlatform.Android)
-            {
-                //CheckLastVersion();
-            }
+            StartCoroutine(nameof(Polling));
 
             isInitialize = true;
+            
+            CheckLoginWayData();
+
+            if (checkLoginWayData >= 0)
+            {
+                StartTokenLogin();
+            }
         }
         else
         {
             Debug.Log("Initialize Failed : " + bro);
         }
         
+    }
+    
+    public void CheckLoginWayData()
+    {
+        if (PlayerPrefs.HasKey("LoginWay"))
+        {
+            checkLoginWayData = PlayerPrefs.GetInt("LoginWay");
+        }
+        Debug.LogError(PlayerPrefs.HasKey("LoginWay") + checkLoginWayData.ToString());
     }
     
     public void GuestLoginSequense()
@@ -99,6 +111,15 @@ public class BackendManager : Singleton<BackendManager>
             Backend.ErrorHandler.Poll();
             yield return null;
         }
+    }
+    
+    public void StartTokenLogin()
+    {
+        Debug.Log("자동 로그인");
+        Backend.BMember.LoginWithTheBackendToken((callback) =>
+        {
+            StartCoroutine(LoginProcess(callback, LoginType.Auto));
+        });
     }
     
     private IEnumerator LoginProcess(BackendReturnObject bro, LoginType type)
@@ -148,6 +169,7 @@ public class BackendManager : Singleton<BackendManager>
                 break;
             case LoginType.Auto:
                 GetUserInfo();
+                loginSceneController.ChangeHostingUI(1);
                 Debug.LogError("자동 로그인에 성공했습니다.");
                 break;
         }
@@ -194,7 +216,29 @@ public class BackendManager : Singleton<BackendManager>
         }
         StartCoroutine(nameof(RefreshToken));
     }
-        private IEnumerator RefreshToken()
+    
+    public void GuestIdDelete()
+    {
+        if (Backend.BMember.GetGuestID().Length > 0)
+        {
+            Debug.LogFormat("GuestID {0} Delete", Backend.BMember.GetGuestID());
+            Backend.BMember.DeleteGuestInfo();
+            PlayerPrefs.DeleteAll();
+            PlayerPrefs.SetInt("LoginWay", -1);
+            CheckLoginWayData();
+        }
+        else
+        {
+            Debug.LogFormat("Server Not Connected");
+        }
+    }
+    public static void BackEndDebug(string str, BackendReturnObject bro)
+    {
+        Debug.Log(str);
+        Debug.LogFormat("Status : {0}\nErrorCode : {1}\nMessage : {2}", bro.GetStatusCode(), bro.GetErrorCode(), bro.GetMessage());
+    }
+    
+    private IEnumerator RefreshToken()
     {
         int count = 0;
         WaitForSeconds waitForRefreshTokenCycle = new WaitForSeconds(60 * 60 * 6); // 60초 x 60분 x 8시간
@@ -310,6 +354,7 @@ public class BackendManager : Singleton<BackendManager>
     
     public void GetUserInfo()
     {
+        Debug.Log(Backend.UserNickName + Backend.UID);
         UID = Backend.UID;
         Nickname = Backend.UserNickName;
     }
