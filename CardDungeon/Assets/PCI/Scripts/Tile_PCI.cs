@@ -4,8 +4,16 @@ using UnityEngine;
 
 public class Tile_PCI : MonoBehaviour
 {
+    public List<Sprite> sprites = new List<Sprite>();
+    public SpriteRenderer spriteRenderer;
+    [HideInInspector]
     public List<TileObject_PCI> onTileObjects = new List<TileObject_PCI>();
 
+    private void Start()
+    {
+        int rand = Random.Range(0, sprites.Count);
+        spriteRenderer.sprite = sprites[rand];
+    }
     public void AddTileObject(TileObject_PCI obj)
     {
         onTileObjects.Add(obj);

@@ -74,6 +74,20 @@ public class BackEndServerManager : MonoBehaviour
 
     }
 
+    public void GuestIdDelete()
+    {
+        if (Backend.BMember.GetGuestID().Length > 0)
+        {
+            Debug.LogFormat("GuestID {0} Delete", Backend.BMember.GetGuestID());
+            Backend.BMember.DeleteGuestInfo();
+            PlayerPrefs.DeleteAll();
+            PlayerPrefs.SetInt("LoginWay", -1);
+        }
+        else
+        {
+            Debug.LogFormat("Server Not Connected");
+        }
+    }
     void Update()
     {
         //비동기함수 풀링
@@ -196,6 +210,8 @@ public class BackEndServerManager : MonoBehaviour
                 Debug.LogError("닉네임 생성 실패\n" + bro.ToString());
                 func(false, string.Format(BackendError,
                     bro.GetStatusCode(), bro.GetErrorCode(), bro.GetMessage()));
+                
+                
                 return;
             }
             loginSuccessFunc = func;

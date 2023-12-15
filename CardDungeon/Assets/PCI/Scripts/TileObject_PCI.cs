@@ -7,6 +7,8 @@ public class TileObject_PCI : MonoBehaviour
     public bool isPathable;
     public bool isDestructable;
     public bool isInteractable;
+
+    public SpriteRenderer spriteRenderer;
     public virtual void OnDamaged(Player_HJH player)
     {
         Debug.Log($"Object Damaged : {gameObject.name}");

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 using Battlehub.Dispatcher;
 
@@ -71,7 +72,7 @@ public class LoginUI : MonoBehaviour
             fadeObject = fade.GetComponent<FadeAnimation>();
         }
 
-        mainTitle.GetComponentInChildren<Text>().text = string.Format(VERSION_STR, Application.version);
+        //mainTitle.GetComponentInChildren<Text>().text = string.Format(VERSION_STR, Application.version);
 
         var google = loginObject.transform.GetChild(0).gameObject;
         var apple = loginObject.transform.GetChild(1).gameObject;
@@ -216,7 +217,42 @@ public class LoginUI : MonoBehaviour
             nicknameObject.SetActive(true);
         });
     }
-
+    [Header("Bad Word List")]
+    public List<Dictionary<string, object>> inappositeWordList = new List<Dictionary<string, object>>();
+    public bool Unable_NickName_Check(string nickName)
+    {
+        if (inappositeWordList.Count < 1)
+        {
+            inappositeWordList = CSVReader.Read("CSV/inappositeWord");
+        }
+        for (int i = 0; i < inappositeWordList.Count; i++)
+        {
+            if (nickName.Contains(inappositeWordList[i]["word"].ToString().Trim()))
+            {
+                Debug.Log("욕설발견");
+                ErrorMSG("닉네임에 욕설을 포함 할 수 없습니다");
+                loadingObject.SetActive(false);
+                return true;
+            }
+        }
+        Debug.Log("욕설없음");
+        BackEndServerManager.GetInstance().UpdateNickname(nicknameField.text, (bool result, string error) =>
+        {
+            Dispatcher.Current.BeginInvoke(() =>
+            {
+                if (!result)
+                {
+                    loadingObject.SetActive(false);
+                    errorText.text = "닉네임 생성 오류\n\n" + error;
+                    errorObject.SetActive(true);
+                    return;
+                }
+            });
+        });
+        
+        ChangeLobbyScene();
+        return false;
+    }
     public void UpdateNickName()
     {
         if (errorObject.activeSelf)
@@ -230,23 +266,20 @@ public class LoginUI : MonoBehaviour
             errorObject.SetActive(true);
             return;
         }
-        loadingObject.SetActive(true);
-        BackEndServerManager.GetInstance().UpdateNickname(nickname, (bool result, string error) =>
+        else
         {
-            Dispatcher.Current.BeginInvoke(() =>
-            {
-                if (!result)
-                {
-                    loadingObject.SetActive(false);
-                    errorText.text = "닉네임 생성 오류\n\n" + error;
-                    errorObject.SetActive(true);
-                    return;
-                }
-                ChangeLobbyScene();
-            });
-        });
+            Unable_NickName_Check(nickname);
+            Debug.Log(Unable_NickName_Check(nickname));
+        }
+        //loadingObject.SetActive(true);
     }
 
+    public void ErrorMSG(string text)
+    {
+        errorObject.SetActive(true);
+        errorText.text = text;
+    }
+    
     public void GuestLogin()
     {
         if (errorObject.activeSelf)

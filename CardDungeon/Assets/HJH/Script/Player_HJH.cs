@@ -16,6 +16,7 @@ public class Player_HJH : MonoBehaviour
         set
         {
             hp = value;
+            GamePlayManager.Instance.mainUi.ReNewHp();
             if (hp > maxHp)
             {
                 hp = maxHp;
@@ -45,6 +46,7 @@ public class Player_HJH : MonoBehaviour
         set
         {
             mp = value;
+            GamePlayManager.Instance.mainUi.ReNewMp();
         }
     }
     public bool myPlayer;
@@ -52,7 +54,8 @@ public class Player_HJH : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        HP = maxHp;
+        Mp = maxMp;
     }
 
     // Update is called once per frame

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6432909188706139058}
   - component: {fileID: 6777746364649402662}
-  - component: {fileID: -5031687140799364295}
+  - component: {fileID: 3174382540500026525}
   m_Layer: 0
   m_Name: BlockPrefab_PCI
   m_TagString: Untagged
@@ -74,8 +74,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 7482667652216324306, guid: 806385f37c14a664ea1aa5c2f21aff41, type: 3}
-  m_Color: {r: 0.3584906, g: 0.31621575, b: 0.31621575, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 7162e445123af3b41b7d7ca48af62ba8, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -85,7 +85,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-5031687140799364295
+--- !u!114 &3174382540500026525
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -94,9 +94,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 4135391857062601413}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb42b56c5d8ce3e498d5b59978891180, type: 3}
+  m_Script: {fileID: 11500000, guid: f0144d6d5c4d8ff4491b752689bc68b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   isPathable: 0
   isDestructable: 1
   isInteractable: 0
+  spriteRenderer: {fileID: 6777746364649402662}
+  sprites:
+  - {fileID: 21300000, guid: 7162e445123af3b41b7d7ca48af62ba8, type: 3}
+  - {fileID: 21300000, guid: ee96c65e065cc3941b6f1b60dd769ac0, type: 3}
+  - {fileID: 21300000, guid: 0e24f90cafb09e94e976cfeebd83afc4, type: 3}
+  - {fileID: 21300000, guid: 000895b7dbae6114fa077bbabcaafc4f, type: 3}
