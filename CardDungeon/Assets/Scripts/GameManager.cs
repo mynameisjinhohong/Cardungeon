@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-
     private static GameManager instance;
     private static bool isCreate = false;
 

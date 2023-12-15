@@ -366,8 +366,8 @@ public class BackendManager : Singleton<BackendManager>
     
     public void GetUserInfo()
     {
-        Debug.Log(Backend.UserNickName + Backend.UID);
-        UID = Backend.UID;
+        Debug.Log(Backend.UserNickName + Backend.UserInDate);
+        UID = Backend.UserInDate;
         Nickname = Backend.UserNickName;
     }
 }
