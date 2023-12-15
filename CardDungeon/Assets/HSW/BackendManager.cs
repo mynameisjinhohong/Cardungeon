@@ -10,6 +10,8 @@ using UnityEngine;
 
 public class BackendManager : Singleton<BackendManager>
 {
+    private static BackendManager instance;   // 인스턴스
+    
     private Thread serverCheckThread;
     
     public string UserIndate = string.Empty;
@@ -31,6 +33,16 @@ public class BackendManager : Singleton<BackendManager>
         Initialize();
     }
     
+    void Awake()
+    {
+        if (instance != null)
+        {
+            Destroy(instance);
+        }
+        instance = this;
+        // 모든 씬에서 유지
+        DontDestroyOnLoad(this.gameObject);
+    }
     public void Initialize()
     {
         BackendCustomSetting settings = new BackendCustomSetting();
