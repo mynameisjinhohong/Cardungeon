@@ -15,6 +15,8 @@ public class MainUI_HJH : MonoBehaviour
     public Sprite mpSprite;
     public Sprite emptySprite;
 
+    public TMP_Text deckCardAmount;
+
     public Player_HJH myPlayer;
     // Start is called before the first frame update
     void Start()
