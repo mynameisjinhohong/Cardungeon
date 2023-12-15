@@ -12,18 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 660911240, guid: f624596d5fe1bd5459a5da424a8abc1b, type: 3}
   m_Name: TheBackendSettings
   m_EditorClassIdentifier: 
-  clientAppID: 
-  signatureKey: 
+  clientAppID: 5544b740-9b5b-11ee-9f65-b5daf02063d76483
+  signatureKey: 5544b741-9b5b-11ee-9f65-b5daf02063d76483
   functionAuthKey: 
   packageName: com.DefaultCompany.2DProject
   isAllPlatform: 1
   sendLogReport: 1
   rateCountActive: 0
   timeOutSec: 100
-  Version: 5.11.3
+  Version: 5.9.0
   autoRefreshToken: 1
   retryWhenClientRequestFailError: 1
   retryWhenServerError: 1
   retryWhenBadSignatureError: 1
   initFailWhenDeviceIdUnknown: 1
-  autoLoadLocationProperties: 1
