@@ -173,7 +173,6 @@ MonoBehaviour:
   LoadServerTime: 0
   checkLoginWayData: -1
   isInitialize: 0
-  initTimeCount: 0
   SuccessLoadDataCount: 0
   loginSceneController: {fileID: 421133512}
 --- !u!1 &421133511
@@ -1749,7 +1748,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1243156456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2219,7 +2218,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1552962609
 RectTransform:
   m_ObjectHideFlags: 0
