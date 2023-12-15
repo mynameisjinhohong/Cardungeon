@@ -8,6 +8,9 @@ public class TileObject_PCI : MonoBehaviour
     public bool isDestructable;
     public bool isInteractable;
 
+    [HideInInspector]
+    public Tile_PCI tile;
+
     public SpriteRenderer spriteRenderer;
     public virtual void OnDamaged(Player_HJH player)
     {

@@ -14,4 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: "MP\uC655\uD45C\uC158"
   itemIdx: 0
+  description: 
+  image: {fileID: 0}
+  amount: 3
+  sprites:
+  - {fileID: -2413806693520163455, guid: c9b00fb38d5d36f498f7903bc0c75936, type: 3}
   value: 5
