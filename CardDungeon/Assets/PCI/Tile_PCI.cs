@@ -4,11 +4,41 @@ using UnityEngine;
 
 public class Tile_PCI : MonoBehaviour
 {
-    private List<TileObject_PCI> onTileObjects = new List<TileObject_PCI>();
-    private bool isPathable;
+    public List<TileObject_PCI> onTileObjects = new List<TileObject_PCI>();
 
     public void AddTileObject(TileObject_PCI obj)
     {
         onTileObjects.Add(obj);
+    }
+
+    public bool IsPahtable()
+    {
+        foreach (var e in onTileObjects)
+        {
+            if (e.isPathable) return false;
+        }
+        return true;
+    }
+
+    public void OnDamaged()
+    {
+        foreach(var e in onTileObjects)
+        {
+            if (e.isDestructable)
+            {
+                e.OnDamaged();
+            }
+        }
+    }
+
+    public void OnInteracted()
+    {
+        foreach(var e in onTileObjects)
+        {
+            if (e.isInteractable)
+            {
+                e.OnInteracted();
+            }
+        }
     }
 }
