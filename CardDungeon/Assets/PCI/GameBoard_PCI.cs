@@ -92,15 +92,24 @@ public class GameBoard_PCI : MonoBehaviour
             }
         }
     }
-
+    private bool IsValidCoordinate(Vector2Int target)
+    {
+        if(target.x < 0 || target.x >= width || target.y < 0 || target.y >= height)
+        {
+            return false;
+        }
+        return true;
+    }
     public bool IsPathable(Vector2Int target)
     {
+        if (!IsValidCoordinate(target)) return false;
         return board[target.x, target.y].IsPahtable();
     }
 
     public bool IsDestructable(Vector2Int target)
     {
-        foreach(var e in board[target.x, target.y].onTileObjects)
+        if (!IsValidCoordinate(target)) return false;
+        foreach (var e in board[target.x, target.y].onTileObjects)
         {
             if (e.isDestructable) return true;
         }
@@ -109,7 +118,8 @@ public class GameBoard_PCI : MonoBehaviour
 
     public bool IsInteractable(Vector2Int target)
     {
-        foreach(var e in board[target.x, target.y].onTileObjects)
+        if (!IsValidCoordinate(target)) return false;
+        foreach (var e in board[target.x, target.y].onTileObjects)
         {
             if (e.isInteractable) return true;
         }
