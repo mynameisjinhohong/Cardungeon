@@ -13,10 +13,31 @@ MonoBehaviour:
   m_Name: Card Data
   m_EditorClassIdentifier: 
   cards:
-  - cardName: 
+  - cardName: "\uC704\uB85C \uAE61\uCD1D"
     useMP: 0
-    cardType: 0
+    cardType: {fileID: 21300000, guid: f7f9f6a8ee85c91459fde09323579547, type: 3}
     itemImage: {fileID: 0}
-    description: 
-    cardIdx: 0
-    enforceDescription: 
+    description: "\uC704\uB85C \uD55C\uCE78 \uC774\uB3D9\uD55C\uB2E4."
+    cardIdx: 1
+    enforceDescription: "\uC704\uB85C \uB450\uCE78 \uC774\uB3D9\uD55C\uB2E4."
+  - cardName: "\uC55E\uC73C\uB85C \uAE61\uCD1D"
+    useMP: 0
+    cardType: {fileID: 21300000, guid: f7f9f6a8ee85c91459fde09323579547, type: 3}
+    itemImage: {fileID: 0}
+    description: "\uC624\uB978\uCABD\uC73C\uB85C \uD55C\uCE78 \uC774\uB3D9\uD55C\uB2E4."
+    cardIdx: 2
+    enforceDescription: "\uC624\uB978\uCABD\uC73C\uB85C \uB450\uCE78 \uC774\uB3D9\uD55C\uB2E4."
+  - cardName: "\uB4A4\uB85C \uAE61\uCD1D"
+    useMP: 0
+    cardType: {fileID: 21300000, guid: f7f9f6a8ee85c91459fde09323579547, type: 3}
+    itemImage: {fileID: 0}
+    description: "\uC67C\uCABD\uC73C\uB85C \uD55C\uCE78 \uC774\uB3D9\uD55C\uB2E4."
+    cardIdx: 3
+    enforceDescription: "\uC67C\uCABD\uC73C\uB85C \uB450\uCE78 \uC774\uB3D9\uD55C\uB2E4."
+  - cardName: "\uC544\uB798\uB85C \uAE61\uCD1D"
+    useMP: 0
+    cardType: {fileID: 21300000, guid: f7f9f6a8ee85c91459fde09323579547, type: 3}
+    itemImage: {fileID: 0}
+    description: "\uC544\uB798\uB85C \uD55C\uCE78 \uC774\uB3D9\uD55C\uB2E4."
+    cardIdx: 4
+    enforceDescription: "\uC544\uB798\uB85C \uB450\uCE78 \uC774\uB3D9\uD55C\uB2E4."
