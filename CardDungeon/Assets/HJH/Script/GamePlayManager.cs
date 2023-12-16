@@ -37,7 +37,21 @@ public class GamePlayManager : Singleton<GamePlayManager>
     {
         yield return new WaitUntil(() => BackendManager.Instance.isLoadGame);
 
-        BackendManager.Instance.UserDataList.Sort();
+        BackendManager.Instance.UserDataList.Sort((UserData lhs, UserData rhs) =>
+        {
+            if (int.Parse(lhs.playerToken) < int.Parse(rhs.playerToken))
+            {
+                return 1;
+            }
+            else if (lhs.playerToken == rhs.playerToken)
+            {
+                return 0;
+            }
+            else
+            {
+                return -1;
+            }
+        });
         
         DataInit();
             
