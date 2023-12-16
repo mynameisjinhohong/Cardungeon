@@ -22,7 +22,7 @@ public class Player_HJH : MonoBehaviour
         }
         set
         {
-            if(value < hp)
+            if (value < hp)
             {
                 if (shield)
                 {
@@ -43,7 +43,7 @@ public class Player_HJH : MonoBehaviour
             {
                 hp = maxHp;
             }
-            if(hp < 0)
+            if (hp < 0)
             {
                 if (myPlayer)
                 {
@@ -68,7 +68,7 @@ public class Player_HJH : MonoBehaviour
         set
         {
             mp = value;
-            if(mp < maxMp)
+            if (mp < maxMp)
             {
                 if (!cool)
                 {
@@ -78,7 +78,7 @@ public class Player_HJH : MonoBehaviour
             }
             else
             {
-                currentTime= 0;
+                currentTime = 0;
                 cool = false;
             }
             GamePlayManager.Instance.mainUi.ReNewMp();
@@ -98,8 +98,8 @@ public class Player_HJH : MonoBehaviour
         if (cool)
         {
             currentTime += Time.deltaTime;
-            GamePlayManager.Instance.mainUi.mpCoolTime.fillAmount = currentTime/mpCoolTime;
-            if(currentTime / mpCoolTime > 1)
+            GamePlayManager.Instance.mainUi.mpCoolTime.fillAmount = currentTime / mpCoolTime;
+            if (currentTime / mpCoolTime > 1)
             {
                 Mp++;
                 currentTime = 0;
