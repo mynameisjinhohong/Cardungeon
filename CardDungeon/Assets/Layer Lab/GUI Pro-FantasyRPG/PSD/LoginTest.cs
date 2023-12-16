@@ -42,6 +42,7 @@ public class LoginTest : MonoBehaviour {
         var bro = Backend.BMember.UpdateNickname(_inputField.text);
 
         if (bro.IsSuccess()) {
+            gameObject.SetActive(false);
             Debug.Log("닉네임 변경 : " + bro);
 
         } else {
