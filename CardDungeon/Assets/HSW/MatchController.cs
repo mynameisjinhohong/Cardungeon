@@ -47,7 +47,7 @@ public class MatchController : MonoBehaviour
 
     public void CheckPlayersLoginWay()
     {
-        if(BackendManager.Instance.checkLoginWayData == -1)
+        if(BackendManager.Instance.checkLoginWayData == -1 || BackendManager.Instance.Nickname == "")
         {
             LoginPopup.SetActive(true);
 

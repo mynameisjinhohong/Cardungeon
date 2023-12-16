@@ -11,6 +11,9 @@ using UnityEngine.UI;
 public class LoginTest : MonoBehaviour {
     
     [SerializeField] private InputField _inputField;
+
+    public MatchController matchController;
+    
     void Start() {
         var bro = Backend.Initialize();
         Debug.Log("초기화 결과 : " + bro);
@@ -44,6 +47,12 @@ public class LoginTest : MonoBehaviour {
         if (bro.IsSuccess()) {
             gameObject.SetActive(false);
             Debug.Log("닉네임 변경 : " + bro);
+            matchController.ChangeUI(1);
+            //matchController.MainUserNickName.text = BackendManager.Instance.Nickname;
+
+            matchController.UserNickName.text = Backend.UserNickName;
+            
+            matchController.MatchStart();
 
         } else {
             Debug.LogError("닉네임 변경 : " + bro);

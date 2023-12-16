@@ -114,6 +114,10 @@ public class BackendManager : Singleton<BackendManager>
     {
         BackendReturnObject bro = Backend.BMember.GuestLogin("GuestLoginTry2 Sequence");
         Debug.LogError($"{bro.IsSuccess()} {bro.GetStatusCode()} {bro.GetErrorCode()} {bro.GetMessage()}");
+
+        if (!bro.IsSuccess())
+            GuestIdDelete();
+        
         StartCoroutine((LoginProcess(bro, LoginType.Guest)));
         PlayerPrefs.SetInt("LoginWay", 0);
     }
