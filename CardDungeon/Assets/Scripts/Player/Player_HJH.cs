@@ -18,6 +18,7 @@ public class Player_HJH : MonoBehaviour
     float currentTime;
     bool shield = false;
     public Animator animator;
+    public int keys;
 
     public int HP
     {
