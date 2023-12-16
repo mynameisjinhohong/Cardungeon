@@ -12,6 +12,8 @@ public class Player_HJH : MonoBehaviour
     float currentTime;
     bool shield = false;
     public Animator animator;
+    public bool myPlayer;
+
     public int HP
     {
         get
@@ -20,7 +22,7 @@ public class Player_HJH : MonoBehaviour
         }
         set
         {
-            if(value < hp)
+            if (value < hp)
             {
                 if (shield)
                 {
@@ -32,12 +34,16 @@ public class Player_HJH : MonoBehaviour
                     hp = value;
                 }
             }
+            else
+            {
+                hp = value;
+            }
             GamePlayManager.Instance.mainUi.ReNewHp();
             if (hp > maxHp)
             {
                 hp = maxHp;
             }
-            if(hp < 0)
+            if (hp < 0)
             {
                 if (myPlayer)
                 {
@@ -62,7 +68,7 @@ public class Player_HJH : MonoBehaviour
         set
         {
             mp = value;
-            if(mp < maxMp)
+            if (mp < maxMp)
             {
                 if (!cool)
                 {
@@ -72,13 +78,12 @@ public class Player_HJH : MonoBehaviour
             }
             else
             {
-                currentTime= 0;
+                currentTime = 0;
                 cool = false;
             }
             GamePlayManager.Instance.mainUi.ReNewMp();
         }
     }
-    public bool myPlayer;
 
     // Start is called before the first frame update
     void Start()
@@ -93,8 +98,8 @@ public class Player_HJH : MonoBehaviour
         if (cool)
         {
             currentTime += Time.deltaTime;
-            GamePlayManager.Instance.mainUi.mpCoolTime.fillAmount = currentTime/mpCoolTime;
-            if(currentTime / mpCoolTime > 1)
+            GamePlayManager.Instance.mainUi.mpCoolTime.fillAmount = currentTime / mpCoolTime;
+            if (currentTime / mpCoolTime > 1)
             {
                 Mp++;
                 currentTime = 0;

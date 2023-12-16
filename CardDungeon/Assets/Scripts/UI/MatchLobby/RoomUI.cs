@@ -18,6 +18,7 @@ public partial class LobbyUI : MonoBehaviour
     private List<string> readyUserList = null;
     public void OpenRoomUI()
     {
+        Debug.Log("대기방 열기");
         // 매치 서버에 대기방 생성 요청
         if (BackEndMatchManager.GetInstance().CreateMatchRoom() == true)
         {

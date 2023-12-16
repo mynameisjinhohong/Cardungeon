@@ -7,6 +7,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
 {
     public MainUI_HJH mainUi;
     public Player_HJH[] players;
+    public PlayerDeck_HJH playerDeck;
     public int myIdx;
     public GameBoard_PCI gameBoard;
     // Start is called before the first frame update

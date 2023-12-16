@@ -24,7 +24,7 @@ public class TabUI : MonoBehaviour
             if (isOn == true)
             {
                 image.color = onColor;
-                LobbyUI.GetInstance().ChangeTab();
+                //LobbyUI.GetInstance().ChangeTab();
             }
             else
             {

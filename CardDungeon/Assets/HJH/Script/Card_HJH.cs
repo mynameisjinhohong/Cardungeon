@@ -1,21 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
-using static UnityEditorInternal.ReorderableList;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class Card_HJH : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
-    public int cardIdx; //¾î¶² Ä«µåÀÎÁö
-    public int handIdx; //ÇÚµå¿¡¼­ ¸î¹øÂ° Ä«µåÀÎÁö
+    public int cardIdx; //ï¿½î¶² Ä«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    public int handIdx; //ï¿½Úµå¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½Â° Ä«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     public PlayerDeck_HJH playerDeck;
     public Vector2 defaultPos;
-    #region µå·¡±× ¾Ø µå·Ó
+    #region ï¿½å·¡ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½
+
+    void ChildRayCast(bool onOff)
+    {
+        GetComponent<Image>().raycastTarget = onOff;
+        transform.GetChild(0).GetComponent<TMP_Text>().raycastTarget = onOff;
+        transform.GetChild(1).GetComponent<TMP_Text>().raycastTarget = onOff;
+        transform.GetChild(2).GetComponent<Image>().raycastTarget = onOff;
+    }
     void IBeginDragHandler.OnBeginDrag(UnityEngine.EventSystems.PointerEventData eventData)
     {
         defaultPos = transform.position;
-        GetComponent<Image>().raycastTarget = false;
+        ChildRayCast(false);
 
     }
     void IDragHandler.OnDrag(UnityEngine.EventSystems.PointerEventData eventData)
@@ -30,17 +38,24 @@ public class Card_HJH : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
             if (!playerDeck.UseCard(handIdx))
             {
                 transform.position = defaultPos;
+                ChildRayCast(true);
+            }
+            else
+            {
+                ChildRayCast(true);
             }
         }
         else
         {
             transform.position = defaultPos;
             GetComponent<Image>().raycastTarget = true;
+            ChildRayCast(true);
         }
     }
 
     public void OnClick()
     {
+        ChildRayCast(true);
         playerDeck.mainUi.BigCardOn(cardIdx);
     }
     #endregion
