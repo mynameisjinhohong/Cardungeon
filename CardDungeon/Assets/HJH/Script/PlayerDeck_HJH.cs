@@ -39,13 +39,26 @@ public class PlayerDeck_HJH : MonoBehaviour
             {
                 GameObject card = cards[i];
                 card.SetActive(true);
-                card.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[hand[i]].cardType;
-                card.GetComponent<Card_HJH>().handIdx = i;
-                card.GetComponent<Card_HJH>().cardIdx = hand[i];
-                card.GetComponent<Card_HJH>().playerDeck = this;
-                card.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[hand[i]].cardName;
-                card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[hand[i]].useMP.ToString(); //나중에 변경
-                card.transform.GetChild(2).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[hand[i]].itemImage;
+                if (hand[i] > 0)
+                {
+                    card.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[hand[i]].cardType;
+                    card.GetComponent<Card_HJH>().handIdx = i;
+                    card.GetComponent<Card_HJH>().cardIdx = hand[i];
+                    card.GetComponent<Card_HJH>().playerDeck = this;
+                    card.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[hand[i]].cardName;
+                    card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[hand[i]].useMP.ToString(); //나중에 변경
+                    card.transform.GetChild(2).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[hand[i]].itemImage;
+                }
+                else
+                {
+                    card.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[-hand[i]].enforceSmallCard;
+                    card.GetComponent<Card_HJH>().handIdx = i;
+                    card.GetComponent<Card_HJH>().cardIdx = hand[i];
+                    card.GetComponent<Card_HJH>().playerDeck = this;
+                    card.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[-hand[i]].cardName;
+                    card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[-hand[i]].useMP.ToString(); //나중에 변경
+                    card.transform.GetChild(2).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[-hand[i]].itemImage;
+                }
 
             }
             else
