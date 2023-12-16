@@ -47,6 +47,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
     public void DataInit()
     {
+        players = new List<Player_HJH>();
         for (int i = 0; i < players.Count; i++)
         {
             if (i < BackendManager.Instance.UserDataList.Count)
