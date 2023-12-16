@@ -1075,6 +1075,15 @@ MonoBehaviour:
   dectContent: {fileID: 1317725566}
   cardPrefab: {fileID: 8574994598966932390, guid: 1ce410061526eff428e8fda2c10e6d4d, type: 3}
   endText: {fileID: 689745227}
+  icons:
+  - {fileID: 21300000, guid: 1b0f3ec90c9b57d45a719df4b7fc1347, type: 3}
+  - {fileID: 21300000, guid: 90f8b82ce37a5af4c859904c5eb3bb84, type: 3}
+  - {fileID: 21300000, guid: feaf41ec388653349ba8eedb6518672b, type: 3}
+  - {fileID: 21300000, guid: 8901019a31b27014db7cd5a16378466a, type: 3}
+  - {fileID: 21300000, guid: 810eedcf6d6a612478b1f50a4ddae8ca, type: 3}
+  - {fileID: 21300000, guid: ff89ec6dcdae8ac47bdf26cc3434a8bb, type: 3}
+  - {fileID: 21300000, guid: c527e03410ec85b47ab9cf1e54fa781a, type: 3}
+  - {fileID: 21300000, guid: b388392f476b1924b948880dbea1f764, type: 3}
 --- !u!1 &637735337
 GameObject:
   m_ObjectHideFlags: 0
