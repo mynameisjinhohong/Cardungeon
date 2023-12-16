@@ -46,6 +46,11 @@ public class MatchController : MonoBehaviour
         }
     }
 
+    public void MatchStartCor()
+    {
+        StartCoroutine(MatchSetting());
+    }
+    
     IEnumerator MatchSetting()
     {
         matchingTest.GetMatchList();
@@ -57,6 +62,16 @@ public class MatchController : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         matchingTest.JoinMatchMakingServer();
+
+        yield return new WaitForSeconds(0.5f);
+        
+        matchingTest.RequestMatchMaking();
+    }
+
+    public void MatchCancel()
+    {
+        Backend.Match.LeaveMatchMakingServer();
+        ChangeUI(1);
     }
     
 
