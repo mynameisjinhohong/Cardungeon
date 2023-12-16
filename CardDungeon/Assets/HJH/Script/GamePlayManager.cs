@@ -22,16 +22,6 @@ public class GamePlayManager : Singleton<GamePlayManager>
     void Start()
     {
         InitializeGame();
-        var matchInstance = BackEndMatchManager.GetInstance();
-        if (matchInstance == null)
-        {
-            return;
-        }
-        if (matchInstance.isReconnectProcess)
-        {
-            InGameUiManager.GetInstance().SetStartCount(0, false);
-            InGameUiManager.GetInstance().SetReconnectBoard(BackEndServerManager.GetInstance().myNickName);
-        }
         //서버랑 소통하고 나서 로컬 플레이어의 인덱스를 받아왔다는 가정 하에 코드 작성
         for (int i =0; i<BackEndServerManager.GetInstance().nameList.Count; i++)
         {
@@ -40,25 +30,28 @@ public class GamePlayManager : Singleton<GamePlayManager>
                 myIdx = i;
             }
         } //인덱스 받아오기
-
-
         mainUi.myPlayer = players[myIdx];
     }
-    public bool InitializeGame()
+    public void InitializeGame()
     {
-        if (!playerPool)
+        if (Backend.Match.OnMatchRelay == null)
         {
-            Debug.Log("Player Pool Not Exist!");
-            return false;
+            Backend.Match.OnMatchRelay = (MatchRelayEventArgs args) => {
+                var strByte = System.Text.Encoding.Default.GetString(args.BinaryUserData);
+                Message msg = JsonUtility.FromJson<Message>(strByte);
+                if (args.From.NickName == "슈퍼방장")
+                {
+                    CardRealGo(msg.playerIdx, msg.cardIdx);
+                }
+                //Debug.Log($"서버에서 받은 데이터 : {args.From.NickName} : {msg.ToString()}");
+            };
         }
-        Debug.Log("게임 초기화 진행");
         //gameRecord = new Stack<SessionId>();
         //GameManager.OnGameOver += OnGameOver;
         //GameManager.OnGameResult += OnGameResult;
         //myPlayerIndex = SessionId.None;
         //SetPlayerAttribute();
         //OnGameStart();
-        return true;
     }
     // Update is called once per frame
     void Update()
@@ -85,23 +78,9 @@ public class GamePlayManager : Singleton<GamePlayManager>
         public int cardIdx;
     }
 
-    public void SendData()
+    public void SendData(Message mes)
     {
-        if (Backend.Match.OnMatchRelay == null)
-        {
-            Backend.Match.OnMatchRelay = (MatchRelayEventArgs args) => {
-                var strByte = System.Text.Encoding.Default.GetString(args.BinaryUserData);
-                Message msg = JsonUtility.FromJson<Message>(strByte);
-                if(args.From.NickName == "슈퍼방장")
-                {
-
-                }
-                //Debug.Log($"서버에서 받은 데이터 : {args.From.NickName} : {msg.ToString()}");
-            };
-        }
-
-        Message message = new Message();
-        var jsonData = JsonUtility.ToJson(message); // 클래스를 json으로 변환해주는 함수
+        var jsonData = JsonUtility.ToJson(mes); // 클래스를 json으로 변환해주는 함수
         var dataByte = System.Text.Encoding.UTF8.GetBytes(jsonData); // json을 byte[]로 변환해주는 함수
         Backend.Match.SendDataToInGameRoom(dataByte);
     }
@@ -109,11 +88,15 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
     public void CardGo(int playerIdx,int cardIdx) //카드 사용, 서버와 통신 해야됨
     {
-        CardManager.Instance.OnCardStart(players[playerIdx].transform, cardIdx);
+        Message mes = new Message();
+        mes.playerIdx = playerIdx;
+        mes.cardIdx = cardIdx;
+        SendData(mes);
     }
 
     public void CardRealGo(int playerIdx,int cardIdx)
     {
+        CardManager.Instance.OnCardStart(players[playerIdx].transform, cardIdx);
 
     }
 
