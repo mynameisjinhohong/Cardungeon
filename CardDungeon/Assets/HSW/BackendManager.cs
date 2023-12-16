@@ -35,7 +35,11 @@ public class BackendManager : Singleton<BackendManager>
     {
         Initialize();
     }
-    
+
+    public void ChangeMode(bool is1vs1)
+    {
+        matchIndex = is1vs1 ? 1 : 0;
+    }
     void Awake()
     {
         if (instance != null)
