@@ -129,8 +129,10 @@ public class MainUI_HJH : MonoBehaviour
         {
             bigCard.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[-cardIdx].enforceBigCard;
             bigCardMp.text = CardManager.Instance.cardList.cards[-cardIdx].useMP.ToString();
-            bigCardName.text = CardManager.Instance.cardList.cards[-cardIdx].cardName;
+            bigCardName.text = CardManager.Instance.cardList.cards[-cardIdx].cardName + "+";
+            bigCardName.color = Color.yellow;
             bigCardDescribe.text = CardManager.Instance.cardList.cards[-cardIdx].description;
+            bigCardDescribe.color = Color.yellow;
             itemImage.sprite = CardManager.Instance.cardList.cards[-cardIdx].itemImage;
         }
     }
@@ -162,8 +164,10 @@ public class MainUI_HJH : MonoBehaviour
             {
                 card.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.hand[i]].enforceBigCard;
                 card.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.hand[i]].useMP.ToString();
-                card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.hand[i]].cardName;
+                card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.hand[i]].cardName + "+";
+                card.transform.GetChild(1).GetComponent<TMP_Text>().color = Color.yellow;
                 card.transform.GetChild(2).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.hand[i]].description;
+                card.transform.GetChild(2).GetComponent<TMP_Text>().color = Color.yellow;
                 card.transform.GetChild(3).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.hand[i]].itemImage;
             }
 
@@ -186,8 +190,10 @@ public class MainUI_HJH : MonoBehaviour
             {
                 card.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.deck[i]].enforceBigCard;
                 card.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.deck[i]].useMP.ToString();
-                card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.deck[i]].cardName;
+                card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.deck[i]].cardName + "+";
+                card.transform.GetChild(1).GetComponent<TMP_Text>().color = Color.yellow;
                 card.transform.GetChild(2).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.deck[i]].description;
+                card.transform.GetChild(2).GetComponent<TMP_Text>().color = Color.yellow;
                 card.transform.GetChild(3).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.deck[i]].itemImage;
             }
 
@@ -209,8 +215,10 @@ public class MainUI_HJH : MonoBehaviour
             {
                 card.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.trash[i]].enforceBigCard;
                 card.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[i]].useMP.ToString();
-                card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[i]].cardName;
+                card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[i]].cardName + "+";
                 card.transform.GetChild(2).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[i]].description;
+                card.transform.GetChild(1).GetComponent<TMP_Text>().color = Color.yellow;
+                card.transform.GetChild(2).GetComponent<TMP_Text>().color = Color.yellow;
                 card.transform.GetChild(3).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.trash[i]].itemImage;
             }
         }
@@ -278,8 +286,10 @@ public class MainUI_HJH : MonoBehaviour
             {
                 card.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.hand[i]].enforceBigCard;
                 card.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.hand[i]].useMP.ToString();
-                card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.hand[i]].cardName;
+                card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.hand[i]].cardName + "+";
+                card.transform.GetChild(1).GetComponent<TMP_Text>().color = Color.yellow;
                 card.transform.GetChild(2).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.hand[i]].description;
+                card.transform.GetChild(2).GetComponent<TMP_Text>().color = Color.yellow;
                 card.transform.GetChild(3).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.hand[i]].itemImage;
                 card.transform.GetChild(4).gameObject.SetActive(false);
             }
@@ -302,8 +312,10 @@ public class MainUI_HJH : MonoBehaviour
             {
                 card.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.deck[i]].enforceBigCard;
                 card.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.deck[i]].useMP.ToString();
-                card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.deck[i]].cardName;
+                card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.deck[i]].cardName + "+";
+                card.transform.GetChild(1).GetComponent<TMP_Text>().color = Color.yellow;
                 card.transform.GetChild(2).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.deck[i]].description;
+                card.transform.GetChild(2).GetComponent<TMP_Text>().color = Color.yellow;
                 card.transform.GetChild(3).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.deck[i]].itemImage;
                 card.transform.GetChild(4).gameObject.SetActive(false);
             }
@@ -326,8 +338,10 @@ public class MainUI_HJH : MonoBehaviour
             {
                 card.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.trash[i]].enforceBigCard;
                 card.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[i]].useMP.ToString();
-                card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[i]].cardName;
+                card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[i]].cardName + "+";
+                card.transform.GetChild(1).GetComponent<TMP_Text>().color = Color.yellow;
                 card.transform.GetChild(2).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[i]].description;
+                card.transform.GetChild(2).GetComponent<TMP_Text>().color = Color.yellow;
                 card.transform.GetChild(3).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.trash[i]].itemImage;
                 card.transform.GetChild(4).gameObject.SetActive(false);
             }
