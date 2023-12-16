@@ -37,6 +37,8 @@ public class GamePlayManager : Singleton<GamePlayManager>
     {
         yield return new WaitUntil(() => BackendManager.Instance.isLoadGame);
 
+        BackendManager.Instance.UserDataList.Sort();
+        
         DataInit();
             
         yield return new WaitUntil(() => isDataCheck);
