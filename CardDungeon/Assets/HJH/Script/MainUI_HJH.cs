@@ -16,18 +16,25 @@ public class MainUI_HJH : MonoBehaviour
     public Sprite emptySprite;
 
     public TMP_Text deckCardAmount;
+    public Image mpCoolTime;
 
     public Player_HJH myPlayer;
+    public PlayerDeck_HJH playerDeck;
     // Start is called before the first frame update
     void Start()
     {
+        //서버랑 통신해서 닉네임이랑 아이콘 바꾸는거 해야됨
         
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        int deckAmount = 0;
+        deckAmount += playerDeck.deck.Count;
+        deckAmount += playerDeck.hand.Count;
+        deckAmount += playerDeck.trash.Count;
+        deckCardAmount.text = "사용한 카드 " + playerDeck.trash.Count + "/" + deckAmount;
     }
 
     public void ReNewHp()

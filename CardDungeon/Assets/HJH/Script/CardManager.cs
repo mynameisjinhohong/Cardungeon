@@ -277,4 +277,9 @@ public class CardManager : Singleton<CardManager>
             }
         }
     }
+
+    void Idx9Func(Transform player)
+    {
+
+    }
 }

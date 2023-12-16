@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnityEditorInternal.ReorderableList;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class Card_HJH : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
@@ -14,6 +15,8 @@ public class Card_HJH : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
     void IBeginDragHandler.OnBeginDrag(UnityEngine.EventSystems.PointerEventData eventData)
     {
         defaultPos = transform.position;
+        GetComponent<Image>().raycastTarget = false;
+
     }
     void IDragHandler.OnDrag(UnityEngine.EventSystems.PointerEventData eventData)
     {
@@ -22,7 +25,7 @@ public class Card_HJH : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
     }
     void IEndDragHandler.OnEndDrag(UnityEngine.EventSystems.PointerEventData eventData)
     {
-        if (transform.position.y > 650)
+        if (!EventSystem.current.IsPointerOverGameObject())
         {
             if (!playerDeck.UseCard(handIdx))
             {
@@ -32,6 +35,7 @@ public class Card_HJH : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
         else
         {
             transform.position = defaultPos;
+            GetComponent<Image>().raycastTarget = true;
         }
     }
 
