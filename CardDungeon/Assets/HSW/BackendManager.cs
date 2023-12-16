@@ -7,6 +7,7 @@ using BackEnd.Util;
 using LitJson;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
 public class BackendManager : Singleton<BackendManager>
@@ -25,10 +26,10 @@ public class BackendManager : Singleton<BackendManager>
     public bool isInitialize = false;
     private int initTimeCount = 0;
     public int matchIndex = 0;
-    public GameObject LoginPopup;
-
-    public List<String> UserNameList;
-    public List<Player_HJH> PlayerDataList;
+    public bool isLoadGame = false;
+    
+    [SerializeField]
+    public List<UserData> UserDataList;
 
     void Start()
     {
@@ -96,7 +97,6 @@ public class BackendManager : Singleton<BackendManager>
             {
                 GuestIdDelete();
                 GuestLoginSequense();
-                LoginPopup.SetActive(true);
             }
         }
         else
@@ -164,6 +164,7 @@ public class BackendManager : Singleton<BackendManager>
                                     (int)ServerState.Maintenance)
                                 {
                                     GuestIdDelete();
+                                    SceneManager.LoadScene(0);
                                 }
                             }else if (bro.GetMessage().Contains("customId"))
                             {
