@@ -84,6 +84,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
             m.cardIdx = Random.Range(0, 100);
             SendData(m);
             gameBoard.Generate(m.cardIdx);
+            Debug.Log("¸Ê »ý¼º!!" + m.cardIdx);
         }
         //gameRecord = new Stack<SessionId>();
         //GameManager.OnGameOver += OnGameOver;
