@@ -5,7 +5,7 @@ using UnityEngine;
 public class ItemData_PCI : ScriptableObject
 {
     public string itemName;
-    public int itemIdx;
+    [TextArea]
     public string description;
     public Sprite image;
     public int amount;

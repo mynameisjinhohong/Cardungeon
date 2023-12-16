@@ -230,7 +230,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainUi: {fileID: 556443424}
   players:
-  - {fileID: 1748101668}
+  - {fileID: 0}
   playerDeck: {fileID: 1490756469}
   myIdx: 0
   gameBoard: {fileID: 1314709952}
@@ -3371,17 +3371,6 @@ Transform:
   m_Father: {fileID: 1314709953}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1748101668 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1373004332962014393, guid: 1c0407bca6cee1f48a32e8a9aa1cabcb, type: 3}
-  m_PrefabInstance: {fileID: 1041131915}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7adf2010beb49b5468035e93997aad29, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1748101669 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5898363691524700562, guid: 1c0407bca6cee1f48a32e8a9aa1cabcb, type: 3}
