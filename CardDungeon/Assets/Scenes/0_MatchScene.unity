@@ -434,7 +434,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1254970368}
         m_TargetAssemblyTypeName: MatchingTest, Assembly-CSharp
         m_MethodName: RequestMatchMaking
         m_Mode: 1
