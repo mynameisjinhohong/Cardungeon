@@ -23,6 +23,7 @@ public class MainUI_HJH : MonoBehaviour
     public PlayerDeck_HJH playerDeck;
 
     public ToastMsgContainer toastMsgContainer;
+    public GameObject winImage;
 
     //카드 클릭했을 때 요소들
     public GameObject bigCard;
