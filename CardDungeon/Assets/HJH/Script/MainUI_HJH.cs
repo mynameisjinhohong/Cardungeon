@@ -142,6 +142,10 @@ public class MainUI_HJH : MonoBehaviour
     }
     public void EnforceOn()
     {
+        for(int i =0; i< dectContent.transform.childCount; i++)
+        {
+            Destroy(dectContent.transform.GetChild(i).gameObject);
+        }
         idx = 0;
         for (int i = 0; i < playerDeck.hand.Count; i++)
         {
@@ -163,7 +167,7 @@ public class MainUI_HJH : MonoBehaviour
                 card.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[-playerDeck.hand[i]].useMP.ToString();
                 card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[-playerDeck.hand[i]].cardName + "+";
                 card.transform.GetChild(1).GetComponent<TMP_Text>().color = Color.yellow;
-                card.transform.GetChild(2).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[-playerDeck.hand[i]].description + "??????";
+                card.transform.GetChild(2).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[-playerDeck.hand[i]].description;
                 card.transform.GetChild(2).GetComponent<TMP_Text>().color = Color.yellow;
                 card.transform.GetChild(3).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[-playerDeck.hand[i]].itemImage;
             }
@@ -263,7 +267,11 @@ public class MainUI_HJH : MonoBehaviour
 
     public void DeckListOn()
     {
-        for(int i =0; i< playerDeck.hand.Count; i++)
+        for (int i = 0; i < dectContent.transform.childCount; i++)
+        {
+            Destroy(dectContent.transform.GetChild(i).gameObject);
+        }
+        for (int i =0; i< playerDeck.hand.Count; i++)
         {
             GameObject card = Instantiate(cardPrefab, dectContent.transform);
             card.transform.GetChild(4).gameObject.SetActive(false);
