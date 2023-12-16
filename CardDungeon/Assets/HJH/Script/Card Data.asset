@@ -23,39 +23,39 @@ MonoBehaviour:
     enforceDescription: 
   - cardName: "\uC704\uB85C \uAE61\uCD1D"
     useMP: 1
-    cardType: {fileID: 21300000, guid: f7f9f6a8ee85c91459fde09323579547, type: 3}
+    cardType: {fileID: 21300000, guid: f6db1223d286f52428b38d93da6f7297, type: 3}
     bigCardType: {fileID: 21300000, guid: 743c0ed5f8ff0644ea119708d93b4687, type: 3}
-    itemImage: {fileID: 0}
+    itemImage: {fileID: 21300000, guid: 817005ce5684e3d408931d006e75592d, type: 3}
     description: "\uC704\uB85C \uD55C\uCE78 \uC774\uB3D9\uD55C\uB2E4."
     cardIdx: 1
     enforceDescription: "\uC704\uB85C \uB450\uCE78 \uC774\uB3D9\uD55C\uB2E4."
   - cardName: "\uC55E\uC73C\uB85C \uAE61\uCD1D"
     useMP: 1
-    cardType: {fileID: 21300000, guid: f7f9f6a8ee85c91459fde09323579547, type: 3}
+    cardType: {fileID: 21300000, guid: f6db1223d286f52428b38d93da6f7297, type: 3}
     bigCardType: {fileID: 21300000, guid: 743c0ed5f8ff0644ea119708d93b4687, type: 3}
-    itemImage: {fileID: 0}
+    itemImage: {fileID: 21300000, guid: 60f2f16752ec77441ab14b7e58cb5354, type: 3}
     description: "\uC624\uB978\uCABD\uC73C\uB85C \uD55C\uCE78 \uC774\uB3D9\uD55C\uB2E4."
     cardIdx: 2
     enforceDescription: "\uC624\uB978\uCABD\uC73C\uB85C \uB450\uCE78 \uC774\uB3D9\uD55C\uB2E4."
   - cardName: "\uB4A4\uB85C \uAE61\uCD1D"
     useMP: 1
-    cardType: {fileID: 21300000, guid: f7f9f6a8ee85c91459fde09323579547, type: 3}
+    cardType: {fileID: 21300000, guid: f6db1223d286f52428b38d93da6f7297, type: 3}
     bigCardType: {fileID: 21300000, guid: 743c0ed5f8ff0644ea119708d93b4687, type: 3}
-    itemImage: {fileID: 0}
+    itemImage: {fileID: 21300000, guid: f9ca3196808ecb94881772b3feb5d70e, type: 3}
     description: "\uC67C\uCABD\uC73C\uB85C \uD55C\uCE78 \uC774\uB3D9\uD55C\uB2E4."
     cardIdx: 3
     enforceDescription: "\uC67C\uCABD\uC73C\uB85C \uB450\uCE78 \uC774\uB3D9\uD55C\uB2E4."
   - cardName: "\uC544\uB798\uB85C \uAE61\uCD1D"
     useMP: 1
-    cardType: {fileID: 21300000, guid: f7f9f6a8ee85c91459fde09323579547, type: 3}
-    bigCardType: {fileID: 0}
-    itemImage: {fileID: 0}
+    cardType: {fileID: 21300000, guid: f6db1223d286f52428b38d93da6f7297, type: 3}
+    bigCardType: {fileID: 21300000, guid: 743c0ed5f8ff0644ea119708d93b4687, type: 3}
+    itemImage: {fileID: 21300000, guid: b5b35756291a9d349824b98e4cd6d336, type: 3}
     description: "\uC544\uB798\uB85C \uD55C\uCE78 \uC774\uB3D9\uD55C\uB2E4."
     cardIdx: 4
     enforceDescription: "\uC544\uB798\uB85C \uB450\uCE78 \uC774\uB3D9\uD55C\uB2E4."
   - cardName: "\uD798\uAECF \uAE61\uCD1D"
     useMP: 1
-    cardType: {fileID: 21300000, guid: f7f9f6a8ee85c91459fde09323579547, type: 3}
+    cardType: {fileID: 21300000, guid: f6db1223d286f52428b38d93da6f7297, type: 3}
     bigCardType: {fileID: 21300000, guid: 743c0ed5f8ff0644ea119708d93b4687, type: 3}
     itemImage: {fileID: 0}
     description: "\uC0AC\uBC29 3\uCE78 \uC548\uC5D0 \uBB34\uC791\uC704\uB85C \uC774\uB3D9\uD55C\uB2E4."
@@ -64,7 +64,7 @@ MonoBehaviour:
       \uC774\uB3D9\uD55C\uB2E4."
   - cardName: "\uB2F9\uADFC \uD718\uB450\uB974\uAE30"
     useMP: 1
-    cardType: {fileID: 21300000, guid: ccb079729598e194bbf7c45b536be8b4, type: 3}
+    cardType: {fileID: 21300000, guid: ca0fafb909f16804a9f3b244aee7729c, type: 3}
     bigCardType: {fileID: 21300000, guid: 743c0ed5f8ff0644ea119708d93b4687, type: 3}
     itemImage: {fileID: 0}
     description: "\uC704\uC544\uB798\uC5D0 \uACF5\uACA9\uD55C\uB2E4. "
@@ -72,7 +72,7 @@ MonoBehaviour:
     enforceDescription: "\uB354 \uAC15\uB825\uD558\uAC8C \uC704\uC544\uB798 \uACF5\uACA9\uD55C\uB2E4."
   - cardName: "\uB2F9\uADFC \uCC0C\uB974\uAE30"
     useMP: 1
-    cardType: {fileID: 21300000, guid: ccb079729598e194bbf7c45b536be8b4, type: 3}
+    cardType: {fileID: 21300000, guid: ca0fafb909f16804a9f3b244aee7729c, type: 3}
     bigCardType: {fileID: 21300000, guid: 743c0ed5f8ff0644ea119708d93b4687, type: 3}
     itemImage: {fileID: 0}
     description: "\uC591 \uC606\uC5D0 \uACF5\uACA9\uD55C\uB2E4. "
@@ -80,7 +80,7 @@ MonoBehaviour:
     enforceDescription: "\uB354 \uAC15\uB825\uD558\uAC8C \uC591 \uC606\uC5D0 \uACF5\uACA9\uD55C\uB2E4."
   - cardName: "\uB2F9\uADFC \uB0B4\uB824\uCE58\uAE30"
     useMP: 2
-    cardType: {fileID: 21300000, guid: ccb079729598e194bbf7c45b536be8b4, type: 3}
+    cardType: {fileID: 21300000, guid: ca0fafb909f16804a9f3b244aee7729c, type: 3}
     bigCardType: {fileID: 21300000, guid: 743c0ed5f8ff0644ea119708d93b4687, type: 3}
     itemImage: {fileID: 0}
     description: "\uBAA8\uB4E0 \uBC29\uD5A5\uC5D0 \uACF5\uACA9\uD55C\uB2E4."

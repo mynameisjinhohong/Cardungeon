@@ -231,6 +231,7 @@ MonoBehaviour:
   mainUi: {fileID: 556443424}
   players:
   - {fileID: 1748101668}
+  playerDeck: {fileID: 1490756469}
   myIdx: 0
   gameBoard: {fileID: 1314709952}
 --- !u!4 &31816213

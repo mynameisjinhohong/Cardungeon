@@ -111,11 +111,6 @@ public class CardManager : Singleton<CardManager>
         {
             player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 1, player.transform.position.z);
         }
-        Player_HJH p;
-        if(player.TryGetComponent<Player_HJH>(out p))
-        {
-            p.animator.Play("Walk");
-        }
     }
     //플레이어 위로 2칸 이동
     void Idx0EnforceFunc(Transform player)
@@ -124,11 +119,6 @@ public class CardManager : Singleton<CardManager>
         {
             player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 2, player.transform.position.z);
 
-        }
-        Player_HJH p;
-        if (player.TryGetComponent<Player_HJH>(out p))
-        {
-            p.animator.Play("Walk");
         }
     }
     //플레이어 오른쪽으로 1칸 이동
@@ -139,11 +129,6 @@ public class CardManager : Singleton<CardManager>
             player.transform.position = new Vector3(player.transform.position.x + 1, player.transform.position.y, player.transform.position.z);
 
         }
-        Player_HJH p;
-        if (player.TryGetComponent<Player_HJH>(out p))
-        {
-            p.animator.Play("Walk");
-        }
     }
     //플레이어 오른쪽으로 2칸 이동
     void Idx1EnforceFunc(Transform player)
@@ -153,11 +138,6 @@ public class CardManager : Singleton<CardManager>
             player.transform.position = new Vector3(player.transform.position.x + 2, player.transform.position.y, player.transform.position.z);
 
         }
-        Player_HJH p;
-        if (player.TryGetComponent<Player_HJH>(out p))
-        {
-            p.animator.Play("Walk");
-        }
     }
     //플레이어 왼쪽으로 1칸 이동
     void Idx2Func(Transform player)
@@ -165,11 +145,6 @@ public class CardManager : Singleton<CardManager>
         if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x - 1, (int)player.transform.position.y)))
         {
             player.transform.position = new Vector3(player.transform.position.x - 1, player.transform.position.y, player.transform.position.z);
-        }
-        Player_HJH p;
-        if (player.TryGetComponent<Player_HJH>(out p))
-        {
-            p.animator.Play("Walk");
         }
     }
     //플레이어 왼쪽으로 2칸 이동
@@ -179,11 +154,6 @@ public class CardManager : Singleton<CardManager>
         {
             player.transform.position = new Vector3(player.transform.position.x - 2, player.transform.position.y, player.transform.position.z);
         }
-        Player_HJH p;
-        if (player.TryGetComponent<Player_HJH>(out p))
-        {
-            p.animator.Play("Walk");
-        }
     }
     //플레이어 아래로 1칸 이동
     void Idx3Func(Transform player)
@@ -192,11 +162,6 @@ public class CardManager : Singleton<CardManager>
         {
             player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y - 1, player.transform.position.z);
         }
-        Player_HJH p;
-        if (player.TryGetComponent<Player_HJH>(out p))
-        {
-            p.animator.Play("Walk");
-        }
     }
     //플레이어 아래로 2칸 이동
     void Idx3EnforceFunc(Transform player)
@@ -204,11 +169,6 @@ public class CardManager : Singleton<CardManager>
         if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y - 2)))
         {
             player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y - 2, player.transform.position.z);
-        }
-        Player_HJH p;
-        if (player.TryGetComponent<Player_HJH>(out p))
-        {
-            p.animator.Play("Walk");
         }
     }
     // 플레이어가 5*5 안에서 랜덤하게 이동
@@ -234,11 +194,6 @@ public class CardManager : Singleton<CardManager>
                 }
             }
         }
-        Player_HJH p;
-        if (player.TryGetComponent<Player_HJH>(out p))
-        {
-            p.animator.Play("Walk");
-        }
     }
     // 플레이어가 7*7 안에서 랜덤하게 이동
     void Idx5EnforceFunc(Transform player)
@@ -262,11 +217,6 @@ public class CardManager : Singleton<CardManager>
                 }
             }
         }
-        Player_HJH p;
-        if (player.TryGetComponent<Player_HJH>(out p))
-        {
-            p.animator.Play("Walk");
-        }
     }
     // 플레이어가 위아래 공격
     void Idx6Func(Transform player)
@@ -275,11 +225,7 @@ public class CardManager : Singleton<CardManager>
         Vector2Int down = new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y - 1);
         GamePlayManager.Instance.GoDamage(up, 1);
         GamePlayManager.Instance.GoDamage(down, 1);
-        Player_HJH p;
-        if (player.TryGetComponent<Player_HJH>(out p))
-        {
-            p.animator.Play("SwingVertical");
-        }
+
     }
     // 플레이어가 위아래 강하게공격
     void Idx6EnforceFunc(Transform player)
@@ -288,11 +234,7 @@ public class CardManager : Singleton<CardManager>
         Vector2Int down = new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y - 1);
         GamePlayManager.Instance.GoDamage(up, 2);
         GamePlayManager.Instance.GoDamage(down, 2);
-        Player_HJH p;
-        if (player.TryGetComponent<Player_HJH>(out p))
-        {
-            p.animator.Play("SwingVertical");
-        }
+
     }
     // 플레이어가 좌우 공격
     void Idx7Func(Transform player)
@@ -301,11 +243,7 @@ public class CardManager : Singleton<CardManager>
         Vector2Int left = new Vector2Int((int)player.transform.position.x - 1, (int)player.transform.position.y);
         GamePlayManager.Instance.GoDamage(right, 1);
         GamePlayManager.Instance.GoDamage(left, 1);
-        Player_HJH p;
-        if (player.TryGetComponent<Player_HJH>(out p))
-        {
-            p.animator.Play("SwingHorizontal");
-        }
+
     }
     // 플레이어가 좌우 강하게공격
     void Idx7EnforceFunc(Transform player)
@@ -314,11 +252,6 @@ public class CardManager : Singleton<CardManager>
         Vector2Int left = new Vector2Int((int)player.transform.position.x - 1, (int)player.transform.position.y);
         GamePlayManager.Instance.GoDamage(right, 2);
         GamePlayManager.Instance.GoDamage(left, 2);
-        Player_HJH p;
-        if (player.TryGetComponent<Player_HJH>(out p))
-        {
-            p.animator.Play("SwingHorizontal");
-        }
     }
     // 플레이어가 모든 방향 공격
     void Idx8Func(Transform player)
@@ -335,11 +268,7 @@ public class CardManager : Singleton<CardManager>
                 GamePlayManager.Instance.GoDamage(vec, 1);
             }
         }
-        Player_HJH p;
-        if (player.TryGetComponent<Player_HJH>(out p))
-        {
-            p.animator.Play("SmashDown");
-        }
+
     }
     // 플레이어가 모든방향 강하게공격
     void Idx8EnforceFunc(Transform player)
@@ -355,11 +284,6 @@ public class CardManager : Singleton<CardManager>
                 Vector2Int vec = new Vector2Int((int)player.transform.position.x + i, (int)player.transform.position.y + j);
                 GamePlayManager.Instance.GoDamage(vec, 2);
             }
-        }
-        Player_HJH p;
-        if (player.TryGetComponent<Player_HJH>(out p))
-        {
-            p.animator.Play("SmashDown");
         }
     }
     //3초 안에 공격 들어오면 막기
