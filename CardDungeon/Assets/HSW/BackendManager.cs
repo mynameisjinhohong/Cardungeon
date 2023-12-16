@@ -26,8 +26,6 @@ public class BackendManager : Singleton<BackendManager>
     
     public int SuccessLoadDataCount = 0;
 
-    public LoginSceneController_HSW loginSceneController;
-
     void Start()
     {
         Initialize();
@@ -181,7 +179,6 @@ public class BackendManager : Singleton<BackendManager>
                 break;
             case LoginType.Auto:
                 GetUserInfo();
-                loginSceneController.ChangeHostingUI(1);
                 Debug.LogError("자동 로그인에 성공했습니다.");
                 break;
         }
