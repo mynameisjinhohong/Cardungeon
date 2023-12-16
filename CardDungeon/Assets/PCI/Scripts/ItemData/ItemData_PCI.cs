@@ -13,10 +13,8 @@ public class ItemData_PCI : ScriptableObject
     public List<Sprite> sprites = new List<Sprite>();
     public virtual void OnInteracted(Player_HJH player)
     {
-        if (player.myPlayer)
-        {
-            GamePlayManager.Instance.mainUi.toastMsgContainer.AddMessage(description, 3.0f);
-        }
+        if (!player.myPlayer) return;
+        GamePlayManager.Instance.mainUi.toastMsgContainer.AddMessage(description, 3.0f);
         Debug.Log($"Item Activated : {itemName}({player})");
     }
 }
