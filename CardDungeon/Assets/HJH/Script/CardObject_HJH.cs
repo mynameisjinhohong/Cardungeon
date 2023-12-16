@@ -10,8 +10,10 @@ public class Card
     public Sprite cardType;
     public Sprite bigCardType;
     public Sprite itemImage;
+    [TextArea]
     public string description;
     public int cardIdx;
+    [TextArea]
     public string enforceDescription;
 }
 

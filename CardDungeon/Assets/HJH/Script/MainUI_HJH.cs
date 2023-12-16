@@ -27,6 +27,12 @@ public class MainUI_HJH : MonoBehaviour
     public TMP_Text bigCardMp;
     public TMP_Text bigCardName;
     public TMP_Text bigCardDescribe;
+
+    //µ¦ ¸®½ºÆ®
+    public GameObject deckList;
+    public GameObject dectContent;
+    public GameObject cardPrefab;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -114,5 +120,43 @@ public class MainUI_HJH : MonoBehaviour
     public void BigCardOff()
     {
         bigCard.SetActive(false);
+    }
+
+    public void DeckListOn()
+    {
+        for(int i =0; i< playerDeck.hand.Count; i++)
+        {
+            GameObject card = Instantiate(cardPrefab, dectContent.transform);
+            card.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.hand[i]].bigCardType;
+            card.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.hand[i]].useMP.ToString();
+            card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.hand[i]].cardName;
+            card.transform.GetChild(2).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.hand[i]].description;
+            card.transform.GetChild(3).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.hand[i]].itemImage;
+        }
+        for (int i =0; i<playerDeck.deck.Count; i++)
+        {
+            GameObject card = Instantiate(cardPrefab, dectContent.transform);
+            card.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.deck[i]].bigCardType;
+            card.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.deck[i]].useMP.ToString();
+            card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.deck[i]].cardName;
+            card.transform.GetChild(2).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.deck[i]].description;
+            card.transform.GetChild(3).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.deck[i]].itemImage;
+        }
+        for(int i =0; i<playerDeck.trash.Count; i++)
+        {
+            GameObject card = Instantiate(cardPrefab, dectContent.transform);
+            card.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.trash[i]].bigCardType;
+            card.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[i]].useMP.ToString();
+            card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[i]].cardName;
+            card.transform.GetChild(2).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[i]].description;
+            card.transform.GetChild(3).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.trash[i]].itemImage;
+        }
+        deckList.SetActive(true);
+
+    }
+
+    public void DeckListOff()
+    {
+        deckList.SetActive(false);
     }
 }
