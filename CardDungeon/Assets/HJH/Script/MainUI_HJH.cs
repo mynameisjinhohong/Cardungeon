@@ -37,16 +37,29 @@ public class MainUI_HJH : MonoBehaviour
     public GameObject cardPrefab;
     public TMP_Text endText;
     int idx = 0;
+
+    public Sprite[] icons;
+    bool firstSet = false;
     // Start is called before the first frame update
     void Start()
     {
         //서버랑 통신해서 닉네임이랑 아이콘 바꾸는거 해야됨
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!firstSet)
+        {
+            if(myPlayer != null)
+            {
+                playerNickName.text = myPlayer.PlayerName;
+                playerIcon.sprite = icons[GamePlayManager.Instance.myIdx];
+                firstSet = true;
+            }
+
+        }
         int deckAmount = 0;
         deckAmount += playerDeck.deck.Count;
         deckAmount += playerDeck.hand.Count;

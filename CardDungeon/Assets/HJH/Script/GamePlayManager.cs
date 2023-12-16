@@ -71,6 +71,11 @@ public class GamePlayManager : Singleton<GamePlayManager>
                 players.Add(playerHjh);
                 playerHjh.isSuperGamer = BackendManager.Instance.UserDataList[i].isSuperGamer;
                 playerHjh.PlayerName   = BackendManager.Instance.UserDataList[i].playerName;
+                if(BackendManager.Instance.Nickname == BackendManager.Instance.UserDataList[i].playerName)
+                {
+                    playerHjh.isMine = true;
+                    mainUi.myPlayer = playerHjh;
+                }
                 playerHjh.PlayerToken  = BackendManager.Instance.UserDataList[i].playerToken;
             
                 if (BackendManager.Instance.UserDataList[i].isSuperGamer)
@@ -91,7 +96,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
                 Transform parentTransform = PlayerSpawnPosition[myIdx].transform;
                 
-                Camera.main.transform.SetParent(parentTransform);
+                Camera.main.transform.SetParent(parentTransform.GetChild(0));
                 
                 Camera.main.transform.localPosition = new Vector3(0.5f, 0.5f, -10f);
                 
@@ -148,7 +153,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
             SendData(m);
             gameBoard.Generate(m.cardIdx);
         }
-        mainUi.myPlayer = players[myIdx];
+
         //gameRecord = new Stack<SessionId>();
         //GameManager.OnGameOver += OnGameOver;
         //GameManager.OnGameResult += OnGameResult;
