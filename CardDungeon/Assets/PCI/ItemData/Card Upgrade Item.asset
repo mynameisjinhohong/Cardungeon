@@ -9,12 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7ac9fcfbaa1aa843987b5dfa1d23e16, type: 3}
-  m_Name: Card
+  m_Script: {fileID: 11500000, guid: 8a849e9351a23b648b326bd17eae6181, type: 3}
+  m_Name: Card Upgrade Item
   m_EditorClassIdentifier: 
-  itemName: "\uCE74\uB4DC"
-  description: "\uB371\uC5D0 \uCE74\uB4DC\uB97C \uCD94\uAC00\uD569\uB2C8\uB2E4"
-  image: {fileID: 0}
-  amount: 50
+  itemName: "\uCE74\uB4DC \uAC15\uD654"
+  description: "\uCE74\uB4DC\uB97C \uAC15\uD654\uD569\uB2C8\uB2E4"
+  image: {fileID: 21300000, guid: 150a652d377f7447db261970c983c757, type: 3}
+  amount: 20
   sprites:
   - {fileID: 21300000, guid: 150a652d377f7447db261970c983c757, type: 3}

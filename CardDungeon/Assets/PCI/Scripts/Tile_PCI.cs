@@ -6,7 +6,6 @@ public class Tile_PCI : MonoBehaviour
 {
     public List<Sprite> sprites = new List<Sprite>();
     public SpriteRenderer spriteRenderer;
-    [HideInInspector]
     public List<TileObject_PCI> onTileObjects = new List<TileObject_PCI>();
 
     private void Start()
@@ -17,13 +16,39 @@ public class Tile_PCI : MonoBehaviour
     public void AddTileObject(TileObject_PCI obj)
     {
         onTileObjects.Add(obj);
+        onTileObjects.Sort((TileObject_PCI lhs, TileObject_PCI rhs) =>
+        {
+            if(lhs.sortOrder < rhs.sortOrder)
+            {
+                return 1;
+            }else if(lhs.sortOrder == rhs.sortOrder)
+            {
+                return 0;
+            }
+            else
+            {
+                return -1;
+            }
+        });
         obj.tile = this;
+        Render();
+    }
+
+    public void Render()
+    {
+        if (onTileObjects.Count == 0) return;
+        foreach(var e in onTileObjects)
+        {
+            e.spriteRenderer.enabled = false;
+        }
+        onTileObjects[0].spriteRenderer.enabled = true;
     }
 
     public void RemoveTileObject(TileObject_PCI obj)
     {
         if(onTileObjects.Contains(obj))
             onTileObjects.Remove(obj);
+        Render();
     }
 
     public bool IsPahtable()
@@ -61,6 +86,7 @@ public class Tile_PCI : MonoBehaviour
             {
                 onTileObjects.Remove(e);
                 e.OnDamaged(player);
+                Render();
                 break;
             }
         }
@@ -73,6 +99,7 @@ public class Tile_PCI : MonoBehaviour
             if (e.isInteractable)
             {
                 e.OnInteracted(player);
+                Render();
                 break;
             }
         }
