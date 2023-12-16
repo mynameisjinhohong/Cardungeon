@@ -101,6 +101,12 @@ public class GameBoard_PCI : MonoBehaviour
                 int x = UnityEngine.Random.Range(0, width);
                 int y = UnityEngine.Random.Range(0, height);
 
+                bool flag = true;
+                for(int i = 0; i < 8; i++)
+                {
+                    if ((x, y) == offset[i]) { flag = false; break; }
+                }
+                if (!flag) continue;
                 if (!IsInteractable(new Vector2Int(x, y)))
                 {
                     var targetTile = board[x, y];
