@@ -34,7 +34,7 @@ public class MatchController : MonoBehaviour
             ChangeUI(1);
             UserNickName.text = BackendManager.Instance.Nickname;
 
-            MatchSetting();
+            MatchStart();
         }
     }
 
@@ -46,31 +46,16 @@ public class MatchController : MonoBehaviour
         }
     }
 
-    public void MatchStartCor()
-    {
-        StartCoroutine(MatchSetting());
-    }
-    
-    IEnumerator MatchSetting()
+    public void MatchStart()
     {
         matchingTest.GetMatchList();
 
-        yield return new WaitForSeconds(0.5f);
-        
-        matchingTest.CreateMatchRoom();
-
-        yield return new WaitForSeconds(0.5f);
-
         matchingTest.JoinMatchMakingServer();
-
-        yield return new WaitForSeconds(0.5f);
-        
-        matchingTest.RequestMatchMaking();
     }
 
     public void MatchCancel()
     {
-        Backend.Match.LeaveMatchMakingServer();
+        Backend.Match.CancelMatchMaking();
         ChangeUI(1);
     }
     

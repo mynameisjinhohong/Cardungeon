@@ -434,9 +434,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1841941305}
-        m_TargetAssemblyTypeName: MatchController, Assembly-CSharp
-        m_MethodName: MatchStartCor
+      - m_Target: {fileID: 1841941307}
+        m_TargetAssemblyTypeName: MatchingTest, Assembly-CSharp
+        m_MethodName: RequestMatchMaking
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
