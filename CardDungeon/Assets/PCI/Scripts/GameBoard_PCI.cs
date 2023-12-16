@@ -8,6 +8,8 @@ public class GameBoard_PCI : MonoBehaviour
     [SerializeField]
     private Tile_PCI tilePrefab;
     [SerializeField]
+    private TileObject_PCI bedrockPrefab;
+    [SerializeField]
     private TileObject_PCI undestructablePrefab;
     [SerializeField]
     private TileObject_PCI blockPrefab;
@@ -81,10 +83,15 @@ public class GameBoard_PCI : MonoBehaviour
         }
 
         // Render
-        for (int i = 0; i < width; i++)
+        for (int i = -5; i < width+5; i++)
         {
-            for (int j = 0; j < height; j++)
+            for (int j = -5; j < height+5; j++)
             {
+                if(i < 0 || j < 0 || i >= width || j >= height)
+                {
+                    Instantiate(bedrockPrefab, new Vector3(i, j, 0), Quaternion.identity, transform);
+                    continue;
+                }
                 var newTile = Instantiate(tilePrefab, new Vector3(i, j, 0), Quaternion.identity, transform);
                 board[i, j] = newTile;
                 if(tempBoard[i, j] == 0)
