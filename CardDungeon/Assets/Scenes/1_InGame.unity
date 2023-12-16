@@ -1066,7 +1066,7 @@ MonoBehaviour:
   reRollButton: {fileID: 1844075509}
   myPlayer: {fileID: 0}
   playerDeck: {fileID: 1490756469}
-  toastMsgContainer: {fileID: 0}
+  toastMsgContainer: {fileID: 1221552189}
   bigCard: {fileID: 2091109527871445737}
   bigCardMp: {fileID: 2091109527533129221}
   bigCardName: {fileID: 2091109528579579246}
@@ -3044,6 +3044,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7975077980767190671, guid: b2fbc8e84754076499a1913d4dd615ce, type: 3}
   m_PrefabInstance: {fileID: 1221552187}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1221552189 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4786090515322184944, guid: b2fbc8e84754076499a1913d4dd615ce, type: 3}
+  m_PrefabInstance: {fileID: 1221552187}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a044fe3c9334c043ae8fd1f40aa9ecd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1261299302 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 264628220894464234, guid: 4fce94221d260b4459d0e78d397c0bd5, type: 3}
