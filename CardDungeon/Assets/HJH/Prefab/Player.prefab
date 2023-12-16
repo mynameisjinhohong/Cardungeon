@@ -47,13 +47,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHp: 5
   maxMp: 5
-  mpCoolTime: 7
+  mpCoolTime: 3
   PlayerName: 
   PlayerToken: 
   isSuperGamer: 0
   isMine: 0
   animator: {fileID: 5531401151381640362}
-  myPlayer: 0
 --- !u!1 &5898363692132139200
 GameObject:
   m_ObjectHideFlags: 0
