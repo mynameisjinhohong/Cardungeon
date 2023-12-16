@@ -1,13 +1,8 @@
-using BackEnd.Tcp;
 using BackEnd;
-using Protocol;
+using BackEnd.Tcp;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.LowLevel;
-using UnityEngine.UI;
-using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 public class GamePlayManager : Singleton<GamePlayManager>
 {
@@ -52,9 +47,9 @@ public class GamePlayManager : Singleton<GamePlayManager>
             }
         });
         DataInit();
-            
+
         yield return new WaitUntil(() => isDataCheck);
-        
+
         InitializeGame();
         //서버랑 소통하고 나서 로컬 플레이어의 인덱스를 받아왔다는 가정 하에 코드 작성
     }
@@ -70,19 +65,19 @@ public class GamePlayManager : Singleton<GamePlayManager>
                 Player_HJH playerHjh = PlayerPrefab.GetComponent<Player_HJH>();
                 players.Add(playerHjh);
                 playerHjh.isSuperGamer = BackendManager.Instance.UserDataList[i].isSuperGamer;
-                playerHjh.PlayerName   = BackendManager.Instance.UserDataList[i].playerName;
-                if(BackendManager.Instance.Nickname == BackendManager.Instance.UserDataList[i].playerName)
+                playerHjh.PlayerName = BackendManager.Instance.UserDataList[i].playerName;
+                if (BackendManager.Instance.Nickname == BackendManager.Instance.UserDataList[i].playerName)
                 {
                     playerHjh.isMine = true;
                     mainUi.myPlayer = playerHjh;
                 }
-                playerHjh.PlayerToken  = BackendManager.Instance.UserDataList[i].playerToken;
-            
+                playerHjh.PlayerToken = BackendManager.Instance.UserDataList[i].playerToken;
+
                 if (BackendManager.Instance.UserDataList[i].isSuperGamer)
                 {
                     SuperGamerIdx = i;
                 }
-                
+
                 players[i].gameObject.SetActive(true);
             }
 
@@ -95,11 +90,11 @@ public class GamePlayManager : Singleton<GamePlayManager>
                 myIdx = i;
 
                 Transform parentTransform = PlayerSpawnPosition[myIdx].transform;
-                
+
                 Camera.main.transform.SetParent(parentTransform.GetChild(0));
-                
+
                 Camera.main.transform.localPosition = new Vector3(0.5f, 0.5f, -10f);
-                
+
                 if (myIdx == SuperGamerIdx)
                     isHost = true;
             }
@@ -107,23 +102,147 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
         isDataCheck = true;
     }
-    
+    public bool CardIdxCheckNoPlayer(int cardIdx, Transform playerPos)
+    {
+        Vector2 goPos = new Vector2();
+        switch (Mathf.Abs(cardIdx))
+        {
+            case 1:
+                if(cardIdx > 0)
+                {
+                    goPos = new Vector2(playerPos.position.x, playerPos.position.y + 2);
+                }
+                else
+                {
+                    goPos = new Vector2(playerPos.position.x, playerPos.position.y + 1);
+                }
+                break;
+            case 2:
+                if (cardIdx > 0)
+                {
+                    goPos = new Vector2(playerPos.position.x + 2, playerPos.position.y);
+                }
+                else
+                {
+                    goPos = new Vector2(playerPos.position.x + 1, playerPos.position.y);
+                }
+                break;
+            case 3:
+                if (cardIdx > 0)
+                {
+                    goPos = new Vector2(playerPos.position.x - 2, playerPos.position.y);
+                }
+                else
+                {
+                    goPos = new Vector2(playerPos.position.x - 1, playerPos.position.y);
+                }
+                break;
+            case 4:
+                if (cardIdx > 0)
+                {
+                    goPos = new Vector2(playerPos.position.x, playerPos.position.y - 2);
+                }
+                else
+                {
+                    goPos = new Vector2(playerPos.position.x, playerPos.position.y - 1);
+                }
+                break;
+            case 5:
+                if (cardIdx > 0)
+                {
+                    goPos = new Vector2(playerPos.position.x, playerPos.position.y - 2);
+                }
+                else
+                {
+                    goPos = new Vector2(playerPos.position.x, playerPos.position.y - 1);
+                }
+                break;
+        }
+        if(Mathf.Abs(cardIdx) == 6)
+        {
+            if(cardIdx > 0)
+            {
+                Random.InitState(CardManager.Instance.seed);
+                int x = Random.Range(-2, 3);
+                int y = Random.Range(-2, 3);
+                if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)playerPos.transform.position.x + x, (int)playerPos.transform.position.y + y)))
+                {
+                    goPos = new Vector3(playerPos.transform.position.x + x, playerPos.transform.position.y + y, playerPos.transform.position.z);
+                }
+                else
+                {
+                    for (int i = -2; i < 3; i++)
+                    {
+                        for (int j = -2; j < 3; j++)
+                        {
+                            if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)playerPos.transform.position.x + j, (int)playerPos.transform.position.y + i)))
+                            {
+                                goPos = new Vector3(playerPos.transform.position.x + j, playerPos.transform.position.y + i, playerPos.transform.position.z);
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                Random.InitState(CardManager.Instance.seed);
+                int x = Random.Range(-3, 4);
+                int y = Random.Range(-3, 4);
+                if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)playerPos.transform.position.x + x, (int)playerPos.transform.position.y + y)))
+                {
+                    goPos = new Vector3(playerPos.transform.position.x + x, playerPos.transform.position.y + y, playerPos.transform.position.z);
+                }
+                else
+                {
+                    for (int i = -3; i < 4; i++)
+                    {
+                        for (int j = -3; j < 4; j++)
+                        {
+                            if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)playerPos.transform.position.x + j, (int)playerPos.transform.position.y + i)))
+                            {
+                                goPos = new Vector3(playerPos.transform.position.x + j, playerPos.transform.position.y + i, playerPos.transform.position.z);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return CheckNoPlayer(goPos);
+
+
+    }
+
+
+    public bool CheckNoPlayer(Vector2 goPos)
+    {
+        for (int i = 0; i < players.Count; i++)
+        {
+            Vector2 vec = new Vector2((int)players[i].transform.position.x, (int)players[i].transform.position.y);
+            if ((Vector2)goPos == vec)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public void InitializeGame()
     {
         if (isHost)
         {
-            messageQueue= new Queue<Message>();
+            messageQueue = new Queue<Message>();
         }
         if (Backend.Match.OnMatchRelay == null)
         {
-            Backend.Match.OnMatchRelay = (MatchRelayEventArgs args) => {
+            Backend.Match.OnMatchRelay = (MatchRelayEventArgs args) =>
+            {
                 if (args.From.NickName == BackendManager.Instance.Nickname)
                 {
                     return;
                 }
                 var strByte = System.Text.Encoding.Default.GetString(args.BinaryUserData);
                 Message msg = JsonUtility.FromJson<Message>(strByte);
-               
+
                 if (isHost)
                 {
                     messageQueue.Enqueue(msg);
@@ -132,7 +251,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
                 {
                     if (args.From.NickName == BackendManager.Instance.UserDataList[SuperGamerIdx].playerName)
                     {
-                        if(msg.playerIdx == -10)
+                        if (msg.playerIdx == -10)
                         {
                             gameBoard.Generate(msg.cardIdx);
                             CardManager.Instance.seed = msg.cardIdx;
@@ -212,7 +331,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
     }
 
 
-    public void CardGo(int playerIdx,int cardIdx) //카드 사용, 서버와 통신 해야됨
+    public void CardGo(int playerIdx, int cardIdx) //카드 사용, 서버와 통신 해야됨
     {
         if (isHost)
         {
@@ -231,7 +350,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
     }
 
-    public void CardRealGo(int playerIdx,int cardIdx)
+    public void CardRealGo(int playerIdx, int cardIdx)
     {
         CardManager.Instance.OnCardStart(players[playerIdx].transform, cardIdx);
 
@@ -242,12 +361,12 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
     }
 
-    public void GoDamage(Vector2Int pos,int damage)
+    public void GoDamage(Vector2Int pos, int damage)
     {
-        for(int i =0; i<players.Count;i++)
+        for (int i = 0; i < players.Count; i++)
         {
             Vector2Int vec = new Vector2Int((int)players[i].transform.position.x, (int)players[i].transform.position.y);
-            if(vec == pos)
+            if (vec == pos)
             {
                 players[i].HP -= damage;
             }

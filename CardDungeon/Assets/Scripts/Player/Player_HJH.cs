@@ -13,6 +13,7 @@ public class Player_HJH : MonoBehaviour
     public bool isSuperGamer;
     public bool isMine;
     int hp;
+    Vector2 myPos;
     bool cool;
     float currentTime;
     bool shield = false;
@@ -115,6 +116,7 @@ public class Player_HJH : MonoBehaviour
                 currentTime = 0;
             }
         }
+        myPos = (Vector2)transform.position;
     }
 
     public void ShieldOn(float time)
