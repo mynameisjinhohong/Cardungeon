@@ -215,6 +215,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilePrefab: {fileID: 536246774118506383, guid: 4e8aace49810cce4cbc6091e1cdda848, type: 3}
+  undestructablePrefab: {fileID: 3174382540500026525, guid: 0fc463b9cf18dc244946a9a2249a33b1, type: 3}
   blockPrefab: {fileID: 3174382540500026525, guid: a96a59fc8ffa4254fa268213287b729d, type: 3}
   itemPrefab: {fileID: -2395730373240350998, guid: 56314e1473c0e25489ae9455bcb66773, type: 3}
   itemList: {fileID: 11400000, guid: bd343f981b4885642905df0531d05f11, type: 2}
