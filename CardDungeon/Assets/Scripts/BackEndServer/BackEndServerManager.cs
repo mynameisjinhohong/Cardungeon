@@ -13,7 +13,6 @@ using static BackEnd.SendQueue;
  */
 public class BackEndServerManager : MonoBehaviour
 {
-
     private static BackEndServerManager instance;   // 인스턴스
     public bool isLogin { get; private set; }   // 로그인 여부
 
@@ -23,6 +22,8 @@ public class BackEndServerManager : MonoBehaviour
     private Action<bool, string> loginSuccessFunc = null;
 
     private const string BackendError = "statusCode : {0}\nErrorCode : {1}\nMessage : {2}";
+
+    public List<String> nameList;
 
     public string appleToken = ""; // SignInWithApple.cs에서 토큰값을 받을 문자열
     void Awake()
