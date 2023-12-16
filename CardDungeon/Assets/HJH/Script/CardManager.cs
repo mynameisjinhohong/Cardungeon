@@ -3,7 +3,9 @@ using UnityEngine;
 public class CardManager : Singleton<CardManager>
 {
     public CardObject_HJH cardList;
-
+    public GameObject Idx6Effect;
+    public GameObject Idx7Effect;
+    public GameObject Idx8Effect;
 
     public void OnCardStart(Transform player, int cardIdx)
     {
@@ -395,8 +397,11 @@ public class CardManager : Singleton<CardManager>
     {
         Vector2Int up = new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y + 1);
         Vector2Int down = new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y - 1);
+        GamePlayManager.Instance.gameBoard.Attack(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y + 1), player.GetComponent<Player_HJH>());
+        GamePlayManager.Instance.gameBoard.Attack(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y - 1), player.GetComponent<Player_HJH>());
         GamePlayManager.Instance.GoDamage(up, 1);
         GamePlayManager.Instance.GoDamage(down, 1);
+        Instantiate(Idx6Effect, player);
         Player_HJH p;
         if (player.TryGetComponent<Player_HJH>(out p))
         {
@@ -410,6 +415,9 @@ public class CardManager : Singleton<CardManager>
     {
         Vector2Int up = new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y + 1);
         Vector2Int down = new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y - 1);
+        GamePlayManager.Instance.gameBoard.Attack(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y + 1), player.GetComponent<Player_HJH>());
+        GamePlayManager.Instance.gameBoard.Attack(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y - 1), player.GetComponent<Player_HJH>());
+        Instantiate(Idx6Effect, player);
         GamePlayManager.Instance.GoDamage(up, 2);
         GamePlayManager.Instance.GoDamage(down, 2);
         Player_HJH p;
@@ -425,8 +433,11 @@ public class CardManager : Singleton<CardManager>
     {
         Vector2Int right = new Vector2Int((int)player.transform.position.x + 1, (int)player.transform.position.y);
         Vector2Int left = new Vector2Int((int)player.transform.position.x - 1, (int)player.transform.position.y);
+        GamePlayManager.Instance.gameBoard.Attack(new Vector2Int((int)player.transform.position.x + 1, (int)player.transform.position.y), player.GetComponent<Player_HJH>());
+        GamePlayManager.Instance.gameBoard.Attack(new Vector2Int((int)player.transform.position.x - 1, (int)player.transform.position.y), player.GetComponent<Player_HJH>());
         GamePlayManager.Instance.GoDamage(right, 1);
         GamePlayManager.Instance.GoDamage(left, 1);
+        Instantiate(Idx7Effect, player);
         Player_HJH p;
         if (player.TryGetComponent<Player_HJH>(out p))
         {
@@ -440,8 +451,11 @@ public class CardManager : Singleton<CardManager>
     {
         Vector2Int right = new Vector2Int((int)player.transform.position.x + 1, (int)player.transform.position.y);
         Vector2Int left = new Vector2Int((int)player.transform.position.x - 1, (int)player.transform.position.y);
+        GamePlayManager.Instance.gameBoard.Attack(new Vector2Int((int)player.transform.position.x + 1, (int)player.transform.position.y), player.GetComponent<Player_HJH>());
+        GamePlayManager.Instance.gameBoard.Attack(new Vector2Int((int)player.transform.position.x - 1, (int)player.transform.position.y), player.GetComponent<Player_HJH>());
         GamePlayManager.Instance.GoDamage(right, 2);
         GamePlayManager.Instance.GoDamage(left, 2);
+        Instantiate(Idx7Effect, player);
         Player_HJH p;
         if (player.TryGetComponent<Player_HJH>(out p))
         {
@@ -462,9 +476,11 @@ public class CardManager : Singleton<CardManager>
                     continue;
                 }
                 Vector2Int vec = new Vector2Int((int)player.transform.position.x + i, (int)player.transform.position.y + j);
+                GamePlayManager.Instance.gameBoard.Attack(vec, player.GetComponent<Player_HJH>());
                 GamePlayManager.Instance.GoDamage(vec, 1);
             }
         }
+        Instantiate(Idx8Effect, player);
         Player_HJH p;
         if (player.TryGetComponent<Player_HJH>(out p))
         {
@@ -488,6 +504,7 @@ public class CardManager : Singleton<CardManager>
                 GamePlayManager.Instance.GoDamage(vec, 2);
             }
         }
+        Instantiate(Idx8Effect, player);
         Player_HJH p;
         if (player.TryGetComponent<Player_HJH>(out p))
         {
