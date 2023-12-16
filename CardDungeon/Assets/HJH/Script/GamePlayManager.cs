@@ -114,7 +114,6 @@ public class GamePlayManager : Singleton<GamePlayManager>
                         if(msg.playerIdx == -10)
                         {
                             gameBoard.Generate(msg.cardIdx);
-                            Debug.Log("甘 积己!!" + msg.cardIdx);
                         }
                         else
                         {
@@ -132,8 +131,8 @@ public class GamePlayManager : Singleton<GamePlayManager>
             m.cardIdx = Random.Range(0, 100);
             SendData(m);
             gameBoard.Generate(m.cardIdx);
-            Debug.Log("甘 积己!!" + m.cardIdx);
         }
+        mainUi.myPlayer = players[myIdx];
         //gameRecord = new Stack<SessionId>();
         //GameManager.OnGameOver += OnGameOver;
         //GameManager.OnGameResult += OnGameResult;
