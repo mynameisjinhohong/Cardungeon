@@ -17,7 +17,6 @@ public class Player_HJH : MonoBehaviour
     float currentTime;
     bool shield = false;
     public Animator animator;
-    public bool myPlayer;
 
     public int HP
     {
@@ -53,7 +52,7 @@ public class Player_HJH : MonoBehaviour
             }
             if (hp < 0)
             {
-                if (myPlayer)
+                if (isMine)
                 {
                     GamePlayManager.Instance.GameOver();
                 }
