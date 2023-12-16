@@ -52,7 +52,7 @@ public class Player_HJH : MonoBehaviour
             {
                 hp = maxHp;
             }
-            if (hp < 0)
+            if (hp < 1)
             {
                 if (isMine)
                 {
