@@ -54,13 +54,30 @@ public class GamePlayManager : Singleton<GamePlayManager>
                 }
                 else
                 {
-                    if (args.From.NickName == "슈퍼방장")
+                    if (args.From.NickName == BackendManager.Instance.UserNameList[0])
                     {
-                        CardRealGo(msg.playerIdx, msg.cardIdx);
+                        if(msg.playerIdx == -10)
+                        {
+                            gameBoard.Generate(msg.cardIdx);
+                            Debug.Log("맵 생성!!" + msg.cardIdx);
+                        }
+                        else
+                        {
+                            CardRealGo(msg.playerIdx, msg.cardIdx);
+                        }
                     }
                 }
                 //Debug.Log($"서버에서 받은 데이터 : {args.From.NickName} : {msg.ToString()}");
             };
+        }
+        if (isHost)
+        {
+            Message m = new Message();
+            m.playerIdx = -10;
+            m.cardIdx = Random.Range(0, 100);
+            SendData(m);
+            gameBoard.Generate(m.cardIdx);
+            Debug.Log("맵 생성!!" + m.cardIdx);
         }
         //gameRecord = new Stack<SessionId>();
         //GameManager.OnGameOver += OnGameOver;
@@ -125,6 +142,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
         public int playerIdx;
         public int cardIdx;
     }
+
 
     public void SendData(Message mes)
     {

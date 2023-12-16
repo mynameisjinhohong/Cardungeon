@@ -240,9 +240,10 @@ MonoBehaviour:
   - {fileID: 4443530726614185820, guid: d61a1080a860be640bf2d0917b364916, type: 3}
   playerDeck: {fileID: 1490756469}
   myIdx: 0
+  SuperGamerIdx: 0
   gameBoard: {fileID: 103219521}
   playerPool: {fileID: 531361958}
-  playerPrefeb: {fileID: 5898363691524700565, guid: 1c0407bca6cee1f48a32e8a9aa1cabcb, type: 3}
+  PlayerSpawnPosition: []
   isHost: 0
 --- !u!4 &31816213
 Transform:
@@ -530,7 +531,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 8f0143be08ff5f54fadebcdfc13bcbc3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: da5a4a7441b3fc042925b62c3abbe2b1, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3541,7 +3542,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: e9dfb536c7cd36f479391f7fd14cefbf, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f2898f73c6a3eb149963b9f4960d863e, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
