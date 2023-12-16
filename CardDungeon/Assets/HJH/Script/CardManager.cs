@@ -6,7 +6,7 @@ public class CardManager : Singleton<CardManager>
     public GameObject Idx6Effect;
     public GameObject Idx7Effect;
     public GameObject Idx8Effect;
-
+    public int seed;
     public void OnCardStart(Transform player, int cardIdx)
     {
         switch (cardIdx)
@@ -330,7 +330,7 @@ public class CardManager : Singleton<CardManager>
     // 플레이어가 5*5 안에서 랜덤하게 이동
     void Idx5Func(Transform player)
     {
-
+        Random.InitState(seed);
         int x = Random.Range(-2, 3);
         int y = Random.Range(-2, 3);
         if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x + x, (int)player.transform.position.y + y)))
@@ -363,6 +363,7 @@ public class CardManager : Singleton<CardManager>
     // 플레이어가 7*7 안에서 랜덤하게 이동
     void Idx5EnforceFunc(Transform player)
     {
+        Random.InitState(seed);
         int x = Random.Range(-3, 4);
         int y = Random.Range(-3, 4);
         if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x + x, (int)player.transform.position.y + y)))

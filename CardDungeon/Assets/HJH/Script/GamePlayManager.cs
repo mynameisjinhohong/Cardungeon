@@ -135,6 +135,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
                         if(msg.playerIdx == -10)
                         {
                             gameBoard.Generate(msg.cardIdx);
+                            CardManager.Instance.seed = msg.cardIdx;
                         }
                         else
                         {
@@ -153,6 +154,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
             m.playerIdx = -10;
             m.cardIdx = Random.Range(0, 100);
             SendData(m);
+            CardManager.Instance.seed = m.cardIdx;
             gameBoard.Generate(m.cardIdx);
         }
 
