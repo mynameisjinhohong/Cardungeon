@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MainUI_HJH : MonoBehaviour
@@ -41,6 +42,8 @@ public class MainUI_HJH : MonoBehaviour
 
     public Sprite[] icons;
     bool firstSet = false;
+
+    public GameObject gameOver;
     // Start is called before the first frame update
     void Start()
     {
@@ -376,4 +379,33 @@ public class MainUI_HJH : MonoBehaviour
     {
         deckList.SetActive(false);
     }
+
+    public void GameOver()
+    {
+        gameOver.SetActive(true);
+
+    }
+    public void GotoLobby()
+    {
+        SceneManager.LoadScene(0);
+    }
+    public void LookAround()
+    {
+        float disTance = float.MaxValue;
+        int idx = 0;
+        for(int i =0; i<GamePlayManager.Instance.players.Count; i++)
+        {
+            Transform myPos = myPlayer.transform;
+            if(i != GamePlayManager.Instance.myIdx)
+            {
+                if ((GamePlayManager.Instance.players[i].transform.position - myPos.position).magnitude < disTance)
+                {
+                    disTance = (GamePlayManager.Instance.players[i].transform.position - myPos.position).magnitude;
+                    idx = i;
+                }
+            }
+        }
+        Camera.main.transform.SetParent(GamePlayManager.Instance.players[idx].transform);
+    }
+
 }
