@@ -80,21 +80,21 @@ public class InGameTest : MonoBehaviour {
             string userListString = "접속한 유저 : \n";
             foreach (var list in inGameUserList)
             {
-                Player_HJH playerData = new Player_HJH();
-                
                 userListString += $"{list.Value.m_nickname}({list.Value.m_sessionId})" + (list.Value.m_isSuperGamer == true ? "슈퍼게이머" : "");
 
-                playerData.PlayerToken = list.Value.m_sessionId.ToString();
-                playerData.PlayerName = list.Value.m_nickname;
-                playerData.isSuperGamer = list.Value.m_isSuperGamer;
+                UserData data = new UserData();
+                    
+                data.playerToken = list.Value.m_sessionId.ToString();
+                data.playerName = list.Value.m_nickname;
+                data.isSuperGamer = list.Value.m_isSuperGamer;
                 
-                BackendManager.Instance.UserNameList.Add(list.Value.m_nickname);
-                BackendManager.Instance.PlayerDataList.Add(playerData);
+                BackendManager.Instance.UserDataList.Add(data);
             }
 
             Debug.Log("6-1. OnMatchInGameStart 인게임 시작");
             Debug.Log(userListString);
             Debug.Log("데이터를 보낼 수 있습니다!");
+            BackendManager.Instance.isLoadGame = true;
         };
         
         Debug.Log($"5-1. JoinGameRoom 게임룸 접속 요청 : 토큰({currentGameRoomInfo.m_inGameRoomToken}");

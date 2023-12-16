@@ -238,12 +238,29 @@ MonoBehaviour:
   - {fileID: 3060288916194163921, guid: cb2c769c9602e214098c39a4da068331, type: 3}
   - {fileID: 6428670304694956862, guid: 2c6ae317eeb182e44be7c8ced9cfcb50, type: 3}
   - {fileID: 4443530726614185820, guid: d61a1080a860be640bf2d0917b364916, type: 3}
+  playerPrefabs:
+  - {fileID: 5898363691524700565, guid: 1c0407bca6cee1f48a32e8a9aa1cabcb, type: 3}
+  - {fileID: 9191593415827058464, guid: 72b7cd1721978654da4cc478fcdbc67a, type: 3}
+  - {fileID: 4648987187662829648, guid: b42b0be3808ebd54b8dcf147c1d167c7, type: 3}
+  - {fileID: 6968893008334608134, guid: 749aee0454c65294fa4aee6e22f3bcb8, type: 3}
+  - {fileID: 5227476593760219095, guid: bbb4c64913dbc1941b70088982d952be, type: 3}
+  - {fileID: 6248010190224005879, guid: cb2c769c9602e214098c39a4da068331, type: 3}
+  - {fileID: 2736509829034153240, guid: 2c6ae317eeb182e44be7c8ced9cfcb50, type: 3}
+  - {fileID: 4712919166776824186, guid: d61a1080a860be640bf2d0917b364916, type: 3}
   playerDeck: {fileID: 1490756469}
   myIdx: 0
   SuperGamerIdx: 0
   gameBoard: {fileID: 103219521}
   playerPool: {fileID: 531361958}
-  PlayerSpawnPosition: []
+  PlayerSpawnPosition:
+  - {fileID: 103219528}
+  - {fileID: 103219527}
+  - {fileID: 103219526}
+  - {fileID: 103219525}
+  - {fileID: 103219524}
+  - {fileID: 103219523}
+  - {fileID: 103219522}
+  - {fileID: 103219520}
   isHost: 0
 --- !u!4 &31816213
 Transform:
@@ -317,6 +334,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e36e36b8cb80c004d8e7795049669df8, type: 3}
+--- !u!4 &103219520 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8787522441360011871, guid: e36e36b8cb80c004d8e7795049669df8, type: 3}
+  m_PrefabInstance: {fileID: 103219519}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &103219521 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8787522441298779875, guid: e36e36b8cb80c004d8e7795049669df8, type: 3}
@@ -328,6 +350,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27b35fc794f72084999646baa66a6078, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &103219522 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8787522441305619597, guid: e36e36b8cb80c004d8e7795049669df8, type: 3}
+  m_PrefabInstance: {fileID: 103219519}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &103219523 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8787522440827928639, guid: e36e36b8cb80c004d8e7795049669df8, type: 3}
+  m_PrefabInstance: {fileID: 103219519}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &103219524 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8787522442316386973, guid: e36e36b8cb80c004d8e7795049669df8, type: 3}
+  m_PrefabInstance: {fileID: 103219519}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &103219525 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8787522442620148466, guid: e36e36b8cb80c004d8e7795049669df8, type: 3}
+  m_PrefabInstance: {fileID: 103219519}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &103219526 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8787522441982954870, guid: e36e36b8cb80c004d8e7795049669df8, type: 3}
+  m_PrefabInstance: {fileID: 103219519}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &103219527 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8787522441194958083, guid: e36e36b8cb80c004d8e7795049669df8, type: 3}
+  m_PrefabInstance: {fileID: 103219519}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &103219528 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8787522442114132123, guid: e36e36b8cb80c004d8e7795049669df8, type: 3}
+  m_PrefabInstance: {fileID: 103219519}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &109102243
 GameObject:
   m_ObjectHideFlags: 0
@@ -531,7 +588,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: da5a4a7441b3fc042925b62c3abbe2b1, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8f0143be08ff5f54fadebcdfc13bcbc3, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3542,7 +3599,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f2898f73c6a3eb149963b9f4960d863e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e9dfb536c7cd36f479391f7fd14cefbf, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1

@@ -13,6 +13,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
 {
     public MainUI_HJH mainUi;
     public Player_HJH[] players;
+    public List<GameObject> playerPrefabs;
     public PlayerDeck_HJH playerDeck;
     public int myIdx;
     public int SuperGamerIdx;
@@ -27,11 +28,17 @@ public class GamePlayManager : Singleton<GamePlayManager>
     // Start is called before the first frame update
     void Start()
     {
+        StartCoroutine(WaitforGameStart());
+    }
+
+    IEnumerator WaitforGameStart()
+    {
+        yield return new WaitUntil(() => BackendManager.Instance.isLoadGame);
+        
         InitializeGame();
         //서버랑 소통하고 나서 로컬 플레이어의 인덱스를 받아왔다는 가정 하에 코드 작성
-
-        mainUi.myPlayer = players[myIdx];
     }
+    
     public void InitializeGame()
     {
         if (isHost)
@@ -84,19 +91,35 @@ public class GamePlayManager : Singleton<GamePlayManager>
         //myPlayerIndex = SessionId.None;
         //SetPlayerAttribute();
         //OnGameStart();
-        for (int i = 0; i < BackendManager.Instance.PlayerDataList.Count; i++)
+        for (int i = 0; i < players.Length; i++)
         {
-            Instantiate(players[i].gameObject, PlayerSpawnPosition[i]);
-
-            if (BackendManager.Instance.PlayerDataList[i].isSuperGamer)
+            if (i < BackendManager.Instance.UserDataList.Count)
             {
-                SuperGamerIdx = i;
+                GameObject PlayerPrefab = Instantiate(playerPrefabs[i], PlayerSpawnPosition[i]);
+
+                Player_HJH playerHjh = PlayerPrefab.GetComponent<Player_HJH>();
+            
+                playerHjh.isSuperGamer = BackendManager.Instance.UserDataList[i].isSuperGamer;
+                playerHjh.PlayerName   = BackendManager.Instance.UserDataList[i].playerName;
+                playerHjh.PlayerToken  = BackendManager.Instance.UserDataList[i].playerToken;
+            
+                if (BackendManager.Instance.UserDataList[i].isSuperGamer)
+                {
+                    SuperGamerIdx = i;
+                }
+                
+                players[i].gameObject.SetActive(true);
             }
+            else
+            {
+                players[i].gameObject.SetActive(false);
+            }
+
         }
 
-        for (int i = 0; i < BackendManager.Instance.UserNameList.Count; i++)
+        for (int i = 0; i < BackendManager.Instance.UserDataList.Count; i++)
         {
-            if (BackendManager.Instance.Nickname == BackendManager.Instance.UserNameList[i])
+            if (BackendManager.Instance.Nickname == BackendManager.Instance.UserDataList[i].playerName)
             {
                 myIdx = i;
 
