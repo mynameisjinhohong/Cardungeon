@@ -69,17 +69,24 @@ public class MainUI_HJH : MonoBehaviour
         }
     }
 
-    public void Reroll()
+    public void Reroll(float reRollCool)
     {
         reRollButton.raycastTarget = false;
-        StartCoroutine(RerollButton());
+        StartCoroutine(RerollButton(reRollCool));
     }
-    IEnumerator RerollButton()
+    IEnumerator RerollButton(float reRollCool)
     {
         float currentTime = 0;
         while (true)
         {
+            yield return null;
             currentTime += Time.deltaTime;
+            reRollButton.fillAmount = currentTime/reRollCool;
+            if(currentTime/reRollCool > 1)
+            {
+                reRollButton.raycastTarget = true;
+                break;
+            }
         }
     }
 }
