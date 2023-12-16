@@ -37,22 +37,6 @@ public class GamePlayManager : Singleton<GamePlayManager>
     {
         yield return new WaitUntil(() => BackendManager.Instance.isLoadGame);
 
-        BackendManager.Instance.UserDataList.Sort((UserData lhs, UserData rhs) =>
-        {
-            if (int.Parse(lhs.playerToken) < int.Parse(rhs.playerToken))
-            {
-                return 1;
-            }
-            else if (lhs.playerToken == rhs.playerToken)
-            {
-                return 0;
-            }
-            else
-            {
-                return -1;
-            }
-        });
-        
         DataInit();
             
         yield return new WaitUntil(() => isDataCheck);
@@ -68,9 +52,8 @@ public class GamePlayManager : Singleton<GamePlayManager>
             if (i < BackendManager.Instance.UserDataList.Count)
             {
                 GameObject PlayerPrefab = Instantiate(playerPrefabs[i], PlayerSpawnPosition[i]);
-
                 Player_HJH playerHjh = PlayerPrefab.GetComponent<Player_HJH>();
-            
+                players[i] = playerHjh;
                 playerHjh.isSuperGamer = BackendManager.Instance.UserDataList[i].isSuperGamer;
                 playerHjh.PlayerName   = BackendManager.Instance.UserDataList[i].playerName;
                 playerHjh.PlayerToken  = BackendManager.Instance.UserDataList[i].playerToken;

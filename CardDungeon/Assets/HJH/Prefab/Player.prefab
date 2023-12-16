@@ -48,6 +48,9 @@ MonoBehaviour:
   maxHp: 0
   maxMp: 0
   mpCoolTime: 0
+  PlayerName: 
+  PlayerToken: 
+  isSuperGamer: 0
   animator: {fileID: 0}
   myPlayer: 0
 --- !u!1 &5898363692132139200
