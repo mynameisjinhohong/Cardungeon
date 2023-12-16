@@ -23,13 +23,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
     {
         InitializeGame();
         //서버랑 소통하고 나서 로컬 플레이어의 인덱스를 받아왔다는 가정 하에 코드 작성
-        for (int i =0; i<BackEndServerManager.GetInstance().nameList.Count; i++)
-        {
-            if (BackEndServerManager.GetInstance().nameList[i] == BackEndServerManager.GetInstance().myNickName)
-            {
-                myIdx = i;
-            }
-        } //인덱스 받아오기
+
         mainUi.myPlayer = players[myIdx];
     }
     public void InitializeGame()
