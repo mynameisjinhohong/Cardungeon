@@ -15,6 +15,7 @@ namespace Protocol
         PlayerNoMove,   // 플레이어 이동 멈춤
         PlayerNoRotate, // 플레이어 회전 멈춤
         bulletInfo,
+        CardInfo,
 
         AIPlayerInfo,   // AI가 존재하는 경우 AI 정보
         LoadRoomScene,      // 룸 씬으로 전환
@@ -58,6 +59,18 @@ namespace Protocol
             this.type = type;
         }
     }
+
+    public class CardMessage : Message
+    {
+        public int cardIdx;
+        public int playerIdx;
+        public CardMessage(int cardIdx,int playerIdx) : base(Type.CardInfo)
+        {
+            this.cardIdx = cardIdx;
+            this.playerIdx = playerIdx;
+        }
+    }
+
 
     public class KeyMessage : Message
     {
