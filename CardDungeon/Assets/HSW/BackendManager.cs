@@ -7,6 +7,7 @@ using BackEnd.Util;
 using LitJson;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class BackendManager : Singleton<BackendManager>
 {
@@ -26,7 +27,8 @@ public class BackendManager : Singleton<BackendManager>
     public int matchIndex = 0;
     public GameObject LoginPopup;
 
-    public List<String> UserList;
+    public List<String> UserNameList;
+    public List<Player_HJH> PlayerDataList;
 
     void Start()
     {

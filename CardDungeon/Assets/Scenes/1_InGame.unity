@@ -229,7 +229,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainUi: {fileID: 556443424}
-  players: []
+  players:
+  - {fileID: -5974585506449072205, guid: 1c0407bca6cee1f48a32e8a9aa1cabcb, type: 3}
+  - {fileID: 234795378270210310, guid: 72b7cd1721978654da4cc478fcdbc67a, type: 3}
+  - {fileID: 4344202958666194550, guid: b42b0be3808ebd54b8dcf147c1d167c7, type: 3}
+  - {fileID: 2052317483158679840, guid: 749aee0454c65294fa4aee6e22f3bcb8, type: 3}
+  - {fileID: 3766850833962813937, guid: bbb4c64913dbc1941b70088982d952be, type: 3}
+  - {fileID: 3060288916194163921, guid: cb2c769c9602e214098c39a4da068331, type: 3}
+  - {fileID: 6428670304694956862, guid: 2c6ae317eeb182e44be7c8ced9cfcb50, type: 3}
+  - {fileID: 4443530726614185820, guid: d61a1080a860be640bf2d0917b364916, type: 3}
   playerDeck: {fileID: 1490756469}
   myIdx: 0
   gameBoard: {fileID: 103219521}
