@@ -74,6 +74,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
                 if(BackendManager.Instance.Nickname == BackendManager.Instance.UserDataList[i].playerName)
                 {
                     playerHjh.isMine = true;
+                    mainUi.myPlayer = playerHjh;
                 }
                 playerHjh.PlayerToken  = BackendManager.Instance.UserDataList[i].playerToken;
             
@@ -152,7 +153,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
             SendData(m);
             gameBoard.Generate(m.cardIdx);
         }
-        mainUi.myPlayer = players[myIdx];
+
         //gameRecord = new Stack<SessionId>();
         //GameManager.OnGameOver += OnGameOver;
         //GameManager.OnGameResult += OnGameResult;
