@@ -62,7 +62,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
                 }
                 else
                 {
-                    if (args.From.NickName == BackendManager.Instance.UserNameList[0])
+                    if (args.From.NickName == BackendManager.Instance.UserDataList[0].playerName)
                     {
                         if(msg.playerIdx == -10)
                         {
