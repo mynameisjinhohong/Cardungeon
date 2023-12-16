@@ -51,7 +51,8 @@ MonoBehaviour:
   PlayerName: 
   PlayerToken: 
   isSuperGamer: 0
-  animator: {fileID: 0}
+  isMine: 0
+  animator: {fileID: 5531401151381640362}
   myPlayer: 0
 --- !u!1 &5898363692132139200
 GameObject:
