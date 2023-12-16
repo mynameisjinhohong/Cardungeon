@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Protocol;
 using BackEnd.Tcp;
 using BackEnd;
 
-public class Player : MonoBehaviour
+public class Player_HJH : MonoBehaviour
 {
     public enum SurfaceType
     {
@@ -20,6 +21,13 @@ public class Player : MonoBehaviour
         Multiply
     }
 
+    public int maxHp = 5;
+    public int maxMp = 5;
+    bool cool;
+    float currentTime;
+    bool shield = false;
+    public Animator animator;
+    public float mpCoolTime;
     private SessionId index = 0;
     private string nickName = string.Empty;
     private bool isMe = false;
@@ -63,7 +71,76 @@ public class Player : MonoBehaviour
             Initialize(true, SessionId.None, "testPlayer", 0);
         }
     }
-
+    
+    public int HP
+    {
+        get
+        {
+            return hp;
+        }
+        set
+        {
+            if(value < hp)
+            {
+                if (shield)
+                {
+                    StopAllCoroutines();
+                    shield = false;
+                }
+                else
+                {
+                    hp = value;
+                }
+            }
+            else
+            {
+                hp = value;
+            }
+            GamePlayManager.Instance.mainUi.ReNewHp();
+            if (hp > maxHp)
+            {
+                hp = maxHp;
+            }
+            if(hp < 0)
+            {
+                if (isMe)
+                {
+                    GamePlayManager.Instance.GameOver();
+                }
+                else
+                {
+                    Destroy(gameObject);
+                }
+            }
+        }
+    }
+    
+    int mp;
+    public int Mp
+    {
+        get
+        {
+            return mp;
+        }
+        set
+        {
+            mp = value;
+            if(mp < maxMp)
+            {
+                if (!cool)
+                {
+                    cool = true;
+                    currentTime = 0;
+                }
+            }
+            else
+            {
+                currentTime= 0;
+                cool = false;
+            }
+            GamePlayManager.Instance.mainUi.ReNewMp();
+        }
+    }
     public void Initialize(bool isMe, SessionId index, string nickName, float rot)
     {
         this.isMe = isMe;
@@ -356,6 +433,17 @@ public class Player : MonoBehaviour
             nameObject.transform.position = GetNameUIPos();
             hpObject.transform.position = GetHeartUIPos();
         }
+        
+        if (cool)
+        {
+            currentTime += Time.deltaTime;
+            GamePlayManager.Instance.mainUi.mpCoolTime.fillAmount = currentTime/mpCoolTime;
+            if(currentTime / mpCoolTime > 1)
+            {
+                Mp++;
+                currentTime = 0;
+            }
+        }
     }
 
     public SessionId GetIndex()
@@ -460,5 +548,25 @@ public class Player : MonoBehaviour
             nameObject.SetActive(true);
             hpObject.SetActive(true);
         }
+    }
+
+    public void ShieldOn(float time)
+    {
+        if (shield)
+        {
+            StopAllCoroutines();
+            StartCoroutine(ShieldCheck(time));
+        }
+        else
+        {
+            StartCoroutine(ShieldCheck(time));
+        }
+    }
+
+    IEnumerator ShieldCheck(float time)
+    {
+        shield = true;
+        yield return new WaitForSeconds(time);
+        shield = false;
     }
 }
