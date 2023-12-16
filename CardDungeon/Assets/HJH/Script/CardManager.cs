@@ -103,12 +103,103 @@ public class CardManager : Singleton<CardManager>
 
     }
 
+    public bool OnCardCheck(Player_HJH player,int cardIdx)
+    {
+        bool ret = true;
+        switch(Mathf.Abs(cardIdx))
+        {
+            case 1:
+                if (cardIdx < 0)
+                {
+                    ret = GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y + 2));
+                }
+                else
+                {
+                    ret = GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y + 1));
+                }
+                break;
+                case 2:
+                if (cardIdx < 0)
+                {
+                    ret = GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x + 2, (int)player.transform.position.y));
+                }
+                else
+                {
+                    ret = GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x + 1, (int)player.transform.position.y));
+                }
+                break;
+            case 3:
+                if (cardIdx < 0)
+                {
+                    ret = GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x - 2, (int)player.transform.position.y));
+                }
+                else
+                {
+                    ret = GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x - 1, (int)player.transform.position.y));
+                }
+                break;
+            case 4:
+                if (cardIdx < 0)
+                {
+                    ret = GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y - 2));
+                }
+                else
+                {
+                    ret = GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y - 1));
+                }
+                break;
+            case 5:
+                if (cardIdx < 0)
+                {
+                    ret = GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y - 2));
+                }
+                else
+                {
+                    ret = GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y - 1));
+                }
+                break;
+            case 6:
+                if (cardIdx < 0)
+                {
+                    ret = false;
+                    for (int i = -3; i < 4; i++)
+                    {
+                        for (int j = -3; j < 4; j++)
+                        {
+                            if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x + j, (int)player.transform.position.y + i)))
+                            {
+                                ret = true;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    ret = false;
+                    for (int i = -2; i < 3; i++)
+                    {
+                        for (int j = -2; j < 3; j++)
+                        {
+                            if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x + j, (int)player.transform.position.y + i)))
+                            {
+                                ret = true;
+                            }
+                        }
+                    }
+                }
+                break;
+        }
+        return ret;
+
+    }
+
 
     //플레이어 위로 1칸 이동
     void Idx0Func(Transform player)
     {
         if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y + 1)))
         {
+            GamePlayManager.Instance.gameBoard.Interact(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y + 1),player.GetComponent<Player_HJH>());
             player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 1, player.transform.position.z);
         }
         Player_HJH p;
@@ -122,6 +213,7 @@ public class CardManager : Singleton<CardManager>
     {
         if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y + 2)))
         {
+            GamePlayManager.Instance.gameBoard.Interact(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y + 2), player.GetComponent<Player_HJH>());
             player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 2, player.transform.position.z);
 
         }
@@ -136,6 +228,7 @@ public class CardManager : Singleton<CardManager>
     {
         if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x + 1, (int)player.transform.position.y)))
         {
+            GamePlayManager.Instance.gameBoard.Interact(new Vector2Int((int)player.transform.position.x + 1, (int)player.transform.position.y ), player.GetComponent<Player_HJH>());
             player.transform.position = new Vector3(player.transform.position.x + 1, player.transform.position.y, player.transform.position.z);
 
         }
@@ -150,6 +243,7 @@ public class CardManager : Singleton<CardManager>
     {
         if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x + 2, (int)player.transform.position.y)))
         {
+            GamePlayManager.Instance.gameBoard.Interact(new Vector2Int((int)player.transform.position.x + 2, (int)player.transform.position.y), player.GetComponent<Player_HJH>());
             player.transform.position = new Vector3(player.transform.position.x + 2, player.transform.position.y, player.transform.position.z);
 
         }
@@ -164,6 +258,7 @@ public class CardManager : Singleton<CardManager>
     {
         if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x - 1, (int)player.transform.position.y)))
         {
+            GamePlayManager.Instance.gameBoard.Interact(new Vector2Int((int)player.transform.position.x - 1, (int)player.transform.position.y), player.GetComponent<Player_HJH>());
             player.transform.position = new Vector3(player.transform.position.x - 1, player.transform.position.y, player.transform.position.z);
         }
         Player_HJH p;
@@ -177,6 +272,7 @@ public class CardManager : Singleton<CardManager>
     {
         if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x - 2, (int)player.transform.position.y)))
         {
+            GamePlayManager.Instance.gameBoard.Interact(new Vector2Int((int)player.transform.position.x - 2, (int)player.transform.position.y), player.GetComponent<Player_HJH>());
             player.transform.position = new Vector3(player.transform.position.x - 2, player.transform.position.y, player.transform.position.z);
         }
         Player_HJH p;
@@ -190,6 +286,7 @@ public class CardManager : Singleton<CardManager>
     {
         if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y - 1)))
         {
+            GamePlayManager.Instance.gameBoard.Interact(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y -1), player.GetComponent<Player_HJH>());
             player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y - 1, player.transform.position.z);
         }
         Player_HJH p;
@@ -203,6 +300,7 @@ public class CardManager : Singleton<CardManager>
     {
         if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y - 2)))
         {
+            GamePlayManager.Instance.gameBoard.Interact(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y - 2), player.GetComponent<Player_HJH>());
             player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y - 2, player.transform.position.z);
         }
         Player_HJH p;
@@ -219,6 +317,7 @@ public class CardManager : Singleton<CardManager>
         int y = Random.Range(-2, 3);
         if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x + x, (int)player.transform.position.y + y)))
         {
+            GamePlayManager.Instance.gameBoard.Interact(new Vector2Int((int)player.transform.position.x + x, (int)player.transform.position.y + y), player.GetComponent<Player_HJH>());
             player.transform.position = new Vector3(player.transform.position.x + x, player.transform.position.y + y, player.transform.position.z);
         }
         else
@@ -229,6 +328,7 @@ public class CardManager : Singleton<CardManager>
                 {
                     if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x + j, (int)player.transform.position.y + i)))
                     {
+                        GamePlayManager.Instance.gameBoard.Interact(new Vector2Int((int)player.transform.position.x + j, (int)player.transform.position.y + i), player.GetComponent<Player_HJH>());
                         player.transform.position = new Vector3(player.transform.position.x + j, player.transform.position.y + i, player.transform.position.z);
                     }
                 }
@@ -247,6 +347,7 @@ public class CardManager : Singleton<CardManager>
         int y = Random.Range(-3, 4);
         if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x + x, (int)player.transform.position.y + y)))
         {
+            GamePlayManager.Instance.gameBoard.Interact(new Vector2Int((int)player.transform.position.x + x, (int)player.transform.position.y + y), player.GetComponent<Player_HJH>());
             player.transform.position = new Vector3(player.transform.position.x + x, player.transform.position.y + y, player.transform.position.z);
         }
         else
@@ -257,6 +358,7 @@ public class CardManager : Singleton<CardManager>
                 {
                     if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x + j, (int)player.transform.position.y + i)))
                     {
+                        GamePlayManager.Instance.gameBoard.Interact(new Vector2Int((int)player.transform.position.x + j, (int)player.transform.position.y + i), player.GetComponent<Player_HJH>());
                         player.transform.position = new Vector3(player.transform.position.x + j, player.transform.position.y + i, player.transform.position.z);
                     }
                 }
