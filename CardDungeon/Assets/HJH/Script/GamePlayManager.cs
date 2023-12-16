@@ -71,6 +71,10 @@ public class GamePlayManager : Singleton<GamePlayManager>
                 players.Add(playerHjh);
                 playerHjh.isSuperGamer = BackendManager.Instance.UserDataList[i].isSuperGamer;
                 playerHjh.PlayerName   = BackendManager.Instance.UserDataList[i].playerName;
+                if(BackendManager.Instance.Nickname == BackendManager.Instance.UserDataList[i].playerName)
+                {
+                    playerHjh.isMine = true;
+                }
                 playerHjh.PlayerToken  = BackendManager.Instance.UserDataList[i].playerToken;
             
                 if (BackendManager.Instance.UserDataList[i].isSuperGamer)

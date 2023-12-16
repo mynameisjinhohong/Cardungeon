@@ -11,6 +11,7 @@ public class Player_HJH : MonoBehaviour
     public string PlayerName;
     public string PlayerToken;
     public bool isSuperGamer;
+    public bool isMine;
     int hp;
     bool cool;
     float currentTime;
@@ -42,7 +43,10 @@ public class Player_HJH : MonoBehaviour
             {
                 hp = value;
             }
-            GamePlayManager.Instance.mainUi.ReNewHp();
+            if (isMine)
+            {
+                GamePlayManager.Instance.mainUi.ReNewHp();
+            }
             if (hp > maxHp)
             {
                 hp = maxHp;
@@ -85,7 +89,10 @@ public class Player_HJH : MonoBehaviour
                 currentTime = 0;
                 cool = false;
             }
-            GamePlayManager.Instance.mainUi.ReNewMp();
+            if (isMine)
+            {
+                GamePlayManager.Instance.mainUi.ReNewMp();
+            }
         }
     }
 
