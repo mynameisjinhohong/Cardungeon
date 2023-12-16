@@ -55,8 +55,10 @@ public class PlayerDeck_HJH : MonoBehaviour
                     card.GetComponent<Card_HJH>().handIdx = i;
                     card.GetComponent<Card_HJH>().cardIdx = hand[i];
                     card.GetComponent<Card_HJH>().playerDeck = this;
-                    card.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[-hand[i]].cardName;
+                    card.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[-hand[i]].cardName + "+";
+                    card.transform.GetChild(0).GetComponent<TMP_Text>().color = Color.yellow;
                     card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[-hand[i]].useMP.ToString(); //나중에 변경
+                    card.transform.GetChild(1).GetComponent<TMP_Text>().color = Color.yellow;
                     card.transform.GetChild(2).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[-hand[i]].itemImage;
                 }
 
