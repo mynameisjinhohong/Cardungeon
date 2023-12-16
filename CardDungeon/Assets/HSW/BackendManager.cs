@@ -23,8 +23,7 @@ public class BackendManager : Singleton<BackendManager>
     public int checkLoginWayData = -1;
     public bool isInitialize = false;
     private int initTimeCount = 0;
-    
-    public int SuccessLoadDataCount = 0;
+    public int matchIndex = 0;
 
     void Start()
     {

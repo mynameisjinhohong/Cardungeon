@@ -1,12 +1,23 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using BackEnd;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MatchController : MonoBehaviour
 {
     public List<GameObject> UIList;
+
+    public TextMeshProUGUI UserNickName;
+
+    private MatchingTest matchingTest;
+
+    public void Start()
+    {
+        matchingTest = GetComponent<MatchingTest>();
+    }
 
     public void CheckPlayersLoginWay()
     {
@@ -17,8 +28,13 @@ public class MatchController : MonoBehaviour
         }
         else
         {
-            BackendManager.Instance.StartTokenLogin();
+            if (!BackendManager.Instance.isInitialize)
+                BackendManager.Instance.StartTokenLogin();
+            
             ChangeUI(1);
+            UserNickName.text = BackendManager.Instance.Nickname;
+
+            MatchSetting();
         }
     }
 
@@ -28,6 +44,19 @@ public class MatchController : MonoBehaviour
         {
             UIList[i].SetActive(i == index);
         }
+    }
+
+    IEnumerator MatchSetting()
+    {
+        matchingTest.GetMatchList();
+
+        yield return new WaitForSeconds(0.5f);
+        
+        matchingTest.CreateMatchRoom();
+
+        yield return new WaitForSeconds(0.5f);
+
+        matchingTest.JoinMatchMakingServer();
     }
     
 

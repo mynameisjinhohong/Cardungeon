@@ -18,7 +18,7 @@ public class PopupManager : Singleton<PopupManager>
     
     private Action ABBAction;
     
-    public SignUpPopup SignUpPrefab;
+    public GameObject SignUpPrefab;
 
     //public RecyclePopup RecyclePopup;
 
