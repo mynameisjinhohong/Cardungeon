@@ -15,9 +15,6 @@ EditorBuildSettings:
     path: Assets/Scenes/2. LoadRoom.unity
     guid: a993a8a193e284f399369874ca6ef979
   - enabled: 1
-    path: Assets/Scenes/3. InGame.unity
-    guid: 99c9720ab356a0642a771bea13969a05
-  - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
+    path: Assets/Scenes/3. Ingame.unity
+    guid: 733a92e433c0d7145953825e0f964f7b
   m_configObjects: {}

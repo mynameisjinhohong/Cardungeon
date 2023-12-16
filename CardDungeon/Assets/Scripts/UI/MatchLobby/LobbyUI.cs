@@ -70,6 +70,11 @@ public partial class LobbyUI : MonoBehaviour
 
     void Start()
     {
+        if (BackEndMatchManager.GetInstance() != null)
+        {
+            SetNickName();
+        }
+
         errorText = errorObject.GetComponentInChildren<Text>();
 
         loadingObject = GameObject.FindGameObjectWithTag("Loading");
@@ -105,7 +110,7 @@ public partial class LobbyUI : MonoBehaviour
         }
 
         recordObject.SetActive(false);
-        modelObject.SetActive(true);
+        //modelObject.SetActive(true);
         errorObject.SetActive(false);
         requestProgressObject.SetActive(false);
         matchDoneObject.SetActive(false);
@@ -114,9 +119,24 @@ public partial class LobbyUI : MonoBehaviour
         loadingObject.SetActive(false);
         selectObject.SetActive(false);
         readyRoomObject.SetActive(false);
-        //ChangeTab();
+        ChangeTab();
     }
-    
+
+    private void SetNickName()
+    {
+        var name = BackEndServerManager.GetInstance().myNickName;
+        if (name.Equals(string.Empty))
+        {
+            Debug.LogError("닉네임 불러오기 실패");
+            name = "test123";
+        }
+        Text nickname = nickNameObject.GetComponent<Text>();
+        RectTransform rect = nickNameObject.GetComponent<RectTransform>();
+
+        nickname.text = name;
+        rect.sizeDelta = new Vector2(nickname.preferredWidth, nickname.preferredHeight);
+    }
+
     public void RequestCancel()
     {
         if (loadingObject.activeSelf || errorObject.activeSelf || matchDoneObject.activeSelf)
@@ -131,12 +151,12 @@ public partial class LobbyUI : MonoBehaviour
         if (!result)
         {
             requestProgressObject.SetActive(false);
-            modelObject.SetActive(true);
+            //modelObject.SetActive(true);
             return;
         }
 
         requestProgressObject.SetActive(true);
-        modelObject.SetActive(false);
+        //modelObject.SetActive(false);
     }
 
     public void MatchDoneCallback()
@@ -299,6 +319,8 @@ public partial class LobbyUI : MonoBehaviour
             }
             index += 1;
         }
+
+        Debug.Log(BackEndMatchManager.GetInstance().matchInfos[index]);
         var matchInfo = BackEndMatchManager.GetInstance().matchInfos[index];
         matchInfoText.text = string.Format(matchInfoStr, matchInfo.headCount, matchInfo.isSandBoxEnable.Equals(true) ? "활성화" : "비활성화",
             matchInfo.matchType, matchInfo.matchModeType);

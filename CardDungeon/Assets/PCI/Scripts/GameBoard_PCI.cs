@@ -8,6 +8,10 @@ public class GameBoard_PCI : MonoBehaviour
     [SerializeField]
     private Tile_PCI tilePrefab;
     [SerializeField]
+    private TileObject_PCI bedrockPrefab;
+    [SerializeField]
+    private TileObject_PCI undestructablePrefab;
+    [SerializeField]
     private TileObject_PCI blockPrefab;
     [SerializeField]
     private Item_PCI itemPrefab;
@@ -79,16 +83,30 @@ public class GameBoard_PCI : MonoBehaviour
         }
 
         // Render
-        for (int i = 0; i < width; i++)
+        for (int i = -5; i < width+5; i++)
         {
-            for (int j = 0; j < height; j++)
+            for (int j = -5; j < height+5; j++)
             {
+                if(i < 0 || j < 0 || i >= width || j >= height)
+                {
+                    Instantiate(bedrockPrefab, new Vector3(i, j, 0), Quaternion.identity, transform);
+                    continue;
+                }
                 var newTile = Instantiate(tilePrefab, new Vector3(i, j, 0), Quaternion.identity, transform);
                 board[i, j] = newTile;
                 if(tempBoard[i, j] == 0)
                 {
-                    var newTileObject = Instantiate(blockPrefab, new Vector3(i, j, 0), Quaternion.identity, newTile.transform);
-                    newTile.AddTileObject(newTileObject);
+                    float rand = UnityEngine.Random.value;
+                    if(rand < 0.1f)
+                    {
+                        var newTileObject = Instantiate(undestructablePrefab, new Vector3(i, j, 0), Quaternion.identity, newTile.transform);
+                        newTile.AddTileObject(newTileObject);
+                    }
+                    else
+                    {
+                        var newTileObject = Instantiate(blockPrefab, new Vector3(i, j, 0), Quaternion.identity, newTile.transform);
+                        newTile.AddTileObject(newTileObject);
+                    }
                 }
             }
         }
@@ -101,6 +119,12 @@ public class GameBoard_PCI : MonoBehaviour
                 int x = UnityEngine.Random.Range(0, width);
                 int y = UnityEngine.Random.Range(0, height);
 
+                bool flag = true;
+                for(int i = 0; i < 8; i++)
+                {
+                    if ((x, y) == offset[i]) { flag = false; break; }
+                }
+                if (!flag) continue;
                 if (!IsInteractable(new Vector2Int(x, y)))
                 {
                     var targetTile = board[x, y];

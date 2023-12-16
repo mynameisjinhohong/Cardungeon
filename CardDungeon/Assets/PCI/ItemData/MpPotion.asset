@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: "MP\uD3EC\uC158"
   itemIdx: 0
-  description: 
+  description: "\uB9C8\uB098\uB97C \uD55C\uCE78 \uD68C\uBCF5\uD569\uB2C8\uB2E4"
   image: {fileID: 0}
   amount: 20
   sprites:
