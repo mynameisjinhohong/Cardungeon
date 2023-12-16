@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Player_HJH : MonoBehaviour
 {
+    //TestCommit
     public int maxHp;
     public int maxMp;
     public float mpCoolTime;
