@@ -31,11 +31,11 @@ public class LoadRoomUI : MonoBehaviour
             return;
         }
 
-        if (numOfClient != 4)
-        {
-            userObject[2].SetActive(false);
-            userObject[3].SetActive(false);
-        }
+        // if (numOfClient != 4)
+        // {
+        //     userObject[2].SetActive(false);
+        //     userObject[3].SetActive(false);
+        // }
 
         byte index = 0;
         foreach (var record in matchInstance.gameRecords.OrderByDescending(x => x.Key))
@@ -58,7 +58,9 @@ public class LoadRoomUI : MonoBehaviour
             data[2].text = string.Format(NUM_RECORD, record.Value.m_numberOfMatches);
             data[3].text = string.Format(WIN_RECORD, record.Value.m_numberOfWin);
             data[4].text = string.Format(DEFEAT_RECORD, record.Value.m_numberOfDefeats);
-
+            
+            BackEndServerManager.GetInstance().nameList.Add(data[0].text);
+            
             if (matchInstance.nowModeType == MatchModeType.TeamOnTeam)
             {
                 var teamNumber = matchInstance.GetTeamInfo(record.Key);

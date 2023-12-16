@@ -139,6 +139,7 @@ public partial class BackEndMatchManager : MonoBehaviour
         {
             //접속 성공
             Debug.Log(SUCCESS_CONNECT_MATCHSERVER);
+            LobbyUI.GetInstance().OpenRoomUI();
         }
     }
 
