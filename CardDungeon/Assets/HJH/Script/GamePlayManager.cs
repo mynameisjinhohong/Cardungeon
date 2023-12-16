@@ -18,6 +18,11 @@ public class GamePlayManager : Singleton<GamePlayManager>
     public GameBoard_PCI gameBoard;
     public GameObject playerPool;
     public GameObject playerPrefeb;
+
+    #region 호스트
+    public bool isHost;
+    public Queue<Message> messageQueue;
+    #endregion
     // Start is called before the first frame update
     void Start()
     {
@@ -28,14 +33,28 @@ public class GamePlayManager : Singleton<GamePlayManager>
     }
     public void InitializeGame()
     {
+        if (isHost)
+        {
+            messageQueue= new Queue<Message>();
+        }
         if (Backend.Match.OnMatchRelay == null)
         {
             Backend.Match.OnMatchRelay = (MatchRelayEventArgs args) => {
                 var strByte = System.Text.Encoding.Default.GetString(args.BinaryUserData);
                 Message msg = JsonUtility.FromJson<Message>(strByte);
-                if (args.From.NickName == "슈퍼방장")
+                if (isHost)
                 {
-                    CardRealGo(msg.playerIdx, msg.cardIdx);
+                    if(!args.From.IsRemote)
+                    {
+                        messageQueue.Enqueue(msg);
+                    }
+                }
+                else
+                {
+                    if (args.From.NickName == "슈퍼방장" && !args.From.IsRemote)
+                    {
+                        CardRealGo(msg.playerIdx, msg.cardIdx);
+                    }
                 }
                 //Debug.Log($"서버에서 받은 데이터 : {args.From.NickName} : {msg.ToString()}");
             };
@@ -50,8 +69,20 @@ public class GamePlayManager : Singleton<GamePlayManager>
     // Update is called once per frame
     void Update()
     {
-        
+        if (isHost)
+        {
+            if (messageQueue.Count > 0)
+            {
+                Message m = messageQueue.Dequeue();
+                SendData(m);
+                CardRealGo(m.playerIdx, m.cardIdx);
+            }
+        }
+
     }
+
+
+
     //public void CardData(int cardIdx,int playerIdx )
     //{
     //    CardMessage msg;
@@ -82,10 +113,21 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
     public void CardGo(int playerIdx,int cardIdx) //카드 사용, 서버와 통신 해야됨
     {
-        Message mes = new Message();
-        mes.playerIdx = playerIdx;
-        mes.cardIdx = cardIdx;
-        SendData(mes);
+        if (isHost)
+        {
+            Message mes = new Message();
+            mes.playerIdx = playerIdx;
+            mes.cardIdx = cardIdx;
+            messageQueue.Enqueue(mes);
+        }
+        else
+        {
+            Message mes = new Message();
+            mes.playerIdx = playerIdx;
+            mes.cardIdx = cardIdx;
+            SendData(mes);
+        }
+
     }
 
     public void CardRealGo(int playerIdx,int cardIdx)
