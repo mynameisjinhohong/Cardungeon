@@ -1,17 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditorInternal.ReorderableList;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class Card_HJH : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
-    public int cardIdx; //¾î¶² Ä«µåÀÎÁö
-    public int handIdx; //ÇÚµå¿¡¼­ ¸î¹øÂ° Ä«µåÀÎÁö
+    public int cardIdx; //ï¿½î¶² Ä«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    public int handIdx; //ï¿½Úµå¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½Â° Ä«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     public PlayerDeck_HJH playerDeck;
     public Vector2 defaultPos;
-    #region µå·¡±× ¾Ø µå·Ó
+    #region ï¿½å·¡ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½
     void IBeginDragHandler.OnBeginDrag(UnityEngine.EventSystems.PointerEventData eventData)
     {
         defaultPos = transform.position;
