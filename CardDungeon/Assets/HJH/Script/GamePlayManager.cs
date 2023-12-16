@@ -15,9 +15,10 @@ public class GamePlayManager : Singleton<GamePlayManager>
     public Player_HJH[] players;
     public PlayerDeck_HJH playerDeck;
     public int myIdx;
+    public int SuperGamerIdx;
     public GameBoard_PCI gameBoard;
     public GameObject playerPool;
-    public GameObject playerPrefeb;
+    public Transform[] PlayerSpawnPosition;
 
     #region 호스트
     public bool isHost;
@@ -29,7 +30,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
         InitializeGame();
         //서버랑 소통하고 나서 로컬 플레이어의 인덱스를 받아왔다는 가정 하에 코드 작성
 
-        //mainUi.myPlayer = players[myIdx];
+        mainUi.myPlayer = players[myIdx];
     }
     public void InitializeGame()
     {
@@ -67,7 +68,26 @@ public class GamePlayManager : Singleton<GamePlayManager>
         //myPlayerIndex = SessionId.None;
         //SetPlayerAttribute();
         //OnGameStart();
-        
+        for (int i = 0; i < BackendManager.Instance.PlayerDataList.Count; i++)
+        {
+            Instantiate(players[i].gameObject, PlayerSpawnPosition[i]);
+
+            if (BackendManager.Instance.PlayerDataList[i].isSuperGamer)
+            {
+                SuperGamerIdx = i;
+            }
+        }
+
+        for (int i = 0; i < BackendManager.Instance.UserNameList.Count; i++)
+        {
+            if (BackendManager.Instance.Nickname == BackendManager.Instance.UserNameList[i])
+            {
+                myIdx = i;
+
+                if (myIdx == SuperGamerIdx)
+                    isHost = true;
+            }
+        }
     }
     // Update is called once per frame
     void Update()

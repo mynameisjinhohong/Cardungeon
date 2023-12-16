@@ -69,7 +69,6 @@ public class InGameTest : MonoBehaviour {
             if (args.ErrInfo == ErrorCode.Success) {
                 Debug.Log($"5-3. OnMatchInGameAccess - 유저가 접속했습니다 : {args.GameRecord.m_nickname}({args.GameRecord.m_sessionId})");
                 if (!inGameUserList.ContainsKey(args.GameRecord.m_nickname)) {
-                    BackendManager.Instance.UserList.Add(args.GameRecord.m_nickname);
                     inGameUserList.Add(args.GameRecord.m_nickname, args.GameRecord);
                 }
             } else {
@@ -79,8 +78,18 @@ public class InGameTest : MonoBehaviour {
         
         Backend.Match.OnMatchInGameStart = () => {
             string userListString = "접속한 유저 : \n";
-            foreach (var list in inGameUserList) {
+            foreach (var list in inGameUserList)
+            {
+                Player_HJH playerData = new Player_HJH();
+                
                 userListString += $"{list.Value.m_nickname}({list.Value.m_sessionId})" + (list.Value.m_isSuperGamer == true ? "슈퍼게이머" : "");
+
+                playerData.PlayerToken = list.Value.m_sessionId.ToString();
+                playerData.PlayerName = list.Value.m_nickname;
+                playerData.isSuperGamer = list.Value.m_isSuperGamer;
+                
+                BackendManager.Instance.UserNameList.Add(list.Value.m_nickname);
+                BackendManager.Instance.PlayerDataList.Add(playerData);
             }
 
             Debug.Log("6-1. OnMatchInGameStart 인게임 시작");

@@ -8,6 +8,9 @@ public class Player_HJH : MonoBehaviour
     public int maxHp;
     public int maxMp;
     public float mpCoolTime;
+    public string PlayerName;
+    public string PlayerToken;
+    public bool isSuperGamer;
     int hp;
     bool cool;
     float currentTime;
