@@ -40,18 +40,20 @@ public class GamePlayManager : Singleton<GamePlayManager>
         if (Backend.Match.OnMatchRelay == null)
         {
             Backend.Match.OnMatchRelay = (MatchRelayEventArgs args) => {
+                if (args.From.NickName == BackendManager.Instance.Nickname)
+                {
+                    return;
+                }
                 var strByte = System.Text.Encoding.Default.GetString(args.BinaryUserData);
                 Message msg = JsonUtility.FromJson<Message>(strByte);
+               
                 if (isHost)
                 {
-                    if(!args.From.IsRemote)
-                    {
-                        messageQueue.Enqueue(msg);
-                    }
+                    messageQueue.Enqueue(msg);
                 }
                 else
                 {
-                    if (args.From.NickName == "Ω¥∆€πÊ¿Â" && !args.From.IsRemote)
+                    if (args.From.NickName == "Ω¥∆€πÊ¿Â")
                     {
                         CardRealGo(msg.playerIdx, msg.cardIdx);
                     }
