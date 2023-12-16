@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6777746364649402662}
   - component: {fileID: 3174382540500026525}
   m_Layer: 0
-  m_Name: BlockPrefab_PCI
+  m_Name: UndestructablePrefab_PCI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -98,11 +98,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isPathable: 0
-  isDestructable: 1
+  isDestructable: 0
   isInteractable: 0
   tile: {fileID: 0}
   spriteRenderer: {fileID: 6777746364649402662}
   sprites:
-  - {fileID: 21300000, guid: eaec22bf17ee4da489b3d78bef42d306, type: 3}
-  - {fileID: 21300000, guid: ddccefd966a5a6b4faee4dbea944b6bb, type: 3}
-  - {fileID: 21300000, guid: d0dc2cefaf5ed604192c7f54d07b5ad6, type: 3}
+  - {fileID: 21300000, guid: b1be4216fa54a72439e7a5d81cefeda5, type: 3}
