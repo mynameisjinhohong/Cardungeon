@@ -13,7 +13,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
 {
     //
     public MainUI_HJH mainUi;
-    public Player_HJH[] players;
+    public List<Player_HJH> players;
     public List<GameObject> playerPrefabs;
     public PlayerDeck_HJH playerDeck;
     public int myIdx;
@@ -47,13 +47,13 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
     public void DataInit()
     {
-        for (int i = 0; i < players.Length; i++)
+        for (int i = 0; i < players.Count; i++)
         {
             if (i < BackendManager.Instance.UserDataList.Count)
             {
                 GameObject PlayerPrefab = Instantiate(playerPrefabs[i], PlayerSpawnPosition[i]);
                 Player_HJH playerHjh = PlayerPrefab.GetComponent<Player_HJH>();
-                players[i] = playerHjh;
+                players.Add(playerHjh);
                 playerHjh.isSuperGamer = BackendManager.Instance.UserDataList[i].isSuperGamer;
                 playerHjh.PlayerName   = BackendManager.Instance.UserDataList[i].playerName;
                 playerHjh.PlayerToken  = BackendManager.Instance.UserDataList[i].playerToken;
@@ -217,7 +217,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
     public void GoDamage(Vector2Int pos,int damage)
     {
-        for(int i =0; i<players.Length;i++)
+        for(int i =0; i<players.Count;i++)
         {
             Vector2Int vec = new Vector2Int((int)players[i].transform.position.x, (int)players[i].transform.position.y);
             if(vec == pos)
