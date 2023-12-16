@@ -16,7 +16,7 @@ public class MatchController : MonoBehaviour
 
     public void Start()
     {
-        matchingTest = GetComponent<MatchingTest>();
+        matchingTest = BackendManager.Instance.GetComponent<MatchingTest>();
     }
 
     public void CheckPlayersLoginWay()

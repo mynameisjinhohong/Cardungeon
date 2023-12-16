@@ -434,7 +434,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1841941307}
+      - m_Target: {fileID: 1254970368}
         m_TargetAssemblyTypeName: MatchingTest, Assembly-CSharp
         m_MethodName: RequestMatchMaking
         m_Mode: 1
@@ -1855,6 +1855,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1254970365}
   - component: {fileID: 1254970366}
+  - component: {fileID: 1254970368}
+  - component: {fileID: 1254970367}
   m_Layer: 0
   m_Name: BackendManager
   m_TagString: Untagged
@@ -1898,6 +1900,30 @@ MonoBehaviour:
   matchIndex: 0
   LoginPopup: {fileID: 9004259816092339788}
   UserList: []
+--- !u!114 &1254970367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1254970361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9771307effc4b07aee1274aa9a14c5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1254970368
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1254970361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29f74f292e3e08c49bfb0c382c419961, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1303124231
 GameObject:
   m_ObjectHideFlags: 0
@@ -3154,8 +3180,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1841941306}
   - component: {fileID: 1841941305}
-  - component: {fileID: 1841941307}
-  - component: {fileID: 1841941308}
   m_Layer: 0
   m_Name: MatchController
   m_TagString: Untagged
@@ -3195,30 +3219,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1841941307
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1841941304}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 29f74f292e3e08c49bfb0c382c419961, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1841941308
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1841941304}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9771307effc4b07aee1274aa9a14c5e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1868569579
 GameObject:
   m_ObjectHideFlags: 0

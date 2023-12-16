@@ -33,7 +33,8 @@ public class InGameTest : MonoBehaviour {
             }
             
             // 게임 서버에 정상적으로 접속했으면 매칭 서버를 종료
-            LeaveMatchMaking();
+            // LeaveMatchMaking();
+            JoinGameRoom();
             SceneManager.LoadScene(1);
         };
 
@@ -57,7 +58,6 @@ public class InGameTest : MonoBehaviour {
                     if (inGameUserList.ContainsKey(list.m_nickname)) {
                         continue;
                     }
-                    BackendManager.Instance.UserList.Add(list.m_nickname);
                     inGameUserList.Add(list.m_nickname, list);
                 }
             } else {
@@ -69,6 +69,7 @@ public class InGameTest : MonoBehaviour {
             if (args.ErrInfo == ErrorCode.Success) {
                 Debug.Log($"5-3. OnMatchInGameAccess - 유저가 접속했습니다 : {args.GameRecord.m_nickname}({args.GameRecord.m_sessionId})");
                 if (!inGameUserList.ContainsKey(args.GameRecord.m_nickname)) {
+                    BackendManager.Instance.UserList.Add(args.GameRecord.m_nickname);
                     inGameUserList.Add(args.GameRecord.m_nickname, args.GameRecord);
                 }
             } else {
