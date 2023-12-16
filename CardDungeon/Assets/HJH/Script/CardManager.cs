@@ -207,6 +207,8 @@ public class CardManager : Singleton<CardManager>
         {
             p.animator.Play("Walk");
         }
+        AudioPlayer.Instance.PlayClip(8);
+
     }
     //플레이어 위로 2칸 이동
     void Idx0EnforceFunc(Transform player)
@@ -222,6 +224,8 @@ public class CardManager : Singleton<CardManager>
         {
             p.animator.Play("Walk");
         }
+        AudioPlayer.Instance.PlayClip(9);
+
     }
     //플레이어 오른쪽으로 1칸 이동
     void Idx1Func(Transform player)
@@ -237,6 +241,8 @@ public class CardManager : Singleton<CardManager>
         {
             p.animator.Play("Walk");
         }
+        AudioPlayer.Instance.PlayClip(8);
+
     }
     //플레이어 오른쪽으로 2칸 이동
     void Idx1EnforceFunc(Transform player)
@@ -252,6 +258,8 @@ public class CardManager : Singleton<CardManager>
         {
             p.animator.Play("Walk");
         }
+        AudioPlayer.Instance.PlayClip(9);
+
     }
     //플레이어 왼쪽으로 1칸 이동
     void Idx2Func(Transform player)
@@ -266,6 +274,8 @@ public class CardManager : Singleton<CardManager>
         {
             p.animator.Play("Walk");
         }
+        AudioPlayer.Instance.PlayClip(8);
+
     }
     //플레이어 왼쪽으로 2칸 이동
     void Idx2EnforceFunc(Transform player)
@@ -280,6 +290,8 @@ public class CardManager : Singleton<CardManager>
         {
             p.animator.Play("Walk");
         }
+        AudioPlayer.Instance.PlayClip(9);
+
     }
     //플레이어 아래로 1칸 이동
     void Idx3Func(Transform player)
@@ -294,6 +306,8 @@ public class CardManager : Singleton<CardManager>
         {
             p.animator.Play("Walk");
         }
+        AudioPlayer.Instance.PlayClip(8);
+
     }
     //플레이어 아래로 2칸 이동
     void Idx3EnforceFunc(Transform player)
@@ -308,6 +322,8 @@ public class CardManager : Singleton<CardManager>
         {
             p.animator.Play("Walk");
         }
+        AudioPlayer.Instance.PlayClip(9);
+
     }
     // 플레이어가 5*5 안에서 랜덤하게 이동
     void Idx5Func(Transform player)
@@ -339,6 +355,8 @@ public class CardManager : Singleton<CardManager>
         {
             p.animator.Play("Walk");
         }
+        AudioPlayer.Instance.PlayClip(10);
+
     }
     // 플레이어가 7*7 안에서 랜덤하게 이동
     void Idx5EnforceFunc(Transform player)
@@ -369,6 +387,8 @@ public class CardManager : Singleton<CardManager>
         {
             p.animator.Play("Walk");
         }
+        AudioPlayer.Instance.PlayClip(10);
+
     }
     // 플레이어가 위아래 공격
     void Idx6Func(Transform player)
@@ -382,6 +402,8 @@ public class CardManager : Singleton<CardManager>
         {
             p.animator.Play("SwingVertical");
         }
+        AudioPlayer.Instance.PlayClip(4);
+
     }
     // 플레이어가 위아래 강하게공격
     void Idx6EnforceFunc(Transform player)
@@ -395,6 +417,8 @@ public class CardManager : Singleton<CardManager>
         {
             p.animator.Play("SwingVertical");
         }
+        AudioPlayer.Instance.PlayClip(5);
+
     }
     // 플레이어가 좌우 공격
     void Idx7Func(Transform player)
@@ -408,6 +432,8 @@ public class CardManager : Singleton<CardManager>
         {
             p.animator.Play("SwingHorizontal");
         }
+        AudioPlayer.Instance.PlayClip(4);
+
     }
     // 플레이어가 좌우 강하게공격
     void Idx7EnforceFunc(Transform player)
@@ -421,6 +447,8 @@ public class CardManager : Singleton<CardManager>
         {
             p.animator.Play("SwingHorizontal");
         }
+        AudioPlayer.Instance.PlayClip(5);
+
     }
     // 플레이어가 모든 방향 공격
     void Idx8Func(Transform player)
@@ -442,6 +470,8 @@ public class CardManager : Singleton<CardManager>
         {
             p.animator.Play("SmashDown");
         }
+        AudioPlayer.Instance.PlayClip(6);
+
     }
     // 플레이어가 모든방향 강하게공격
     void Idx8EnforceFunc(Transform player)
@@ -463,6 +493,7 @@ public class CardManager : Singleton<CardManager>
         {
             p.animator.Play("SmashDown");
         }
+        AudioPlayer.Instance.PlayClip(6);
     }
     //3초 안에 공격 들어오면 막기
     void Idx9Func(Player_HJH player)
