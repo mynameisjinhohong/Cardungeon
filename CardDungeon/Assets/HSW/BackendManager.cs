@@ -84,8 +84,6 @@ public class BackendManager : Singleton<BackendManager>
             };
             
             StartCoroutine(nameof(Polling));
-
-            isInitialize = true;
             
             CheckLoginWayData();
 
@@ -93,11 +91,8 @@ public class BackendManager : Singleton<BackendManager>
             {
                 StartTokenLogin();
             }
-            else
-            {
-                GuestIdDelete();
-                GuestLoginSequense();
-            }
+
+            isInitialize = true;
         }
         else
         {
@@ -329,7 +324,7 @@ public class BackendManager : Singleton<BackendManager>
         InitTime();
         InvokeRepeating("GetServerTimeFor5minutes", 300f, 300f);
     }
-    
+
     public void InsertLog(GameLogType type, string str)
     {
         Param param = new();
