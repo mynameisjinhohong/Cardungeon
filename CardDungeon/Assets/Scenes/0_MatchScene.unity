@@ -436,7 +436,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1841941307}
         m_TargetAssemblyTypeName: MatchingTest, Assembly-CSharp
-        m_MethodName: JoinMatchMakingServer
+        m_MethodName: RequestMatchMaking
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3091,9 +3091,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1841941304}
-        m_TargetAssemblyTypeName: MatchingTest, Assembly-CSharp
-        m_MethodName: 
+      - m_Target: {fileID: 1841941305}
+        m_TargetAssemblyTypeName: MatchController, Assembly-CSharp
+        m_MethodName: MatchCancel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
