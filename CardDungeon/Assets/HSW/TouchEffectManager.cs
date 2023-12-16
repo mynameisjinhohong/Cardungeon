@@ -34,6 +34,7 @@ public class TouchEffectManager : Singleton<TouchEffectManager>
 #if UNITY_EDITOR
         if (Input.GetMouseButtonDown(0) && IsPointerOverButton())
         {
+            AudioPlayer.Instance.PlayClip(1);
             //SoundManager.instance.SFXPlay(ResourceManager.Instance.GetAudioClip("TOUCH_Sound"));
         }
         if (Input.GetMouseButton(0) && spawnsTime >= defaultTime)
