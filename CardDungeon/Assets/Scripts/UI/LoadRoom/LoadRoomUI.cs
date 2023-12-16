@@ -31,11 +31,10 @@ public class LoadRoomUI : MonoBehaviour
             return;
         }
 
-        // if (numOfClient != 4)
-        // {
-        //     userObject[2].SetActive(false);
-        //     userObject[3].SetActive(false);
-        // }
+        for(int i = 0; i < 8; i++)
+        {
+            userObject[i].SetActive(i < numOfClient);
+        }
 
         byte index = 0;
         foreach (var record in matchInstance.gameRecords.OrderByDescending(x => x.Key))
