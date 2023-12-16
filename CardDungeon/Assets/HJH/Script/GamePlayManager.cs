@@ -78,6 +78,12 @@ public class GamePlayManager : Singleton<GamePlayManager>
             {
                 myIdx = i;
 
+                Transform parentTransform = PlayerSpawnPosition[myIdx].transform;
+                
+                Camera.main.transform.SetParent(parentTransform);
+                
+                Camera.main.transform.localPosition = new Vector3(0.5f, 0.5f, -10f);
+                
                 if (myIdx == SuperGamerIdx)
                     isHost = true;
             }
