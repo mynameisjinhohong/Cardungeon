@@ -3,6 +3,8 @@ using BackEnd.Tcp;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GamePlayManager : Singleton<GamePlayManager>
 {
@@ -361,6 +363,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
     }
 
+
     public void GoDamage(Vector2Int pos, int damage)
     {
         for (int i = 0; i < players.Count; i++)
@@ -371,6 +374,35 @@ public class GamePlayManager : Singleton<GamePlayManager>
                 players[i].HP -= damage;
             }
         }
+
+        for (int i = 0; i < players.Count; i++)
+        {
+            if (players[i].isMine) continue;
+            if (players[i].HP > 0)
+            {
+                return;
+            }
+        }
+        GameWin();
     }
 
+    public void GameWin()
+    {
+        mainUi.winImage.SetActive(true);
+        if (mainUi.winImage.TryGetComponent<Button>(out Button btn))
+        {
+            btn.onClick.AddListener(GoTitle);
+        }
+
+    }
+
+    public void GoTitle()
+    {
+        mainUi.winImage.SetActive(false);
+        if (mainUi.winImage.TryGetComponent<Button>(out Button btn))
+        {
+            btn.onClick.RemoveListener(GoTitle);
+        }
+        SceneManager.LoadScene(0);
+    }
 }
