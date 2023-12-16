@@ -12,6 +12,8 @@ public class MatchController : MonoBehaviour
 
     public TextMeshProUGUI UserNickName;
 
+    public GameObject LoginPopup;
+    
     private MatchingTest matchingTest;
 
     public void Start()
@@ -23,7 +25,7 @@ public class MatchController : MonoBehaviour
     {
         if(BackendManager.Instance.checkLoginWayData == -1)
         {
-            BackendManager.Instance.LoginPopup.SetActive(true);
+            LoginPopup.SetActive(true);
 
             BackendManager.Instance.GuestLoginSequense();
         }
