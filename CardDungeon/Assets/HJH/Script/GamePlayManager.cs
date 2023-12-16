@@ -1,5 +1,6 @@
     using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GamePlayManager : Singleton<GamePlayManager>
@@ -30,6 +31,18 @@ public class GamePlayManager : Singleton<GamePlayManager>
     public void GameOver()
     {
 
+    }
+
+    public void GoDamage(Vector2Int pos,int damage)
+    {
+        for(int i =0; i<players.Length;i++)
+        {
+            Vector2Int vec = new Vector2Int((int)players[i].transform.position.x, (int)players[i].transform.position.y);
+            if(vec == pos)
+            {
+                players[i].HP -= damage;
+            }
+        }
     }
 
 }

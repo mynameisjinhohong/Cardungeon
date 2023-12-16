@@ -93,11 +93,24 @@ public class GameBoard_PCI : MonoBehaviour
                     var newTileObject = Instantiate(blockPrefab, new Vector3(i, j, 0), Quaternion.identity, newTile.transform);
                     newTile.AddTileObject(newTileObject);
                 }
-                float rand = UnityEngine.Random.Range(0f, 1f);
-                if(rand < 0.03f)
+            }
+        }
+        // Generate Items
+        foreach (var e in itemList.itemDataList)
+        {
+            int k = e.amount;
+            while (k != 0)
+            {
+                int x = UnityEngine.Random.Range(0, width);
+                int y = UnityEngine.Random.Range(0, height);
+
+                if (!IsInteractable(new Vector2Int(x, y)))
                 {
-                    var newItemObject = Instantiate(itemPrefab, new Vector3(i, j, 0), Quaternion.identity, newTile.transform);
-                    newItemObject.SetData(itemList.itemDataList[0]);
+                    var targetTile = board[x, y];
+                    var newItemObject = Instantiate(itemPrefab, new Vector3(x, y, 0), Quaternion.identity, targetTile.transform);
+                    newItemObject.SetData(e);
+                    targetTile.AddTileObject(newItemObject);
+                    k--;
                 }
             }
         }
@@ -119,21 +132,13 @@ public class GameBoard_PCI : MonoBehaviour
     public bool IsDestructable(Vector2Int target)
     {
         if (!IsValidCoordinate(target)) return false;
-        foreach (var e in board[target.x, target.y].onTileObjects)
-        {
-            if (e.isDestructable) return true;
-        }
-        return true;
+        return board[target.x, target.y].IsDestructable();
     }
 
     public bool IsInteractable(Vector2Int target)
     {
         if (!IsValidCoordinate(target)) return false;
-        foreach (var e in board[target.x, target.y].onTileObjects)
-        {
-            if (e.isInteractable) return true;
-        }
-        return true;
+        return board[target.x, target.y].IsInteractable();
     }
 
     public void Attack(Vector2Int target, Player_HJH player)

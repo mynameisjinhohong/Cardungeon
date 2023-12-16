@@ -17,6 +17,13 @@ public class Tile_PCI : MonoBehaviour
     public void AddTileObject(TileObject_PCI obj)
     {
         onTileObjects.Add(obj);
+        obj.tile = this;
+    }
+
+    public void RemoveTileObject(TileObject_PCI obj)
+    {
+        if(onTileObjects.Contains(obj))
+            onTileObjects.Remove(obj);
     }
 
     public bool IsPahtable()
@@ -26,6 +33,24 @@ public class Tile_PCI : MonoBehaviour
             if (!e.isPathable) return false;
         }
         return true;
+    }
+
+    public bool IsDestructable()
+    {
+        foreach(var e in onTileObjects)
+        {
+            if (e.isDestructable) return true;
+        }
+        return false;
+    }
+
+    public bool IsInteractable()
+    {
+        foreach(var e in onTileObjects)
+        {
+            if (e.isInteractable) return true;
+        }
+        return false;
     }
 
     public void OnDamaged(Player_HJH player)
