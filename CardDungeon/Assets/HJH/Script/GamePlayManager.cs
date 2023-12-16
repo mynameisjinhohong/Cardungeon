@@ -11,6 +11,7 @@ using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 public class GamePlayManager : Singleton<GamePlayManager>
 {
+    //
     public MainUI_HJH mainUi;
     public Player_HJH[] players;
     public List<GameObject> playerPrefabs;
