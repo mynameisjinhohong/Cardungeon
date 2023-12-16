@@ -21,6 +21,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
     public GameBoard_PCI gameBoard;
     public GameObject playerPool;
     public Transform[] PlayerSpawnPosition;
+    public bool isDataCheck = false;
 
     #region 호스트
     public bool isHost;
@@ -35,9 +36,55 @@ public class GamePlayManager : Singleton<GamePlayManager>
     IEnumerator WaitforGameStart()
     {
         yield return new WaitUntil(() => BackendManager.Instance.isLoadGame);
+
+        DataInit();
+            
+        yield return new WaitUntil(() => isDataCheck);
         
         InitializeGame();
         //서버랑 소통하고 나서 로컬 플레이어의 인덱스를 받아왔다는 가정 하에 코드 작성
+    }
+
+    public void DataInit()
+    {
+        for (int i = 0; i < players.Length; i++)
+        {
+            if (i < BackendManager.Instance.UserDataList.Count)
+            {
+                GameObject PlayerPrefab = Instantiate(playerPrefabs[i], PlayerSpawnPosition[i]);
+
+                Player_HJH playerHjh = PlayerPrefab.GetComponent<Player_HJH>();
+            
+                playerHjh.isSuperGamer = BackendManager.Instance.UserDataList[i].isSuperGamer;
+                playerHjh.PlayerName   = BackendManager.Instance.UserDataList[i].playerName;
+                playerHjh.PlayerToken  = BackendManager.Instance.UserDataList[i].playerToken;
+            
+                if (BackendManager.Instance.UserDataList[i].isSuperGamer)
+                {
+                    SuperGamerIdx = i;
+                }
+                
+                players[i].gameObject.SetActive(true);
+            }
+            else
+            {
+                players[i].gameObject.SetActive(false);
+            }
+
+        }
+
+        for (int i = 0; i < BackendManager.Instance.UserDataList.Count; i++)
+        {
+            if (BackendManager.Instance.Nickname == BackendManager.Instance.UserDataList[i].playerName)
+            {
+                myIdx = i;
+
+                if (myIdx == SuperGamerIdx)
+                    isHost = true;
+            }
+        }
+
+        isDataCheck = true;
     }
     
     public void InitializeGame()
@@ -93,42 +140,6 @@ public class GamePlayManager : Singleton<GamePlayManager>
         //myPlayerIndex = SessionId.None;
         //SetPlayerAttribute();
         //OnGameStart();
-        for (int i = 0; i < players.Length; i++)
-        {
-            if (i < BackendManager.Instance.UserDataList.Count)
-            {
-                GameObject PlayerPrefab = Instantiate(playerPrefabs[i], PlayerSpawnPosition[i]);
-
-                Player_HJH playerHjh = PlayerPrefab.GetComponent<Player_HJH>();
-            
-                playerHjh.isSuperGamer = BackendManager.Instance.UserDataList[i].isSuperGamer;
-                playerHjh.PlayerName   = BackendManager.Instance.UserDataList[i].playerName;
-                playerHjh.PlayerToken  = BackendManager.Instance.UserDataList[i].playerToken;
-            
-                if (BackendManager.Instance.UserDataList[i].isSuperGamer)
-                {
-                    SuperGamerIdx = i;
-                }
-                
-                players[i].gameObject.SetActive(true);
-            }
-            else
-            {
-                players[i].gameObject.SetActive(false);
-            }
-
-        }
-
-        for (int i = 0; i < BackendManager.Instance.UserDataList.Count; i++)
-        {
-            if (BackendManager.Instance.Nickname == BackendManager.Instance.UserDataList[i].playerName)
-            {
-                myIdx = i;
-
-                if (myIdx == SuperGamerIdx)
-                    isHost = true;
-            }
-        }
     }
     // Update is called once per frame
     void Update()
