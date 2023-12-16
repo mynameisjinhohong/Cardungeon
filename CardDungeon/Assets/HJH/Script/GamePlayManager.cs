@@ -66,10 +66,6 @@ public class GamePlayManager : Singleton<GamePlayManager>
                 
                 players[i].gameObject.SetActive(true);
             }
-            else
-            {
-                players[i].gameObject.SetActive(false);
-            }
 
         }
 
