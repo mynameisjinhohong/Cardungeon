@@ -6,11 +6,10 @@ using BackEnd;
 using BackEnd.Tcp;
 using LitJson;
 using System;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class InGameTest : MonoBehaviour {
-    [SerializeField] private InputField _inputField;
-
     MatchInGameRoomInfo currentGameRoomInfo;
     Dictionary<string, MatchUserGameRecord> inGameUserList = new Dictionary<string, MatchUserGameRecord>();
 
@@ -34,7 +33,8 @@ public class InGameTest : MonoBehaviour {
             }
             
             // 게임 서버에 정상적으로 접속했으면 매칭 서버를 종료
-            // LeaveMatchMaking();
+            LeaveMatchMaking();
+            SceneManager.LoadScene(1);
         };
 
         Debug.Log("4-1. JoinGameServer 인게임 서버 접속 요청");
@@ -57,7 +57,7 @@ public class InGameTest : MonoBehaviour {
                     if (inGameUserList.ContainsKey(list.m_nickname)) {
                         continue;
                     }
-
+                    BackendManager.Instance.UserList.Add(list.m_nickname);
                     inGameUserList.Add(list.m_nickname, list);
                 }
             } else {
@@ -113,7 +113,7 @@ public class InGameTest : MonoBehaviour {
         }
         
         Message message = new Message();
-        message.message = _inputField.text;
+        //message.message = _inputField.text;
         var jsonData = JsonUtility.ToJson(message); // 클래스를 json으로 변환해주는 함수
         var dataByte = System.Text.Encoding.UTF8.GetBytes(jsonData); // json을 byte[]로 변환해주는 함수
         Backend.Match.SendDataToInGameRoom(dataByte);

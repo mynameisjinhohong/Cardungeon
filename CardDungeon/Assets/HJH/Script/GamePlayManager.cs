@@ -67,6 +67,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
         //myPlayerIndex = SessionId.None;
         //SetPlayerAttribute();
         //OnGameStart();
+        
     }
     // Update is called once per frame
     void Update()

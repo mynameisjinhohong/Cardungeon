@@ -25,6 +25,8 @@ public class BackendManager : Singleton<BackendManager>
     private int initTimeCount = 0;
     public int matchIndex = 0;
 
+    public List<String> UserList;
+
     void Start()
     {
         Initialize();
