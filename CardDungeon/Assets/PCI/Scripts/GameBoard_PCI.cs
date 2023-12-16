@@ -30,7 +30,7 @@ public class GameBoard_PCI : MonoBehaviour
         int rand = UnityEngine.Random.Range(0, 100);
         Generate(rand);
     }
-    private void Generate(int seed)
+    public void Generate(int seed)
     {
         int[,] tempBoard = new int[width, height];
 
