@@ -12,6 +12,7 @@ public class Player_HJH : MonoBehaviour
     float currentTime;
     bool shield = false;
     public Animator animator;
+    public bool myPlayer;
 
     public int HP
     {
@@ -32,6 +33,10 @@ public class Player_HJH : MonoBehaviour
                 {
                     hp = value;
                 }
+            }
+            else
+            {
+                hp = value;
             }
             GamePlayManager.Instance.mainUi.ReNewHp();
             if (hp > maxHp)
@@ -79,7 +84,6 @@ public class Player_HJH : MonoBehaviour
             GamePlayManager.Instance.mainUi.ReNewMp();
         }
     }
-    public bool myPlayer;
 
     // Start is called before the first frame update
     void Start()

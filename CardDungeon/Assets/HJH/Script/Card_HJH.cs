@@ -4,6 +4,7 @@ using UnityEngine;
 using static UnityEditorInternal.ReorderableList;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 
 public class Card_HJH : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
@@ -12,11 +13,19 @@ public class Card_HJH : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
     public PlayerDeck_HJH playerDeck;
     public Vector2 defaultPos;
     #region 드래그 앤 드롭
+
+    void ChildRayCast(bool onOff)
+    {
+        GetComponent<Image>().raycastTarget = onOff;
+        transform.GetChild(0).GetComponent<TMP_Text>().raycastTarget = onOff;
+        transform.GetChild(1).GetComponent<TMP_Text>().raycastTarget = onOff;
+        transform.GetChild(2).GetComponent<Image>().raycastTarget = onOff;
+    }
+
     void IBeginDragHandler.OnBeginDrag(UnityEngine.EventSystems.PointerEventData eventData)
     {
         defaultPos = transform.position;
-        GetComponent<Image>().raycastTarget = false;
-
+        ChildRayCast(false);
     }
     void IDragHandler.OnDrag(UnityEngine.EventSystems.PointerEventData eventData)
     {
@@ -30,17 +39,24 @@ public class Card_HJH : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
             if (!playerDeck.UseCard(handIdx))
             {
                 transform.position = defaultPos;
+                ChildRayCast(true);
+            }
+            else
+            {
+                ChildRayCast(true);
             }
         }
         else
         {
             transform.position = defaultPos;
-            GetComponent<Image>().raycastTarget = true;
+            ChildRayCast(true);
         }
     }
 
     public void OnClick()
     {
+
+        ChildRayCast(true);
         playerDeck.mainUi.BigCardOn(cardIdx);
     }
     #endregion
