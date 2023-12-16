@@ -8,6 +8,7 @@ public class Card
     public string cardName;
     public int useMP;
     public Sprite cardType;
+    public Sprite bigCardType;
     public Sprite itemImage;
     public string description;
     public int cardIdx;

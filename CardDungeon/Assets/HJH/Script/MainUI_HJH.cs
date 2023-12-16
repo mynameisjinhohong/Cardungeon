@@ -21,6 +21,12 @@ public class MainUI_HJH : MonoBehaviour
 
     public Player_HJH myPlayer;
     public PlayerDeck_HJH playerDeck;
+
+    //카드 클릭했을 때 요소들
+    public GameObject bigCard;
+    public TMP_Text bigCardMp;
+    public TMP_Text bigCardName;
+    public TMP_Text bigCardDescribe;
     // Start is called before the first frame update
     void Start()
     {
@@ -36,6 +42,13 @@ public class MainUI_HJH : MonoBehaviour
         deckAmount += playerDeck.hand.Count;
         deckAmount += playerDeck.trash.Count;
         deckCardAmount.text = "사용한 카드 " + playerDeck.trash.Count + "/" + deckAmount;
+        if (bigCard.activeInHierarchy)
+        {
+            if(Input.GetMouseButtonDown(0))
+            {
+                BigCardOff();
+            }
+        }
     }
 
     public void ReNewHp()
@@ -88,5 +101,18 @@ public class MainUI_HJH : MonoBehaviour
                 break;
             }
         }
+    }
+
+    public void BigCardOn(int cardIdx)
+    {
+        bigCard.SetActive(true);
+        bigCardMp.text = CardManager.Instance.cardList.cards[cardIdx].useMP.ToString();
+        bigCardName.text = CardManager.Instance.cardList.cards[cardIdx].cardName;
+        bigCardDescribe.text = CardManager.Instance.cardList.cards[cardIdx].description;
+    }
+
+    public void BigCardOff()
+    {
+        bigCard.SetActive(false);
     }
 }

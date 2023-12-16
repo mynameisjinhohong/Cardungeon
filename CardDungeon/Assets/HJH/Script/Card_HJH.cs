@@ -39,9 +39,9 @@ public class Card_HJH : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
         }
     }
 
-    void OnDrag()
+    public void OnClick()
     {
-        
+        playerDeck.mainUi.BigCardOn(cardIdx);
     }
     #endregion
 }

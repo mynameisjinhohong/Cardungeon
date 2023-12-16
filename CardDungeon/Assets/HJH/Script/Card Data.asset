@@ -16,6 +16,7 @@ MonoBehaviour:
   - cardName: None
     useMP: 0
     cardType: {fileID: 0}
+    bigCardType: {fileID: 0}
     itemImage: {fileID: 0}
     description: 
     cardIdx: 0
@@ -23,6 +24,7 @@ MonoBehaviour:
   - cardName: "\uC704\uB85C \uAE61\uCD1D"
     useMP: 1
     cardType: {fileID: 21300000, guid: f7f9f6a8ee85c91459fde09323579547, type: 3}
+    bigCardType: {fileID: 21300000, guid: 743c0ed5f8ff0644ea119708d93b4687, type: 3}
     itemImage: {fileID: 0}
     description: "\uC704\uB85C \uD55C\uCE78 \uC774\uB3D9\uD55C\uB2E4."
     cardIdx: 1
@@ -30,6 +32,7 @@ MonoBehaviour:
   - cardName: "\uC55E\uC73C\uB85C \uAE61\uCD1D"
     useMP: 1
     cardType: {fileID: 21300000, guid: f7f9f6a8ee85c91459fde09323579547, type: 3}
+    bigCardType: {fileID: 21300000, guid: 743c0ed5f8ff0644ea119708d93b4687, type: 3}
     itemImage: {fileID: 0}
     description: "\uC624\uB978\uCABD\uC73C\uB85C \uD55C\uCE78 \uC774\uB3D9\uD55C\uB2E4."
     cardIdx: 2
@@ -37,6 +40,7 @@ MonoBehaviour:
   - cardName: "\uB4A4\uB85C \uAE61\uCD1D"
     useMP: 1
     cardType: {fileID: 21300000, guid: f7f9f6a8ee85c91459fde09323579547, type: 3}
+    bigCardType: {fileID: 21300000, guid: 743c0ed5f8ff0644ea119708d93b4687, type: 3}
     itemImage: {fileID: 0}
     description: "\uC67C\uCABD\uC73C\uB85C \uD55C\uCE78 \uC774\uB3D9\uD55C\uB2E4."
     cardIdx: 3
@@ -44,6 +48,7 @@ MonoBehaviour:
   - cardName: "\uC544\uB798\uB85C \uAE61\uCD1D"
     useMP: 1
     cardType: {fileID: 21300000, guid: f7f9f6a8ee85c91459fde09323579547, type: 3}
+    bigCardType: {fileID: 0}
     itemImage: {fileID: 0}
     description: "\uC544\uB798\uB85C \uD55C\uCE78 \uC774\uB3D9\uD55C\uB2E4."
     cardIdx: 4
@@ -51,6 +56,7 @@ MonoBehaviour:
   - cardName: "\uD798\uAECF \uAE61\uCD1D"
     useMP: 1
     cardType: {fileID: 21300000, guid: f7f9f6a8ee85c91459fde09323579547, type: 3}
+    bigCardType: {fileID: 21300000, guid: 743c0ed5f8ff0644ea119708d93b4687, type: 3}
     itemImage: {fileID: 0}
     description: "\uC0AC\uBC29 3\uCE78 \uC548\uC5D0 \uBB34\uC791\uC704\uB85C \uC774\uB3D9\uD55C\uB2E4."
     cardIdx: 5
@@ -59,6 +65,7 @@ MonoBehaviour:
   - cardName: "\uB2F9\uADFC \uD718\uB450\uB974\uAE30"
     useMP: 1
     cardType: {fileID: 21300000, guid: ccb079729598e194bbf7c45b536be8b4, type: 3}
+    bigCardType: {fileID: 21300000, guid: 743c0ed5f8ff0644ea119708d93b4687, type: 3}
     itemImage: {fileID: 0}
     description: "\uC704\uC544\uB798\uC5D0 \uACF5\uACA9\uD55C\uB2E4. "
     cardIdx: 6
@@ -66,6 +73,7 @@ MonoBehaviour:
   - cardName: "\uB2F9\uADFC \uCC0C\uB974\uAE30"
     useMP: 1
     cardType: {fileID: 21300000, guid: ccb079729598e194bbf7c45b536be8b4, type: 3}
+    bigCardType: {fileID: 21300000, guid: 743c0ed5f8ff0644ea119708d93b4687, type: 3}
     itemImage: {fileID: 0}
     description: "\uC591 \uC606\uC5D0 \uACF5\uACA9\uD55C\uB2E4. "
     cardIdx: 7
@@ -73,6 +81,7 @@ MonoBehaviour:
   - cardName: "\uB2F9\uADFC \uB0B4\uB824\uCE58\uAE30"
     useMP: 2
     cardType: {fileID: 21300000, guid: ccb079729598e194bbf7c45b536be8b4, type: 3}
+    bigCardType: {fileID: 21300000, guid: 743c0ed5f8ff0644ea119708d93b4687, type: 3}
     itemImage: {fileID: 0}
     description: "\uBAA8\uB4E0 \uBC29\uD5A5\uC5D0 \uACF5\uACA9\uD55C\uB2E4."
     cardIdx: 8
@@ -81,6 +90,7 @@ MonoBehaviour:
   - cardName: "\uD1A0\uB07C\uBCF4\uD638\uAD6C\uC5ED"
     useMP: 1
     cardType: {fileID: 21300000, guid: ccb079729598e194bbf7c45b536be8b4, type: 3}
+    bigCardType: {fileID: 21300000, guid: 743c0ed5f8ff0644ea119708d93b4687, type: 3}
     itemImage: {fileID: 0}
     description: "3\uCD08 \uC548\uC5D0 \uACF5\uACA9\uC744 \uD55C\uBC88 \uB9C9\uB294\uB2E4."
     cardIdx: 9
