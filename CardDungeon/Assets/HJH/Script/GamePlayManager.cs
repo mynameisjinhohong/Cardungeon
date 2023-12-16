@@ -138,6 +138,8 @@ public class GamePlayManager : Singleton<GamePlayManager>
                         }
                         else
                         {
+
+                            Debug.Log(msg.playerIdx + "  " + msg.cardIdx);
                             CardRealGo(msg.playerIdx, msg.cardIdx);
                         }
                     }
@@ -170,6 +172,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
             {
                 Message m = messageQueue.Dequeue();
                 SendData(m);
+                Debug.Log(m.playerIdx + "  " + m.cardIdx);
                 CardRealGo(m.playerIdx, m.cardIdx);
             }
         }
