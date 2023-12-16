@@ -9,6 +9,7 @@ public class PlayerDeck_HJH : MonoBehaviour
 {
 
     public MainUI_HJH mainUi;
+    public float reRollCoolTime;
     //카드의 idx를 가지고 있도록
     public List<int> deck;
     public List<int> trash;
@@ -115,19 +116,26 @@ public class PlayerDeck_HJH : MonoBehaviour
             hand.RemoveAt(0);
             trash.Add(a);
         }
+        mainUi.Reroll(reRollCoolTime);
         DrawFirst();
     }
 
     public void mpReroll()
     {
-        int hd = hand.Count;
-        for (int i = 0; i < hd; i++)
+
+        if (GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].Mp > 0)
         {
-            int a = hand[0];
-            hand.RemoveAt(0);
-            trash.Add(a);
+            GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].Mp--;
+            int hd = hand.Count;
+            for (int i = 0; i < hd; i++)
+            {
+                int a = hand[0];
+                hand.RemoveAt(0);
+                trash.Add(a);
+            }
+            DrawFirst();
         }
-        DrawFirst();
+
     }
 
 

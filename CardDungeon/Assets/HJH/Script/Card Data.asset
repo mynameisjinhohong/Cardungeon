@@ -79,7 +79,7 @@ MonoBehaviour:
     enforceDescription: "\uB354 \uAC15\uB825\uD558\uAC8C \uBAA8\uB4E0 \uBC29\uD5A5\uC5D0
       \uACF5\uACA9\uD55C\uB2E4. "
   - cardName: "\uD1A0\uB07C\uBCF4\uD638\uAD6C\uC5ED"
-    useMP: 2
+    useMP: 1
     cardType: {fileID: 21300000, guid: ccb079729598e194bbf7c45b536be8b4, type: 3}
     itemImage: {fileID: 0}
     description: "3\uCD08 \uC548\uC5D0 \uACF5\uACA9\uC744 \uD55C\uBC88 \uB9C9\uB294\uB2E4."
