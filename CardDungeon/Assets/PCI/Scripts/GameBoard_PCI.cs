@@ -71,12 +71,7 @@ public class GameBoard_PCI : MonoBehaviour
                 for (int y = -2; y <= 2; y++)
                 {
                     if (Mathf.Abs(x + y) == 4) continue;
-                    try {
-                        tempBoard[curPos.Item1 + x, curPos.Item2 + y] = 1;
-                    }catch(Exception e)
-                    {
-                        Debug.Log(curPos);
-                    }
+                    tempBoard[curPos.Item1 + x, curPos.Item2 + y] = 1;
                 }
             }
         }
@@ -115,6 +110,15 @@ public class GameBoard_PCI : MonoBehaviour
             }
         }
     }
+
+    public TileObject_PCI AddTileObject(Vector2Int target, TileObject_PCI prefab)
+    {
+        var targetTile = board[target.x, target.y];
+        var newTileObject = Instantiate(prefab, new Vector3(target.x, target.y, 0), Quaternion.identity, targetTile.transform);
+        targetTile.AddTileObject(newTileObject);
+        return newTileObject;
+    }
+
     private bool IsValidCoordinate(Vector2Int target)
     {
         if(target.x < 0 || target.x >= width || target.y < 0 || target.y >= height)
