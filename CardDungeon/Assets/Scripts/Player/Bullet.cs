@@ -47,7 +47,7 @@ public class Bullet : MonoBehaviour
             {
                 return;
             }
-            Player_HJH tmp = collider.gameObject.GetComponent<Player_HJH>();
+            Player tmp = collider.gameObject.GetComponent<Player>();
             if (tmp)
             {
                 Protocol.PlayerDamegedMessage message =

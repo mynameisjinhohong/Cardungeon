@@ -20,7 +20,7 @@ public class WorldManager : MonoBehaviour
     public GameObject particle;
     private const int MAXPLAYER = 4;
     public int alivePlayer { get; set; }
-    private Dictionary<SessionId, Player_HJH> players;
+    private Dictionary<SessionId, Player> players;
     public GameObject startPointObject;
     private List<Vector4> statringPoints;
 
@@ -181,14 +181,14 @@ public class WorldManager : MonoBehaviour
             return;
         }
 
-        players = new Dictionary<SessionId, Player_HJH>();
+        players = new Dictionary<SessionId, Player>();
         BackEndMatchManager.GetInstance().SetPlayerSessionList(gamers);
 
         int index = 0;
         foreach (var sessionId in gamers)
         {
             GameObject player = Instantiate(playerPrefeb, new Vector3(statringPoints[index].x, statringPoints[index].y, statringPoints[index].z), Quaternion.identity, playerPool.transform);
-            players.Add(sessionId, player.GetComponent<Player_HJH>());
+            players.Add(sessionId, player.GetComponent<Player>());
 
             if (BackEndMatchManager.GetInstance().IsMySessionId(sessionId))
             {
