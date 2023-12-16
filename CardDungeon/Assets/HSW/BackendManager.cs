@@ -24,6 +24,9 @@ public class BackendManager : Singleton<BackendManager>
     public bool isInitialize = false;
     private int initTimeCount = 0;
     public int matchIndex = 0;
+    public GameObject LoginPopup;
+
+    public List<String> UserList;
 
     void Start()
     {
@@ -86,6 +89,12 @@ public class BackendManager : Singleton<BackendManager>
             if (checkLoginWayData >= 0)
             {
                 StartTokenLogin();
+            }
+            else
+            {
+                GuestIdDelete();
+                GuestLoginSequense();
+                LoginPopup.SetActive(true);
             }
         }
         else
@@ -152,7 +161,7 @@ public class BackendManager : Singleton<BackendManager>
                                 if (int.Parse(Bro.GetReturnValuetoJSON()["serverStatus"].ToString()) ==
                                     (int)ServerState.Maintenance)
                                 {
-                                    // 나중에 점검중 추가할것
+                                    GuestIdDelete();
                                 }
                             }else if (bro.GetMessage().Contains("customId"))
                             {

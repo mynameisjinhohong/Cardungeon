@@ -37,12 +37,7 @@ public class PopupManager : Singleton<PopupManager>
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
-    
-    public void SignUpPopup(GameObject prefab)
-    {
-        PopupListAddNoneABB(prefab);
-    }
-    
+
     public void FindCanvas()
     {
         canvas = null;

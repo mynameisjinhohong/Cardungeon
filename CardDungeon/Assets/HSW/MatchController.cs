@@ -16,15 +16,16 @@ public class MatchController : MonoBehaviour
 
     public void Start()
     {
-        matchingTest = GetComponent<MatchingTest>();
+        matchingTest = BackendManager.Instance.GetComponent<MatchingTest>();
     }
 
     public void CheckPlayersLoginWay()
     {
         if(BackendManager.Instance.checkLoginWayData == -1)
         {
+            BackendManager.Instance.LoginPopup.SetActive(true);
+
             BackendManager.Instance.GuestLoginSequense();
-            //팝업매니저 닉네임 입력 팝업   
         }
         else
         {

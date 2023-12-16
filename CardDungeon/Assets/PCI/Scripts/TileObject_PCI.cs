@@ -7,6 +7,7 @@ public class TileObject_PCI : MonoBehaviour
     public bool isPathable;
     public bool isDestructable;
     public bool isInteractable;
+    public int sortOrder;
 
     [HideInInspector]
     public Tile_PCI tile;

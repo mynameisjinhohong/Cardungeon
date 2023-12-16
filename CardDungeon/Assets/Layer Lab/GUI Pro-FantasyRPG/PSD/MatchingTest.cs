@@ -70,7 +70,7 @@ public class MatchingTest : MonoBehaviour {
 
             } else if (args.ErrInfo == ErrorCode.Success) {
                 Debug.Log("3-3. OnMatchMakingResponse 매칭 성사 완료");
-                
+                _inGameTest = GetComponent<InGameTest>();
                 _inGameTest.JoinGameServer(args.RoomInfo);
             } else {
                 Debug.LogError("3-2. OnMatchMakingResponse 매칭 신청 진행중 에러 발생 : " + args.ToString());
