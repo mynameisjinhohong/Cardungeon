@@ -79,7 +79,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 5, y: 5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -103,7 +103,7 @@ MonoBehaviour:
   tile: {fileID: 0}
   spriteRenderer: {fileID: 6777746364649402662}
   sprites:
-  - {fileID: 21300000, guid: 7162e445123af3b41b7d7ca48af62ba8, type: 3}
-  - {fileID: 21300000, guid: ee96c65e065cc3941b6f1b60dd769ac0, type: 3}
-  - {fileID: 21300000, guid: 0e24f90cafb09e94e976cfeebd83afc4, type: 3}
-  - {fileID: 21300000, guid: 000895b7dbae6114fa077bbabcaafc4f, type: 3}
+  - {fileID: 21300000, guid: b318623f3bfd66242a340011ac9ecbd8, type: 3}
+  - {fileID: 21300000, guid: b5525188449a6cd4e852b0c041e046ac, type: 3}
+  - {fileID: 21300000, guid: d201f57f8c4fd7a48a097d38fd2cd374, type: 3}
+  - {fileID: 21300000, guid: ddb93ebbcbe8c9b46a7e130578dafca2, type: 3}

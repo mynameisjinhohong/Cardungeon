@@ -20,6 +20,7 @@ public class GameBoard_PCI : MonoBehaviour
 
     private Tile_PCI[,] board = new Tile_PCI[width,height];
 
+    public List<Transform> StartingPoints = new List<Transform>();
     private void Awake()
     {
         int rand = UnityEngine.Random.Range(0, 100);
@@ -34,6 +35,7 @@ public class GameBoard_PCI : MonoBehaviour
         for(int i = 1; i < 9; i++)
         {
             (int, int) curPos = offset[i-1];
+            StartingPoints[i - 1].position = new Vector3(curPos.Item1, curPos.Item2, 0);
             while (true)
             {
                 tempBoard[curPos.Item1, curPos.Item2] = i;
