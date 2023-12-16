@@ -11,6 +11,7 @@ public class Player_HJH : MonoBehaviour
     bool cool;
     float currentTime;
     bool shield = false;
+    public Animator animator;
     public int HP
     {
         get
