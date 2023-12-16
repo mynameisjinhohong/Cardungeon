@@ -27,8 +27,7 @@ public class GameBoard_PCI : MonoBehaviour
     public List<Transform> StartingPoints = new List<Transform>();
     private void Awake()
     {
-        int rand = UnityEngine.Random.Range(0, 100);
-        Generate(rand);
+
     }
     public void Generate(int seed)
     {
