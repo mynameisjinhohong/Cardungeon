@@ -10,8 +10,23 @@ public class Tile_PCI : MonoBehaviour
 
     private void Start()
     {
-        int rand = Random.Range(0, sprites.Count);
-        spriteRenderer.sprite = sprites[rand];
+        float x = transform.position.x;
+        float y = transform.position.y;
+        if(x < 5 || x > 35 || y < 5 || y > 35)
+        {
+            int rand = Random.Range(8, 12);
+            spriteRenderer.sprite = sprites[rand];
+        }
+        else if(x < 10 || x > 30 || y < 10 || y > 30)
+        {
+            int rand = Random.Range(4, 8);
+            spriteRenderer.sprite = sprites[rand];
+        }
+        else
+        {
+            int rand = Random.Range(0, 4);
+            spriteRenderer.sprite = sprites[rand];
+        }
     }
     public void AddTileObject(TileObject_PCI obj)
     {
