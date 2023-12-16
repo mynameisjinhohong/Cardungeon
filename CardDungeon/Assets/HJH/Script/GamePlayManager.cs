@@ -59,6 +59,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
                         if(msg.playerIdx == -10)
                         {
                             gameBoard.Generate(msg.cardIdx);
+                            Debug.Log("¸Ê »ý¼º!!" + msg.cardIdx);
                         }
                         else
                         {
@@ -76,10 +77,6 @@ public class GamePlayManager : Singleton<GamePlayManager>
             m.cardIdx = Random.Range(0, 100);
             SendData(m);
             gameBoard.Generate(m.cardIdx);
-        }
-        else
-        {
-
         }
         //gameRecord = new Stack<SessionId>();
         //GameManager.OnGameOver += OnGameOver;
