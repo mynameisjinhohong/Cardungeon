@@ -360,7 +360,9 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
     public void GameOver()
     {
-
+        Camera.main.transform.SetParent(null);
+        players[myIdx].gameObject.SetActive(false);
+        mainUi.GameOver();
     }
 
 
