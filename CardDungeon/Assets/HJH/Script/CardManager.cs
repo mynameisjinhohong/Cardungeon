@@ -89,7 +89,16 @@ public class CardManager : Singleton<CardManager>
                     Idx8Func(player);
                 }
                 break;
-
+            case 9:
+                if(cardIdx < 0)
+                {
+                    Idx9EnforceFunc(player.GetComponent<Player_HJH>());
+                }
+                else
+                {
+                    Idx9Func(player.GetComponent<Player_HJH>());
+                }
+                break;
         }
 
     }
@@ -277,9 +286,15 @@ public class CardManager : Singleton<CardManager>
             }
         }
     }
-
-    void Idx9Func(Transform player)
+    //3초 안에 공격 들어오면 막기
+    void Idx9Func(Player_HJH player)
     {
-
+        player.ShieldOn(3);
     }
+    //5초 안에 공격 들어오면 막기
+    void Idx9EnforceFunc(Player_HJH player)
+    {
+        player.ShieldOn(5);
+    }
+
 }

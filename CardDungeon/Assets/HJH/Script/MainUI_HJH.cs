@@ -17,6 +17,7 @@ public class MainUI_HJH : MonoBehaviour
 
     public TMP_Text deckCardAmount;
     public Image mpCoolTime;
+    public Image reRollButton;
 
     public Player_HJH myPlayer;
     public PlayerDeck_HJH playerDeck;
@@ -65,6 +66,20 @@ public class MainUI_HJH : MonoBehaviour
             {
                 mpBar[i].sprite = emptySprite;
             }
+        }
+    }
+
+    public void Reroll()
+    {
+        reRollButton.raycastTarget = false;
+        StartCoroutine(RerollButton());
+    }
+    IEnumerator RerollButton()
+    {
+        float currentTime = 0;
+        while (true)
+        {
+            currentTime += Time.deltaTime;
         }
     }
 }

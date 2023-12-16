@@ -10,6 +10,7 @@ public class Player_HJH : MonoBehaviour
     int hp;
     bool cool;
     float currentTime;
+    bool shield = false;
     public int HP
     {
         get
@@ -18,7 +19,18 @@ public class Player_HJH : MonoBehaviour
         }
         set
         {
-            hp = value;
+            if(value < hp)
+            {
+                if (shield)
+                {
+                    StopAllCoroutines();
+                    shield = false;
+                }
+                else
+                {
+                    hp = value;
+                }
+            }
             GamePlayManager.Instance.mainUi.ReNewHp();
             if (hp > maxHp)
             {
@@ -89,5 +101,24 @@ public class Player_HJH : MonoBehaviour
         }
     }
 
+    public void ShieldOn(float time)
+    {
+        if (shield)
+        {
+            StopAllCoroutines();
+            StartCoroutine(ShieldCheck(time));
+        }
+        else
+        {
+            StartCoroutine(ShieldCheck(time));
+        }
+    }
+
+    IEnumerator ShieldCheck(float time)
+    {
+        shield = true;
+        yield return new WaitForSeconds(time);
+        shield = false;
+    }
 
 }
