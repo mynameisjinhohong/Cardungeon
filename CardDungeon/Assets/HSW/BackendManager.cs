@@ -6,6 +6,7 @@ using BackEnd;
 using BackEnd.Util;
 using LitJson;
 using Newtonsoft.Json;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
@@ -15,6 +16,8 @@ public class BackendManager : Singleton<BackendManager>
     private static BackendManager instance;   // 인스턴스
     
     private Thread serverCheckThread;
+
+    public TextMeshProUGUI text;
     
     public string UserIndate = string.Empty;
     public string Nickname   = string.Empty;
@@ -49,6 +52,7 @@ public class BackendManager : Singleton<BackendManager>
         instance = this;
         // 모든 씬에서 유지
         DontDestroyOnLoad(this.gameObject);
+        Screen.SetResolution(1920, 1080, true);
     }
     public void Initialize()
     {
@@ -113,6 +117,14 @@ public class BackendManager : Singleton<BackendManager>
         }
         Debug.LogError(PlayerPrefs.HasKey("LoginWay") + checkLoginWayData.ToString());
     }
+
+    public void GetHashKey()
+    {
+        string googlehash = Backend.Utils.GetGoogleHash();
+
+        text.text = googlehash;
+    }
+
     
     public void GuestLoginSequense()
     {
@@ -125,7 +137,6 @@ public class BackendManager : Singleton<BackendManager>
         StartCoroutine((LoginProcess(bro, LoginType.Guest)));
         PlayerPrefs.SetInt("LoginWay", 0);
     }
-
     private IEnumerator Polling()
     {
         while (true)
