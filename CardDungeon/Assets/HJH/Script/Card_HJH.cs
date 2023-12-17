@@ -198,7 +198,7 @@ public class Card_HJH : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
     }
     void IDragHandler.OnDrag(UnityEngine.EventSystems.PointerEventData eventData)
     {
-        Vector2 currentPos = eventData.position;
+        Vector2 currentPos = Camera.main.ScreenToWorldPoint(eventData.position);
         transform.position = currentPos;
     }
     void IEndDragHandler.OnEndDrag(UnityEngine.EventSystems.PointerEventData eventData)
@@ -208,7 +208,7 @@ public class Card_HJH : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
             Destroy(tileEffects[i]);
         }
         tileEffects.Clear();
-        if (!EventSystem.current.IsPointerOverGameObject())
+        if (!EventSystem.current.IsPointerOverGameObject() || Mathf.Abs((eventData.position - defaultPos).magnitude) <10)
         {
             if (!playerDeck.UseCard(handIdx))
             {
