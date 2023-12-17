@@ -44,13 +44,45 @@ public class MainUI_HJH : MonoBehaviour
     bool firstSet = false;
 
     public GameObject gameOver;
+
+    public List<GameObject> ToonList;
+
+    public GameObject ToonBG;
     // Start is called before the first frame update
     void Start()
     {
-        //서버랑 통신해서 닉네임이랑 아이콘 바꾸는거 해야됨
-
+        StartCoroutine(ToonStart());
     }
 
+    IEnumerator ToonStart()
+    {
+        ToonBG.SetActive(true);
+        
+        ChangeToon(0);
+
+        yield return new WaitForSeconds(3);
+        
+        ChangeToon(1);
+
+        yield return new WaitForSeconds(3);
+        
+        ChangeToon(2);
+        
+        yield return new WaitForSeconds(3);
+        
+        ToonList[2].SetActive(false);
+        
+        ToonBG.SetActive(false);
+    }
+
+    public void ChangeToon(int index)
+    {
+        for (int i = 0; i < ToonList.Count; i++)
+        {
+            ToonList[index].SetActive(i == index);
+        }
+    }
+    
     // Update is called once per frame
     void Update()
     {
