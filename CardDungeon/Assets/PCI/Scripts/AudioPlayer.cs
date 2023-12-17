@@ -7,16 +7,31 @@ using UnityEngine.Events;
 public class AudioPlayer : Singleton<AudioPlayer>
 {
     private static AudioPlayer instance;
-
+    private float timer = 300;
     void Awake()
     {
         if (instance != null)
         {
-            Destroy(instance);
+            Destroy(gameObject);
         }
         instance = this;
         DontDestroyOnLoad(this.gameObject);
     }
+
+    private void Update()
+    {
+        if(timer > 180)
+        {
+            return;
+        }
+        timer += Time.deltaTime;
+
+        if (timer > 180)
+        {
+            PlayBGM(2);
+        }
+    }
+
     // 이벤트 리스너 등록
     private void OnEnable()
     {
@@ -33,11 +48,13 @@ public class AudioPlayer : Singleton<AudioPlayer>
     {
         if(scene.buildIndex == 0)
         {
+            timer = 300;
             PlayBGM(0);
         }
         else
         {
-            PlayBGM(2);
+            PlayBGM(1);
+            timer = 0;
         }
     }
 
@@ -73,6 +90,7 @@ public class AudioPlayer : Singleton<AudioPlayer>
     /// <param name="idx"></param>
     public void PlayBGM(int idx)
     {
+        bgmPlayer.Stop();
         bgmPlayer.clip = bgmClips[idx];
         bgmPlayer.Play();
     }

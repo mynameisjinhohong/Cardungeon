@@ -15,7 +15,7 @@ public class Tile_PCI : MonoBehaviour
         float y = Mathf.Abs(transform.position.y - 20);
         y *= y; // y < 400
         float t = x + y; // t < 800
-        t = t / 70;
+        t = t / 50;
         int rand = Random.Range(0, 4);
         spriteRenderer.sprite = sprites[Mathf.Clamp((int)t+rand, 0, 11)];
     }
