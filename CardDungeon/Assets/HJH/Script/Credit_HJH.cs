@@ -10,12 +10,12 @@ public class Credit_HJH : MonoBehaviour
     public float creditSpeed;
     [TextArea]
     public string creditText;
-
+    public Vector3 firstPos;
     bool nowCredit = false;
     // Start is called before the first frame update
     void Start()
     {
-        
+        firstPos = creditTex.GetComponent<RectTransform>().anchoredPosition;
     }
 
     // Update is called once per frame
@@ -40,13 +40,13 @@ public class Credit_HJH : MonoBehaviour
     IEnumerator CreditCo()
     {
         creditTex.GetComponent<TMP_Text>().text = creditText;
-        creditTex.GetComponent<RectTransform>().position = new Vector3(0,-1 * creditTex.GetComponent<RectTransform>().sizeDelta.y,0);
-
+        creditTex.GetComponent<RectTransform>().anchoredPosition = firstPos;
+        credit.SetActive(true);
         while (true)
         {
             creditTex.GetComponent<RectTransform>().position += new Vector3(0, creditSpeed * Time.deltaTime, 0); 
             yield return null;
-            if(creditTex.GetComponent<RectTransform>().position.y > creditTex.GetComponent<RectTransform>().sizeDelta.y)
+            if(creditTex.GetComponent<RectTransform>().anchoredPosition.y > creditTex.GetComponent<RectTransform>().sizeDelta.y)
             {
                 credit.SetActive(false);
                 break;
