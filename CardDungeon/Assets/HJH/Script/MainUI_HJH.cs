@@ -51,6 +51,7 @@ public class MainUI_HJH : MonoBehaviour
     public Image Toon;
     
     public GameObject ToonBG;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -74,6 +75,8 @@ public class MainUI_HJH : MonoBehaviour
         yield return new WaitForSeconds(4);
         
         ToonBG.SetActive(false);
+
+        GetComponent<Canvas>().sortingOrder = 200;
     }
 
     // Update is called once per frame
