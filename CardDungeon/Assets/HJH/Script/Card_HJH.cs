@@ -126,6 +126,7 @@ public class Card_HJH : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
                             tileEffects.Add(tile);
                             Vector3 playerPos = GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].transform.position;
                             tile.transform.position = new Vector3(playerPos.x + i, playerPos.y + j, 0);
+                            Debug.Log(tile.transform.position);
                         }
                     }
                 }
