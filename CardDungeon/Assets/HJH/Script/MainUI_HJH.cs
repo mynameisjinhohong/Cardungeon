@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -45,8 +46,10 @@ public class MainUI_HJH : MonoBehaviour
 
     public GameObject gameOver;
 
-    public List<GameObject> ToonList;
+    public List<Sprite> ToonList;
 
+    public Image Toon;
+    
     public GameObject ToonBG;
     // Start is called before the first frame update
     void Start()
@@ -57,32 +60,22 @@ public class MainUI_HJH : MonoBehaviour
     IEnumerator ToonStart()
     {
         ToonBG.SetActive(true);
-        
-        ChangeToon(0);
 
-        yield return new WaitForSeconds(3);
-        
-        ChangeToon(1);
+        Toon.sprite = ToonList[0];
 
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(4);
+
+        Toon.sprite = ToonList[1];
+
+        yield return new WaitForSeconds(4);
+
+        Toon.sprite = ToonList[2];
         
-        ChangeToon(2);
-        
-        yield return new WaitForSeconds(3);
-        
-        ToonList[2].SetActive(false);
+        yield return new WaitForSeconds(4);
         
         ToonBG.SetActive(false);
     }
 
-    public void ChangeToon(int index)
-    {
-        for (int i = 0; i < ToonList.Count; i++)
-        {
-            ToonList[index].SetActive(i == index);
-        }
-    }
-    
     // Update is called once per frame
     void Update()
     {
