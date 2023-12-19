@@ -33,7 +33,7 @@ MonoBehaviour:
     description: "\uC704\uB85C \uD55C \uCE78\n\uC774\uB3D9\uD55C\uB2E4."
     cardIdx: 1
     enforceDescription: "\uC704\uB85C \uB450 \uCE78\n\uC774\uB3D9\uD55C\uB2E4."
-  - cardName: "\uC55E\uC73C\uB85C \uAE61\uCD1D"
+  - cardName: "\uC6B0\uB85C \uAE61\uCD1D"
     useMP: 0
     cardType: {fileID: 21300000, guid: f6db1223d286f52428b38d93da6f7297, type: 3}
     bigCardType: {fileID: 21300000, guid: 04f0308d540937a4fab4f97e1a4a8431, type: 3}
@@ -43,7 +43,7 @@ MonoBehaviour:
     description: "\uC624\uB978\uCABD\uC73C\uB85C \n\uD55C \uCE78 \uC774\uB3D9\uD55C\uB2E4."
     cardIdx: 2
     enforceDescription: "\uC624\uB978\uCABD\uC73C\uB85C \n\uB450 \uCE78 \uC774\uB3D9\uD55C\uB2E4."
-  - cardName: "\uB4A4\uB85C \uAE61\uCD1D"
+  - cardName: "\uC88C\uB85C \uAE61\uCD1D"
     useMP: 0
     cardType: {fileID: 21300000, guid: f6db1223d286f52428b38d93da6f7297, type: 3}
     bigCardType: {fileID: 21300000, guid: 04f0308d540937a4fab4f97e1a4a8431, type: 3}
