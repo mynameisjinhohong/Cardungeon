@@ -8,7 +8,10 @@ public class GetCard_PCI : ItemData_PCI
     public override void OnInteracted(Player_HJH player)
     {
         base.OnInteracted(player);
-        int cardIdx = Random.Range(1, CardManager.Instance.cardList.cards.Length);
-        GamePlayManager.Instance.playerDeck.deck.Add(cardIdx);
+        if (player.isMine)
+        {
+            int cardIdx = Random.Range(1, CardManager.Instance.cardList.cards.Length);
+            GamePlayManager.Instance.playerDeck.deck.Add(cardIdx);
+        }
     }
 }

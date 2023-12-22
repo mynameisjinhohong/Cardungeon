@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 902637959905577771}
   - component: {fileID: 1314669488671456025}
   - component: {fileID: 536246774118506383}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TilePrefab_PCI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,18 +97,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 876dbc8a5ef013e46ae9406dee20221c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sprites:
-  - {fileID: 21300000, guid: eaf81250f190815448677ce37c87198c, type: 3}
-  - {fileID: 21300000, guid: dc67185cc7b2f4a41b00b23b3b181851, type: 3}
-  - {fileID: 21300000, guid: 3cb25a248f35dc147b4fd9980b7a9114, type: 3}
-  - {fileID: 21300000, guid: c12db331aa69aae40b0e77ed1bb973f8, type: 3}
-  - {fileID: 21300000, guid: 000895b7dbae6114fa077bbabcaafc4f, type: 3}
-  - {fileID: 21300000, guid: 0e24f90cafb09e94e976cfeebd83afc4, type: 3}
-  - {fileID: 21300000, guid: ee96c65e065cc3941b6f1b60dd769ac0, type: 3}
-  - {fileID: 21300000, guid: 7162e445123af3b41b7d7ca48af62ba8, type: 3}
-  - {fileID: 21300000, guid: 8ec55a7a9e9edef48ad2b1c4f6dd3474, type: 3}
-  - {fileID: 21300000, guid: 35f66dc78c063394bb82e29d24fe3f9c, type: 3}
-  - {fileID: 21300000, guid: 62816d094c3b83c4e9a913025c5c09db, type: 3}
-  - {fileID: 21300000, guid: e952b2f42432ffb42b8a19818748e239, type: 3}
   spriteRenderer: {fileID: 1314669488671456025}
   onTileObjects: []

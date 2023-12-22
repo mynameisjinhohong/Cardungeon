@@ -18,19 +18,34 @@ public class GameBoard_PCI : MonoBehaviour
     [SerializeField]
     private ItemDataList_PCI itemList;
     [SerializeField]
-    private const int width = 40, height = 40;
-    private const int padding = 4;
-    (int, int)[] offset = { (padding, padding), (padding, height/2), (padding, height- padding), (width/2, padding), (width/2, height- padding), (width- padding, padding), (width- padding, height/2), (width- padding, height- padding) };
+    private List<Sprite> tileSprites = new List<Sprite>();
 
-    private Tile_PCI[,] board = new Tile_PCI[width,height];
+    [Header("Generate Settings")]
+    [SerializeField]
+    [Range(20, 40)]
+    private int width, height;
+    [SerializeField]
+    [Range(2, 5)]
+    private int padding;
+    (int, int)[] offset;
+
+    private Tile_PCI[,] board;
 
     public List<Transform> StartingPoints = new List<Transform>();
+
     private void Awake()
     {
-
+        offset = new (int, int)[] { (padding, padding), (padding, height / 2), (padding, height - padding), (width / 2, padding), (width / 2, height - padding), (width - padding, padding), (width - padding, height / 2), (width - padding, height - padding) };
     }
+
     public void Generate(int seed)
     {
+        Generate(seed, width, height);
+    }
+
+    public void Generate(int seed, int width, int height)
+    {
+        board = new Tile_PCI[width, height];
         int[,] tempBoard = new int[width, height];
 
         UnityEngine.Random.InitState(seed);
@@ -86,21 +101,32 @@ public class GameBoard_PCI : MonoBehaviour
         {
             for (int j = -5; j < height+5; j++)
             {
+                // 범위 바깥에는 기반암 생성
                 if(i < 0 || j < 0 || i >= width || j >= height)
                 {
                     Instantiate(bedrockPrefab, new Vector3(i, j, 0), Quaternion.identity, transform);
                     continue;
                 }
+                // 기본 타일 생성
                 var newTile = Instantiate(tilePrefab, new Vector3(i, j, 0), Quaternion.identity, transform);
+                int x = Mathf.Abs(i - width/2);
+                int y = Mathf.Abs(j - height/2);
+                int r = x*x + y*y;
+                r = (128 * r) / ((width+height)*(width+height));
+                int randi = UnityEngine.Random.Range(0, 4);
+                Debug.Log($"({i}, {j}) : {8 - r}");
+                newTile.spriteRenderer.sprite = tileSprites[Mathf.Clamp(8-r + randi, 0, tileSprites.Count)];
                 board[i, j] = newTile;
                 if(tempBoard[i, j] == 0)
                 {
-                    float rand = UnityEngine.Random.value;
-                    if(rand < 0.1f)
+                    // 10% 확률로 파괴 불가능한 오브젝트 생성
+                    float randf = UnityEngine.Random.value;
+                    if(randf < 0.1f)
                     {
                         var newTileObject = Instantiate(undestructablePrefab, new Vector3(i, j, 0), Quaternion.identity, newTile.transform);
                         newTile.AddTileObject(newTileObject);
                     }
+                    // 90% 확률로 파괴 가능한 오브젝트 생성
                     else
                     {
                         var newTileObject = Instantiate(blockPrefab, new Vector3(i, j, 0), Quaternion.identity, newTile.transform);
@@ -132,6 +158,18 @@ public class GameBoard_PCI : MonoBehaviour
                     targetTile.AddTileObject(newItemObject);
                     k--;
                 }
+            }
+        }
+    }
+
+    public void Clear()
+    {
+        for(int i = 0; i < width; i++)
+        {
+            for(int j = 0; j < height; j++)
+            {
+                var item = board[i, j];
+
             }
         }
     }

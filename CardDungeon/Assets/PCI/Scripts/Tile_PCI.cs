@@ -4,21 +4,14 @@ using UnityEngine;
 
 public class Tile_PCI : MonoBehaviour
 {
-    public List<Sprite> sprites = new List<Sprite>();
     public SpriteRenderer spriteRenderer;
     public List<TileObject_PCI> onTileObjects = new List<TileObject_PCI>();
 
     private void Start()
     {
-        float x = Mathf.Abs(transform.position.x - 20);
-        x *= x; // x < 400
-        float y = Mathf.Abs(transform.position.y - 20);
-        y *= y; // y < 400
-        float t = x + y; // t < 800
-        t = t / 50;
-        int rand = Random.Range(0, 4);
-        spriteRenderer.sprite = sprites[Mathf.Clamp((int)t+rand, 0, 11)];
+
     }
+
     public void AddTileObject(TileObject_PCI obj)
     {
         onTileObjects.Add(obj);
