@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class MainUI_HJH : MonoBehaviour
 {
     public Image playerIcon;
-    public TMP_Text playerNickName;
+    public Image playerBG;
     public Image[] hpBar;
     public Image[] mpBar;
 
@@ -18,6 +18,8 @@ public class MainUI_HJH : MonoBehaviour
     public Sprite emptySprite;
 
     public TMP_Text deckCardAmount;
+    public TMP_Text trashCardAmount;
+    
     public Image mpCoolTime;
     public Image reRollButton;
 
@@ -86,7 +88,6 @@ public class MainUI_HJH : MonoBehaviour
         {
             if(myPlayer != null)
             {
-                playerNickName.text = myPlayer.PlayerName;
                 playerIcon.sprite = icons[GamePlayManager.Instance.myIdx];
                 firstSet = true;
             }
@@ -96,7 +97,10 @@ public class MainUI_HJH : MonoBehaviour
         deckAmount += playerDeck.deck.Count;
         deckAmount += playerDeck.hand.Count;
         deckAmount += playerDeck.trash.Count;
-        deckCardAmount.text = "사용한 카드 " + playerDeck.trash.Count + "/" + deckAmount;
+        
+        trashCardAmount.text = playerDeck.trash.Count.ToString();
+        deckCardAmount.text  = playerDeck.deck.Count.ToString();
+        
         if (bigCard.activeInHierarchy)
         {
             if(Input.GetMouseButtonDown(0))

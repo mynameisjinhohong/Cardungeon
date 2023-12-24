@@ -435,7 +435,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startPrefab: {fileID: 1281965719775568678, guid: 38d28c38ed87ad842ab1de00039d5844, type: 3}
-  defaultTime: 0.05
+  defaultTime: 0.1
 --- !u!4 &414292490
 Transform:
   m_ObjectHideFlags: 0
@@ -2355,6 +2355,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29f74f292e3e08c49bfb0c382c419961, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  matchCardList: []
 --- !u!1 &1303124231
 GameObject:
   m_ObjectHideFlags: 0
@@ -3864,7 +3865,6 @@ MonoBehaviour:
   UIIndex: 0
   Rabbit1: {fileID: 2070873575}
   Rabbit2: {fileID: 1505109940}
-  LoginButtons: {fileID: 0}
   TipStrings: []
 --- !u!4 &1841941306
 Transform:

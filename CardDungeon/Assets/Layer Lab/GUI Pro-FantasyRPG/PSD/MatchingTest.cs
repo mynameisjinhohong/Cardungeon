@@ -11,7 +11,7 @@ using UnityEngine.UI;
 public class MatchingTest : MonoBehaviour {
     private InGameTest _inGameTest;
     
-    List<MatchCard> matchCardList = new List<MatchCard>();
+    public List<MatchCard> matchCardList = new List<MatchCard>();
     MatchInGameRoomInfo currentGameRoomInfo;
 
     void Update() {
@@ -61,7 +61,7 @@ public class MatchingTest : MonoBehaviour {
                 
                 Debug.Log("3-2. OnMatchMakingResponse 매칭 신청 진행중");
 
-                int second = matchCardList[matchCardList.Count].transit_to_sandbox_timeout_ms / 1000;
+                int second = matchCardList[BackendManager.Instance.matchIndex].transit_to_sandbox_timeout_ms / 1000;
                 
                 if (second > 0) {
                     Debug.Log($"{second}초 뒤에 샌드박스 활성화가 됩니다.");
@@ -78,9 +78,8 @@ public class MatchingTest : MonoBehaviour {
         };
         
         Debug.Log("3-1. RequestMatchMaking 매칭 신청 시작");
-
-        int index = matchCardList.Count - 1;
-        Backend.Match.RequestMatchMaking( matchCardList[index].matchType, MatchModeType.Melee, matchCardList[index].inDate);
+        
+        Backend.Match.RequestMatchMaking( matchCardList[6].matchType, MatchModeType.Melee, matchCardList[6].inDate);
     }
     
     IEnumerator WaitFor10Seconds(int second) {
@@ -205,6 +204,7 @@ public class MatchingTest : MonoBehaviour {
         });
     }
 
+    [Serializable]
     public class MatchCard {
         public string inDate;
         public string matchTitle;

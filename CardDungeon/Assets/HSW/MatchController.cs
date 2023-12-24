@@ -25,8 +25,6 @@ public class MatchController : MonoBehaviour
     public GameObject Rabbit1;
     public GameObject Rabbit2;
 
-    public GameObject LoginButtons;
-    
     public List<String> TipStrings;
     
     public void Start()
@@ -85,7 +83,7 @@ public class MatchController : MonoBehaviour
 
         if (index == 2)
         {
-            int randomVal = Random.Range(0, TipStrings.Count + 1);
+            int randomVal = Random.Range(0, TipStrings.Count);
             TipText.text = TipStrings[randomVal];
             Debug.Log("텍스트");
         }
@@ -95,6 +93,8 @@ public class MatchController : MonoBehaviour
     {
         matchingTest.GetMatchList();
 
+        BackendManager.Instance.matchIndex = 6;
+        
         matchingTest.JoinMatchMakingServer();
     }
 

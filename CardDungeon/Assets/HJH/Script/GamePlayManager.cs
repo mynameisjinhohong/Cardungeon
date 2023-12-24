@@ -19,11 +19,13 @@ public class GamePlayManager : Singleton<GamePlayManager>
     public GameObject playerPool;
     public Transform[] PlayerSpawnPosition;
     public bool isDataCheck = false;
-
     #region È£½ºÆ®
     public bool isHost;
     public Queue<Message> messageQueue;
     #endregion
+    
+    public List<Color> colorList;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -88,7 +90,9 @@ public class GamePlayManager : Singleton<GamePlayManager>
                 Player_HJH playerHjh = PlayerPrefab.GetComponent<Player_HJH>();
                 players.Add(playerHjh);
                 playerHjh.isSuperGamer = BackendManager.Instance.UserDataList[i].isSuperGamer;
-                playerHjh.PlayerName = BackendManager.Instance.UserDataList[i].playerName;
+                playerHjh.PlayerName.text = BackendManager.Instance.UserDataList[i].playerName;
+                playerHjh.PlayerName.color = colorList[i];
+
                 if (BackendManager.Instance.Nickname == BackendManager.Instance.UserDataList[i].playerName)
                 {
                     playerHjh.isMine = true;
@@ -123,6 +127,8 @@ public class GamePlayManager : Singleton<GamePlayManager>
             }
         }
 
+        mainUi.playerBG.color = colorList[myIdx];
+        
         isDataCheck = true;
     }
     public bool CardIdxCheckNoPlayer(int cardIdx, Transform playerPos)

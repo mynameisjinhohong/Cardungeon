@@ -31,7 +31,6 @@ public class TouchEffectManager : Singleton<TouchEffectManager>
     
     void Update()
     {
-#if UNITY_EDITOR
         if (Input.GetMouseButtonDown(0) && IsPointerOverButton())
         {
             AudioPlayer.Instance.PlayClip(1);
@@ -43,20 +42,6 @@ public class TouchEffectManager : Singleton<TouchEffectManager>
             spawnsTime = 0;
         }
         spawnsTime += Time.deltaTime;
-        
-#elif UNITY_ANDROID
-        if (Input.GetMouseButtonDown(0) && IsPointerOverButton())
-        {
-            //SoundManager.instance.SFXPlay(ResourceManager.Instance.GetAudioClip("TOUCH_Sound"));
-        }
-
-        if (Input.GetMouseButton(0) && spawnsTime >= defaultTime)
-        {
-            StarCreat();
-            spawnsTime = 0;
-        }
-        spawnsTime += Time.deltaTime;
-#endif
     }
     
     void StarCreat()
