@@ -41,19 +41,28 @@ public class LoginTest : MonoBehaviour {
         }
     }
 
-    public void UpdateNickname() {
+    public void UpdateNickname()
+    {
+        if (BackendManager.Instance.UserIndate == "")
+        {
+            BackendManager.Instance.GuestLoginSequense();
+        }
+        
         var bro = Backend.BMember.UpdateNickname(_inputField.text);
 
         if (bro.IsSuccess()) {
             gameObject.SetActive(false);
             Debug.Log("닉네임 변경 : " + bro);
             matchController.ChangeUI(1);
-            //matchController.MainUserNickName.text = BackendManager.Instance.Nickname;
 
+            BackendManager.Instance.GetUserInfo();
+            
             matchController.UserNickName.text = Backend.UserNickName;
             
             matchController.MatchStart();
-
+            
+            PlayerPrefs.SetInt("LoginWay", 0);
+            
         } else {
             Debug.LogError("닉네임 변경 : " + bro);
         }

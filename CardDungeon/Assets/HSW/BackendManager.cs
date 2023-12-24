@@ -55,8 +55,8 @@ public class BackendManager : Singleton<BackendManager>
 
     public void SetResolution()
     {
-        int setWidth = 1080; // 사용자 설정 너비
-        int setHeight = 1920; // 사용자 설정 높이
+        int setWidth = 1920; // 사용자 설정 너비
+        int setHeight = 1080; // 사용자 설정 높이
 
         int deviceWidth = Screen.width; // 기기 너비 저장
         int deviceHeight = Screen.height; // 기기 높이 저장
@@ -112,6 +112,8 @@ public void Initialize()
             };
             
             StartCoroutine(nameof(Polling));
+
+            CheckLoginWayData();
             
             isInitialize = true;
         }
@@ -148,8 +150,11 @@ public void Initialize()
         Debug.LogError($"{bro.IsSuccess()} {bro.GetStatusCode()} {bro.GetErrorCode()} {bro.GetMessage()}");
 
         if (!bro.IsSuccess())
+        {
+            Debug.Log("계스트 계정 생성 실패");
             GuestIdDelete();
-        
+        }
+
         StartCoroutine((LoginProcess(bro, LoginType.Guest)));
         PlayerPrefs.SetInt("LoginWay", 0);
     }
@@ -208,7 +213,8 @@ public void Initialize()
                                     (int)ServerState.Maintenance)
                                 {
                                     GuestIdDelete();
-                                    SceneManager.LoadScene(0);
+                                    Debug.Log("삭제된 계정입니다 씬재시작");
+                                    
                                 }
                             }else if (bro.GetMessage().Contains("customId"))
                             {
@@ -236,6 +242,7 @@ public void Initialize()
             {
                 case "201": //로그인
                     Debug.Log("자동 로그인 하여 서버에서 유저 데이터 불러오기 성공");
+                    GetUserInfo();
                     break;
             }
         }
@@ -264,7 +271,7 @@ public void Initialize()
             Backend.BMember.DeleteGuestInfo();
             PlayerPrefs.DeleteAll();
             PlayerPrefs.SetInt("LoginWay", -1);
-            CheckLoginWayData();
+            //CheckLoginWayData();
         }
         else
         {

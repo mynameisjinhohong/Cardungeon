@@ -61,7 +61,7 @@ public class MatchingTest : MonoBehaviour {
                 
                 Debug.Log("3-2. OnMatchMakingResponse 매칭 신청 진행중");
 
-                int second = matchCardList[BackendManager.Instance.matchIndex].transit_to_sandbox_timeout_ms / 1000;
+                int second = matchCardList[matchCardList.Count].transit_to_sandbox_timeout_ms / 1000;
                 
                 if (second > 0) {
                     Debug.Log($"{second}초 뒤에 샌드박스 활성화가 됩니다.");
@@ -79,7 +79,7 @@ public class MatchingTest : MonoBehaviour {
         
         Debug.Log("3-1. RequestMatchMaking 매칭 신청 시작");
 
-        int index = BackendManager.Instance.matchIndex;
+        int index = matchCardList.Count - 1;
         Backend.Match.RequestMatchMaking( matchCardList[index].matchType, MatchModeType.Melee, matchCardList[index].inDate);
     }
     

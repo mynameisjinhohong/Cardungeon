@@ -57,6 +57,7 @@ public class MatchController : MonoBehaviour
         }
         else
         {
+            Debug.Log("자동로그인 실행 테스트");
             if (!BackendManager.Instance.isInitialize)
                 BackendManager.Instance.StartTokenLogin();
             
