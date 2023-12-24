@@ -17,8 +17,6 @@ public class BackendManager : Singleton<BackendManager>
     
     private Thread serverCheckThread;
 
-    public TextMeshProUGUI text;
-    
     public string UserIndate = string.Empty;
     public string Nickname   = string.Empty;
     public string UID        = string.Empty;
@@ -57,8 +55,8 @@ public class BackendManager : Singleton<BackendManager>
 
     public void SetResolution()
     {
-        int setWidth = 1080; // 사용자 설정 너비
-        int setHeight = 1920; // 사용자 설정 높이
+        int setWidth = 1920; // 사용자 설정 너비
+        int setHeight = 1080; // 사용자 설정 높이
 
         int deviceWidth = Screen.width; // 기기 너비 저장
         int deviceHeight = Screen.height; // 기기 높이 저장
@@ -115,13 +113,6 @@ public void Initialize()
             
             StartCoroutine(nameof(Polling));
             
-            CheckLoginWayData();
-
-            if (checkLoginWayData >= 0)
-            {
-                StartTokenLogin();
-            }
-
             isInitialize = true;
         }
         else
@@ -138,13 +129,16 @@ public void Initialize()
             checkLoginWayData = PlayerPrefs.GetInt("LoginWay");
         }
         Debug.LogError(PlayerPrefs.HasKey("LoginWay") + checkLoginWayData.ToString());
+        
+        if (checkLoginWayData >= 0)
+        {
+            StartTokenLogin();
+        }
     }
 
     public void GetHashKey()
     {
         string googlehash = Backend.Utils.GetGoogleHash();
-
-        text.text = googlehash;
     }
 
     
@@ -167,6 +161,20 @@ public void Initialize()
             Backend.ErrorHandler.Poll();
             yield return null;
         }
+    }
+
+    public void TryCustomSignin(string id, string pw)
+    {
+        Backend.BMember.CustomSignUp ( id, pw, callback => {
+            if(callback.IsSuccess())
+            {
+                Debug.Log("회원가입에 성공했습니다");
+            }
+            else
+            {
+                Debug.LogWarning(callback.GetMessage());
+            }
+        });
     }
     
     public void StartTokenLogin()
@@ -218,35 +226,10 @@ public void Initialize()
             }
             yield break;
         }
-        switch (type)
-        {
-            case LoginType.Guest:
-                GetUserInfo();
-                Debug.LogError("게스트 로그인에 성공했습니다.");
-                break;
-            case LoginType.Auto:
-                GetUserInfo();
-                Debug.LogError("자동 로그인에 성공했습니다.");
-                break;
-        }
+
         UserIndate = Backend.UserInDate;
         GetServerTime();
-        // while (!LoadServerTime)
-        //     yield return null;
-        // Debug.LogError($"LoadServerTime {LoadServerTime}");
-        // GetServerChartList();
-        // while (!LoadChartList)
-        //     yield return null;
-        // Debug.LogError($"LoadChartList {LoadChartList}");
-        // GetChartData();
-        // while (!LoadChartDataFromServer)
-        //     yield return null;
-        // Debug.LogError($"LoadChartDataFromServer {LoadChartDataFromServer}");
-        // LoadLocalData();
-        // while(!LoadChartDataFromLocal)
-        //     yield return null;
-        // Debug.LogError($"LoadChartDataFromLocal {LoadChartDataFromLocal}");
-        // DataManager.Instance.SetDefaultData();
+
         if (type == LoginType.Auto)
         {
             switch (bro.GetStatusCode())
@@ -411,7 +394,7 @@ public void Initialize()
     public void GetUserInfo()
     {
         Debug.Log(Backend.UserNickName + Backend.UserInDate);
-        UID = Backend.UserInDate;
+        UID = Backend.UID;
         Nickname = Backend.UserNickName;
     }
 }

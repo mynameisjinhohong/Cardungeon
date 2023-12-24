@@ -25,6 +25,8 @@ public class MatchController : MonoBehaviour
     public GameObject Rabbit1;
     public GameObject Rabbit2;
 
+    public GameObject LoginButtons;
+    
     public List<String> TipStrings;
     
     public void Start()
