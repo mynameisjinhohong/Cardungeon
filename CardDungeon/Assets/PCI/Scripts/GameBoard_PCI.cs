@@ -23,7 +23,7 @@ public class GameBoard_PCI : MonoBehaviour
     [Header("Generate Settings")]
     [SerializeField]
     [Range(20, 40)]
-    private int width, height;
+    public int width, height;
     [SerializeField]
     [Range(2, 5)]
     private int padding;
