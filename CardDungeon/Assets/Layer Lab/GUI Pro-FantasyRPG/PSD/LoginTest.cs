@@ -57,7 +57,7 @@ public class LoginTest : MonoBehaviour {
 
             BackendManager.Instance.GetUserInfo();
             
-            matchController.UserNickName.text = Backend.UserNickName;
+            matchController.userNickNameText.text = Backend.UserNickName;
             
             matchController.MatchStart();
             

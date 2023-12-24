@@ -21,3 +21,9 @@ public enum GameLogType
     Signin,
     Login,
 }
+
+public enum ServerType
+{
+    Dev,
+    Live
+}

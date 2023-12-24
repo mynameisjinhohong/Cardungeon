@@ -17,6 +17,8 @@ public class BackendManager : Singleton<BackendManager>
     
     private Thread serverCheckThread;
 
+    public ServerType serverType;
+    
     public string UserIndate = string.Empty;
     public string Nickname   = string.Empty;
     public string UID        = string.Empty;
@@ -24,10 +26,14 @@ public class BackendManager : Singleton<BackendManager>
     public bool LoadServerTime = false;
 
     public int checkLoginWayData = -1;
+    
     public bool isInitialize = false;
+    public bool isLogin      = false;
+    public bool isLoadGame   = false;
+    
     private int initTimeCount = 0;
     public int matchIndex = 0;
-    public bool isLoadGame = false;
+    
     
     [SerializeField]
     public List<UserData> UserDataList;
@@ -36,11 +42,7 @@ public class BackendManager : Singleton<BackendManager>
     {
         Initialize();
     }
-
-    public void ChangeMode(bool is1vs1)
-    {
-        matchIndex = is1vs1 ? 1 : 0;
-    }
+    
     void Awake()
     {
         if (instance != null)
@@ -78,14 +80,27 @@ public void Initialize()
     {
         BackendCustomSetting settings = new BackendCustomSetting();
 
-        settings.clientAppID     = "5544b740-9b5b-11ee-9f65-b5daf02063d76483";
-        settings.signatureKey    = "5544b741-9b5b-11ee-9f65-b5daf02063d76483";
-        settings.functionAuthKey = "";
-        settings.isAllPlatform   = true;
-        settings.sendLogReport   = true;
-        settings.timeOutSec      = 100;
-        settings.useAsyncPoll    = true;
-
+        if (serverType == ServerType.Dev)
+        {
+            settings.clientAppID     = "5544b740-9b5b-11ee-9f65-b5daf02063d76483";
+            settings.signatureKey    = "5544b741-9b5b-11ee-9f65-b5daf02063d76483";
+            settings.functionAuthKey = "";
+            settings.isAllPlatform   = true;
+            settings.sendLogReport   = true;
+            settings.timeOutSec      = 100;
+            settings.useAsyncPoll    = true;
+        }
+        else
+        {
+            settings.clientAppID     = "c06c8520-a268-11ee-9006-8513c03d25496583";
+            settings.signatureKey    = "c06c8521-a268-11ee-9006-8513c03d25496583";
+            settings.functionAuthKey = "";
+            settings.isAllPlatform   = true;
+            settings.sendLogReport   = true;
+            settings.timeOutSec      = 100;
+            settings.useAsyncPoll    = true;
+        }
+        
         var bro = Backend.Initialize(settings);
 
         if (bro.IsSuccess())
@@ -96,7 +111,6 @@ public void Initialize()
 
             Backend.ErrorHandler.OnMaintenanceError = () => {
                 Debug.LogError("Server Inspection Error");
-                //GetTempNotice();
             };
             Backend.ErrorHandler.OnTooManyRequestError = () => {
                 Debug.LogError("403 Error");
@@ -232,8 +246,7 @@ public void Initialize()
             }
             yield break;
         }
-
-        UserIndate = Backend.UserInDate;
+        
         GetServerTime();
 
         if (type == LoginType.Auto)
@@ -242,6 +255,7 @@ public void Initialize()
             {
                 case "201": //로그인
                     Debug.Log("자동 로그인 하여 서버에서 유저 데이터 불러오기 성공");
+                    isLogin = true;
                     GetUserInfo();
                     break;
             }
@@ -260,6 +274,7 @@ public void Initialize()
                     break;
             }
         }
+
         StartCoroutine(nameof(RefreshToken));
     }
     
@@ -401,7 +416,9 @@ public void Initialize()
     public void GetUserInfo()
     {
         Debug.Log(Backend.UserNickName + Backend.UserInDate);
-        UID = Backend.UID;
-        Nickname = Backend.UserNickName;
+        
+        UserIndate = Backend.UserInDate;
+        Nickname   = Backend.UserNickName;
+        UID        = Backend.UID;
     }
 }

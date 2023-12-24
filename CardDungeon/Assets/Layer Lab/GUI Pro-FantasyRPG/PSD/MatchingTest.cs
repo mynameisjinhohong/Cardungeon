@@ -46,6 +46,7 @@ public class MatchingTest : MonoBehaviour {
         Backend.Match.OnMatchMakingRoomCreate = (MatchMakingInteractionEventArgs args) => {
             if (args.ErrInfo == ErrorCode.Success) {
                 Debug.Log("2-2. OnMatchMakingRoomCreate 성공");
+                RequestMatchMaking();
             } else {
                 Debug.LogError("2-2. OnMatchMakingRoomCreate 실패");
             }
