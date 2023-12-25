@@ -368,7 +368,9 @@ MonoBehaviour:
   playerDeck: {fileID: 0}
   defaultPos: {x: 0, y: 0}
   cardEffect: {fileID: 1489232369465262644, guid: 6c66b4f717a2f8448a2331f08c502784, type: 3}
-  tileEffect: {fileID: 9129434909808352066, guid: b5ad21f8f43018f40813fa89a7bdaa44, type: 3}
+  tileEffect:
+  - {fileID: 9129434909808352066, guid: b5ad21f8f43018f40813fa89a7bdaa44, type: 3}
+  - {fileID: 9129434909808352066, guid: d908e76c50213dd49917a56cac3c4881, type: 3}
   tileEffects: []
 --- !u!114 &7588948901025031501
 MonoBehaviour:

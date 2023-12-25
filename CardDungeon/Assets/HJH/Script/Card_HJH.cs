@@ -12,7 +12,7 @@ public class Card_HJH : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
     public PlayerDeck_HJH playerDeck;
     public Vector2 defaultPos;
     public GameObject cardEffect;
-    public GameObject tileEffect;
+    public GameObject[] tileEffect; // 0 - move, 1 - attack
     public List<GameObject> tileEffects;
     #region �巡�� �� ���
 
@@ -32,14 +32,14 @@ public class Card_HJH : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
             case 1:
                 if (cardIdx < 0)
                 {
-                    GameObject tile = Instantiate(tileEffect);
+                    GameObject tile = Instantiate(tileEffect[0]);
                     tileEffects.Add(tile);
                     Vector3 playerPos = GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].transform.position;
                     tile.transform.position = new Vector3(playerPos.x, playerPos.y + 2, 0);
                 }
                 else
                 {
-                    GameObject tile = Instantiate(tileEffect);
+                    GameObject tile = Instantiate(tileEffect[0]);
                     tileEffects.Add(tile);
                     Vector3 playerPos = GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].transform.position;
                     tile.transform.position = new Vector3(playerPos.x, playerPos.y + 1, 0);
@@ -48,14 +48,14 @@ public class Card_HJH : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
             case 2:
                 if (cardIdx < 0)
                 {
-                    GameObject tile = Instantiate(tileEffect);
+                    GameObject tile = Instantiate(tileEffect[0]);
                     tileEffects.Add(tile);
                     Vector3 playerPos = GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].transform.position;
                     tile.transform.position = new Vector3(playerPos.x + 2, playerPos.y, 0);
                 }
                 else
                 {
-                    GameObject tile = Instantiate(tileEffect);
+                    GameObject tile = Instantiate(tileEffect[0]);
                     tileEffects.Add(tile);
                     Vector3 playerPos = GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].transform.position;
                     tile.transform.position = new Vector3(playerPos.x + 1, playerPos.y, 0);
@@ -64,14 +64,14 @@ public class Card_HJH : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
             case 3:
                 if (cardIdx < 0)
                 {
-                    GameObject tile = Instantiate(tileEffect);
+                    GameObject tile = Instantiate(tileEffect[0]);
                     tileEffects.Add(tile);
                     Vector3 playerPos = GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].transform.position;
-                    tileEffect.transform.position = new Vector3(playerPos.x - 2, playerPos.y, 0);
+                    tileEffect[0].transform.position = new Vector3(playerPos.x - 2, playerPos.y, 0);
                 }
                 else
                 {
-                    GameObject tile = Instantiate(tileEffect);
+                    GameObject tile = Instantiate(tileEffect[0]);
                     tileEffects.Add(tile);
                     Vector3 playerPos = GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].transform.position;
                     tile.transform.position = new Vector3(playerPos.x - 1, playerPos.y, 0);
@@ -80,14 +80,14 @@ public class Card_HJH : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
             case 4:
                 if (cardIdx < 0)
                 {
-                    GameObject tile = Instantiate(tileEffect);
+                    GameObject tile = Instantiate(tileEffect[0]);
                     tileEffects.Add(tile);
                     Vector3 playerPos = GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].transform.position;
                     tile.transform.position = new Vector3(playerPos.x, playerPos.y -2, 0);
                 }
                 else
                 {
-                    GameObject tile = Instantiate(tileEffect);
+                    GameObject tile = Instantiate(tileEffect[0]);
                     tileEffects.Add(tile);
                     Vector3 playerPos = GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].transform.position;
                     tile.transform.position = new Vector3(playerPos.x, playerPos.y - 1, 0);
@@ -104,7 +104,7 @@ public class Card_HJH : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
                             {
                                 continue;
                             }
-                            GameObject tile = Instantiate(tileEffect);
+                            GameObject tile = Instantiate(tileEffect[0]);
                             tileEffects.Add(tile);
                             Vector3 playerPos = GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].transform.position;
                             tile.transform.position = new Vector3(playerPos.x +i , playerPos.y + j, 0);
@@ -122,7 +122,7 @@ public class Card_HJH : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
                             {
                                 continue;
                             }
-                            GameObject tile = Instantiate(tileEffect);
+                            GameObject tile = Instantiate(tileEffect[0]);
                             tileEffects.Add(tile);
                             Vector3 playerPos = GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].transform.position;
                             tile.transform.position = new Vector3(playerPos.x + i, playerPos.y + j, 0);
@@ -133,22 +133,22 @@ public class Card_HJH : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
             case 6:
                 if (cardIdx < 0)
                 {
-                    GameObject tile = Instantiate(tileEffect);
+                    GameObject tile = Instantiate(tileEffect[1]);
                     tileEffects.Add(tile);
                     Vector3 playerPos = GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].transform.position;
                     tile.transform.position = new Vector3(playerPos.x, playerPos.y + 1, 0);
-                    GameObject tile2 = Instantiate(tileEffect);
+                    GameObject tile2 = Instantiate(tileEffect[1]);
                     tileEffects.Add(tile2);
                     tile2.transform.position = new Vector3(playerPos.x, playerPos.y - 1, 0);
 
                 }
                 else
                 {
-                    GameObject tile = Instantiate(tileEffect);
+                    GameObject tile = Instantiate(tileEffect[1]);
                     tileEffects.Add(tile);
                     Vector3 playerPos = GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].transform.position;
                     tile.transform.position = new Vector3(playerPos.x, playerPos.y + 1, 0);
-                    GameObject tile2 = Instantiate(tileEffect);
+                    GameObject tile2 = Instantiate(tileEffect[1]);
                     tileEffects.Add(tile2);
                     tile2.transform.position = new Vector3(playerPos.x, playerPos.y - 1, 0);
                 }
@@ -156,22 +156,22 @@ public class Card_HJH : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
             case 7:
                 if (cardIdx < 0)
                 {
-                    GameObject tile = Instantiate(tileEffect);
+                    GameObject tile = Instantiate(tileEffect[1]);
                     tileEffects.Add(tile);
                     Vector3 playerPos = GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].transform.position;
                     tile.transform.position = new Vector3(playerPos.x + 1, playerPos.y, 0);
-                    GameObject tile2 = Instantiate(tileEffect);
+                    GameObject tile2 = Instantiate(tileEffect[1]);
                     tileEffects.Add(tile2);
                     tile.transform.position = new Vector3(playerPos.x - 1, playerPos.y , 0);
 
                 }
                 else
                 {
-                    GameObject tile = Instantiate(tileEffect);
+                    GameObject tile = Instantiate(tileEffect[1]);
                     tileEffects.Add(tile);
                     Vector3 playerPos = GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].transform.position;
                     tile.transform.position = new Vector3(playerPos.x + 1, playerPos.y, 0);
-                    GameObject tile2 = Instantiate(tileEffect);
+                    GameObject tile2 = Instantiate(tileEffect[1]);
                     tileEffects.Add(tile2);
                     tile.transform.position = new Vector3(playerPos.x - 1, playerPos.y, 0);
                 }
@@ -185,7 +185,7 @@ public class Card_HJH : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
                         {
                             continue;
                         }
-                        GameObject tile = Instantiate(tileEffect);
+                        GameObject tile = Instantiate(tileEffect[1]);
                         tileEffects.Add(tile);
                         Vector3 playerPos = GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].transform.position;
                         tile.transform.position = new Vector3(playerPos.x + i, playerPos.y + j, 0);
@@ -207,7 +207,7 @@ public class Card_HJH : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
             Destroy(tileEffects[i]);
         }
         tileEffects.Clear();
-        if (!EventSystem.current.IsPointerOverGameObject() || Mathf.Abs((eventData.position - defaultPos).magnitude) <10)
+        if (!EventSystem.current.IsPointerOverGameObject() || Mathf.Abs(((Vector2)transform.position - defaultPos).magnitude) <50)
         {
             if (!playerDeck.UseCard(handIdx))
             {
