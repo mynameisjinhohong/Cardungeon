@@ -27,3 +27,9 @@ public enum ServerType
     Dev,
     Live
 }
+
+public enum ServerSaveType
+{
+    Insert,
+    Update
+}

@@ -30,6 +30,8 @@ public class BackendManager : Singleton<BackendManager>
     public bool isInitialize = false;
     public bool isLogin      = false;
     public bool isLoadGame   = false;
+
+    public bool NotAutoLogin;
     
     private int initTimeCount = 0;
     public int matchIndex = 0;
@@ -52,6 +54,8 @@ public class BackendManager : Singleton<BackendManager>
         // 모든 씬에서 유지
         DontDestroyOnLoad(this.gameObject);
         SetResolution();
+
+        NotAutoLogin = PlayerPrefs.GetInt("NotAutoLogin") == 0;
     }
 
     public void SetResolution()
@@ -75,7 +79,7 @@ public class BackendManager : Singleton<BackendManager>
             Camera.main.rect = new Rect(0f, (1f - newHeight) / 2f, 1f, newHeight); // 새로운 Rect 적용
         }
     }
-public void Initialize()
+    public void Initialize()
     {
         BackendCustomSetting settings = new BackendCustomSetting();
 
