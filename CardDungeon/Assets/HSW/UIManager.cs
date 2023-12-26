@@ -12,7 +12,7 @@ public class UIManager : Singleton<UIManager>
 
     public List<GameObject> PopupList;
 
-    private GameObject CurrentPopup;
+    public GameObject CurrentPopup;
     
     private Transform PopupListParent;
     

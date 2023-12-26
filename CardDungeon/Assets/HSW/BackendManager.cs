@@ -34,7 +34,6 @@ public class BackendManager : Singleton<BackendManager>
     private int initTimeCount = 0;
     public int matchIndex = 0;
     
-    
     [SerializeField]
     public List<UserData> UserDataList;
 
@@ -220,17 +219,10 @@ public void Initialize()
                             if (bro.GetMessage().Contains("accessToken") || bro.GetMessage().Contains("refreshToken"))
                             {
                                 Debug.LogError("accessToken or refreshToken 만료");
+                                Debug.Log("삭제된 계정입니다 토큰을 삭제합니다");
+                                GuestIdDelete();
                             }
-                            else if (bro.GetMessage().Contains("maintenance")){
-                                BackendReturnObject Bro = Backend.Utils.GetServerStatus();
-                                if (int.Parse(Bro.GetReturnValuetoJSON()["serverStatus"].ToString()) ==
-                                    (int)ServerState.Maintenance)
-                                {
-                                    GuestIdDelete();
-                                    Debug.Log("삭제된 계정입니다 씬재시작");
-                                    
-                                }
-                            }else if (bro.GetMessage().Contains("customId"))
+                            else if (bro.GetMessage().Contains("customId"))
                             {
                                 Debug.LogError($"Guest Data Damaged");
                             }
@@ -286,7 +278,6 @@ public void Initialize()
             Backend.BMember.DeleteGuestInfo();
             PlayerPrefs.DeleteAll();
             PlayerPrefs.SetInt("LoginWay", -1);
-            //CheckLoginWayData();
         }
         else
         {

@@ -1975,7 +1975,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 653894387}
   m_OnClick:
     m_PersistentCalls:
@@ -2435,8 +2435,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SceneNumber: 0
   PopupList: []
+  CurrentPopup: {fileID: 0}
   AccountLoginPrefab: {fileID: 4557327945877872313, guid: 116597740de631240b2a19fea96e3b72, type: 3}
-  AccountSignUpPrefab: {fileID: 5097887765796371620, guid: c40d871ea086fcd47be3e1808aa459cc, type: 3}
+  AccountSignUpPrefab: {fileID: 4557327945877872313, guid: f5730667b5b3ca94da087e06a52a7cb2, type: 3}
   FindAccountPrefab: {fileID: 4557327945877872313, guid: 58c443f8429c49243a255e3cc952fa5a, type: 3}
   GoogleLoginPrefab: {fileID: 5097887765796371620, guid: 513dbdf03e01cc5448020e691f5f3234, type: 3}
   GuestLoginPrefab: {fileID: 5097887765796371620, guid: 919e8e8d821778049b2e069557afa5f7, type: 3}
@@ -2763,7 +2764,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -2583}
-  m_SizeDelta: {x: 1080, y: 2583.36}
+  m_SizeDelta: {x: 1080, y: 2740.32}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1013504273
 MonoBehaviour:
@@ -3376,6 +3377,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1254970366}
+        m_TargetAssemblyTypeName: BackendManager, Assembly-CSharp
+        m_MethodName: GuestLoginSequense
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 835534842}
         m_TargetAssemblyTypeName: PopupManager, Assembly-CSharp
         m_MethodName: OpenPopup
@@ -3667,7 +3680,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1197033086}
   m_OnClick:
     m_PersistentCalls:

@@ -10,7 +10,7 @@ using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-public class MatchController : MonoBehaviour
+public class MatchController : Singleton<MatchController>
 {
     public List<GameObject> uIList;
     
@@ -112,6 +112,15 @@ public class MatchController : MonoBehaviour
         }
     }
     
+    public void GuestLoginSuccess()
+    {
+        UIManager.Instance.PopupListPop();
+        
+        ChangeUI(1);
+        
+        userNickNameText.text = Backend.UserNickName;
+    }
+
     public void MatchStart()
     {
         matchingTest.GetMatchList();
@@ -120,7 +129,7 @@ public class MatchController : MonoBehaviour
         
         matchingTest.JoinMatchMakingServer();
     }
-
+    
     IEnumerator waitInitDataCor()
     {
         yield return new WaitUntil(() => BackendManager.Instance.isInitialize);
