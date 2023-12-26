@@ -6,22 +6,26 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-public class MatchController : MonoBehaviour
+public class MatchController : Singleton<MatchController>
 {
-    public List<GameObject> UIList;
-
-    public TextMeshProUGUI UserNickName;
-
-    public GameObject LoginPopup;
+    public List<GameObject> uIList;
     
+    public TextMeshProUGUI userNickNameText;
+
+    public GameObject readyToPlay;
+
+    public Button loginCheckButton;
+    
+    public GameObject LoginButtonListObj;
+
     private MatchingTest matchingTest;
 
     public TextMeshProUGUI TipText;
 
-    public int UIIndex = 0;
-    
     public GameObject Rabbit1;
     public GameObject Rabbit2;
 
@@ -30,7 +34,9 @@ public class MatchController : MonoBehaviour
     public void Start()
     {
         matchingTest = BackendManager.Instance.GetComponent<MatchingTest>();
-        
+
+        StartCoroutine(waitInitDataCor());
+
         TipStrings.Add("뒤끝 서버가\n토끼들의 성장을 돕고있어요");
         TipStrings.Add("잠시만 기다려 주세요\n토끼들을 모아 훈련하는 중입니다.");
         TipStrings.Add("던전은 매번\n랜덤으로 생성됩니다.");
@@ -45,56 +51,94 @@ public class MatchController : MonoBehaviour
         TipStrings.Add("다른 유저가 먼저 탈출 하거나\nHP를 전부 잃으면 게임오버 됩니다.");
     }
 
-    public void CheckPlayersLoginWay()
+    public void TryAutoLogin()
     {
         if(BackendManager.Instance.checkLoginWayData == -1 || BackendManager.Instance.Nickname == "")
         {
-            LoginPopup.SetActive(true);
-
-            BackendManager.Instance.GuestLoginSequense();
+            Debug.Log("로그인 정보 없음");
+            readyToPlay.gameObject.SetActive(false);
+            LoginButtonListObj.gameObject.SetActive(true);
         }
         else
         {
+            Debug.Log("자동로그인 실행 테스트");
             if (!BackendManager.Instance.isInitialize)
                 BackendManager.Instance.StartTokenLogin();
             
             ChangeUI(1);
-            UserNickName.text = BackendManager.Instance.Nickname;
-
-            MatchStart();
         }
     }
 
+    IEnumerator WaitForLogin()
+    {
+        yield return new WaitUntil(() => BackendManager.Instance.isLogin);
+    }
+    
     public void ChangeUI(int index)
     {
-        for (int i = 0; i < UIList.Count; i++)
+        for (int i = 0; i < uIList.Count; i++)
         {
-            UIList[i].SetActive(i == index);
+            uIList[i].SetActive(i == index);
         }
-
-        UIIndex = index;
 
         if (index == 1)
         {
+            userNickNameText.text = BackendManager.Instance.Nickname;
             StartCoroutine(RabbitBlinkEye());
             Debug.Log("깜빡");
         }
 
-        if (index == 2)
+        if (index == 3)
         {
-            int randomVal = Random.Range(0, TipStrings.Count + 1);
-            TipText.text = TipStrings[randomVal];
+            StartCoroutine(RandomTipTextCor());
             Debug.Log("텍스트");
         }
+    }
+
+    IEnumerator RandomTipTextCor()
+    {
+        int currentTipIndex = 0;
+        
+        while (true)
+        {
+            int randomVal = Random.Range(0, TipStrings.Count);
+
+            if (currentTipIndex != randomVal)
+            {
+                TipText.text = TipStrings[randomVal];
+                
+                yield return new WaitForSeconds(3);
+            }
+        }
+    }
+    
+    public void GuestLoginSuccess()
+    {
+        UIManager.Instance.PopupListPop();
+        
+        ChangeUI(1);
+        
+        userNickNameText.text = Backend.UserNickName;
     }
 
     public void MatchStart()
     {
         matchingTest.GetMatchList();
 
+        BackendManager.Instance.matchIndex = 6;
+        
         matchingTest.JoinMatchMakingServer();
     }
+    
+    IEnumerator waitInitDataCor()
+    {
+        yield return new WaitUntil(() => BackendManager.Instance.isInitialize);
+        
+        readyToPlay.gameObject.SetActive(true);
 
+        loginCheckButton.interactable = true;
+    }
+    
     public void MatchCancel()
     {
         Backend.Match.CancelMatchMaking();

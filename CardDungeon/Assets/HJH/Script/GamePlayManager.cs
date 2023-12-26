@@ -19,11 +19,13 @@ public class GamePlayManager : Singleton<GamePlayManager>
     public GameObject playerPool;
     public Transform[] PlayerSpawnPosition;
     public bool isDataCheck = false;
-
     #region 호스트
     public bool isHost;
     public Queue<Message> messageQueue;
     #endregion
+    
+    public List<Color> colorList;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -32,8 +34,8 @@ public class GamePlayManager : Singleton<GamePlayManager>
     }
     public void SetResolution()
     {
-        int setWidth = 1080; // 사용자 설정 너비
-        int setHeight = 1920; // 사용자 설정 높이
+        int setWidth = 1920; // 사용자 설정 너비
+        int setHeight = 1080; // 사용자 설정 높이
 
         int deviceWidth = Screen.width; // 기기 너비 저장
         int deviceHeight = Screen.height; // 기기 높이 저장
@@ -88,7 +90,9 @@ public class GamePlayManager : Singleton<GamePlayManager>
                 Player_HJH playerHjh = PlayerPrefab.GetComponent<Player_HJH>();
                 players.Add(playerHjh);
                 playerHjh.isSuperGamer = BackendManager.Instance.UserDataList[i].isSuperGamer;
-                playerHjh.PlayerName = BackendManager.Instance.UserDataList[i].playerName;
+                playerHjh.PlayerName.text = BackendManager.Instance.UserDataList[i].playerName;
+                playerHjh.PlayerName.color = colorList[i];
+
                 if (BackendManager.Instance.Nickname == BackendManager.Instance.UserDataList[i].playerName)
                 {
                     playerHjh.isMine = true;
@@ -123,6 +127,8 @@ public class GamePlayManager : Singleton<GamePlayManager>
             }
         }
 
+        mainUi.playerBG.color = colorList[myIdx];
+        
         isDataCheck = true;
     }
     public bool CardIdxCheckNoPlayer(int cardIdx, Transform playerPos)

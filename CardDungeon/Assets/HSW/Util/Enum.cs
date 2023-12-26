@@ -5,6 +5,7 @@ using UnityEngine;
 public enum LoginType
 {
     Guest,
+    Custom,
     Auto
 }
 
@@ -19,4 +20,10 @@ public enum GameLogType
 {
     Signin,
     Login,
+}
+
+public enum ServerType
+{
+    Dev,
+    Live
 }

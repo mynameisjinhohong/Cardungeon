@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Player_HJH : MonoBehaviour
@@ -8,7 +9,7 @@ public class Player_HJH : MonoBehaviour
     public int maxHp;
     public int maxMp;
     public float mpCoolTime;
-    public string PlayerName;
+    public TMP_Text PlayerName;
     public string PlayerToken;
     public bool isSuperGamer;
     public bool isMine;

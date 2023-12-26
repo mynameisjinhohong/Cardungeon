@@ -17,7 +17,7 @@ public class BackendManager : Singleton<BackendManager>
     
     private Thread serverCheckThread;
 
-    public TextMeshProUGUI text;
+    public ServerType serverType;
     
     public string UserIndate = string.Empty;
     public string Nickname   = string.Empty;
@@ -26,10 +26,13 @@ public class BackendManager : Singleton<BackendManager>
     public bool LoadServerTime = false;
 
     public int checkLoginWayData = -1;
+    
     public bool isInitialize = false;
+    public bool isLogin      = false;
+    public bool isLoadGame   = false;
+    
     private int initTimeCount = 0;
     public int matchIndex = 0;
-    public bool isLoadGame = false;
     
     [SerializeField]
     public List<UserData> UserDataList;
@@ -38,11 +41,7 @@ public class BackendManager : Singleton<BackendManager>
     {
         Initialize();
     }
-
-    public void ChangeMode(bool is1vs1)
-    {
-        matchIndex = is1vs1 ? 1 : 0;
-    }
+    
     void Awake()
     {
         if (instance != null)
@@ -57,8 +56,8 @@ public class BackendManager : Singleton<BackendManager>
 
     public void SetResolution()
     {
-        int setWidth = 1080; // 사용자 설정 너비
-        int setHeight = 1920; // 사용자 설정 높이
+        int setWidth = 1920; // 사용자 설정 너비
+        int setHeight = 1080; // 사용자 설정 높이
 
         int deviceWidth = Screen.width; // 기기 너비 저장
         int deviceHeight = Screen.height; // 기기 높이 저장
@@ -80,14 +79,27 @@ public void Initialize()
     {
         BackendCustomSetting settings = new BackendCustomSetting();
 
-        settings.clientAppID     = "5544b740-9b5b-11ee-9f65-b5daf02063d76483";
-        settings.signatureKey    = "5544b741-9b5b-11ee-9f65-b5daf02063d76483";
-        settings.functionAuthKey = "";
-        settings.isAllPlatform   = true;
-        settings.sendLogReport   = true;
-        settings.timeOutSec      = 100;
-        settings.useAsyncPoll    = true;
-
+        if (serverType == ServerType.Dev)
+        {
+            settings.clientAppID     = "5544b740-9b5b-11ee-9f65-b5daf02063d76483";
+            settings.signatureKey    = "5544b741-9b5b-11ee-9f65-b5daf02063d76483";
+            settings.functionAuthKey = "";
+            settings.isAllPlatform   = true;
+            settings.sendLogReport   = true;
+            settings.timeOutSec      = 100;
+            settings.useAsyncPoll    = true;
+        }
+        else
+        {
+            settings.clientAppID     = "c06c8520-a268-11ee-9006-8513c03d25496583";
+            settings.signatureKey    = "c06c8521-a268-11ee-9006-8513c03d25496583";
+            settings.functionAuthKey = "";
+            settings.isAllPlatform   = true;
+            settings.sendLogReport   = true;
+            settings.timeOutSec      = 100;
+            settings.useAsyncPoll    = true;
+        }
+        
         var bro = Backend.Initialize(settings);
 
         if (bro.IsSuccess())
@@ -98,7 +110,6 @@ public void Initialize()
 
             Backend.ErrorHandler.OnMaintenanceError = () => {
                 Debug.LogError("Server Inspection Error");
-                //GetTempNotice();
             };
             Backend.ErrorHandler.OnTooManyRequestError = () => {
                 Debug.LogError("403 Error");
@@ -114,14 +125,9 @@ public void Initialize()
             };
             
             StartCoroutine(nameof(Polling));
-            
+
             CheckLoginWayData();
-
-            if (checkLoginWayData >= 0)
-            {
-                StartTokenLogin();
-            }
-
+            
             isInitialize = true;
         }
         else
@@ -138,13 +144,16 @@ public void Initialize()
             checkLoginWayData = PlayerPrefs.GetInt("LoginWay");
         }
         Debug.LogError(PlayerPrefs.HasKey("LoginWay") + checkLoginWayData.ToString());
+        
+        if (checkLoginWayData >= 0)
+        {
+            StartTokenLogin();
+        }
     }
 
     public void GetHashKey()
     {
         string googlehash = Backend.Utils.GetGoogleHash();
-
-        text.text = googlehash;
     }
 
     
@@ -154,8 +163,11 @@ public void Initialize()
         Debug.LogError($"{bro.IsSuccess()} {bro.GetStatusCode()} {bro.GetErrorCode()} {bro.GetMessage()}");
 
         if (!bro.IsSuccess())
+        {
+            Debug.Log("계스트 계정 생성 실패");
             GuestIdDelete();
-        
+        }
+
         StartCoroutine((LoginProcess(bro, LoginType.Guest)));
         PlayerPrefs.SetInt("LoginWay", 0);
     }
@@ -167,6 +179,20 @@ public void Initialize()
             Backend.ErrorHandler.Poll();
             yield return null;
         }
+    }
+
+    public void TryCustomSignin(string id, string pw)
+    {
+        Backend.BMember.CustomSignUp ( id, pw, callback => {
+            if(callback.IsSuccess())
+            {
+                Debug.Log("회원가입에 성공했습니다");
+            }
+            else
+            {
+                Debug.LogWarning(callback.GetMessage());
+            }
+        });
     }
     
     public void StartTokenLogin()
@@ -193,16 +219,10 @@ public void Initialize()
                             if (bro.GetMessage().Contains("accessToken") || bro.GetMessage().Contains("refreshToken"))
                             {
                                 Debug.LogError("accessToken or refreshToken 만료");
+                                Debug.Log("삭제된 계정입니다 토큰을 삭제합니다");
+                                GuestIdDelete();
                             }
-                            else if (bro.GetMessage().Contains("maintenance")){
-                                BackendReturnObject Bro = Backend.Utils.GetServerStatus();
-                                if (int.Parse(Bro.GetReturnValuetoJSON()["serverStatus"].ToString()) ==
-                                    (int)ServerState.Maintenance)
-                                {
-                                    GuestIdDelete();
-                                    SceneManager.LoadScene(0);
-                                }
-                            }else if (bro.GetMessage().Contains("customId"))
+                            else if (bro.GetMessage().Contains("customId"))
                             {
                                 Debug.LogError($"Guest Data Damaged");
                             }
@@ -218,41 +238,17 @@ public void Initialize()
             }
             yield break;
         }
-        switch (type)
-        {
-            case LoginType.Guest:
-                GetUserInfo();
-                Debug.LogError("게스트 로그인에 성공했습니다.");
-                break;
-            case LoginType.Auto:
-                GetUserInfo();
-                Debug.LogError("자동 로그인에 성공했습니다.");
-                break;
-        }
-        UserIndate = Backend.UserInDate;
+        
         GetServerTime();
-        // while (!LoadServerTime)
-        //     yield return null;
-        // Debug.LogError($"LoadServerTime {LoadServerTime}");
-        // GetServerChartList();
-        // while (!LoadChartList)
-        //     yield return null;
-        // Debug.LogError($"LoadChartList {LoadChartList}");
-        // GetChartData();
-        // while (!LoadChartDataFromServer)
-        //     yield return null;
-        // Debug.LogError($"LoadChartDataFromServer {LoadChartDataFromServer}");
-        // LoadLocalData();
-        // while(!LoadChartDataFromLocal)
-        //     yield return null;
-        // Debug.LogError($"LoadChartDataFromLocal {LoadChartDataFromLocal}");
-        // DataManager.Instance.SetDefaultData();
+
         if (type == LoginType.Auto)
         {
             switch (bro.GetStatusCode())
             {
                 case "201": //로그인
                     Debug.Log("자동 로그인 하여 서버에서 유저 데이터 불러오기 성공");
+                    isLogin = true;
+                    GetUserInfo();
                     break;
             }
         }
@@ -270,6 +266,7 @@ public void Initialize()
                     break;
             }
         }
+
         StartCoroutine(nameof(RefreshToken));
     }
     
@@ -281,7 +278,6 @@ public void Initialize()
             Backend.BMember.DeleteGuestInfo();
             PlayerPrefs.DeleteAll();
             PlayerPrefs.SetInt("LoginWay", -1);
-            CheckLoginWayData();
         }
         else
         {
@@ -411,7 +407,9 @@ public void Initialize()
     public void GetUserInfo()
     {
         Debug.Log(Backend.UserNickName + Backend.UserInDate);
-        UID = Backend.UserInDate;
-        Nickname = Backend.UserNickName;
+        
+        UserIndate = Backend.UserInDate;
+        Nickname   = Backend.UserNickName;
+        UID        = Backend.UID;
     }
 }

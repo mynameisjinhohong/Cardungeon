@@ -11,7 +11,7 @@ using UnityEngine.UI;
 public class MatchingTest : MonoBehaviour {
     private InGameTest _inGameTest;
     
-    List<MatchCard> matchCardList = new List<MatchCard>();
+    public List<MatchCard> matchCardList = new List<MatchCard>();
     MatchInGameRoomInfo currentGameRoomInfo;
 
     void Update() {
@@ -46,6 +46,7 @@ public class MatchingTest : MonoBehaviour {
         Backend.Match.OnMatchMakingRoomCreate = (MatchMakingInteractionEventArgs args) => {
             if (args.ErrInfo == ErrorCode.Success) {
                 Debug.Log("2-2. OnMatchMakingRoomCreate 성공");
+                RequestMatchMaking();
             } else {
                 Debug.LogError("2-2. OnMatchMakingRoomCreate 실패");
             }
@@ -78,9 +79,8 @@ public class MatchingTest : MonoBehaviour {
         };
         
         Debug.Log("3-1. RequestMatchMaking 매칭 신청 시작");
-
-        int index = BackendManager.Instance.matchIndex;
-        Backend.Match.RequestMatchMaking( matchCardList[index].matchType, MatchModeType.Melee, matchCardList[index].inDate);
+        
+        Backend.Match.RequestMatchMaking( matchCardList[6].matchType, MatchModeType.Melee, matchCardList[6].inDate);
     }
     
     IEnumerator WaitFor10Seconds(int second) {
@@ -205,6 +205,7 @@ public class MatchingTest : MonoBehaviour {
         });
     }
 
+    [Serializable]
     public class MatchCard {
         public string inDate;
         public string matchTitle;
