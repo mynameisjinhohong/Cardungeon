@@ -190,11 +190,17 @@ public class BackendManager : Singleton<BackendManager>
         Backend.BMember.CustomSignUp ( id, pw, callback => {
             if(callback.IsSuccess())
             {
-                Debug.Log("회원가입에 성공했습니다");
+                Debug.Log("회원가입에 성공했습니다.");
+                UIManager.Instance.PopupListPop();
+                
+                UIManager.Instance.PopupListPop();
+                
+                UIManager.Instance.OpenRecyclePopup("안내", "회원가입에 성공했습니다.", null);
             }
             else
             {
                 Debug.LogWarning(callback.GetMessage());
+                UIManager.Instance.OpenRecyclePopup("안내", $"{callback.GetMessage()}", null);
             }
         });
     }

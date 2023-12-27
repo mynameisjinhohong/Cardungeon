@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +9,6 @@ using UnityEngine.UI;
 public class SignUpCheckPanel : MonoBehaviour
 {
     public InputField input;
-    public GameObject infoText;
+    public TextMeshProUGUI infoText;
     public bool isChecked;
 }
