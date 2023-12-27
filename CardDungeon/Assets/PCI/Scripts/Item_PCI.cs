@@ -7,6 +7,10 @@ public class Item_PCI : TileObject_PCI
 {
     ItemData_PCI _data;
 
+    private void Start()
+    {
+        // gameObject.layer = LayerMask.GetMask() 
+    }
     public void SetData(ItemData_PCI data)
     {
         try {
