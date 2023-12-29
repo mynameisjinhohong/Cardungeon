@@ -126,6 +126,9 @@ public class UIManager : Singleton<UIManager>
         target.title.text    = title;
         target.descript.text = descript;
         target.action = action;
+
+        if (action == null)
+            action = PopupListPop;
         
         PopupListAddNoneABB(Popup);
     }

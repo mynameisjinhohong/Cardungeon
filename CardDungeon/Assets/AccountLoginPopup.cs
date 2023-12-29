@@ -54,7 +54,7 @@ public class AccountLoginPopup : MonoBehaviour
                 
                 Debug.Log("에러코드 : " + callback.GetErrorCode() + "에러 사유" + callback.GetMessage());
                 
-                UIManager.Instance.OpenRecyclePopup("로그인 실패", errMSG, UIManager.Instance.PopupListPop);
+                UIManager.Instance.OpenRecyclePopup("로그인 실패", errMSG, null);
             }
         });
     }
