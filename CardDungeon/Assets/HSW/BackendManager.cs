@@ -18,6 +18,7 @@ public class BackendManager : Singleton<BackendManager>
     private Thread serverCheckThread;
 
     public ServerType serverType;
+    public PlatformType platformType;
     
     public string UserIndate = string.Empty;
     public string Nickname   = string.Empty;
@@ -81,6 +82,19 @@ public class BackendManager : Singleton<BackendManager>
     }
     public void Initialize()
     {
+        switch (Application.platform)
+        {
+            case RuntimePlatform.Android :
+                platformType = PlatformType.Android;
+                break;
+            case RuntimePlatform.WindowsEditor :
+                platformType = PlatformType.Window;
+                break;
+            case RuntimePlatform.IPhonePlayer :
+                platformType = PlatformType.IOS;
+                break;
+        }
+
         BackendCustomSetting settings = new BackendCustomSetting();
 
         if (serverType == ServerType.Dev)
@@ -130,7 +144,8 @@ public class BackendManager : Singleton<BackendManager>
             
             StartCoroutine(nameof(Polling));
 
-            CheckLoginWayData();
+            if(platformType == PlatformType.Android || platformType == PlatformType.IOS)
+                CheckLoginWayData();
             
             isInitialize = true;
         }

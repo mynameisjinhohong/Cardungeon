@@ -28,6 +28,13 @@ public enum ServerType
     Live
 }
 
+public enum PlatformType
+{
+    Window,
+    Android,
+    IOS
+}
+
 public enum ServerSaveType
 {
     Insert,
