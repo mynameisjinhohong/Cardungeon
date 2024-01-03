@@ -13,6 +13,8 @@ public class UIManager : Singleton<UIManager>
     public List<GameObject> PopupList;
 
     public GameObject CurrentPopup;
+
+    public CurrentUIStatus CurrentUIStatus; 
     
     private Transform PopupListParent;
     
@@ -25,6 +27,8 @@ public class UIManager : Singleton<UIManager>
     public GameObject GoogleLoginPrefab;
 
     public GameObject GuestLoginPrefab;
+
+    public GameObject NickNamePrefab;
 
     public GameObject RecyclePopupPrefab;
 
@@ -71,6 +75,8 @@ public class UIManager : Singleton<UIManager>
 
         ABBAction = action;
 
+        CurrentUIStatus = CurrentUIStatus.ABBPopup;
+        
         DarkBGCheck();
     }
     
@@ -125,11 +131,12 @@ public class UIManager : Singleton<UIManager>
 
         target.title.text    = title;
         target.descript.text = descript;
-        target.action = action;
 
-        if (action == null)
-            action = PopupListPop;
-        
+        if (target.action == null)
+            target.action = PopupListPop;
+        else
+            target.action = action;
+
         PopupListAddNoneABB(Popup);
     }
 }

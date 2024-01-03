@@ -50,23 +50,35 @@ public class MatchController : Singleton<MatchController>
         TipStrings.Add("나무 상자에는\n행운 혹은 불행이 들어 있어요.\n운을 시험해 보세요!");
         TipStrings.Add("다른 유저가 먼저 탈출 하거나\nHP를 전부 잃으면 게임오버 됩니다.");
     }
-
+    
     public void TryAutoLogin()
     {
-        if(BackendManager.Instance.checkLoginWayData == -1 || BackendManager.Instance.Nickname == "")
+        if (Application.platform == RuntimePlatform.Android)
         {
-            Debug.Log("로그인 정보 없음");
-            readyToPlay.gameObject.SetActive(false);
-            LoginButtonListObj.gameObject.SetActive(true);
+            if(BackendManager.Instance.checkLoginWayData == -1 || BackendManager.Instance.Nickname == "")
+            {
+                Debug.Log("로그인 정보 없음");
+                TryLogin();
+            }
+            else
+            {
+                Debug.Log("자동로그인 실행 테스트");
+                if (!BackendManager.Instance.isInitialize)
+                    BackendManager.Instance.StartTokenLogin();
+            
+                ChangeUI(1);
+            }
         }
         else
         {
-            Debug.Log("자동로그인 실행 테스트");
-            if (!BackendManager.Instance.isInitialize)
-                BackendManager.Instance.StartTokenLogin();
-            
-            ChangeUI(1);
+            TryLogin();
         }
+    }
+
+    public void TryLogin()
+    {
+        readyToPlay.gameObject.SetActive(false);
+        LoginButtonListObj.gameObject.SetActive(true);
     }
 
     IEnumerator WaitForLogin()
@@ -110,15 +122,6 @@ public class MatchController : Singleton<MatchController>
                 yield return new WaitForSeconds(3);
             }
         }
-    }
-    
-    public void GuestLoginSuccess()
-    {
-        UIManager.Instance.PopupListPop();
-        
-        ChangeUI(1);
-        
-        userNickNameText.text = Backend.UserNickName;
     }
 
     public void MatchStart()

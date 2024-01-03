@@ -33,3 +33,10 @@ public enum ServerSaveType
     Insert,
     Update
 }
+
+public enum CurrentUIStatus
+{
+    UI,
+    ABBPopup,
+    NoneABBPopup
+}

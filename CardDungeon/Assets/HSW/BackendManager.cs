@@ -187,6 +187,8 @@ public class BackendManager : Singleton<BackendManager>
 
     public void TryCustomSignin(string id, string pw)
     {
+        GameObject nicknamePopup = UIManager.Instance.NickNamePrefab;
+        
         Backend.BMember.CustomSignUp ( id, pw, callback => {
             if(callback.IsSuccess())
             {
@@ -195,7 +197,8 @@ public class BackendManager : Singleton<BackendManager>
                 
                 UIManager.Instance.PopupListPop();
                 
-                UIManager.Instance.OpenRecyclePopup("안내", "회원가입에 성공했습니다.", null);
+                // 닉네임 생성 팝업 만들기
+                UIManager.Instance.OpenPopup(nicknamePopup);
             }
             else
             {
@@ -421,5 +424,26 @@ public class BackendManager : Singleton<BackendManager>
         UserIndate = Backend.UserInDate;
         Nickname   = Backend.UserNickName;
         UID        = Backend.UID;
+    }
+    public class UserInfo
+    {
+        public string gamerId;
+        public string countryCode;
+        public string nickname;
+        public string inDate;
+        public string emailForFindPassword;
+        public string subscriptionType;
+        public string federationId;
+
+        public override string ToString()
+        {
+            return $"gamerId: {gamerId}\n" +
+                   $"countryCode: {countryCode}\n" +
+                   $"nickname: {nickname}\n" +
+                   $"inDate: {inDate}\n" +
+                   $"emailForFindPassword: {emailForFindPassword}\n" +
+                   $"subscriptionType: {subscriptionType}\n" +
+                   $"federationId: {federationId}\n";
+        }
     }
 }
