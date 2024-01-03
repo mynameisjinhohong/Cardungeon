@@ -1,23 +1,37 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemBox_PCI : TileObject_PCI
+public class ItemBox_PCI : Item_PCI
 {
-    ItemData_PCI _data;
+    private void Start()
+    {
+        // gameObject.layer = LayerMask.GetMask() 
+    }
+
+    public override void SetData(ItemData_PCI data)
+    {
+        try
+        {
+            _data = data;
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+            Debug.Log($"Error ({data.itemName})");
+        }
+    }
 
     public override void OnInteracted(Player_HJH player)
     {
-        base.OnInteracted(player);
-        AudioPlayer.Instance.PlayClip(11);
-        Animation();
+        if (player.isMine)
+        {
+            AudioPlayer.Instance.PlayClip(11);
+            Animation();
+        }
         _data.OnInteracted(player);
         tile.RemoveTileObject(this);
         Destroy(gameObject);
-    }
-
-    private void Animation()
-    {
-
     }
 }

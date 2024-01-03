@@ -13,11 +13,9 @@ MonoBehaviour:
   m_Name: HpPotion
   m_EditorClassIdentifier: 
   itemName: "HP\uD3EC\uC158"
-  itemIdx: 0
   description: "\uCCB4\uB825\uC744 \uD55C\uCE78 \uD68C\uBCF5\uD569\uB2C8\uB2E4"
   image: {fileID: 0}
   amount: 20
   sprites:
-  - {fileID: 21300000, guid: 150a652d377f7447db261970c983c757, type: 3}
   - {fileID: 21300000, guid: 030e1544e2fa04d53947261dced1405c, type: 3}
   value: 1

@@ -16,6 +16,8 @@ public class GameBoard_PCI : MonoBehaviour
     [SerializeField]
     private Item_PCI itemPrefab;
     [SerializeField]
+    private ItemBox_PCI itemBoxPrefab;
+    [SerializeField]
     private ItemDataList_PCI itemList;
     [SerializeField]
     private List<Sprite> tileSprites = new List<Sprite>();
@@ -114,7 +116,6 @@ public class GameBoard_PCI : MonoBehaviour
                 int r = x*x + y*y;
                 r = (128 * r) / ((width+height)*(width+height));
                 int randi = UnityEngine.Random.Range(0, 4);
-                Debug.Log($"({i}, {j}) : {8 - r}");
                 newTile.spriteRenderer.sprite = tileSprites[Mathf.Clamp(8-r + randi, 0, tileSprites.Count)];
                 board[i, j] = newTile;
                 if(tempBoard[i, j] == 0)
@@ -149,14 +150,29 @@ public class GameBoard_PCI : MonoBehaviour
                 {
                     if ((x, y) == offset[i]) { flag = false; break; }
                 }
-                if (!flag) continue;
-                if (!IsInteractable(new Vector2Int(x, y)))
+                if (flag)
                 {
-                    var targetTile = board[x, y];
-                    var newItemObject = Instantiate(itemPrefab, new Vector3(x, y, 0), Quaternion.identity, targetTile.transform);
-                    newItemObject.SetData(e);
-                    targetTile.AddTileObject(newItemObject);
-                    k--;
+                    if (!IsInteractable(new Vector2Int(x, y)))
+                    {
+                        if (UnityEngine.Random.value < 0.5f)
+                        {
+                            // 아이템 박스 생성
+                            var targetTile = board[x, y];
+                            var newItemObject = Instantiate(itemBoxPrefab, new Vector3(x, y, 0), Quaternion.identity, targetTile.transform);
+                            newItemObject.SetData(e);
+                            targetTile.AddTileObject(newItemObject);
+                            k--;
+                        }
+                        else
+                        {
+                            // 아이템 바로 생성
+                            var targetTile = board[x, y];
+                            var newItemObject = Instantiate(itemPrefab, new Vector3(x, y, 0), Quaternion.identity, targetTile.transform);
+                            newItemObject.SetData(e);
+                            targetTile.AddTileObject(newItemObject);
+                            k--;
+                        }
+                    }
                 }
             }
         }

@@ -8,7 +8,6 @@ public class HPPotion_PCI : ItemData_PCI
     public int value;
     public override void OnInteracted(Player_HJH player)
     {
-       
         base.OnInteracted(player);
          player.HP += value;
     }
