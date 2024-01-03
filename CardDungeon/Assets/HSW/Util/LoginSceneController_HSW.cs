@@ -16,7 +16,7 @@ public class LoginSceneController_HSW : MonoBehaviour
         string name = NickNameText.text;
         
         BackendReturnObject bro = Backend.BMember.UpdateNickname(name);
-        BackendManager.Instance.Nickname = name;
+        BackendManager.Instance.userInfo.Nickname = name;
     }
 
     public void ChangeHostingUI(int index)

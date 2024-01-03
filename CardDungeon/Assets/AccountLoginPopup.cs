@@ -54,8 +54,9 @@ public class AccountLoginPopup : MonoBehaviour
         Backend.BMember.CustomLogin( idInput.text, pwInput.text, callback => {
             if(callback.IsSuccess())
             {
-                Debug.Log("�α��ο� �����߽��ϴ�");
+                Debug.Log("계정 로그인 성공");
                 UIManager.Instance.PopupListPop();
+                BackendManager.Instance.GetUserInfo();
                 MatchController.Instance.ChangeUI(1);
             }
             else
@@ -65,22 +66,20 @@ public class AccountLoginPopup : MonoBehaviour
                 switch (callback.GetStatusCode())
                 {
                     case "401" :
-                        errMSG = "������ �������� �ʰų�\n���̵� ��й�ȣ�� Ʋ�Ƚ��ϴ�.";
+                        errMSG = "없는 계정이거나\n비밀번호가 틀렸습니다.";
                         break;
                     case "403" :
-                        errMSG = "���ܵ� �����Դϴ�, �� ���ͷ� ���� ���ּ���.";
+                        errMSG = "차단된 계정입니다. 고객센터로 문의하세요.";
                         break;
                     case "400" :
-                        errMSG = "�߸��� ������� �Դϴ�.";
+                        errMSG = "기기 정보가 없습니다.";
                         break;
                     case "410" :
-                        errMSG = "������ ���� ���� �Դϴ�.";
+                        errMSG = "탈퇴된 계정입니다.";
                         break;
                 }
-                
-                Debug.Log("�����ڵ� : " + callback.GetErrorCode() + "���� ����" + callback.GetMessage());
-                
-                UIManager.Instance.OpenRecyclePopup("�α��� ����", errMSG, null);
+
+                UIManager.Instance.OpenRecyclePopup("로그인 실패", errMSG, null);
             }
         });
     }

@@ -93,7 +93,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
                 playerHjh.PlayerName.text = BackendManager.Instance.UserDataList[i].playerName;
                 playerHjh.PlayerName.color = colorList[i];
 
-                if (BackendManager.Instance.Nickname == BackendManager.Instance.UserDataList[i].playerName)
+                if (BackendManager.Instance.userInfo.Nickname == BackendManager.Instance.UserDataList[i].playerName)
                 {
                     playerHjh.isMine = true;
                     mainUi.myPlayer = playerHjh;
@@ -112,7 +112,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
         for (int i = 0; i < BackendManager.Instance.UserDataList.Count; i++)
         {
-            if (BackendManager.Instance.Nickname == BackendManager.Instance.UserDataList[i].playerName)
+            if (BackendManager.Instance.userInfo.Nickname == BackendManager.Instance.UserDataList[i].playerName)
             {
                 myIdx = i;
 
@@ -265,7 +265,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
         {
             Backend.Match.OnMatchRelay = (MatchRelayEventArgs args) =>
             {
-                if (args.From.NickName == BackendManager.Instance.Nickname)
+                if (args.From.NickName == BackendManager.Instance.userInfo.Nickname)
                 {
                     return;
                 }
@@ -356,7 +356,14 @@ public class GamePlayManager : Singleton<GamePlayManager>
     {
         var jsonData = JsonUtility.ToJson(mes); // 클래스를 json으로 변환해주는 함수
         var dataByte = System.Text.Encoding.UTF8.GetBytes(jsonData); // json을 byte[]로 변환해주는 함수
-        Backend.Match.SendDataToInGameRoom(dataByte);
+        try
+        {
+            Backend.Match.SendDataToInGameRoom(dataByte);
+        }
+        catch
+        {
+            Debug.Log("연결 끊어짐");
+        }
     }
 
 

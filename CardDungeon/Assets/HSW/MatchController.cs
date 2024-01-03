@@ -55,7 +55,7 @@ public class MatchController : Singleton<MatchController>
     {
         if (Application.platform == RuntimePlatform.Android)
         {
-            if(BackendManager.Instance.checkLoginWayData == -1 || BackendManager.Instance.Nickname == "")
+            if(BackendManager.Instance.checkLoginWayData == -1 || BackendManager.Instance.userInfo.Nickname == "")
             {
                 Debug.Log("로그인 정보 없음");
                 TryLogin();
@@ -95,7 +95,7 @@ public class MatchController : Singleton<MatchController>
 
         if (index == 1)
         {
-            userNickNameText.text = BackendManager.Instance.Nickname;
+            userNickNameText.text = BackendManager.Instance.userInfo.Nickname;
             StartCoroutine(RabbitBlinkEye());
             Debug.Log("깜빡");
         }

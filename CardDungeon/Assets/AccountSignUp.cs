@@ -89,7 +89,7 @@ public class AccountSignUp : MonoBehaviour
         }
         else
         {
-            target.infoText.text = "<color=green>사용 가능한 아이디입니다.";
+            target.infoText.text = "";
             target.isChecked = true;
         }
     }

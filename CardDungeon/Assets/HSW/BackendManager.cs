@@ -19,10 +19,8 @@ public class BackendManager : Singleton<BackendManager>
 
     public ServerType serverType;
     public PlatformType platformType;
-    
-    public string UserIndate = string.Empty;
-    public string Nickname   = string.Empty;
-    public string UID        = string.Empty;
+
+    public UserInfo userInfo;
     
     public bool LoadServerTime = false;
 
@@ -42,7 +40,8 @@ public class BackendManager : Singleton<BackendManager>
 
     void Start()
     {
-        Initialize();
+        if(!isInitialize)
+            Initialize();
     }
     
     void Awake()
@@ -436,29 +435,19 @@ public class BackendManager : Singleton<BackendManager>
     {
         Debug.Log(Backend.UserNickName + Backend.UserInDate);
         
-        UserIndate = Backend.UserInDate;
-        Nickname   = Backend.UserNickName;
-        UID        = Backend.UID;
+        userInfo.UserIndate = Backend.UserInDate;
+        userInfo.Nickname   = Backend.UserNickName;
+        userInfo.UID        = Backend.UID;
     }
+    
+    [Serializable]
     public class UserInfo
     {
-        public string gamerId;
-        public string countryCode;
-        public string nickname;
-        public string inDate;
-        public string emailForFindPassword;
-        public string subscriptionType;
-        public string federationId;
-
-        public override string ToString()
-        {
-            return $"gamerId: {gamerId}\n" +
-                   $"countryCode: {countryCode}\n" +
-                   $"nickname: {nickname}\n" +
-                   $"inDate: {inDate}\n" +
-                   $"emailForFindPassword: {emailForFindPassword}\n" +
-                   $"subscriptionType: {subscriptionType}\n" +
-                   $"federationId: {federationId}\n";
-        }
+        public string playerID    = string.Empty;
+        public string UserIndate  = string.Empty;
+        public string Nickname    = string.Empty;
+        public string countryCode = string.Empty;
+        public string UID         = string.Empty;
+        public string Email       = string.Empty;
     }
 }

@@ -2563,11 +2563,13 @@ MonoBehaviour:
   SceneNumber: 0
   PopupList: []
   CurrentPopup: {fileID: 0}
+  CurrentUIStatus: 0
   AccountLoginPrefab: {fileID: 5063278758754645742, guid: d06b3bda27417b84c8ca20038292d2c4, type: 3}
   AccountSignUpPrefab: {fileID: 853597947298320963, guid: 11b9020a17c24a34d82b5f92c63ef819, type: 3}
   FindAccountPrefab: {fileID: 4557327945877872313, guid: 58c443f8429c49243a255e3cc952fa5a, type: 3}
   GoogleLoginPrefab: {fileID: 5097887765796371620, guid: 513dbdf03e01cc5448020e691f5f3234, type: 3}
   GuestLoginPrefab: {fileID: 5097887765796371620, guid: 919e8e8d821778049b2e069557afa5f7, type: 3}
+  NickNamePrefab: {fileID: 5097887765796371620, guid: 919e8e8d821778049b2e069557afa5f7, type: 3}
   RecyclePopupPrefab: {fileID: 5097887765796371620, guid: 35c811efe1a2a6f438b0ed61269621f5, type: 3}
 --- !u!4 &835534843
 Transform:
@@ -4132,9 +4134,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serverType: 0
-  UserIndate: 
-  Nickname: 
-  UID: 
+  platformType: 0
+  userInfo:
+    playerID: 
+    UserIndate: 
+    Nickname: 
+    countryCode: 
+    UID: 
+    Email: 
   LoadServerTime: 0
   checkLoginWayData: -1
   isInitialize: 0
