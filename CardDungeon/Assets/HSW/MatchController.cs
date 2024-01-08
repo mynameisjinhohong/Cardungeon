@@ -28,7 +28,14 @@ public class MatchController : Singleton<MatchController>
     public GameObject Rabbit2;
 
     public List<String> TipStrings;
-    
+
+    private BackendManager _backendManager;
+
+    private void Awake()
+    {
+        _backendManager = BackendManager.Instance;
+    }
+
     public void Start()
     {
         StartCoroutine(waitInitDataCor());
@@ -51,7 +58,7 @@ public class MatchController : Singleton<MatchController>
     {
         if (Application.platform == RuntimePlatform.Android)
         {
-            if(BackendManager.Instance.checkLoginWayData == -1 || BackendManager.Instance.userInfo.Nickname == "")
+            if(_backendManager.checkLoginWayData == -1 || _backendManager.userInfo.Nickname == "")
             {
                 Debug.Log("로그인 정보 없음");
                 TryLogin();
@@ -59,8 +66,8 @@ public class MatchController : Singleton<MatchController>
             else
             {
                 Debug.Log("자동로그인 실행 테스트");
-                if (!BackendManager.Instance.isInitialize)
-                    BackendManager.Instance.StartTokenLogin();
+                if (!_backendManager.isInitialize)
+                    _backendManager.StartTokenLogin();
             
                 ChangeUI(1);
             }
@@ -79,11 +86,13 @@ public class MatchController : Singleton<MatchController>
 
     IEnumerator WaitForLogin()
     {
-        yield return new WaitUntil(() => BackendManager.Instance.isLogin);
+        yield return new WaitUntil(() => _backendManager.isLogin);
     }
     
     public void ChangeUI(int index)
     {
+        UIManager.Instance.AllPopupClear();
+        
         for (int i = 0; i < uIList.Count; i++)
         {
             uIList[i].SetActive(i == index);
@@ -91,7 +100,7 @@ public class MatchController : Singleton<MatchController>
 
         if (index == 1)
         {
-            userNickNameText.text = BackendManager.Instance.userInfo.Nickname;
+            userNickNameText.text = _backendManager.userInfo.Nickname;
             StartCoroutine(RabbitBlinkEye());
             Debug.Log("깜빡");
         }
@@ -120,19 +129,52 @@ public class MatchController : Singleton<MatchController>
         }
     }
 
-    public void MatchStart()
+    public void CreateRoom()
     {
-        BackendManager.Instance.GetMatchList();
+        _backendManager.GetMatchList();
 
-        BackendManager.Instance.matchIndex = 6;
+        StartCoroutine(FindMatchIndex());
+    }
+
+    public void LeaveMatchingRoom()
+    {
+        Backend.Match.LeaveMatchMakingServer();
+        ChangeUI(1);
+    }
+
+    IEnumerator FindMatchIndex()
+    {
+        yield return new WaitUntil(() => _backendManager.matchCardList.Count >= 7);
+
+        for (int i = 0; i < _backendManager.matchCardList.Count; i++)
+        {
+            if (_backendManager.matchCardList[i].matchHeadCount ==
+                _backendManager.roomSettingData.maxCount)
+            {
+                _backendManager.matchIndex = i;
+                
+                Debug.Log(i + "번째 매치카드 선택됨");
+                
+                _backendManager.JoinMatchMakingServer();
+            }
+        }
+    }
+    
+    public void FastMatch()
+    {
+        _backendManager.isFastMatch = true;
         
-        BackendManager.Instance.JoinMatchMakingServer();
+        _backendManager.GetMatchList();
+
+        _backendManager.matchIndex = 6;
+        
+        _backendManager.JoinMatchMakingServer();
     }
     
     IEnumerator waitInitDataCor()
     {
-        yield return new WaitUntil(() => BackendManager.Instance.isInitialize);
-        
+        yield return new WaitUntil(() => _backendManager.isInitialize);
+
         readyToPlay.gameObject.SetActive(true);
 
         loginCheckButton.interactable = true;

@@ -55,7 +55,6 @@ public class AccountLoginPopup : MonoBehaviour
             if(callback.IsSuccess())
             {
                 Debug.Log("계정 로그인 성공");
-                UIManager.Instance.PopupListPop();
                 BackendManager.Instance.GetUserInfo();
                 MatchController.Instance.ChangeUI(1);
             }

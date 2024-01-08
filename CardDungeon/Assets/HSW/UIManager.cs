@@ -36,13 +36,12 @@ public class UIManager : Singleton<UIManager>
     {
         FindCanvas();
     }
-    // 이벤트 리스너 등록
+
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
-
-    // 이벤트 리스너 제거
+    
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
@@ -107,6 +106,21 @@ public class UIManager : Singleton<UIManager>
                 }
             }
         }
+
+        DarkBGCheck();
+    }
+
+    public void AllPopupClear()
+    {
+        foreach (GameObject popup in PopupList)
+        {
+            if (popup != null && popup.activeSelf)
+            {
+                Destroy(popup);
+            }
+        }
+        PopupList.Clear();
+        CurrentPopup = null;
 
         DarkBGCheck();
     }

@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class CreateRoomPopup : MonoBehaviour
 {
+    [SerializeField]
     private RoomSettingData settedData;
 
     [SerializeField]
@@ -29,7 +30,7 @@ public class CreateRoomPopup : MonoBehaviour
         settedData.roomType = (RoomType)roomTypeIndex;
 
         BackendManager.Instance.roomSettingData = settedData;
-        
-        BackendManager.Instance.CreateMatchRoom();
+
+        MatchController.Instance.CreateRoom();
     }
 }

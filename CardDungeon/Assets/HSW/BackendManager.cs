@@ -29,8 +29,8 @@ public class BackendManager : Singleton<BackendManager>
     [HideInInspector] public bool isInitialize = false;
     [HideInInspector] public bool isLogin      = false;
     [HideInInspector] public bool isLoadGame   = false;
-    [HideInInspector] public bool NotAutoLogin;
-    [HideInInspector] public int matchIndex = 0;
+    [HideInInspector] public bool NotAutoLogin; 
+    public int matchIndex = 0;
     
     [Header("전체 유저 데이터 리스트")] 
     public List<UserData> UserDataList;
@@ -38,7 +38,11 @@ public class BackendManager : Singleton<BackendManager>
     [Header("방정보")]
     public RoomSettingData roomSettingData;
 
+    public bool isFastMatch;
+    
     private int initTimeCount = 0;
+
+    public bool matchCardListDownLoaded;
     
     void Start()
     {
@@ -298,7 +302,7 @@ public class BackendManager : Singleton<BackendManager>
 
         StartCoroutine(nameof(RefreshToken));
     }
-    
+
     public void GuestIdDelete()
     {
         if (Backend.BMember.GetGuestID().Length > 0)
@@ -442,7 +446,8 @@ public class BackendManager : Singleton<BackendManager>
         userInfo.UID        = Backend.UID;
     }
     
-    private List<MatchCard> matchCardList = new List<MatchCard>();
+    [Header("매치카드 리스트")]
+    public List<MatchCard> matchCardList = new List<MatchCard>();
 
     void Update() {
         if (Backend.IsInitialized) {
@@ -452,9 +457,13 @@ public class BackendManager : Singleton<BackendManager>
     
     public void JoinMatchMakingServer()
     {
-        Backend.Match.OnException = (Exception e) => { Debug.LogError(e.ToString()); };
+        Debug.Log("서버접속 시도");
         
+        Backend.Match.OnException = (Exception e) => { Debug.LogError(e.ToString()); };
+
         Backend.Match.OnJoinMatchMakingServer = (JoinChannelEventArgs args) => {
+            Debug.Log(args.ErrInfo);
+            
             if (args.ErrInfo == ErrorInfo.Success) {
                 Debug.Log("1-2. OnJoinMatchMakingServer 성공");
                 CreateMatchRoom();
@@ -476,7 +485,11 @@ public class BackendManager : Singleton<BackendManager>
         Backend.Match.OnMatchMakingRoomCreate = (MatchMakingInteractionEventArgs args) => {
             if (args.ErrInfo == ErrorCode.Success) {
                 Debug.Log("2-2. OnMatchMakingRoomCreate 성공");
-                RequestMatchMaking();
+                
+                if(isFastMatch)
+                    RequestMatchMaking();
+                else
+                    MatchController.Instance.ChangeUI(2);
             } else {
                 Debug.LogError("2-2. OnMatchMakingRoomCreate 실패");
             }
@@ -508,8 +521,15 @@ public class BackendManager : Singleton<BackendManager>
         };
         
         Debug.Log("3-1. RequestMatchMaking 매칭 신청 시작");
+
+        MatchModeType settedType;
+
+        if (roomSettingData.maxCount >= 2)
+            settedType = MatchModeType.OneOnOne;
+        else
+            settedType = MatchModeType.Melee;
         
-        Backend.Match.RequestMatchMaking( matchCardList[6].matchType, MatchModeType.Melee, matchCardList[6].inDate);
+        Backend.Match.RequestMatchMaking(matchCardList[matchIndex].matchType, settedType, matchCardList[matchIndex].inDate);
     }
     
     IEnumerator WaitFor10Seconds(int second) {
@@ -520,9 +540,10 @@ public class BackendManager : Singleton<BackendManager>
         }
     }
 
-    public void GetMatchList() {
+    public void GetMatchList()
+    {
         matchCardList.Clear();
-        
+
         Backend.Match.GetMatchList( callback => {
             if (!callback.IsSuccess()) {
                 Debug.LogError("Backend.Match.GetMatchList Error : " + callback);
@@ -632,6 +653,8 @@ public class BackendManager : Singleton<BackendManager>
                 Debug.Log($"{i} 번째 매치카드 : \n" + matchCardList[i].ToString());
             }
         });
+
+        matchCardListDownLoaded = true;
     }
 
     [Serializable]
@@ -859,4 +882,6 @@ public class RoomSettingData
     public SessionId roomId;
 
     public string roomToken;
+
+    public int currentCount;
 }
