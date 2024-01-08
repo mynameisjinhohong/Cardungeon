@@ -22,8 +22,6 @@ public class MatchController : Singleton<MatchController>
     
     public GameObject LoginButtonListObj;
 
-    private MatchingTest matchingTest;
-
     public TextMeshProUGUI TipText;
 
     public GameObject Rabbit1;
@@ -33,8 +31,6 @@ public class MatchController : Singleton<MatchController>
     
     public void Start()
     {
-        matchingTest = BackendManager.Instance.GetComponent<MatchingTest>();
-
         StartCoroutine(waitInitDataCor());
 
         TipStrings.Add("뒤끝 서버가\n토끼들의 성장을 돕고있어요");
@@ -126,11 +122,11 @@ public class MatchController : Singleton<MatchController>
 
     public void MatchStart()
     {
-        matchingTest.GetMatchList();
+        BackendManager.Instance.GetMatchList();
 
         BackendManager.Instance.matchIndex = 6;
         
-        matchingTest.JoinMatchMakingServer();
+        BackendManager.Instance.JoinMatchMakingServer();
     }
     
     IEnumerator waitInitDataCor()

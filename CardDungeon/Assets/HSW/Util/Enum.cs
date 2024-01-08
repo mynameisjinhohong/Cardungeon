@@ -47,3 +47,10 @@ public enum CurrentUIStatus
     ABBPopup,
     NoneABBPopup
 }
+
+public enum RoomType
+{
+    Random,
+    Map1,
+    Map2
+}
