@@ -4,13 +4,10 @@ using System.Collections.Generic;
 using System.Threading;
 using BackEnd;
 using BackEnd.Tcp;
-using BackEnd.Util;
 using LitJson;
 using Newtonsoft.Json;
-using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 
 public class BackendManager : Singleton<BackendManager>
 {
