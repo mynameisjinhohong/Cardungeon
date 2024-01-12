@@ -8,10 +8,26 @@ using UnityEngine.UI;
 public class AccountLoginPopup : MonoBehaviour
 {
     [SerializeField]
-    InputField idInput;
+    TMP_InputField idInput;
 
     [SerializeField]
-    InputField pwInput;
+    TMP_InputField pwInput;
+
+    [SerializeField]
+    Transform idFindObject;
+
+    [SerializeField]
+    Transform pwFindObject;
+
+    [SerializeField]
+    Toggle pwVisibleToggle;
+
+    [SerializeField] 
+    float duration;
+
+    public bool isClickedFindAccount;
+
+    private bool isMoving;
     
     public void BackBtnClick()
     {
@@ -21,8 +37,16 @@ public class AccountLoginPopup : MonoBehaviour
     public void AccountSignUpClick()
     {
         GameObject accountSignUp = UIManager.Instance.AccountSignUpPrefab;
+
+        try
+        {
+            UIManager.Instance.OpenPopup(accountSignUp);
+        }
+        catch
+        {
+            Debug.Log("ìƒì„±ì‹¤íŒ¨");
+        }
         
-        UIManager.Instance.OpenPopup(accountSignUp);
     }
 
     public void AccountLoginCheck()
@@ -30,7 +54,9 @@ public class AccountLoginPopup : MonoBehaviour
         Backend.BMember.CustomLogin( idInput.text, pwInput.text, callback => {
             if(callback.IsSuccess())
             {
-                Debug.Log("·Î±×ÀÎ¿¡ ¼º°øÇß½À´Ï´Ù");
+                Debug.Log("ê³„ì • ë¡œê·¸ì¸ ì„±ê³µ");
+                BackendManager.Instance.GetUserInfo();
+                MatchController.Instance.ChangeUI(1);
             }
             else
             {
@@ -39,30 +65,86 @@ public class AccountLoginPopup : MonoBehaviour
                 switch (callback.GetStatusCode())
                 {
                     case "401" :
-                        errMSG = "°èÁ¤ÀÌ Á¸ÀçÇÏÁö ¾Ê°Å³ª\n¾ÆÀÌµğ³ª ºñ¹Ğ¹øÈ£°¡ Æ²·È½À´Ï´Ù.";
+                        errMSG = "ì—†ëŠ” ê³„ì •ì´ê±°ë‚˜\në¹„ë°€ë²ˆí˜¸ê°€ í‹€ë ¸ìŠµë‹ˆë‹¤.";
                         break;
                     case "403" :
-                        errMSG = "Â÷´ÜµÈ À¯ÀúÀÔ´Ï´Ù, °í°´ ¼¾ÅÍ·Î ¹®ÀÇ ÇØÁÖ¼¼¿ä.";
+                        errMSG = "ì°¨ë‹¨ëœ ê³„ì •ì…ë‹ˆë‹¤. ê³ ê°ì„¼í„°ë¡œ ë¬¸ì˜í•˜ì„¸ìš”.";
                         break;
                     case "400" :
-                        errMSG = "Àß¸øµÈ ±â±âÁ¤º¸ ÀÔ´Ï´Ù.";
+                        errMSG = "ê¸°ê¸° ì •ë³´ê°€ ì—†ìŠµë‹ˆë‹¤.";
                         break;
                     case "410" :
-                        errMSG = "»èÁ¦µÈ À¯Àú Á¤º¸ ÀÔ´Ï´Ù.";
+                        errMSG = "íƒˆí‡´ëœ ê³„ì •ì…ë‹ˆë‹¤.";
                         break;
                 }
-                
-                Debug.Log("¿¡·¯ÄÚµå : " + callback.GetErrorCode() + "¿¡·¯ »çÀ¯" + callback.GetMessage());
-                
-                UIManager.Instance.OpenRecyclePopup("·Î±×ÀÎ ½ÇÆĞ", errMSG, null);
+
+                UIManager.Instance.OpenRecyclePopup("ë¡œê·¸ì¸ ì‹¤íŒ¨", errMSG, null);
             }
         });
     }
 
-    public void FindAccountClick()
+    public void TogglePasswordVisibility()
     {
-        GameObject findAccount = UIManager.Instance.FindAccountPrefab;
+        if (pwVisibleToggle.isOn)
+        {
+            // í† ê¸€ì´ ì¼œì ¸ ìˆìœ¼ë©´ ë¹„ë°€ë²ˆí˜¸ë¥¼ í‘œì‹œ
+            pwInput.contentType = TMP_InputField.ContentType.Standard;
+        }
+        else
+        {
+            // í† ê¸€ì´ êº¼ì ¸ ìˆìœ¼ë©´ ë¹„ë°€ë²ˆí˜¸ë¥¼ ê°€ë¦¼
+            pwInput.contentType = TMP_InputField.ContentType.Password;
+        }
+
+        // ë¹„ë°€ë²ˆí˜¸ ì…ë ¥ í•„ë“œë¥¼ ì—…ë°ì´íŠ¸í•˜ì—¬ ë³€ê²½ëœ ì„¤ì •ì„ ì ìš©
+        pwInput.ForceLabelUpdate();
+    }
+
+    public void FindAccountAnim()
+    {
+        if (isMoving) return;
         
-        UIManager.Instance.OpenPopup(findAccount);
+        if (!isClickedFindAccount)
+        {
+            StartCoroutine(MoveObjectCoroutine(idFindObject, -55));
+            StartCoroutine(MoveObjectCoroutine(pwFindObject, -110));
+        }
+        else
+        {
+            StartCoroutine(MoveObjectCoroutine(idFindObject, 0));
+            StartCoroutine(MoveObjectCoroutine(pwFindObject, 0));
+        }
+        isClickedFindAccount =! isClickedFindAccount;
+    }
+    
+    IEnumerator MoveObjectCoroutine(Transform objTransform, float targetY)
+    {
+        isMoving = true;
+        
+        if (!isClickedFindAccount)
+        {
+            idFindObject.gameObject.SetActive(true);
+            pwFindObject.gameObject.SetActive(true);
+        }
+        
+        float initialLocalY = objTransform.localPosition.y;
+        float t = 0f;
+        
+        while (t < 1f)
+        {
+            t += Time.deltaTime / duration;
+            float newLocalY = Mathf.Lerp(initialLocalY, targetY, t);
+            objTransform.localPosition = new Vector3(objTransform.localPosition.x, newLocalY, objTransform.localPosition.z);
+            yield return null;
+        }
+        
+        if(isClickedFindAccount)
+            yield return new WaitForSeconds(duration - 0.3f);
+        
+        idFindObject.gameObject.SetActive(isClickedFindAccount);
+        pwFindObject.gameObject.SetActive(isClickedFindAccount);
+
+        yield return new WaitForSeconds(0.1f);
+        isMoving = false;
     }
 }

@@ -13,6 +13,8 @@ public class UIManager : Singleton<UIManager>
     public List<GameObject> PopupList;
 
     public GameObject CurrentPopup;
+
+    public CurrentUIStatus CurrentUIStatus; 
     
     private Transform PopupListParent;
     
@@ -26,19 +28,20 @@ public class UIManager : Singleton<UIManager>
 
     public GameObject GuestLoginPrefab;
 
+    public GameObject NickNamePrefab;
+
     public GameObject RecyclePopupPrefab;
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         FindCanvas();
     }
-    // 이벤트 리스너 등록
+
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
-
-    // 이벤트 리스너 제거
+    
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
@@ -71,6 +74,8 @@ public class UIManager : Singleton<UIManager>
 
         ABBAction = action;
 
+        CurrentUIStatus = CurrentUIStatus.ABBPopup;
+        
         DarkBGCheck();
     }
     
@@ -105,6 +110,21 @@ public class UIManager : Singleton<UIManager>
         DarkBGCheck();
     }
 
+    public void AllPopupClear()
+    {
+        foreach (GameObject popup in PopupList)
+        {
+            if (popup != null && popup.activeSelf)
+            {
+                Destroy(popup);
+            }
+        }
+        PopupList.Clear();
+        CurrentPopup = null;
+
+        DarkBGCheck();
+    }
+
     private void DarkBGCheck()
     {
         PopupListParent.gameObject.SetActive(PopupList.Count > 0);
@@ -125,11 +145,12 @@ public class UIManager : Singleton<UIManager>
 
         target.title.text    = title;
         target.descript.text = descript;
-        target.action = action;
 
-        if (action == null)
-            action = PopupListPop;
-        
+        if (target.action == null)
+            target.action = PopupListPop;
+        else
+            target.action = action;
+
         PopupListAddNoneABB(Popup);
     }
 }

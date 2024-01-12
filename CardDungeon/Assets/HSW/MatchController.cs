@@ -22,19 +22,22 @@ public class MatchController : Singleton<MatchController>
     
     public GameObject LoginButtonListObj;
 
-    private MatchingTest matchingTest;
-
     public TextMeshProUGUI TipText;
 
     public GameObject Rabbit1;
     public GameObject Rabbit2;
 
     public List<String> TipStrings;
-    
+
+    private BackendManager _backendManager;
+
+    private void Awake()
+    {
+        _backendManager = BackendManager.Instance;
+    }
+
     public void Start()
     {
-        matchingTest = BackendManager.Instance.GetComponent<MatchingTest>();
-
         StartCoroutine(waitInitDataCor());
 
         TipStrings.Add("뒤끝 서버가\n토끼들의 성장을 돕고있어요");
@@ -50,32 +53,46 @@ public class MatchController : Singleton<MatchController>
         TipStrings.Add("나무 상자에는\n행운 혹은 불행이 들어 있어요.\n운을 시험해 보세요!");
         TipStrings.Add("다른 유저가 먼저 탈출 하거나\nHP를 전부 잃으면 게임오버 됩니다.");
     }
-
+    
     public void TryAutoLogin()
     {
-        if(BackendManager.Instance.checkLoginWayData == -1 || BackendManager.Instance.Nickname == "")
+        if (Application.platform == RuntimePlatform.Android)
         {
-            Debug.Log("로그인 정보 없음");
-            readyToPlay.gameObject.SetActive(false);
-            LoginButtonListObj.gameObject.SetActive(true);
+            if(_backendManager.checkLoginWayData == -1 || _backendManager.userInfo.Nickname == "")
+            {
+                Debug.Log("로그인 정보 없음");
+                TryLogin();
+            }
+            else
+            {
+                Debug.Log("자동로그인 실행 테스트");
+                if (!_backendManager.isInitialize)
+                    _backendManager.StartTokenLogin();
+            
+                ChangeUI(1);
+            }
         }
         else
         {
-            Debug.Log("자동로그인 실행 테스트");
-            if (!BackendManager.Instance.isInitialize)
-                BackendManager.Instance.StartTokenLogin();
-            
-            ChangeUI(1);
+            TryLogin();
         }
+    }
+
+    public void TryLogin()
+    {
+        readyToPlay.gameObject.SetActive(false);
+        LoginButtonListObj.gameObject.SetActive(true);
     }
 
     IEnumerator WaitForLogin()
     {
-        yield return new WaitUntil(() => BackendManager.Instance.isLogin);
+        yield return new WaitUntil(() => _backendManager.isLogin);
     }
     
     public void ChangeUI(int index)
     {
+        UIManager.Instance.AllPopupClear();
+        
         for (int i = 0; i < uIList.Count; i++)
         {
             uIList[i].SetActive(i == index);
@@ -83,7 +100,7 @@ public class MatchController : Singleton<MatchController>
 
         if (index == 1)
         {
-            userNickNameText.text = BackendManager.Instance.Nickname;
+            userNickNameText.text = _backendManager.userInfo.Nickname;
             StartCoroutine(RabbitBlinkEye());
             Debug.Log("깜빡");
         }
@@ -111,29 +128,53 @@ public class MatchController : Singleton<MatchController>
             }
         }
     }
-    
-    public void GuestLoginSuccess()
+
+    public void CreateRoom()
     {
-        UIManager.Instance.PopupListPop();
-        
-        ChangeUI(1);
-        
-        userNickNameText.text = Backend.UserNickName;
+        _backendManager.GetMatchList();
+
+        StartCoroutine(FindMatchIndex());
     }
 
-    public void MatchStart()
+    public void LeaveMatchingRoom()
     {
-        matchingTest.GetMatchList();
+        Backend.Match.LeaveMatchMakingServer();
+        ChangeUI(1);
+    }
 
-        BackendManager.Instance.matchIndex = 6;
+    IEnumerator FindMatchIndex()
+    {
+        yield return new WaitUntil(() => _backendManager.matchCardList.Count >= 7);
+
+        for (int i = 0; i < _backendManager.matchCardList.Count; i++)
+        {
+            if (_backendManager.matchCardList[i].matchHeadCount ==
+                _backendManager.roomSettingData.maxCount)
+            {
+                _backendManager.matchIndex = i;
+                
+                Debug.Log(i + "번째 매치카드 선택됨");
+                
+                _backendManager.JoinMatchMakingServer();
+            }
+        }
+    }
+    
+    public void FastMatch()
+    {
+        _backendManager.isFastMatch = true;
         
-        matchingTest.JoinMatchMakingServer();
+        _backendManager.GetMatchList();
+
+        _backendManager.matchIndex = 6;
+        
+        _backendManager.JoinMatchMakingServer();
     }
     
     IEnumerator waitInitDataCor()
     {
-        yield return new WaitUntil(() => BackendManager.Instance.isInitialize);
-        
+        yield return new WaitUntil(() => _backendManager.isInitialize);
+
         readyToPlay.gameObject.SetActive(true);
 
         loginCheckButton.interactable = true;

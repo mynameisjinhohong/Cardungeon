@@ -360,7 +360,6 @@ GameObject:
   - component: {fileID: 6149991500178447227}
   - component: {fileID: 8083300133106487380}
   - component: {fileID: 8458103338118245301}
-  - component: {fileID: 5097887765796371621}
   m_Layer: 5
   m_Name: GoogleLoginPopup
   m_TagString: Untagged
@@ -404,7 +403,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5097887765796371620}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -427,20 +426,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5097887765796371621
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5097887765796371620}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f2f4700786a452b9a62ffe04010dbbc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _inputField: {fileID: 7724915181153219335}
-  matchController: {fileID: 0}
 --- !u!1 &7724915180147299685
 GameObject:
   m_ObjectHideFlags: 0
@@ -643,7 +628,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5097887765796371621}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: LoginTest, Assembly-CSharp
         m_MethodName: UpdateNickname
         m_Mode: 1

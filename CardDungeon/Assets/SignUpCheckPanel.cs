@@ -8,7 +8,7 @@ using UnityEngine.UI;
 [Serializable]
 public class SignUpCheckPanel : MonoBehaviour
 {
-    public InputField input;
+    public TMP_InputField input;
     public TextMeshProUGUI infoText;
     public bool isChecked;
 }

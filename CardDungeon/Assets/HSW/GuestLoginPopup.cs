@@ -12,11 +12,12 @@ public class GuestLoginPopup : MonoBehaviour
 
     public void UpdateNickname()
     {
-        if (BackendManager.Instance.UserIndate == "")
+        if (!checkNicknameUsable())
         {
-            BackendManager.Instance.GuestLoginSequense();
+            UIManager.Instance.OpenRecyclePopup("안내", "사용할 수 없는 닉네임입니다", null);
+            return;
         }
-        
+
         var bro = Backend.BMember.UpdateNickname(nicknameInput.text);
 
         if (bro.IsSuccess()) {
@@ -24,12 +25,26 @@ public class GuestLoginPopup : MonoBehaviour
             
             BackendManager.Instance.GetUserInfo();
             
-            MatchController.Instance.GuestLoginSuccess();
-            
+            Backend.BMember.GetUserInfo( ( callback ) =>
+            {
+                string nickname = callback.GetReturnValuetoJSON()["row"]["nickname"].ToString();
+                
+                Debug.Log("유저 아이디 조회" + nickname);
+            });
+
             PlayerPrefs.SetInt("LoginWay", 0);
             
-        } else {
-            Debug.LogError("닉네임 변경 : " + bro);
+            UIManager.Instance.PopupListPop();
+            MatchController.Instance.ChangeUI(1);
         }
+        else
+        {
+            Debug.LogError("닉네임 변경 실패 : " + bro);
+        }
+    }
+
+    bool checkNicknameUsable()
+    {
+        return true;
     }
 }

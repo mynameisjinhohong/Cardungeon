@@ -20,10 +20,7 @@ public class AccountSignUp : MonoBehaviour
 
     public Button emailCheckBtn;
 
-    public Button CreateAccountBtn;
-
-    public string HiddenPassword;
-    public string HiddenPasswordCheck;
+    public Toggle pwVibileToggle;
     
     public string settingNumber;
 
@@ -50,10 +47,10 @@ public class AccountSignUp : MonoBehaviour
 
     public void CreateAccount()
     {
-        BackendManager.Instance.TryCustomSignin(checkList[0].input.text, checkList[1].input.text);
+        CheckAllStatus();
     }
     
-    public bool CheckAllStatus()
+    public void CheckAllStatus()
     {
         int checkCount = 0;
         
@@ -64,15 +61,21 @@ public class AccountSignUp : MonoBehaviour
                 checkCount++;
             }
         }
-        
-        CreateAccountBtn.interactable = checkCount > 0;
 
-        return checkCount <= 0;
+        if (checkCount > 0)
+        {
+            UIManager.Instance.OpenRecyclePopup("안내", "확인하지 않은 항목이 있습니다", null);
+        }
+        else
+        {
+            Debug.Log("계정 생성 시도");
+            BackendManager.Instance.TryCustomSignin(checkList[2].input.text, checkList[3].input.text);
+        }
     }
 
     public void CheckIDUsable()
     {
-        SignUpCheckPanel target = checkList[0];
+        SignUpCheckPanel target = checkList[2];
         
         if (target.input.text.Length > 20)
         {
@@ -86,14 +89,14 @@ public class AccountSignUp : MonoBehaviour
         }
         else
         {
-            target.infoText.text = "<color=green>사용 가능한 아이디입니다.";
+            target.infoText.text = "";
             target.isChecked = true;
         }
     }
 
     public void CheckPWUsable()
     {
-        SignUpCheckPanel target = checkList[1];
+        SignUpCheckPanel target = checkList[3];
         
         if (target.input.text.Length > 20)
         {
@@ -117,29 +120,29 @@ public class AccountSignUp : MonoBehaviour
         }
     }
 
-    public void ReCheckPWUsable()
-    {
-        SignUpCheckPanel target = checkList[2];
-
-        if (checkList[1].input.text != target.input.text)
-        {
-            Debug.Log("일치안함");
-            target.infoText.text = "<color=red>비밀번호가 일치하지 않습니다.";
-            target.isChecked = false;
-        }
-        else
-        {
-            Debug.Log("일치함");
-            target.infoText.text = "<color=green>사용 가능 합니다.";
-            target.isChecked = true;
-        }
-    }
+    // public void ReCheckPWUsable()
+    // {
+    //     SignUpCheckPanel target = checkList[2];
+    //
+    //     if (checkList[1].input.text != target.input.text)
+    //     {
+    //         Debug.Log("일치안함");
+    //         target.infoText.text = "<color=red>비밀번호가 일치하지 않습니다.";
+    //         target.isChecked = false;
+    //     }
+    //     else
+    //     {
+    //         Debug.Log("일치함");
+    //         target.infoText.text = "<color=green>사용 가능 합니다.";
+    //         target.isChecked = true;
+    //     }
+    // }
 
     public void EmailCheck()
     {
-        SignUpCheckPanel target = checkList[4];
+        SignUpCheckPanel target = checkList[1];
 
-        if (checkList[4].input.text != settingNumber)
+        if (checkList[1].input.text != settingNumber)
         {
             target.infoText.text = "<color=red>인증번호가 일치하지 않습니다. 다시 시도해주세요.";
             target.isChecked = false;
@@ -149,16 +152,15 @@ public class AccountSignUp : MonoBehaviour
         else
         {
             target.infoText.text = "<color=green>인증번호가 일치합니다.";
+            checkList[0].isChecked = true;
             target.isChecked = true;
-
-            CheckAllStatus();
             emailCheckBtn.interactable = false;
         }
     }
     
     public void SendEmailTest()
     {
-        SignUpCheckPanel target = checkList[3];
+        SignUpCheckPanel target = checkList[0];
         
         MailMessage mail = new MailMessage();
         
@@ -186,7 +188,7 @@ public class AccountSignUp : MonoBehaviour
 
         smtpServer.Port = 587;
 
-        smtpServer.Credentials = new System.Net.NetworkCredential("tkddnr9546@gmail.com", "cuqpixaxzxkvgdsw") as ICredentialsByHost; // 보내는사람 주소 및 비밀번호 확인
+        smtpServer.Credentials = new System.Net.NetworkCredential("gangtoesal@gmail.com", "rmgnahrysuztsyof") as ICredentialsByHost; // 보내는사람 주소 및 비밀번호 확인
 
         smtpServer.EnableSsl = true;
 
@@ -212,17 +214,19 @@ public class AccountSignUp : MonoBehaviour
         return hasSpecialChar && hasDigit && hasLetter;
     }
 
-    public void TogglePasswordVisibility(Toggle toggleTarget, InputField inputTarget)
+    public void TogglePasswordVisibility()
     {
-        if (toggleTarget.isOn)
+        TMP_InputField inputTarget = checkList[3].input;
+        
+        if (pwVibileToggle.isOn)
         {
             // 토글이 켜져 있으면 비밀번호를 표시
-            inputTarget.contentType = InputField.ContentType.Standard;
+            inputTarget.contentType = TMP_InputField.ContentType.Standard;
         }
         else
         {
             // 토글이 꺼져 있으면 비밀번호를 가림
-            inputTarget.contentType = InputField.ContentType.Password;
+            inputTarget.contentType = TMP_InputField.ContentType.Password;
         }
 
         // 비밀번호 입력 필드를 업데이트하여 변경된 설정을 적용

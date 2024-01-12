@@ -28,8 +28,29 @@ public enum ServerType
     Live
 }
 
+public enum PlatformType
+{
+    Window,
+    Android,
+    IOS
+}
+
 public enum ServerSaveType
 {
     Insert,
     Update
+}
+
+public enum CurrentUIStatus
+{
+    UI,
+    ABBPopup,
+    NoneABBPopup
+}
+
+public enum RoomType
+{
+    Random,
+    Map1,
+    Map2
 }

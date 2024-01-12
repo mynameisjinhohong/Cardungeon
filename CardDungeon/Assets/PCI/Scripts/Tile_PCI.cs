@@ -38,9 +38,9 @@ public class Tile_PCI : MonoBehaviour
         if (onTileObjects.Count == 0) return;
         foreach(var e in onTileObjects)
         {
-            e.spriteRenderer.enabled = false;
+            e.Hide();
         }
-        onTileObjects[0].spriteRenderer.enabled = true;
+        onTileObjects[0].Show();
     }
 
     public void RemoveTileObject(TileObject_PCI obj)

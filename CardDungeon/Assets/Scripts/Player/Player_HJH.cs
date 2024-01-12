@@ -21,6 +21,8 @@ public class Player_HJH : MonoBehaviour
     public Animator animator;
     public int keys;
 
+    public GameObject barrierPrefab;
+
     public int HP
     {
         get
@@ -137,7 +139,9 @@ public class Player_HJH : MonoBehaviour
     IEnumerator ShieldCheck(float time)
     {
         shield = true;
+        barrierPrefab.SetActive(true);
         yield return new WaitForSeconds(time);
+        barrierPrefab.SetActive(false);
         shield = false;
     }
     //주석 하나 씀

@@ -42,7 +42,7 @@ public class DataManager : Singleton<DataManager>
 
     public void SetUserData()
     {
-        BackendManager.Instance.Nickname = Backend.UserNickName;
+        BackendManager.Instance.userInfo.Nickname = Backend.UserNickName;
         
         userData.LastConnect = LocalTime.ToString();
     }
