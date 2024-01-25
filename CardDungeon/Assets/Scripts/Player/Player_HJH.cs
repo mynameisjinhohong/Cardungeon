@@ -22,7 +22,9 @@ public class Player_HJH : MonoBehaviour
     public int keys;
     public GameObject[] hpSprites;
     public GameObject barrierPrefab;
-
+    public SpriteRenderer playerTile;
+    public Sprite shieldTileSprite;
+    public Sprite nomalTileSprite;
     public int HP
     {
         get
@@ -122,6 +124,14 @@ public class Player_HJH : MonoBehaviour
             }
         }
         myPos = (Vector2)transform.position;
+        if (shield)
+        {
+            playerTile.sprite = shieldTileSprite;
+        }
+        else
+        {
+            playerTile.sprite = nomalTileSprite;
+        }
     }
     public void HpRenew(int nowHp)
     {
