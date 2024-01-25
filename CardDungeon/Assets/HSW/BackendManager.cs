@@ -56,7 +56,7 @@ public class BackendManager : Singleton<BackendManager>
         instance = this;
         // 모든 씬에서 유지
         DontDestroyOnLoad(this.gameObject);
-        SetResolution();
+        //SetResolution();
 
         NotAutoLogin = PlayerPrefs.GetInt("NotAutoLogin") == 0;
     }

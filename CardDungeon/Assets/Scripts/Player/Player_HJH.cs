@@ -20,7 +20,7 @@ public class Player_HJH : MonoBehaviour
     bool shield = false;
     public Animator animator;
     public int keys;
-
+    public GameObject[] hpSprites;
     public GameObject barrierPrefab;
 
     public int HP
@@ -41,6 +41,7 @@ public class Player_HJH : MonoBehaviour
                 else
                 {
                     hp = value;
+                    HpRenew(hp);
                 }
             }
             else
@@ -122,6 +123,21 @@ public class Player_HJH : MonoBehaviour
         }
         myPos = (Vector2)transform.position;
     }
+    public void HpRenew(int nowHp)
+    {
+        for(int i = 0; i < maxHp; i++)
+        {
+            if(i < nowHp)
+            {
+                hpSprites[i].SetActive(true);
+            }
+            else
+            {
+                hpSprites[i].SetActive(false);
+            }
+        }
+    }
+
 
     public void ShieldOn(float time)
     {
