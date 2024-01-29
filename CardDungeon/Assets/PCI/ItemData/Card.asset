@@ -17,4 +17,4 @@ MonoBehaviour:
   image: {fileID: 0}
   amount: 50
   sprites:
-  - {fileID: 21300000, guid: 150a652d377f7447db261970c983c757, type: 3}
+  - {fileID: 21300000, guid: 769c7e5176e854345b3f732f6c8a288b, type: 3}

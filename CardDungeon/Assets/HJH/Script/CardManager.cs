@@ -242,6 +242,7 @@ public class CardManager : Singleton<CardManager>
         if (player.TryGetComponent<Player_HJH>(out p))
         {
             p.animator.Play("Walk");
+            p.sr.flipX = true;
         }
         AudioPlayer.Instance.PlayClip(8);
 
@@ -259,6 +260,8 @@ public class CardManager : Singleton<CardManager>
         if (player.TryGetComponent<Player_HJH>(out p))
         {
             p.animator.Play("Walk");
+            p.sr.flipX = true;
+
         }
         AudioPlayer.Instance.PlayClip(9);
 
@@ -275,6 +278,8 @@ public class CardManager : Singleton<CardManager>
         if (player.TryGetComponent<Player_HJH>(out p))
         {
             p.animator.Play("Walk");
+            p.sr.flipX = false;
+
         }
         AudioPlayer.Instance.PlayClip(8);
 
@@ -291,6 +296,8 @@ public class CardManager : Singleton<CardManager>
         if (player.TryGetComponent<Player_HJH>(out p))
         {
             p.animator.Play("Walk");
+            p.sr.flipX = false;
+
         }
         AudioPlayer.Instance.PlayClip(9);
 
@@ -356,6 +363,8 @@ public class CardManager : Singleton<CardManager>
         if (player.TryGetComponent<Player_HJH>(out p))
         {
             p.animator.Play("Walk");
+            if (x < 0) p.sr.flipX = false;
+            else p.sr.flipX = true;
         }
         AudioPlayer.Instance.PlayClip(10);
 
@@ -389,6 +398,8 @@ public class CardManager : Singleton<CardManager>
         if (player.TryGetComponent<Player_HJH>(out p))
         {
             p.animator.Play("Walk");
+            if (x < 0) p.sr.flipX = false;
+            else p.sr.flipX = true;
         }
         AudioPlayer.Instance.PlayClip(10);
 

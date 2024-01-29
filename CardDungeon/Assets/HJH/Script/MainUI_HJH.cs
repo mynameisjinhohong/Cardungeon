@@ -314,7 +314,7 @@ public class MainUI_HJH : MonoBehaviour
         playerDeck.HandVisible();
     }
 
-    public void DeckListOn()
+    public void FullDeckListOn()
     {
         for (int i = 0; i < dectContent.transform.childCount; i++)
         {
@@ -397,6 +397,84 @@ public class MainUI_HJH : MonoBehaviour
                 card.transform.GetChild(2).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[-playerDeck.trash[i]].description;
                 card.transform.GetChild(2).GetComponent<TMP_Text>().color = Color.yellow;
                 card.transform.GetChild(3).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[-playerDeck.trash[i]].itemImage;
+                card.transform.GetChild(4).gameObject.SetActive(false);
+            }
+
+        }
+        endText.transform.parent.GetComponent<Button>().onClick.RemoveAllListeners();
+        endText.transform.parent.GetComponent<Button>().onClick.AddListener(DeckListOff);
+        endText.text = "돌아가기";
+        deckList.SetActive(true);
+    }
+
+    public void TrashDeckListOn()
+    {
+        for (int i = 0; i < dectContent.transform.childCount; i++)
+        {
+            Destroy(dectContent.transform.GetChild(i).gameObject);
+        }
+        for (int i = 0; i < playerDeck.trash.Count; i++)
+        {
+            GameObject card = Instantiate(cardPrefab, dectContent.transform);
+            card.transform.GetChild(4).gameObject.SetActive(false);
+            card.GetComponent<Button>().interactable = false;
+            if (playerDeck.trash[i] > 0)
+            {
+                card.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.trash[i]].bigCardType;
+                card.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[i]].useMP.ToString();
+                card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[i]].cardName;
+                card.transform.GetChild(2).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[i]].description;
+                card.transform.GetChild(3).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.trash[i]].itemImage;
+                card.transform.GetChild(4).gameObject.SetActive(false);
+            }
+            else
+            {
+                card.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[-playerDeck.trash[i]].enforceBigCard;
+                card.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[-playerDeck.trash[i]].useMP.ToString();
+                card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[-playerDeck.trash[i]].cardName + "+";
+                card.transform.GetChild(1).GetComponent<TMP_Text>().color = Color.yellow;
+                card.transform.GetChild(2).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[-playerDeck.trash[i]].description;
+                card.transform.GetChild(2).GetComponent<TMP_Text>().color = Color.yellow;
+                card.transform.GetChild(3).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[-playerDeck.trash[i]].itemImage;
+                card.transform.GetChild(4).gameObject.SetActive(false);
+            }
+
+        }
+        endText.transform.parent.GetComponent<Button>().onClick.RemoveAllListeners();
+        endText.transform.parent.GetComponent<Button>().onClick.AddListener(DeckListOff);
+        endText.text = "돌아가기";
+        deckList.SetActive(true);
+    }
+
+    public void DeckListOn()
+    {
+        for (int i = 0; i < dectContent.transform.childCount; i++)
+        {
+            Destroy(dectContent.transform.GetChild(i).gameObject);
+        }
+        for (int i = 0; i < playerDeck.deck.Count; i++)
+        {
+            GameObject card = Instantiate(cardPrefab, dectContent.transform);
+            card.transform.GetChild(4).gameObject.SetActive(false);
+            card.GetComponent<Button>().interactable = false;
+            if (playerDeck.deck[i] > 0)
+            {
+                card.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.deck[i]].bigCardType;
+                card.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.deck[i]].useMP.ToString();
+                card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.deck[i]].cardName;
+                card.transform.GetChild(2).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.deck[i]].description;
+                card.transform.GetChild(3).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.deck[i]].itemImage;
+                card.transform.GetChild(4).gameObject.SetActive(false);
+            }
+            else
+            {
+                card.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[-playerDeck.deck[i]].enforceBigCard;
+                card.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[-playerDeck.deck[i]].useMP.ToString();
+                card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[-playerDeck.deck[i]].cardName + "+";
+                card.transform.GetChild(1).GetComponent<TMP_Text>().color = Color.yellow;
+                card.transform.GetChild(2).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[-playerDeck.deck[i]].description;
+                card.transform.GetChild(2).GetComponent<TMP_Text>().color = Color.yellow;
+                card.transform.GetChild(3).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[-playerDeck.deck[i]].itemImage;
                 card.transform.GetChild(4).gameObject.SetActive(false);
             }
 

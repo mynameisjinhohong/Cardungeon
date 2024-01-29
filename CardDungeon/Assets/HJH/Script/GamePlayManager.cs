@@ -29,7 +29,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
     // Start is called before the first frame update
     void Start()
     {
-        SetResolution();
+        //SetResolution();
         StartCoroutine(WaitforGameStart());
     }
     public void SetResolution()
