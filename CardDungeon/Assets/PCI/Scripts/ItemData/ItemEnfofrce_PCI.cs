@@ -7,7 +7,10 @@ public class ItemEnfofrce_PCI : ItemData_PCI
 {
     public override void OnInteracted(Player_HJH player)
     {
-        GamePlayManager.Instance.mainUi.EnforceOn();
         base.OnInteracted(player);
+        if (player.isMine)
+        {
+            GamePlayManager.Instance.mainUi.EnforceOn();
+        }
     }
 }

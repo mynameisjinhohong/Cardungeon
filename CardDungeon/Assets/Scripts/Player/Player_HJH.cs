@@ -19,6 +19,7 @@ public class Player_HJH : MonoBehaviour
     float currentTime;
     bool shield = false;
     public Animator animator;
+    public SpriteRenderer sr;
     public int keys;
     public GameObject[] hpSprites;
     public GameObject barrierPrefab;
