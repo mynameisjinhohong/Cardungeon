@@ -45,6 +45,11 @@ public class Player_HJH : MonoBehaviour
                 {
                     hp = value;
                     HpRenew(hp);
+                    if (isMine)
+                    {
+                        CameraManager_HJH cam = Camera.main.GetComponent<CameraManager_HJH>();
+                        cam.StartCoroutine(cam.Shake(1, 0.5f));
+                    }
                 }
             }
             else
