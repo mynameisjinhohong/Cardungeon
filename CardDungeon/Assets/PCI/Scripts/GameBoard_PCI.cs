@@ -10,6 +10,8 @@ public class GameBoard_PCI : MonoBehaviour
     [SerializeField]
     private TileObject_PCI bedrockPrefab;
     [SerializeField]
+    private TileObject_PCI bedrockPrefab2;
+    [SerializeField]
     private TileObject_PCI undestructablePrefab;
     [SerializeField]
     private TileObject_PCI blockPrefab;
@@ -104,9 +106,14 @@ public class GameBoard_PCI : MonoBehaviour
             for (int j = -5; j < height+5; j++)
             {
                 // 범위 바깥에는 기반암 생성
-                if(i < 0 || j < 0 || i >= width || j >= height)
+                if(i < 0 || j < 0 || i >= width || j >= height+1)
                 {
                     Instantiate(bedrockPrefab, new Vector3(i, j, 0), Quaternion.identity, transform);
+                    continue;
+                }
+                if(j == height)
+                {
+                    Instantiate(bedrockPrefab2, new Vector3(i, j, 0), Quaternion.identity, transform);
                     continue;
                 }
                 // 기본 타일 생성
