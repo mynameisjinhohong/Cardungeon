@@ -14,9 +14,9 @@ public class CameraManager_HJH : MonoBehaviour
             float timer = 0;
             while (timer <= ShakeTime)
             {
-                Camera.main.transform.position += (Vector3)UnityEngine.Random.insideUnitCircle * ShakeAmount;
+                Camera.main.transform.position = startPos + (Vector3)UnityEngine.Random.insideUnitCircle * ShakeAmount;
                 timer += Time.deltaTime;
-                yield return new WaitForSeconds(0.1f);
+                yield return null;
             }
             Camera.main.transform.position = startPos;
             isShaking = false;
