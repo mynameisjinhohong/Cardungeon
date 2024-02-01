@@ -63,22 +63,12 @@ public class MainUI_HJH : MonoBehaviour
     IEnumerator ToonStart()
     {
         ToonBG.SetActive(true);
-
-        Toon.sprite = ToonList[0];
-
-        yield return new WaitForSeconds(4);
-
-        Toon.sprite = ToonList[1];
-
-        yield return new WaitForSeconds(4);
-
-        Toon.sprite = ToonList[2];
         
-        yield return new WaitForSeconds(4);
+        yield return new WaitForSeconds(4.5f);
+        
+        GetComponent<Canvas>().sortingOrder = 200;
         
         ToonBG.SetActive(false);
-
-        GetComponent<Canvas>().sortingOrder = 200;
     }
 
     // Update is called once per frame
