@@ -63,5 +63,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player_Green
       objectReference: {fileID: 0}
+    - target: {fileID: 5898363692132139214, guid: 1c0407bca6cee1f48a32e8a9aa1cabcb, type: 3}
+      propertyPath: m_Size.x
+      value: 0.8822516
+      objectReference: {fileID: 0}
+    - target: {fileID: 5898363692132139214, guid: 1c0407bca6cee1f48a32e8a9aa1cabcb, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -1946497236, guid: 45b9277bc7369634bb6adad7cd3fafe0, type: 3}
+    - target: {fileID: 5898363692132139214, guid: 1c0407bca6cee1f48a32e8a9aa1cabcb, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1c0407bca6cee1f48a32e8a9aa1cabcb, type: 3}

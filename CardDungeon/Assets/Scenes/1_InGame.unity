@@ -2425,6 +2425,7 @@ GameObject:
   - component: {fileID: 980392491}
   - component: {fileID: 980392490}
   - component: {fileID: 980392493}
+  - component: {fileID: 980392494}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2508,6 +2509,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 521dd0805675d449e974e40c80855147, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &980392494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 980392489}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d085a3fd999ecc4782f58241567bade, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &1012891289
@@ -3566,7 +3579,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainUi: {fileID: 556443424}
   reRollCoolTime: 5
-  deck: 0100000001000000020000000200000003000000030000000400000004000000
+  deck: 010000000200000003000000040000000500000006000000070000000800000009000000
   trash: 
   hand: 
   firstHandCount: 5
