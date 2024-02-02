@@ -31,6 +31,7 @@ public class MainUI_HJH : MonoBehaviour
 
     //카드 클릭했을 때 요소들
     public GameObject bigCard;
+    public Image bigCardImg;
     public TMP_Text bigCardMp;
     public TMP_Text bigCardName;
     public TMP_Text bigCardDescribe;
@@ -157,7 +158,7 @@ public class MainUI_HJH : MonoBehaviour
         bigCard.SetActive(true);
         if(cardIdx > 0)
         {
-            bigCard.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[cardIdx].bigCardType;
+            bigCardImg.sprite = CardManager.Instance.cardList.cards[cardIdx].bigCardType;
             bigCardMp.text = CardManager.Instance.cardList.cards[cardIdx].useMP.ToString();
             bigCardName.text = CardManager.Instance.cardList.cards[cardIdx].cardName;
             bigCardDescribe.text = CardManager.Instance.cardList.cards[cardIdx].description;
@@ -165,7 +166,7 @@ public class MainUI_HJH : MonoBehaviour
         }
         else
         {
-            bigCard.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[-cardIdx].enforceBigCard;
+            bigCardImg.sprite = CardManager.Instance.cardList.cards[-cardIdx].enforceBigCard;
             bigCardMp.text = CardManager.Instance.cardList.cards[-cardIdx].useMP.ToString();
             bigCardName.text = CardManager.Instance.cardList.cards[-cardIdx].cardName + "+";
             bigCardName.color = Color.yellow;
