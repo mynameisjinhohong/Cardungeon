@@ -24,9 +24,55 @@ public class AccountSignUp : MonoBehaviour
     
     public string settingNumber;
 
+    public List<TMP_InputField> inputFieldlist;
+
+    public int selectedInputIndex = -1;
+
+    public GameObject visibleObject;
+    public GameObject unvisibleObject;
+
     public void BackBtnClick()
     {
         UIManager.Instance.PopupListPop();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            if (selectedInputIndex < 0 || selectedInputIndex >= inputFieldlist.Count - 1) return;
+            
+            selectedInputIndex++;
+            inputFieldlist[selectedInputIndex].Select();
+        }
+        
+        if (Input.GetKeyDown(KeyCode.LeftShift) && Input.GetKey(KeyCode.Tab))
+        {
+            if (selectedInputIndex <= 0) return;
+            
+            selectedInputIndex--;
+            inputFieldlist[selectedInputIndex].Select();
+        }
+    }
+
+    public void TogglePasswordVisibility()
+    {
+        if (pwVibileToggle.isOn)
+        {
+            // 토글이 켜져 있으면 비밀번호를 표시
+            inputFieldlist[3].contentType = TMP_InputField.ContentType.Standard;
+        }
+        else
+        {
+            // 토글이 꺼져 있으면 비밀번호를 가림
+            inputFieldlist[3].contentType = TMP_InputField.ContentType.Password;
+        }
+        
+        visibleObject.SetActive(pwVibileToggle.isOn);
+        unvisibleObject.SetActive(!pwVibileToggle.isOn);
+
+        // 비밀번호 입력 필드를 업데이트하여 변경된 설정을 적용
+        inputFieldlist[3].ForceLabelUpdate();
     }
     
     string GenerateAuthenticationCode()
@@ -45,6 +91,11 @@ public class AccountSignUp : MonoBehaviour
         return stringBuilder.ToString();
     }
 
+    public void InputSelected(int value)
+    {
+        selectedInputIndex = value;
+    }
+    
     public void CreateAccount()
     {
         CheckAllStatus();
@@ -115,7 +166,7 @@ public class AccountSignUp : MonoBehaviour
         }
         else
         {
-            target.infoText.text = "<color=green>사용 가능 합니다.";
+            target.infoText.text = "<color=black>사용 가능 합니다.";
             target.isChecked = true;
         }
     }
@@ -151,7 +202,7 @@ public class AccountSignUp : MonoBehaviour
         }
         else
         {
-            target.infoText.text = "<color=green>인증번호가 일치합니다.";
+            target.infoText.text = "<color=black>인증번호가 일치합니다.";
             checkList[0].isChecked = true;
             target.isChecked = true;
             emailCheckBtn.interactable = false;
@@ -169,7 +220,7 @@ public class AccountSignUp : MonoBehaviour
         if (target.input.text.Contains("@"))
         {
             mail.To.Add(target.input.text);
-            target.infoText.text = "<color=green>인증번호가 전송 됐습니다.";
+            target.infoText.text = "<color=black>인증번호가 전송 됐습니다.";
             
             settingNumber = GenerateAuthenticationCode();
             emailSendBtn.interactable = false;
@@ -212,24 +263,5 @@ public class AccountSignUp : MonoBehaviour
 
         // 모든 조건을 만족하면 true를 반환합니다.
         return hasSpecialChar && hasDigit && hasLetter;
-    }
-
-    public void TogglePasswordVisibility()
-    {
-        TMP_InputField inputTarget = checkList[3].input;
-        
-        if (pwVibileToggle.isOn)
-        {
-            // 토글이 켜져 있으면 비밀번호를 표시
-            inputTarget.contentType = TMP_InputField.ContentType.Standard;
-        }
-        else
-        {
-            // 토글이 꺼져 있으면 비밀번호를 가림
-            inputTarget.contentType = TMP_InputField.ContentType.Password;
-        }
-
-        // 비밀번호 입력 필드를 업데이트하여 변경된 설정을 적용
-        inputTarget.ForceLabelUpdate();
     }
 }

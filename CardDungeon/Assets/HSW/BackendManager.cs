@@ -437,10 +437,9 @@ public class BackendManager : Singleton<BackendManager>
     public void GetUserInfo()
     {
         Debug.Log(Backend.UserNickName + Backend.UserInDate);
-        
-        userInfo.UserIndate = Backend.UserInDate;
-        userInfo.Nickname   = Backend.UserNickName;
-        userInfo.UID        = Backend.UID;
+        userInfo.UserIndate  = Backend.UserInDate;
+        userInfo.Nickname    = Backend.UserNickName;
+        userInfo.UID         = Backend.UID;
     }
     
     [Header("매치카드 리스트")]
