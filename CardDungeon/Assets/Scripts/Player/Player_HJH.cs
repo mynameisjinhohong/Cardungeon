@@ -26,6 +26,7 @@ public class Player_HJH : MonoBehaviour
     public SpriteRenderer playerTile;
     public Sprite shieldTileSprite;
     public Sprite nomalTileSprite;
+    Coroutine shieldCo;
     public int HP
     {
         get
@@ -38,13 +39,14 @@ public class Player_HJH : MonoBehaviour
             {
                 if (shield)
                 {
-                    StopAllCoroutines();
+                    StopCoroutine(shieldCo);
                     shield = false;
                 }
                 else
                 {
                     hp = value;
                     HpRenew(hp);
+                    StartCoroutine(GetDamage(1,50));
                     if (isMine)
                     {
                         CameraManager_HJH cam = Camera.main.GetComponent<CameraManager_HJH>();
@@ -159,12 +161,12 @@ public class Player_HJH : MonoBehaviour
     {
         if (shield)
         {
-            StopAllCoroutines();
-            StartCoroutine(ShieldCheck(time));
+            StopCoroutine(shieldCo);
+            shieldCo = StartCoroutine(ShieldCheck(time));
         }
         else
         {
-            StartCoroutine(ShieldCheck(time));
+            shieldCo = StartCoroutine(ShieldCheck(time));
         }
     }
 
@@ -177,4 +179,44 @@ public class Player_HJH : MonoBehaviour
         shield = false;
     }
     //주석 하나 씀
+    IEnumerator GetDamage(float howLongTime, int speed)
+    {
+        SpriteRenderer playerSprite = transform.GetChild(0).GetComponent<SpriteRenderer>();
+        float time = 0;
+        Color color = playerSprite.color;
+        bool down = true;
+        int co = 255;
+        while (true)
+        {
+            time += 0.05f;
+            if (down)
+            {
+                co -= speed;
+                if(co <= 0)
+                {
+                    co = 0;
+                    down = false;
+                }
+            }
+            else
+            {
+                co += speed;
+                if (co >= 255)
+                {
+                    co = 255;
+                    down = true;
+                }
+            }
+            color.g = co / 255f;
+            color.b = co / 255f;
+            playerSprite.color = color;
+            if(time > howLongTime)
+            {
+                break;
+            }
+            yield return new WaitForSeconds(0.05f);
+        }
+        color = Color.white;
+        playerSprite.color = color;
+    }
 }

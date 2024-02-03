@@ -164,9 +164,9 @@ public class CardManager : Singleton<CardManager>
                 if (cardIdx < 0)
                 {
                     ret = false;
-                    for (int i = -3; i < 4; i++)
+                    for (int i = -2; i < 3; i++)
                     {
-                        for (int j = -3; j < 4; j++)
+                        for (int j = -2; j < 3; j++)
                         {
                             if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x + j, (int)player.transform.position.y + i)))
                             {
@@ -178,9 +178,9 @@ public class CardManager : Singleton<CardManager>
                 else
                 {
                     ret = false;
-                    for (int i = -2; i < 3; i++)
+                    for (int i = -1; i < 2; i++)
                     {
-                        for (int j = -2; j < 3; j++)
+                        for (int j = -1; j < 2; j++)
                         {
                             if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x + j, (int)player.transform.position.y + i)))
                             {
@@ -334,12 +334,12 @@ public class CardManager : Singleton<CardManager>
         AudioPlayer.Instance.PlayClip(9);
 
     }
-    // 플레이어가 5*5 안에서 랜덤하게 이동
+    // 플레이어가 3*3 안에서 랜덤하게 이동
     void Idx5Func(Transform player)
     {
         Random.InitState(seed);
-        int x = Random.Range(-2, 3);
-        int y = Random.Range(-2, 3);
+        int x = Random.Range(-1, 2);
+        int y = Random.Range(-1, 2);
         if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x + x, (int)player.transform.position.y + y)))
         {
             GamePlayManager.Instance.gameBoard.Interact(new Vector2Int((int)player.transform.position.x + x, (int)player.transform.position.y + y), player.GetComponent<Player_HJH>());
@@ -347,9 +347,9 @@ public class CardManager : Singleton<CardManager>
         }
         else
         {
-            for (int i = -2; i < 3; i++)
+            for (int i = -1; i < 2; i++)
             {
-                for (int j = -2; j < 3; j++)
+                for (int j = -1; j < 2; j++)
                 {
                     if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x + j, (int)player.transform.position.y + i)))
                     {
@@ -369,12 +369,12 @@ public class CardManager : Singleton<CardManager>
         AudioPlayer.Instance.PlayClip(10);
 
     }
-    // 플레이어가 7*7 안에서 랜덤하게 이동
+    // 플레이어가 5*5 안에서 랜덤하게 이동
     void Idx5EnforceFunc(Transform player)
     {
         Random.InitState(seed);
-        int x = Random.Range(-3, 4);
-        int y = Random.Range(-3, 4);
+        int x = Random.Range(-2, 3);
+        int y = Random.Range(-2, 3);
         if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x + x, (int)player.transform.position.y + y)))
         {
             GamePlayManager.Instance.gameBoard.Interact(new Vector2Int((int)player.transform.position.x + x, (int)player.transform.position.y + y), player.GetComponent<Player_HJH>());
@@ -382,9 +382,9 @@ public class CardManager : Singleton<CardManager>
         }
         else
         {
-            for (int i = -3; i < 4; i++)
+            for (int i = -2; i < 3; i++)
             {
-                for (int j = -3; j < 4; j++)
+                for (int j = -2; j < 3; j++)
                 {
                     if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x + j, (int)player.transform.position.y + i)))
                     {
