@@ -5,6 +5,12 @@ using UnityEngine;
 [System.Serializable]
 public class Card
 {
+    public enum Type
+    {
+        Move,
+        Attack,
+        Skill,
+    }
     public string cardName;
     public int useMP;
     public Sprite cardType;
@@ -12,6 +18,7 @@ public class Card
     public Sprite itemImage;
     public Sprite enforceBigCard;
     public Sprite enforceSmallCard;
+    public Type type;
     [TextArea]
     public string description;
     public int cardIdx;
