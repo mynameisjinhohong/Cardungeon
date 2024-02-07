@@ -13,7 +13,8 @@ public class ItemData_PCI : ScriptableObject
     public List<Sprite> sprites = new List<Sprite>();
     public virtual void OnInteracted(Player_HJH player)
     {
-        if (!player.isMine) {
+        if (!player.isMine)
+        {
             Debug.LogError($"player : {player.PlayerName} / myPlayer : {player.isMine}");
 
             return;

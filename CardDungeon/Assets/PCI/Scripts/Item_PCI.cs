@@ -44,6 +44,6 @@ public class Item_PCI : TileObject_PCI
     public void Animation()
     {
         ItemVfx_PCI v = Instantiate(vfx, transform.parent);
-        v.sr.sprite = _data.sprites[0];
+        v.sr.sprite = _data.image;
     }
 }

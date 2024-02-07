@@ -280,10 +280,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uB2C9\uB124\uC784\uC744 \uC785\uB825\uD574\uC8FC\uC138\uC694"
+  m_text: "\uAD6C\uAE00\uB85C\uADF8\uC778 \uACC4\uC815 \uC120\uD0DD"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8cb431e7be352cc408a58eb83ee8d942, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 65e5bf0b75191214ba5bd32147e7af7b, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: ce3b24c18e0de434aaff1832b55e50a4, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

@@ -11,7 +11,7 @@ public class BigCard_HJH : MonoBehaviour
     {
         for(int i =0; i< transform.parent.childCount; i++)
         {
-            if(i == idx)
+            if(transform.parent.GetChild(i) == transform)
             {
                 transform.GetChild(4).gameObject.SetActive(true);
                 imOn = true;

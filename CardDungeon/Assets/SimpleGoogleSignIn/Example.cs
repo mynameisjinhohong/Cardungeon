@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using Assets.SimpleGoogleSignIn.Scripts;
+using TMPro;
 
 namespace Assets.SimpleGoogleSignIn
 {
@@ -9,7 +10,10 @@ namespace Assets.SimpleGoogleSignIn
     {
         public GoogleAuth GoogleAuth;
         private String Log;
-        public Text Output;
+        public TextMeshProUGUI Output;
+
+        [SerializeField]
+        private UserInfo googleUserData;
         
         public void Start()
         {
@@ -36,6 +40,13 @@ namespace Assets.SimpleGoogleSignIn
         private void OnSignIn(bool success, string error, UserInfo userInfo)
         {
             Output.text = success ? $"Hello, {userInfo.name}!" : error;
+
+            googleUserData = userInfo;
+            
+            BackendManager.Instance.GetUserInfo();
+            BackendManager.Instance.userInfo.playerID = userInfo.email;
+            BackendManager.Instance.userInfo.Email = userInfo.email;
+            MatchController.Instance.ChangeUI(1);
         }
 
         private void OnGetAccessToken(bool success, string error, TokenResponse tokenResponse)

@@ -16,6 +16,8 @@ public class GameBoard_PCI : MonoBehaviour
     [SerializeField]
     private TileObject_PCI blockPrefab;
     [SerializeField]
+    private TileObject_PCI doorPrefab;
+    [SerializeField]
     private Item_PCI itemPrefab;
     [SerializeField]
     private ItemBox_PCI itemBoxPrefab;
@@ -144,9 +146,9 @@ public class GameBoard_PCI : MonoBehaviour
             }
         }
         // Generate Items
-        foreach (var e in itemList.itemDataList)
+        foreach (var item in itemList.itemDataList)
         {
-            int k = e.amount;
+            int k = item.amount;
             while (k != 0)
             {
                 int x = UnityEngine.Random.Range(0, width);
@@ -166,7 +168,7 @@ public class GameBoard_PCI : MonoBehaviour
                             // 아이템 박스 생성
                             var targetTile = board[x, y];
                             var newItemObject = Instantiate(itemBoxPrefab, new Vector3(x, y, 0), Quaternion.identity, targetTile.transform);
-                            newItemObject.SetData(e);
+                            newItemObject.SetData(item);
                             targetTile.AddTileObject(newItemObject);
                             k--;
                         }
@@ -175,7 +177,7 @@ public class GameBoard_PCI : MonoBehaviour
                             // 아이템 바로 생성
                             var targetTile = board[x, y];
                             var newItemObject = Instantiate(itemPrefab, new Vector3(x, y, 0), Quaternion.identity, targetTile.transform);
-                            newItemObject.SetData(e);
+                            newItemObject.SetData(item);
                             targetTile.AddTileObject(newItemObject);
                             k--;
                         }
@@ -183,6 +185,10 @@ public class GameBoard_PCI : MonoBehaviour
                 }
             }
         }
+        // 탈출구 생성
+        var _tile = board[width / 2, height / 2];
+        var door = Instantiate(doorPrefab, new Vector3(width / 2, height / 2, 0), Quaternion.identity, _tile.transform);
+        _tile.AddTileObject(door);
     }
 
     public void Clear()

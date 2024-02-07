@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using BackEnd;
@@ -25,10 +26,35 @@ public class AccountLoginPopup : MonoBehaviour
     [SerializeField] 
     float duration;
 
+    [SerializeField]
+    GameObject visibleImage;
+
+    [SerializeField]
+    GameObject invisibleImage;
+
     public bool isClickedFindAccount;
 
     private bool isMoving;
-    
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            if (idInput.isFocused)
+            {
+                pwInput.Select();
+            }
+        }
+
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.Tab))
+        {
+            if (pwInput.isFocused)
+            {
+                idInput.Select();
+            }
+        }
+    }
+
     public void BackBtnClick()
     {
         UIManager.Instance.PopupListPop();
@@ -56,6 +82,7 @@ public class AccountLoginPopup : MonoBehaviour
             {
                 Debug.Log("계정 로그인 성공");
                 BackendManager.Instance.GetUserInfo();
+                BackendManager.Instance.userInfo.playerID = idInput.text;
                 MatchController.Instance.ChangeUI(1);
             }
             else
@@ -95,6 +122,9 @@ public class AccountLoginPopup : MonoBehaviour
             // 토글이 꺼져 있으면 비밀번호를 가림
             pwInput.contentType = TMP_InputField.ContentType.Password;
         }
+        
+        visibleImage.SetActive(pwVisibleToggle.isOn);
+        invisibleImage.SetActive(!pwVisibleToggle.isOn);
 
         // 비밀번호 입력 필드를 업데이트하여 변경된 설정을 적용
         pwInput.ForceLabelUpdate();
