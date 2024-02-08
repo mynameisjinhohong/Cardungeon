@@ -9,106 +9,107 @@ public class CardManager : Singleton<CardManager>
     public int seed;
     public void OnCardStart(Transform player, int cardIdx)
     {
-        switch (cardIdx)
+        if (cardIdx < 0)
         {
-            case 1:
-                if (cardIdx < 0)
-                {
-                    Idx0EnforceFunc(player);
-                }
-                else
-                {
-                    Idx0Func(player);
-                }
-                break;
-            case 2:
-                if (cardIdx < 0)
-                {
-                    Idx1EnforceFunc(player);
-                }
-                else
-                {
-                    Idx1Func(player);
-                }
-                break;
-            case 3:
-                if (cardIdx < 0)
-                {
-                    Idx2EnforceFunc(player);
-                }
-                else
-                {
-                    Idx2Func(player);
-                }
-                break;
-            case 4:
-                if (cardIdx < 0)
-                {
-                    Idx3EnforceFunc(player);
-                }
-                else
-                {
-                    Idx3Func(player);
-                }
-                break;
-            case 5:
-                if (cardIdx < 0)
-                {
-                    Idx5EnforceFunc(player);
-                }
-                else
-                {
-                    Idx5Func(player);
-                }
-                break;
-            case 6:
-                if (cardIdx < 0)
-                {
-                    Idx6EnforceFunc(player);
-                }
-                else
-                {
-                    Idx6Func(player);
-                }
-                break;
-            case 7:
-                if (cardIdx < 0)
-                {
-                    Idx7EnforceFunc(player);
-                }
-                else
-                {
-                    Idx7Func(player);
-                }
-                break;
-            case 8:
-                if (cardIdx < 0)
-                {
-                    Idx8EnforceFunc(player);
-                }
-                else
-                {
-                    Idx8Func(player);
-                }
-                break;
-            case 9:
-                if(cardIdx < 0)
-                {
-                    Idx9EnforceFunc(player.GetComponent<Player_HJH>());
-                }
-                else
-                {
-                    Idx9Func(player.GetComponent<Player_HJH>());
-                }
-                break;
+            switch (cardIdx)
+            {
+                case -1:
+                    if (cardIdx < 0)
+                    {
+                        Idx0EnforceFunc(player);
+                    }
+                    break;
+                case -2:
+                    if (cardIdx < 0)
+                    {
+                        Idx1EnforceFunc(player);
+                    }
+                    break;
+                case -3:
+                    if (cardIdx < 0)
+                    {
+                        Idx2EnforceFunc(player);
+                    }
+                    break;
+                case -4:
+                    if (cardIdx < 0)
+                    {
+                        Idx3EnforceFunc(player);
+                    }
+                    break;
+                case -5:
+                    if (cardIdx < 0)
+                    {
+                        Idx5EnforceFunc(player);
+                    }
+                    break;
+                case -6:
+                    if (cardIdx < 0)
+                    {
+                        Idx6EnforceFunc(player);
+                    }
+                    break;
+                case -7:
+                    if (cardIdx < 0)
+                    {
+                        Idx7EnforceFunc(player);
+                    }
+                    break;
+                case -8:
+                    if (cardIdx < 0)
+                    {
+                        Idx8EnforceFunc(player);
+                    }
+                    break;
+                case -9:
+                    if (cardIdx < 0)
+                    {
+                        Idx9EnforceFunc(player.GetComponent<Player_HJH>());
+                    }
+                    break;
+            }
         }
+        else
+        {
+            switch (cardIdx)
+            {
+                case 1:
+                    Idx0Func(player);
+                    break;
+                case 2:
+                    Idx1Func(player);
+                    break;
+                case 3:
+                    Idx2Func(player);
+                    break;
+                case 4:
+                    Idx3Func(player);
+                    break;
+                case 5:
+                    Idx5Func(player);
+                    break;
+                case 6:
+                    Idx6Func(player);
+                    break;
+                case 7:
+                    Idx7Func(player);
+                    break;
+                case 8:
+                    Idx8Func(player);
+                    break;
+                case 9:
+                    Idx9Func(player.GetComponent<Player_HJH>());
+                    break;
+            }
+        }
+
 
     }
 
-    public bool OnCardCheck(Player_HJH player,int cardIdx)
+    public bool OnCardCheck(Player_HJH player, int cardIdx)
     {
         bool ret = true;
-        switch(Mathf.Abs(cardIdx))
+        switch (Mathf.Abs(cardIdx))
         {
             case 1:
                 if (cardIdx < 0)
@@ -120,7 +121,7 @@ public class CardManager : Singleton<CardManager>
                     ret = GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y + 1));
                 }
                 break;
-                case 2:
+            case 2:
                 if (cardIdx < 0)
                 {
                     ret = GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x + 2, (int)player.transform.position.y));
@@ -201,11 +202,11 @@ public class CardManager : Singleton<CardManager>
     {
         if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y + 1)))
         {
-            GamePlayManager.Instance.gameBoard.Interact(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y + 1),player.GetComponent<Player_HJH>());
+            GamePlayManager.Instance.gameBoard.Interact(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y + 1), player.GetComponent<Player_HJH>());
             player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 1, player.transform.position.z);
         }
         Player_HJH p;
-        if(player.TryGetComponent<Player_HJH>(out p))
+        if (player.TryGetComponent<Player_HJH>(out p))
         {
             p.animator.Play("Walk");
         }
@@ -233,7 +234,7 @@ public class CardManager : Singleton<CardManager>
     {
         if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x + 1, (int)player.transform.position.y)))
         {
-            GamePlayManager.Instance.gameBoard.Interact(new Vector2Int((int)player.transform.position.x + 1, (int)player.transform.position.y ), player.GetComponent<Player_HJH>());
+            GamePlayManager.Instance.gameBoard.Interact(new Vector2Int((int)player.transform.position.x + 1, (int)player.transform.position.y), player.GetComponent<Player_HJH>());
             player.transform.position = new Vector3(player.transform.position.x + 1, player.transform.position.y, player.transform.position.z);
 
         }
@@ -306,7 +307,7 @@ public class CardManager : Singleton<CardManager>
     {
         if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y - 1)))
         {
-            GamePlayManager.Instance.gameBoard.Interact(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y -1), player.GetComponent<Player_HJH>());
+            GamePlayManager.Instance.gameBoard.Interact(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y - 1), player.GetComponent<Player_HJH>());
             player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y - 1, player.transform.position.z);
         }
         Player_HJH p;
