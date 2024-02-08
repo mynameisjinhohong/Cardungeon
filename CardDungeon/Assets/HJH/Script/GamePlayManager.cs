@@ -322,7 +322,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
             {
                 Message m = messageQueue.Dequeue();
                 SendData(m);
-                Debug.Log(m.playerIdx + "  " + m.cardIdx);
+                //Debug.Log(m.playerIdx + "  " + m.cardIdx);
                 CardRealGo(m.playerIdx, m.cardIdx);
             }
         }
