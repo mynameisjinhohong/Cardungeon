@@ -172,9 +172,9 @@ public class PlayerDeck_HJH : MonoBehaviour
     {
         int a = hand[handIdx];
         
-        if (GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].Mp >= CardManager.Instance.cardList.cards[a].useMP && CardManager.Instance.OnCardCheck(GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx],a))
+        if (GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].Mp >= CardManager.Instance.cardList.cards[Mathf.Abs(a)].useMP && CardManager.Instance.OnCardCheck(GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx],a))
         {
-            GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].Mp -= CardManager.Instance.cardList.cards[a].useMP;
+            GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].Mp -= CardManager.Instance.cardList.cards[Mathf.Abs(a)].useMP;
             GamePlayManager.Instance.CardGo(GamePlayManager.Instance.myIdx, a);
             hand.RemoveAt(handIdx);
             trash.Add(a);
