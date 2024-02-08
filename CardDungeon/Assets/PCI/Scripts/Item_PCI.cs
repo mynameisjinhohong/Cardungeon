@@ -8,6 +8,7 @@ using TMPro;
 
 public class Item_PCI : TileObject_PCI
 {
+    [SerializeField]
     protected ItemData_PCI _data;
     public ItemVfx_PCI vfx;
 
