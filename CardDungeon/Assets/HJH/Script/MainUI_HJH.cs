@@ -54,7 +54,12 @@ public class MainUI_HJH : MonoBehaviour
     public Image Toon;
     
     public GameObject ToonBG;
-    
+
+    //Å« ¹Ì´Ï¸Ê ÀÛÀº ¹Ì´Ï¸Ê
+    public GameObject bigMinimap;
+    public GameObject smallMinimap;
+
+    public  bool reRollNow = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -99,6 +104,36 @@ public class MainUI_HJH : MonoBehaviour
                 BigCardOff();
             }
         }
+        if(Input.GetKeyDown(KeyCode.Q))
+        {
+            if(deckList.activeInHierarchy)
+            {
+                DeckListOff();
+            }
+            else
+            {
+                DeckListOn();
+            }
+        }
+        else if(Input.GetKeyUp(KeyCode.W)) 
+        {
+            if(deckList.activeInHierarchy)
+            {
+                DeckListOff();
+            }
+            else
+            {
+                TrashDeckListOn();
+            }
+        }
+        else if(Input.GetKeyDown(KeyCode.E))
+        {
+            MinimapChange();
+        }
+        else if(Input.GetKeyDown(KeyCode.R))
+        {
+            playerDeck.ButtonReroll();
+        }
     }
 
     public void ReNewHp()
@@ -116,6 +151,22 @@ public class MainUI_HJH : MonoBehaviour
         }
 
     }
+
+    public void MinimapChange()
+    {
+        if (bigMinimap.activeInHierarchy)
+        {
+            bigMinimap.SetActive(false);
+            smallMinimap.SetActive(true);
+        }
+        else
+        {
+            bigMinimap.SetActive(true);
+            smallMinimap.SetActive(false);
+        }
+    }
+
+
 
     public void ReNewMp()
     {
@@ -135,6 +186,7 @@ public class MainUI_HJH : MonoBehaviour
     public void Reroll(float reRollCool)
     {
         reRollButton.raycastTarget = false;
+        reRollNow = true;
         StartCoroutine(RerollButton(reRollCool));
     }
     IEnumerator RerollButton(float reRollCool)
@@ -148,6 +200,7 @@ public class MainUI_HJH : MonoBehaviour
             if(currentTime/reRollCool > 1)
             {
                 reRollButton.raycastTarget = true;
+                reRollNow = false;
                 break;
             }
         }

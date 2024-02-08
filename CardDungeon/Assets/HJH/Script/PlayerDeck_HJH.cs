@@ -124,6 +124,17 @@ public class PlayerDeck_HJH : MonoBehaviour
         }
         HandVisible();
     }
+    public void ButtonReroll()
+    {
+        if (mainUi.reRollNow)
+        {
+            mpReroll();
+        }
+        else
+        {
+            Reroll();
+        }
+    }
 
     public void Reroll()
     {
