@@ -219,7 +219,6 @@ public class CardManager : Singleton<CardManager>
         {
             GamePlayManager.Instance.gameBoard.Interact(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y + 2), player.GetComponent<Player_HJH>());
             player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 2, player.transform.position.z);
-
         }
         Player_HJH p;
         if (player.TryGetComponent<Player_HJH>(out p))
