@@ -4,22 +4,31 @@ using UnityEngine;
 
 public class BigCard_HJH : MonoBehaviour
 {
-
+    public MainUI_HJH mainUi;
     public int idx;
-    public bool imOn = true;
+    public bool imOn = false;
     public void EnforceButton()
     {
-        for(int i =0; i< transform.parent.childCount; i++)
+        if (imOn)
         {
-            if(transform.parent.GetChild(i) == transform)
+            mainUi.EnforceEnd();
+        }
+        else
+        {
+            for (int i = 0; i < 3; i++)
             {
-                transform.GetChild(4).gameObject.SetActive(true);
-                imOn = true;
-            }
-            else
-            {
-                transform.parent.GetChild(i).GetChild(4).gameObject.SetActive(false);
-                transform.parent.GetChild(i).GetComponent<BigCard_HJH>().imOn = false;
+                if (transform.parent.GetChild(i) == transform)
+                {
+                    transform.GetChild(4).gameObject.SetActive(true);
+                    transform.GetChild(5).gameObject.SetActive(true);
+                    imOn = true;
+                }
+                else
+                {
+                    transform.parent.GetChild(i).GetChild(4).gameObject.SetActive(false);
+                    transform.parent.GetChild(i).GetChild(5).gameObject.SetActive(false);
+                    transform.parent.GetChild(i).GetComponent<BigCard_HJH>().imOn = false;
+                }
             }
         }
     }

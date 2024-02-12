@@ -55,6 +55,11 @@ public class MainUI_HJH : MonoBehaviour
     
     public GameObject ToonBG;
 
+    //강화 or 삭제
+    public GameObject threeList;
+    public GameObject returnButton;
+    public GameObject activeButton;
+
     //큰 미니맵 작은 미니맵
     public GameObject bigMinimap;
     public GameObject smallMinimap;
@@ -233,83 +238,123 @@ public class MainUI_HJH : MonoBehaviour
     {
         bigCard.SetActive(false);
     }
+
+    public int[] RandomCard()
+    {
+        int[] ran = new int[3];
+        List<int> canCardList = new List<int>();
+        int all = playerDeck.hand.Count + playerDeck.deck.Count + playerDeck.trash.Count;
+        for (int i = 0; i< all; i++)
+        {
+            if (i >= playerDeck.hand.Count + playerDeck.deck.Count)
+            {
+                if (playerDeck.trash[i - playerDeck.hand.Count - playerDeck.deck.Count] > 0)
+                {
+                    canCardList.Add(i);
+                }
+            }
+            else if (i >= playerDeck.hand.Count)
+            {
+                if (playerDeck.deck[i - playerDeck.hand.Count] > 0)
+                {
+                    canCardList.Add(i);
+                }
+            }
+            else
+            {
+                if (playerDeck.hand[i] > 0)
+                {
+                    canCardList.Add(i);
+                }
+            }
+            
+        }
+        int a = Random.Range(0, canCardList.Count - 2);
+        ran[0] = canCardList[a];
+        a = Random.Range(a+1, canCardList.Count-1);
+        ran[1] = canCardList[a];
+        a = Random.Range(a + 1, canCardList.Count);
+        ran[2] = canCardList[a];
+        return ran;
+    }
     public void EnforceOn()
     {
-        for(int i =0; i< dectContent.transform.childCount; i++)
+        int[] ran = RandomCard();
+        for(int i = 0; i < 3; i++)
         {
-            Destroy(dectContent.transform.GetChild(i).gameObject);
+            GameObject card = threeList.transform.GetChild(i).gameObject;
+            card.GetComponent<Button>().interactable = true;
+            card.GetComponent<BigCard_HJH>().idx = ran[i];
+            card.GetComponent<BigCard_HJH>().mainUi = this;
+            card.GetComponent<BigCard_HJH>().imOn = false;
+            card.transform.GetChild(4).gameObject.SetActive(false);
+            card.transform.GetChild(5).gameObject.SetActive(false);
+            if (ran[i] >= playerDeck.hand.Count + playerDeck.deck.Count)
+            {
+                card.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i] - playerDeck.hand.Count - playerDeck.deck.Count]].bigCardType;
+                card.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i] - playerDeck.hand.Count - playerDeck.deck.Count]].useMP.ToString();
+                card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i] - playerDeck.hand.Count - playerDeck.deck.Count]].cardName;
+                card.transform.GetChild(2).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i] - playerDeck.hand.Count - playerDeck.deck.Count]].description;
+                card.transform.GetChild(3).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i] - playerDeck.hand.Count - playerDeck.deck.Count]].itemImage;
+                GameObject card2 = card.transform.GetChild(5).gameObject;
+                card2.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i]] - playerDeck.hand.Count - playerDeck.deck.Count].bigCardType;
+                card2.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i]] - playerDeck.hand.Count - playerDeck.deck.Count].useMP.ToString();
+                card2.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i]] - playerDeck.hand.Count - playerDeck.deck.Count].cardName;
+                card2.transform.GetChild(2).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i]] - playerDeck.hand.Count - playerDeck.deck.Count].description;
+                card2.transform.GetChild(3).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i]] - playerDeck.hand.Count - playerDeck.deck.Count].itemImage;
+
+            }
+            else if (ran[i] >= playerDeck.hand.Count)
+            {
+                card.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.deck[ran[i]- playerDeck.hand.Count]].bigCardType;
+                card.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.deck[ran[i] - playerDeck.hand.Count]].useMP.ToString();
+                card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.deck[ran[i] - playerDeck.hand.Count]].cardName;
+                card.transform.GetChild(2).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.deck[ran[i] - playerDeck.hand.Count]].description;
+                card.transform.GetChild(3).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.deck[ran[i] - playerDeck.hand.Count]].itemImage;
+                GameObject card2 = card.transform.GetChild(5).gameObject;
+                card2.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.deck[ran[i] - playerDeck.hand.Count]].bigCardType;
+                card2.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.deck[ran[i] - playerDeck.hand.Count]].useMP.ToString();
+                card2.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.deck[ran[i] - playerDeck.hand.Count]].cardName;
+                card2.transform.GetChild(2).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.deck[ran[i] - playerDeck.hand.Count]].description;
+                card2.transform.GetChild(3).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.deck[ran[i] - playerDeck.hand.Count]].itemImage;
+
+            }
+            else
+            {
+                card.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.hand[ran[i]]].bigCardType;
+                card.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.hand[ran[i]]].useMP.ToString();
+                card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.hand[ran[i]]].cardName;
+                card.transform.GetChild(2).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.hand[ran[i]]].description;
+                card.transform.GetChild(3).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.hand[ran[i]]].itemImage;
+                GameObject card2 = card.transform.GetChild(5).gameObject;
+                card2.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.hand[ran[i]]].bigCardType;
+                card2.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.hand[ran[i]]].useMP.ToString();
+                card2.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.hand[ran[i]]].cardName;
+                card2.transform.GetChild(2).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.hand[ran[i]]].description;
+                card2.transform.GetChild(3).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.hand[ran[i]]].itemImage;
+            }
         }
         idx = 0;
-        for (int i = 0; i < playerDeck.hand.Count; i++)
-        {
-            if (playerDeck.hand[i] > 0)
-            {
-                GameObject card = Instantiate(cardPrefab, dectContent.transform);
-                card.GetComponent<Button>().interactable = true;
-                card.GetComponent<BigCard_HJH>().idx = idx;
-                card.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.hand[i]].bigCardType;
-                card.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.hand[i]].useMP.ToString();
-                card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.hand[i]].cardName;
-                card.transform.GetChild(2).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.hand[i]].description;
-                card.transform.GetChild(3).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.hand[i]].itemImage;
-            }
-            idx++;
-        }
-        for (int i = 0; i < playerDeck.deck.Count; i++)
-        {
-            if (playerDeck.deck[i] > 0)
-            {
-                GameObject card = Instantiate(cardPrefab, dectContent.transform);
-                card.GetComponent<Button>().interactable = true;
-                card.GetComponent<BigCard_HJH>().idx = idx;
-                card.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.deck[i]].bigCardType;
-                card.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.deck[i]].useMP.ToString();
-                card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.deck[i]].cardName;
-                card.transform.GetChild(2).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.deck[i]].description;
-                card.transform.GetChild(3).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.deck[i]].itemImage;
-            }
-            idx++;
-        }
-        for (int i = 0; i < playerDeck.trash.Count; i++)
-        {
-            if (playerDeck.trash[i] > 0)
-            {
-                GameObject card = Instantiate(cardPrefab, dectContent.transform);
-                card.GetComponent<Button>().interactable = true;
-                card.GetComponent<BigCard_HJH>().idx = idx;
-                card.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.trash[i]].bigCardType;
-                card.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[i]].useMP.ToString();
-                card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[i]].cardName;
-                card.transform.GetChild(2).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[i]].description;
-                card.transform.GetChild(3).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.trash[i]].itemImage;
-            }
-            idx++;
-        }
-        dectContent.transform.GetChild(0).GetComponent<BigCard_HJH>().EnforceButton();
-        dectContent.transform.GetChild(0).GetChild(4).gameObject.SetActive(true);
-        deckList.SetActive(false);
-        playerDeck.HandVisible();
-        idx = 0;
-        endText.transform.parent.GetComponent<Button>().onClick.RemoveAllListeners();
-        endText.transform.parent.GetComponent<Button>().onClick.AddListener(EnforceEnd);
-        endText.text = "선택하기";
-        deckList.SetActive(true);
+        activeButton.GetComponent<Button>().onClick.RemoveAllListeners();
+        activeButton.GetComponent<Button>().onClick.AddListener(EnforceEnd);
+        activeButton.transform.GetChild(0).GetComponent<TMP_Text>().text = "카드 강화하기";
+        threeList.SetActive(true);
     }
 
     public void EnforceEnd()
     {
-        for(int i =0; i< dectContent.transform.childCount; i++)
+        for(int i =0; i< 3; i++)
         {
-            if (dectContent.transform.GetChild(i).GetComponent<BigCard_HJH>().imOn)
+            if (threeList.transform.GetChild(i).GetComponent<BigCard_HJH>().imOn)
             {
-                idx = dectContent.transform.GetChild(i).GetComponent<BigCard_HJH>().idx;
+                idx = threeList.transform.GetChild(i).GetComponent<BigCard_HJH>().idx;
             }
         }
         if(idx > playerDeck.hand.Count + playerDeck.deck.Count)
         {
-            if(playerDeck.deck[idx - playerDeck.hand.Count - playerDeck.deck.Count] > 0)
+            if(playerDeck.trash[idx - playerDeck.hand.Count - playerDeck.deck.Count] > 0)
             {
-                playerDeck.deck[idx - playerDeck.hand.Count - playerDeck.deck.Count] *= -1;
+                playerDeck.trash[idx - playerDeck.hand.Count - playerDeck.deck.Count] *= -1;
             }
         }
         else if(idx > playerDeck.hand.Count)
@@ -326,7 +371,7 @@ public class MainUI_HJH : MonoBehaviour
                 playerDeck.hand[idx] *= -1;
             }
         }
-        deckList.SetActive(false);
+        threeList.SetActive(false);
         playerDeck.HandVisible();
     }
 
