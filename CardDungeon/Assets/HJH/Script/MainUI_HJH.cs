@@ -340,6 +340,10 @@ public class MainUI_HJH : MonoBehaviour
         activeButton.transform.GetChild(0).GetComponent<TMP_Text>().text = "카드 강화하기";
         threeList.SetActive(true);
     }
+    public void EnforceOff()
+    {
+        threeList.SetActive(false);
+    }
 
     public void EnforceEnd()
     {

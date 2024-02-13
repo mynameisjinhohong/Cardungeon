@@ -3019,7 +3019,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7975077980767190671, guid: b2fbc8e84754076499a1913d4dd615ce, type: 3}
       propertyPath: m_RootOrder
-      value: 22
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 7975077980767190671, guid: b2fbc8e84754076499a1913d4dd615ce, type: 3}
       propertyPath: m_AnchorMax.x
@@ -4708,7 +4708,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 556443424}
         m_TargetAssemblyTypeName: MainUI_HJH, Assembly-CSharp
-        m_MethodName: DeckListOff
+        m_MethodName: EnforceOff
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
