@@ -20,6 +20,6 @@ public class SettingPopup : MonoBehaviour
 
         PlayerPrefs.SetInt("NotAutoLogin", value);
         
-        BackendManager.Instance.NotAutoLogin = autoLoginCheckBox.isOn;
+        BackendManager.Instance.UseAutoLogin = autoLoginCheckBox.isOn;
     }
 }

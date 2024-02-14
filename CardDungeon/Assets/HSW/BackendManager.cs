@@ -21,12 +21,11 @@ public class BackendManager : Singleton<BackendManager>
     [Header("유저정보")]
     public UserInfo userInfo;
     
-    [HideInInspector] public bool LoadServerTime = false;
-    [HideInInspector] public int checkLoginWayData = -1;
-    [HideInInspector] public bool isInitialize = false;
-    [HideInInspector] public bool isLogin      = false;
-    [HideInInspector] public bool isLoadGame   = false;
-    [HideInInspector] public bool NotAutoLogin; 
+    public bool LoadServerTime = false;
+    public int checkLoginWayData = -1;
+    public bool isInitialize = false;
+    public bool isLoadGame   = false;
+    public bool UseAutoLogin = false; 
     public int matchIndex = 0;
     
     [Header("전체 유저 데이터 리스트")] 
@@ -40,6 +39,11 @@ public class BackendManager : Singleton<BackendManager>
     private int initTimeCount = 0;
 
     public bool matchCardListDownLoaded;
+    
+    public int SuccessLoadDataCount = 0;
+    
+    [SerializeField]
+    List<TransactionValue> transactionList = new List<TransactionValue>();
     
     void Start()
     {
@@ -58,7 +62,7 @@ public class BackendManager : Singleton<BackendManager>
         DontDestroyOnLoad(this.gameObject);
         //SetResolution();
 
-        NotAutoLogin = PlayerPrefs.GetInt("NotAutoLogin") == 0;
+        UseAutoLogin = PlayerPrefs.GetInt("NotAutoLogin") == 0;
     }
 
     public void SetResolution()
@@ -146,8 +150,17 @@ public class BackendManager : Singleton<BackendManager>
             
             StartCoroutine(nameof(Polling));
 
-            if(platformType == PlatformType.Android || platformType == PlatformType.IOS)
-                CheckLoginWayData();
+            if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
+            {
+                //CheckLastVersion();
+            }
+            
+            CheckLoginWayData();
+
+            if (checkLoginWayData >= 0 && UseAutoLogin)
+            {
+                StartTokenLogin();
+            }
             
             isInitialize = true;
         }
@@ -172,26 +185,20 @@ public class BackendManager : Singleton<BackendManager>
         }
     }
 
-    public void GetHashKey()
-    {
-        string googlehash = Backend.Utils.GetGoogleHash();
-    }
-
-    
-    public void GuestLoginSequense()
-    {
-        BackendReturnObject bro = Backend.BMember.GuestLogin("GuestLoginTry2 Sequence");
-        Debug.LogError($"{bro.IsSuccess()} {bro.GetStatusCode()} {bro.GetErrorCode()} {bro.GetMessage()}");
-
-        if (!bro.IsSuccess())
-        {
-            Debug.Log("계스트 계정 생성 실패");
-            GuestIdDelete();
-        }
-
-        StartCoroutine((LoginProcess(bro, LoginType.Guest)));
-        PlayerPrefs.SetInt("LoginWay", 0);
-    }
+    // public void GuestLoginSequense()
+    // {
+    //     BackendReturnObject bro = Backend.BMember.GuestLogin("GuestLoginTry2 Sequence");
+    //     Debug.LogError($"{bro.IsSuccess()} {bro.GetStatusCode()} {bro.GetErrorCode()} {bro.GetMessage()}");
+    //
+    //     if (!bro.IsSuccess())
+    //     {
+    //         Debug.Log("계스트 계정 생성 실패");
+    //         GuestIdDelete();
+    //     }
+    //
+    //     StartCoroutine((LoginProcess(bro, LoginType.Guest)));
+    //     PlayerPrefs.SetInt("LoginWay", 0);
+    // }
     private IEnumerator Polling()
     {
         while (true)
@@ -202,7 +209,7 @@ public class BackendManager : Singleton<BackendManager>
         }
     }
 
-    public void TryCustomSignin(string id, string pw)
+    public void TryCustomSignin(string id, string pw, string email)
     {
         GameObject nicknamePopup = UIManager.Instance.NickNamePrefab;
         
@@ -210,12 +217,20 @@ public class BackendManager : Singleton<BackendManager>
             if(callback.IsSuccess())
             {
                 Debug.Log("회원가입에 성공했습니다.");
-                UIManager.Instance.PopupListPop();
                 
-                UIManager.Instance.PopupListPop();
+                Backend.BMember.UpdateCustomEmail(email, ( callback ) =>
+                {
+                    UIManager.Instance.PopupListPop();
                 
-                // 닉네임 생성 팝업 만들기
-                UIManager.Instance.OpenPopup(nicknamePopup);
+                    UIManager.Instance.PopupListPop();
+                
+                    // 닉네임 생성 팝업 만들기
+                    UIManager.Instance.OpenPopup(nicknamePopup);
+
+                    PlayerPrefs.SetInt("LoginWay", 0);
+
+                    DataManager.Instance.SaveAllDataAtFirst();
+                });
             }
             else
             {
@@ -269,16 +284,32 @@ public class BackendManager : Singleton<BackendManager>
             yield break;
         }
         
+        switch (type)
+        {
+            case LoginType.Custom:
+                GetUserInfo();
+                Debug.LogError("계정 로그인에 성공했습니다.");
+                break;
+            case LoginType.Google:
+                GetUserInfo();
+                Debug.LogError("구글 로그인에 성공했습니다.");
+                break;
+            case LoginType.Auto:
+                GetUserInfo();
+                Debug.LogError("자동 로그인에 성공했습니다.");
+                break;
+        }
+        userInfo.UserIndate = Backend.UserInDate;
         GetServerTime();
-
+        DataManager.Instance.SetDefaultData();
+        
         if (type == LoginType.Auto)
         {
             switch (bro.GetStatusCode())
             {
                 case "201": //로그인
                     Debug.Log("자동 로그인 하여 서버에서 유저 데이터 불러오기 성공");
-                    isLogin = true;
-                    GetUserInfo();
+                    GetUserDataFromServer();
                     break;
             }
         }
@@ -288,10 +319,12 @@ public class BackendManager : Singleton<BackendManager>
             {
                 case "201": //신규 회원가입
                     Debug.Log("신규 회원으로 시작합니다");
+                    SetNewUserDataSaveToServer();
                     InsertLog(GameLogType.Signin, $"{type}/{Application.version}");
                     break;
                 case "200": //로그인
                     Debug.Log("일반 로그인");
+                    GetUserDataFromServer();
                     InsertLog(GameLogType.Login, $"{type}/{Application.version}");
                     break;
             }
@@ -300,6 +333,10 @@ public class BackendManager : Singleton<BackendManager>
         StartCoroutine(nameof(RefreshToken));
     }
 
+    public void SetNewUserDataSaveToServer()
+    {
+        DataManager.Instance.SaveAllDataAtFirst();
+    }
     public void GuestIdDelete()
     {
         if (Backend.BMember.GetGuestID().Length > 0)
@@ -423,7 +460,7 @@ public class BackendManager : Singleton<BackendManager>
             {
                 string time = callback.GetReturnValuetoJSON()["utcTime"].ToString();
                 DateTime parsedDate = DateTime.Parse(time);
-                //DataManager.Instance.SetLocalTime(parsedDate);
+                DataManager.Instance.SetLocalTime(parsedDate);
                 LoadServerTime = true;
             }
             else
@@ -436,10 +473,17 @@ public class BackendManager : Singleton<BackendManager>
     
     public void GetUserInfo()
     {
-        Debug.Log(Backend.UserNickName + Backend.UserInDate);
-        userInfo.UserIndate  = Backend.UserInDate;
-        userInfo.Nickname    = Backend.UserNickName;
-        userInfo.UID         = Backend.UID;
+        Backend.BMember.GetUserInfo((callback) =>
+        {
+            JsonData json = callback.GetReturnValuetoJSON()["row"];
+            Debug.LogError(callback.GetReturnValue());
+            Debug.Log(Backend.UserNickName + Backend.UserInDate);
+            userInfo.UserIndate  = Backend.UserInDate;
+            userInfo.Nickname    = Backend.UserNickName;
+            userInfo.UID         = Backend.UID;
+            
+            MatchController.Instance.ChangeUI(1);
+        });
     }
     
     [Header("매치카드 리스트")]
@@ -705,12 +749,9 @@ public class BackendManager : Singleton<BackendManager>
     [Serializable]
     public class UserInfo
     {
-        public string playerID    = string.Empty;
         public string UserIndate  = string.Empty;
         public string Nickname    = string.Empty;
-        public string countryCode = string.Empty;
         public string UID         = string.Empty;
-        public string Email       = string.Empty;
     }
     MatchInGameRoomInfo currentGameRoomInfo;
     Dictionary<string, MatchUserGameRecord> inGameUserList = new Dictionary<string, MatchUserGameRecord>();
@@ -860,6 +901,218 @@ public class BackendManager : Singleton<BackendManager>
         Backend.Match.MatchEnd(matchGameResult);
     }
     
+    public void AddTransactionInsert(UserDataType table, Param param)
+    {
+        for (int i = 0; i < transactionList.Count; i++)
+            if (transactionList[i].table.ToString() == table.ToString())
+                transactionList.RemoveAt(i);
+        transactionList.Add(TransactionValue.SetInsert(table.ToString(), param));
+        if (transactionList.Count > 9)
+            SendTransaction(TransactionType.Insert);
+    }
+    
+    public void GetUserDataFromServer()
+    {
+        transactionList.Clear();
+        for(int i = 0; i < Enum.GetValues(typeof(UserDataType)).Length; i++)
+            AddTransactionSetGet((UserDataType)i);
+        SendTransaction(TransactionType.SetGet, this);
+    }
+    
+    public void AddTransactionSetGet(UserDataType table)
+    {
+        for (int i = 0; i < transactionList.Count; i++)
+            if (transactionList[i].table.ToString() == table.ToString())
+                transactionList.RemoveAt(i);
+        transactionList.Add(TransactionValue.SetGet(table.ToString(), new Where()));
+        if (transactionList.Count > 9)
+            SendTransaction(TransactionType.SetGet);
+    }
+    
+    public BackendReturnObject SendTransaction(TransactionType type)
+    {
+         if(transactionList.Count <= 0) 
+            return null;
+         
+         BackendReturnObject bro = null;
+        
+        switch (type)
+        {
+            case TransactionType.Insert:
+            case TransactionType.Update:
+                bro = Backend.GameData.TransactionWriteV2(transactionList);
+                break;
+            case TransactionType.SetGet:
+                bro = Backend.GameData.TransactionReadV2(transactionList);
+                break;
+        }
+        
+        if (bro.IsSuccess())
+        {
+            switch (type)
+            {
+                case TransactionType.Insert:
+                    JsonData json = bro.GetReturnValuetoJSON()["putItem"];
+                    for (int i = 0; i < json.Count; i++)
+                    {
+                        DataManager.Instance.SetRowInDate((UserDataType)Enum.Parse(typeof(UserDataType), json[i]["table"].ToString()), json[i]["inDate"].ToString());
+                    }
+                    break;
+                case TransactionType.SetGet:
+                    JsonData gameDataListJson = bro.GetFlattenJSON()["Responses"];
+                    for (int j = 0; j < gameDataListJson.Count; j++)
+                        DataManager.Instance.SetUserData(Enum.Parse<UserDataType>(transactionList[j].table), gameDataListJson[j]);
+                    break;
+                case TransactionType.Update:
+                    for (int i = 0; i < transactionList.Count; i++)
+                    {
+                        Param param = new Param();
+                        param = transactionList[i].param;
+                        string paramToString = JsonConvert.SerializeObject(param.GetValue());
+                        int count = System.Text.Encoding.Default.GetByteCount(paramToString);
+                        Debug.Log($"{transactionList[i].table} / byte : {count}");
+                    }                    
+                    Debug.LogError($"Data Update Success");
+                    break;
+            }
+        }
+        else
+        {
+            Debug.LogError($"Send Failed {bro.IsSuccess()} {bro.GetStatusCode()} {bro.GetErrorCode()} {bro.GetMessage()}");
+        }
+        transactionList.Clear();
+        return bro;
+    }
+    
+    public BackendReturnObject SendTransaction(TransactionType type, object obj)
+    {
+
+        if (transactionList.Count <= 0) {
+            return null;
+        }
+
+        BackendReturnObject bro = null;
+        switch (type)
+        {
+            case TransactionType.Insert:
+                BackendReturnObject broInsert = Backend.GameData.TransactionWriteV2(transactionList);
+                if (broInsert.IsSuccess())
+                {
+                    JsonData json = broInsert.GetReturnValuetoJSON()["putItem"];
+                    for (int i = 0; i < json.Count; i++)
+                        DataManager.Instance.SetRowInDate((UserDataType)Enum.Parse(typeof(UserDataType), json[i]["table"].ToString()), json[i]["inDate"].ToString());
+                    SuccessLoadDataCount += json.Count;
+                }
+                else
+                {
+                    Debug.LogError($"Send Failed {broInsert.IsSuccess()} {broInsert.GetStatusCode()} {broInsert.GetErrorCode()} {broInsert.GetMessage()}");
+                }
+                break;
+            case TransactionType.Update:
+                for (int i = 0; i < transactionList.Count; i++)
+                {
+                    Param param = new Param();
+                    param = transactionList[i].param;
+                    string paramToString = JsonConvert.SerializeObject(param.GetValue());
+                    int count = System.Text.Encoding.Default.GetByteCount(paramToString);
+                    Debug.Log($"{transactionList[i].table} / byte : {count}");
+                }
+                Backend.GameData.TransactionWriteV2(transactionList, (callback) =>
+                {
+                    if (callback.IsSuccess())
+                    {
+                        Debug.Log($"Data Update Success");
+                    }
+                    else
+                    {
+                        if (callback.GetStatusCode().Contains("400"))
+                        {
+                            if (callback.GetErrorCode().Contains("HttpRequestException"))
+                            {
+                                //네트워크 연결 끊어짐
+                            }
+                        }
+
+                        if (callback.GetStatusCode().Contains("401"))
+                        {
+                            if (callback.GetErrorCode().Contains("BadUnauthorizedException"))
+                            {
+                                //업데이트 에러
+                            }
+                        }
+                        Debug.LogError($"Send Failed {callback.IsSuccess()} {callback.GetStatusCode()} {callback.GetErrorCode()} {callback.GetMessage()}");
+                    }
+                });
+                break;
+            case TransactionType.SetGet:
+                List<TransactionValue> actions = new List<TransactionValue>();
+                actions = new(transactionList);
+                Backend.GameData.TransactionReadV2(actions, (callback) =>
+                {
+                    // 이후 처리
+                    if (callback.IsSuccess())
+                    {
+                        JsonData gameDataListJson = callback.GetFlattenJSON()["Responses"];
+                        for (int j = 0; j < gameDataListJson.Count; j++)
+                            DataManager.Instance.SetUserData(Enum.Parse<UserDataType>(actions[j].table), gameDataListJson[j]);
+                        SuccessLoadDataCount += gameDataListJson.Count;
+                    }
+                    else
+                    {
+                        switch (callback.GetStatusCode())
+                        {
+                            case "404":
+                                if (callback.GetErrorCode() == "NotFoundException")
+                                {
+                                    transactionList.Clear();
+                                    for (int i = 0; i < actions.Count; i++)
+                                    {
+                                        BackendReturnObject bro = Backend.GameData.GetMyData(actions[i].table, new Where());
+                                        if (bro.IsSuccess())
+                                        {
+                                            JsonData data = bro.FlattenRows();
+                                            if (data.Count <= 0)
+                                            {
+                                                //insert 필요
+                                                switch (actions[i].table)
+                                                {
+                                                    case "UserBattleInfo":
+                                                        DataManager.Instance.SaveUserBattleInfo(ServerSaveType.Insert);
+                                                        break;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                DataManager.Instance.SetUserData(Enum.Parse<UserDataType>(actions[i].table), data[0]);
+                                                SuccessLoadDataCount++;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            Debug.LogError($"GetData {bro.IsSuccess()} {bro.GetStatusCode()} {bro.GetErrorCode()} {bro.GetMessage()}");
+                                        }
+                                    }
+                                    SendTransaction(TransactionType.Insert, this);
+                                }
+                                break;
+                        }
+                    }
+                });
+                break;
+        }
+        transactionList.Clear();
+        return bro;
+    }
+    
+    public void AddTransactionUpdate(UserDataType table, string indate, Param param)
+    {
+        for (int i = 0; i < transactionList.Count; i++)
+            if (transactionList[i].table.ToString() == table.ToString())
+                transactionList.RemoveAt(i);
+        transactionList.Add(TransactionValue.SetUpdateV2(table.ToString(), indate, Backend.UserInDate,  param));
+        if (transactionList.Count > 9)
+            SendTransaction(TransactionType.Update, this);
+    }
 }
 
 

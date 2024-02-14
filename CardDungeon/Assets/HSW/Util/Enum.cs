@@ -4,9 +4,22 @@ using UnityEngine;
 
 public enum LoginType
 {
-    Guest,
     Custom,
+    Google,
     Auto
+}
+
+public enum TransactionType
+{
+    Insert,
+    Update,
+    SetGet
+}
+
+public enum UserDataType
+{
+    UserLoginData,
+    Inventory
 }
 
 public enum ServerState

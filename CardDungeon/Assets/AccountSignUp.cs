@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -120,7 +121,7 @@ public class AccountSignUp : MonoBehaviour
         else
         {
             Debug.Log("계정 생성 시도");
-            BackendManager.Instance.TryCustomSignin(checkList[2].input.text, checkList[3].input.text);
+            BackendManager.Instance.TryCustomSignin(checkList[2].input.text, checkList[3].input.text, checkList[0].input.text);
         }
     }
 
@@ -208,20 +209,25 @@ public class AccountSignUp : MonoBehaviour
             emailCheckBtn.interactable = false;
         }
     }
-    
+
     public void SendEmailTest()
     {
+        SendEmailTestAsync();
+    }
+    
+    public async Task SendEmailTestAsync()
+    {
         SignUpCheckPanel target = checkList[0];
-        
+
         MailMessage mail = new MailMessage();
-        
+
         mail.From = new MailAddress("GangToeSal@gmail.com"); // 보내는사람
 
         if (target.input.text.Contains("@"))
         {
             mail.To.Add(target.input.text);
             target.infoText.text = "<color=black>인증번호가 전송 됐습니다.";
-            
+
             settingNumber = GenerateAuthenticationCode();
             emailSendBtn.interactable = false;
         }
@@ -234,25 +240,23 @@ public class AccountSignUp : MonoBehaviour
         mail.Subject = "강한토끼만 살아 남는다 인증 메일";
 
         mail.Body = $"이메일 인증 코드를 입력하세요\n \n본인 인증을 위해 자동으로 발송된 메일입니다.\n아래 인증번호를 사용하여 이메일 주소를 인증해주세요.\n{settingNumber}";
-        
-        SmtpClient smtpServer = new SmtpClient("smtp.gmail.com");
 
-        smtpServer.Port = 587;
+        using (SmtpClient smtpServer = new SmtpClient("smtp.gmail.com"))
+        {
+            smtpServer.Port = 587;
 
-        smtpServer.Credentials = new System.Net.NetworkCredential("gangtoesal@gmail.com", "rmgnahrysuztsyof") as ICredentialsByHost; // 보내는사람 주소 및 비밀번호 확인
+            smtpServer.Credentials = new System.Net.NetworkCredential("gangtoesal@gmail.com", "rmgnahrysuztsyof") as ICredentialsByHost; // 보내는사람 주소 및 비밀번호 확인
 
-        smtpServer.EnableSsl = true;
+            smtpServer.EnableSsl = true;
 
-        ServicePointManager.ServerCertificateValidationCallback =
+            ServicePointManager.ServerCertificateValidationCallback = (s, certificate, chain, sslPolicyErrors) => true;
 
-            delegate (object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
-
-            { return true; };
-
-        smtpServer.Send(mail);
+            await smtpServer.SendMailAsync(mail);
+        }
 
         Debug.Log("success");
     }
+
 
     static bool IsPasswordValid(string password)
     {

@@ -82,8 +82,6 @@ public class AccountLoginPopup : MonoBehaviour
             {
                 Debug.Log("계정 로그인 성공");
                 BackendManager.Instance.GetUserInfo();
-                BackendManager.Instance.userInfo.playerID = idInput.text;
-                MatchController.Instance.ChangeUI(1);
             }
             else
             {

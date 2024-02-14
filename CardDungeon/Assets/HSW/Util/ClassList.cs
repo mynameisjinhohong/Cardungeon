@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class UserLoginData
+public class UserBattleInfo
 {
     public string rowIndate;
 
-    public string playerID;
-    public string playerPW;
-    public string playerEmail;
+    public int totalBattleCount;
+    public int winCount;
+    public float winRate;
 
     public string LastConnect;
 }

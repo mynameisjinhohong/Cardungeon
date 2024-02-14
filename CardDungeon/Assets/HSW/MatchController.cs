@@ -56,25 +56,18 @@ public class MatchController : Singleton<MatchController>
     
     public void TryAutoLogin()
     {
-        if (Application.platform == RuntimePlatform.Android)
+        if(_backendManager.checkLoginWayData == -1 || _backendManager.userInfo.Nickname == "")
         {
-            if(_backendManager.checkLoginWayData == -1 || _backendManager.userInfo.Nickname == "")
-            {
-                Debug.Log("로그인 정보 없음");
-                TryLogin();
-            }
-            else
-            {
-                Debug.Log("자동로그인 실행 테스트");
-                if (!_backendManager.isInitialize)
-                    _backendManager.StartTokenLogin();
-            
-                ChangeUI(1);
-            }
+            Debug.Log("로그인 정보 없음");
+            TryLogin();
         }
         else
         {
-            TryLogin();
+            Debug.Log("자동로그인 실행 테스트");
+            if (!_backendManager.isInitialize)
+                _backendManager.StartTokenLogin();
+            
+            ChangeUI(1);
         }
     }
 
@@ -84,11 +77,6 @@ public class MatchController : Singleton<MatchController>
         LoginButtonListObj.gameObject.SetActive(true);
     }
 
-    IEnumerator WaitForLogin()
-    {
-        yield return new WaitUntil(() => _backendManager.isLogin);
-    }
-    
     public void ChangeUI(int index)
     {
         UIManager.Instance.AllPopupClear();
@@ -100,7 +88,7 @@ public class MatchController : Singleton<MatchController>
 
         if (index == 1)
         {
-            userNickNameText.text = _backendManager.userInfo.Nickname;
+            userNickNameText.text = BackendManager.Instance.userInfo.Nickname;
             StartCoroutine(RabbitBlinkEye());
             Debug.Log("깜빡");
         }
@@ -178,6 +166,8 @@ public class MatchController : Singleton<MatchController>
         readyToPlay.gameObject.SetActive(true);
 
         loginCheckButton.interactable = true;
+        
+        DataManager.Instance.Initialize();
     }
     
     public void MatchCancel()

@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using Assets.SimpleGoogleSignIn.Scripts;
+using BackEnd;
 using TMPro;
 
 namespace Assets.SimpleGoogleSignIn
@@ -24,6 +25,23 @@ namespace Assets.SimpleGoogleSignIn
         public void SignIn()
         {
             GoogleAuth.SignIn(OnSignIn, caching: true);
+
+            BackendManager.Instance.GetServerTime();
+            
+            DataManager.Instance.userData.rowIndate = Backend.UserInDate;
+
+            if (GoogleAuth.SavedAuth == null)
+            {
+                DataManager.Instance.SaveUserBattleInfo(ServerSaveType.Insert);
+
+                BackendManager.Instance.SendTransaction(TransactionType.Insert);
+            }
+            else
+            {
+                DataManager.Instance.SaveUserBattleInfo(ServerSaveType.Update);
+
+                BackendManager.Instance.SendTransaction(TransactionType.Update);
+            }
         }
 
         public void SignOut()
@@ -44,8 +62,8 @@ namespace Assets.SimpleGoogleSignIn
             googleUserData = userInfo;
             
             BackendManager.Instance.GetUserInfo();
-            BackendManager.Instance.userInfo.playerID = userInfo.email;
-            BackendManager.Instance.userInfo.Email = userInfo.email;
+            //BackendManager.Instance.userInfo.playerID = userInfo.email;
+            //BackendManager.Instance.userInfo.Email = userInfo.email;
             MatchController.Instance.ChangeUI(1);
         }
 
