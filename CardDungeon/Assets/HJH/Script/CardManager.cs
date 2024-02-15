@@ -513,6 +513,7 @@ public class CardManager : Singleton<CardManager>
                     continue;
                 }
                 Vector2Int vec = new Vector2Int((int)player.transform.position.x + i, (int)player.transform.position.y + j);
+                GamePlayManager.Instance.gameBoard.Attack(vec, player.GetComponent<Player_HJH>());
                 GamePlayManager.Instance.GoDamage(vec, 2);
             }
         }
