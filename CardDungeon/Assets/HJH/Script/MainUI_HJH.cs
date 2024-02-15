@@ -60,7 +60,6 @@ public class MainUI_HJH : MonoBehaviour
     public GameObject threeList;
     public GameObject twoList;
     public GameObject oneList;
-    public GameObject returnButton;
     public GameObject activeButton;
 
     //큰 미니맵 작은 미니맵
@@ -241,10 +240,10 @@ public class MainUI_HJH : MonoBehaviour
     {
         bigCard.SetActive(false);
     }
+    #region 카드 강화 삭제
 
-    public int[] RandomCard()
+    public int[] RandomCard(bool del)
     {
-        int[] ran = new int[3];
         List<int> canCardList = new List<int>();
         int all = playerDeck.hand.Count + playerDeck.deck.Count + playerDeck.trash.Count;
         for (int i = 0; i< all; i++)
@@ -272,17 +271,34 @@ public class MainUI_HJH : MonoBehaviour
             }
             
         }
-        int a = Random.Range(0, canCardList.Count - 2);
-        ran[0] = canCardList[a];
-        a = Random.Range(a+1, canCardList.Count-1);
-        ran[1] = canCardList[a];
-        a = Random.Range(a + 1, canCardList.Count);
-        ran[2] = canCardList[a];
+        int[] ran;
+        if(canCardList.Count == 1)
+        {
+            ran = new int[1];
+            ran[0] = canCardList[0];
+        }
+        else if(canCardList.Count == 2)
+        {
+            ran = new int[2];
+            ran[0] = canCardList[0];
+            ran[1] = canCardList[1];
+
+        }
+        else
+        {
+            ran = new int[3];
+            int a = Random.Range(0, canCardList.Count - 2);
+            ran[0] = canCardList[a];
+            a = Random.Range(a+1, canCardList.Count-1);
+            ran[1] = canCardList[a];
+            a = Random.Range(a + 1, canCardList.Count);
+            ran[2] = canCardList[a];
+        }
         return ran;
     }
     public void EnforceOn()
     {
-        int[] ran = RandomCard();
+        int[] ran = RandomCard(false);
         allList.SetActive(true);
         switch (ran.Length)
         {
@@ -331,7 +347,7 @@ public class MainUI_HJH : MonoBehaviour
                 card.transform.GetChild(2).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i] - playerDeck.hand.Count - playerDeck.deck.Count]].description;
                 card.transform.GetChild(3).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i] - playerDeck.hand.Count - playerDeck.deck.Count]].itemImage;
                 GameObject card2 = card.transform.GetChild(5).gameObject;
-                card2.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i]] - playerDeck.hand.Count - playerDeck.deck.Count].bigCardType;
+                card2.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i] - playerDeck.hand.Count - playerDeck.deck.Count]].bigCardType;
                 card2.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i]] - playerDeck.hand.Count - playerDeck.deck.Count].useMP.ToString();
                 card2.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i]] - playerDeck.hand.Count - playerDeck.deck.Count].cardName;
                 card2.transform.GetChild(2).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i]] - playerDeck.hand.Count - playerDeck.deck.Count].description;
@@ -370,6 +386,7 @@ public class MainUI_HJH : MonoBehaviour
         }
         idx = 0;
         activeButton.GetComponent<Button>().onClick.RemoveAllListeners();
+        Debug.Log("강화 델리게이트 들어감");
         activeButton.GetComponent<Button>().onClick.AddListener(EnforceEnd);
         activeButton.transform.GetChild(0).GetComponent<TMP_Text>().text = "카드 강화하기";
         allList.SetActive(true);
@@ -381,7 +398,7 @@ public class MainUI_HJH : MonoBehaviour
 
     public void DeleteStart()
     {
-        int[] ran = RandomCard();
+        int[] ran = RandomCard(true);
         allList.SetActive(true);
         switch (ran.Length)
         {
@@ -533,7 +550,8 @@ public class MainUI_HJH : MonoBehaviour
         allList.SetActive(false);
         playerDeck.HandVisible();
     }
-
+    #endregion
+    #region 덱,묘지 리스트
     public void FullDeckListOn()
     {
         for (int i = 0; i < dectContent.transform.childCount; i++)
@@ -719,7 +737,7 @@ public class MainUI_HJH : MonoBehaviour
     {
         deckList.SetActive(false);
     }
-
+    #endregion
     public void GameOver()
     {
         gameOver.SetActive(true);
