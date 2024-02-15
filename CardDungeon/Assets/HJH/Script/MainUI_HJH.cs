@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -19,7 +18,7 @@ public class MainUI_HJH : MonoBehaviour
 
     public TMP_Text deckCardAmount;
     public TMP_Text trashCardAmount;
-    
+
     public Image mpCoolTime;
     public Image reRollButton;
 
@@ -52,7 +51,7 @@ public class MainUI_HJH : MonoBehaviour
     public List<Sprite> ToonList;
 
     public Image Toon;
-    
+
     public GameObject ToonBG;
 
     //강화 or 삭제
@@ -61,12 +60,12 @@ public class MainUI_HJH : MonoBehaviour
     public GameObject twoList;
     public GameObject oneList;
     public GameObject activeButton;
-
+    int cardSize = 0;
     //큰 미니맵 작은 미니맵
     public GameObject bigMinimap;
     public GameObject smallMinimap;
 
-    public  bool reRollNow = false;
+    public bool reRollNow = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -76,11 +75,11 @@ public class MainUI_HJH : MonoBehaviour
     IEnumerator ToonStart()
     {
         ToonBG.SetActive(true);
-        
+
         yield return new WaitForSeconds(4.5f);
-        
+
         GetComponent<Canvas>().sortingOrder = 200;
-        
+
         ToonBG.SetActive(false);
     }
 
@@ -89,7 +88,7 @@ public class MainUI_HJH : MonoBehaviour
     {
         if (!firstSet)
         {
-            if(myPlayer != null)
+            if (myPlayer != null)
             {
                 playerIcon.sprite = icons[GamePlayManager.Instance.myIdx];
                 firstSet = true;
@@ -100,20 +99,20 @@ public class MainUI_HJH : MonoBehaviour
         deckAmount += playerDeck.deck.Count;
         deckAmount += playerDeck.hand.Count;
         deckAmount += playerDeck.trash.Count;
-        
+
         trashCardAmount.text = playerDeck.trash.Count.ToString();
-        deckCardAmount.text  = playerDeck.deck.Count.ToString();
-        
+        deckCardAmount.text = playerDeck.deck.Count.ToString();
+
         if (bigCard.activeInHierarchy)
         {
-            if(Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0))
             {
                 BigCardOff();
             }
         }
-        if(Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
-            if(deckList.activeInHierarchy)
+            if (deckList.activeInHierarchy)
             {
                 DeckListOff();
             }
@@ -122,9 +121,9 @@ public class MainUI_HJH : MonoBehaviour
                 DeckListOn();
             }
         }
-        else if(Input.GetKeyUp(KeyCode.W)) 
+        else if (Input.GetKeyUp(KeyCode.W))
         {
-            if(deckList.activeInHierarchy)
+            if (deckList.activeInHierarchy)
             {
                 DeckListOff();
             }
@@ -133,11 +132,11 @@ public class MainUI_HJH : MonoBehaviour
                 TrashDeckListOn();
             }
         }
-        else if(Input.GetKeyDown(KeyCode.E))
+        else if (Input.GetKeyDown(KeyCode.E))
         {
             MinimapChange();
         }
-        else if(Input.GetKeyDown(KeyCode.R))
+        else if (Input.GetKeyDown(KeyCode.R))
         {
             playerDeck.ButtonReroll();
         }
@@ -145,9 +144,9 @@ public class MainUI_HJH : MonoBehaviour
 
     public void ReNewHp()
     {
-        for(int i =0; i<hpBar.Length; i++)
+        for (int i = 0; i < hpBar.Length; i++)
         {
-            if(myPlayer.HP > i)
+            if (myPlayer.HP > i)
             {
                 hpBar[i].sprite = hpSprite;
             }
@@ -203,8 +202,8 @@ public class MainUI_HJH : MonoBehaviour
         {
             yield return null;
             currentTime += Time.deltaTime;
-            reRollButton.fillAmount = currentTime/reRollCool;
-            if(currentTime/reRollCool > 1)
+            reRollButton.fillAmount = currentTime / reRollCool;
+            if (currentTime / reRollCool > 1)
             {
                 reRollButton.raycastTarget = true;
                 reRollNow = false;
@@ -216,7 +215,7 @@ public class MainUI_HJH : MonoBehaviour
     public void BigCardOn(int cardIdx)
     {
         bigCard.SetActive(true);
-        if(cardIdx > 0)
+        if (cardIdx > 0)
         {
             bigCardImg.sprite = CardManager.Instance.cardList.cards[cardIdx].bigCardType;
             bigCardMp.text = CardManager.Instance.cardList.cards[cardIdx].useMP.ToString();
@@ -246,7 +245,7 @@ public class MainUI_HJH : MonoBehaviour
     {
         List<int> canCardList = new List<int>();
         int all = playerDeck.hand.Count + playerDeck.deck.Count + playerDeck.trash.Count;
-        for (int i = 0; i< all; i++)
+        for (int i = 0; i < all; i++)
         {
             if (i >= playerDeck.hand.Count + playerDeck.deck.Count)
             {
@@ -269,30 +268,32 @@ public class MainUI_HJH : MonoBehaviour
                     canCardList.Add(i);
                 }
             }
-            
+
         }
         int[] ran;
-        if(canCardList.Count == 1)
+        if (canCardList.Count == 1)
         {
             ran = new int[1];
             ran[0] = canCardList[0];
+            cardSize = 1;
         }
-        else if(canCardList.Count == 2)
+        else if (canCardList.Count == 2)
         {
             ran = new int[2];
             ran[0] = canCardList[0];
             ran[1] = canCardList[1];
-
+            cardSize = 2;
         }
         else
         {
             ran = new int[3];
             int a = Random.Range(0, canCardList.Count - 2);
             ran[0] = canCardList[a];
-            a = Random.Range(a+1, canCardList.Count-1);
+            a = Random.Range(a + 1, canCardList.Count - 1);
             ran[1] = canCardList[a];
             a = Random.Range(a + 1, canCardList.Count);
             ran[2] = canCardList[a];
+            cardSize = 3;
         }
         return ran;
     }
@@ -356,7 +357,7 @@ public class MainUI_HJH : MonoBehaviour
             }
             else if (ran[i] >= playerDeck.hand.Count)
             {
-                card.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.deck[ran[i]- playerDeck.hand.Count]].bigCardType;
+                card.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.deck[ran[i] - playerDeck.hand.Count]].bigCardType;
                 card.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.deck[ran[i] - playerDeck.hand.Count]].useMP.ToString();
                 card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.deck[ran[i] - playerDeck.hand.Count]].cardName;
                 card.transform.GetChild(2).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.deck[ran[i] - playerDeck.hand.Count]].description;
@@ -386,7 +387,6 @@ public class MainUI_HJH : MonoBehaviour
         }
         idx = 0;
         activeButton.GetComponent<Button>().onClick.RemoveAllListeners();
-        Debug.Log("강화 델리게이트 들어감");
         activeButton.GetComponent<Button>().onClick.AddListener(EnforceEnd);
         activeButton.transform.GetChild(0).GetComponent<TMP_Text>().text = "카드 강화하기";
         allList.SetActive(true);
@@ -408,7 +408,7 @@ public class MainUI_HJH : MonoBehaviour
                 oneList.SetActive(true);
                 break;
             case 2:
-                    threeList.SetActive(false);
+                threeList.SetActive(false);
                 twoList.SetActive(true);
                 oneList.SetActive(false);
                 break;
@@ -429,7 +429,7 @@ public class MainUI_HJH : MonoBehaviour
                 case 2:
                     card = twoList.transform.GetChild(i).gameObject;
                     break;
-                    case 3:
+                case 3:
                     card = threeList.transform.GetChild(i).gameObject;
                     break;
             }
@@ -493,13 +493,38 @@ public class MainUI_HJH : MonoBehaviour
 
     public void DeleteEnd()
     {
-        for (int i = 0; i < 3; i++)
+        switch (cardSize)
         {
-            if (threeList.transform.GetChild(i).GetComponent<BigCard_HJH>().imOn)
-            {
-                idx = threeList.transform.GetChild(i).GetComponent<BigCard_HJH>().idx;
-            }
+            case 1:
+                for (int i = 0; i < 3; i++)
+                {
+                    if (threeList.transform.GetChild(i).GetComponent<BigCard_HJH>().imOn)
+                    {
+                        idx = threeList.transform.GetChild(i).GetComponent<BigCard_HJH>().idx;
+                    }
+                }
+                break;
+            case 2:
+                for (int i = 0; i < 2; i++)
+                {
+                    if (twoList.transform.GetChild(i).GetComponent<BigCard_HJH>().imOn)
+                    {
+                        idx = twoList.transform.GetChild(i).GetComponent<BigCard_HJH>().idx;
+                    }
+                }
+                break;
+            case 3:
+                for (int i = 0; i < 1; i++)
+                {
+                    if (oneList.transform.GetChild(i).GetComponent<BigCard_HJH>().imOn)
+                    {
+                        idx = oneList.transform.GetChild(i).GetComponent<BigCard_HJH>().idx;
+                    }
+                }
+                break;
+
         }
+
         if (idx >= playerDeck.hand.Count + playerDeck.deck.Count)
         {
             playerDeck.trash.RemoveAt(idx - playerDeck.hand.Count - playerDeck.deck.Count);
@@ -511,7 +536,7 @@ public class MainUI_HJH : MonoBehaviour
         else
         {
             playerDeck.hand.RemoveAt(idx);
-            
+
         }
         allList.SetActive(false);
         playerDeck.HandVisible();
@@ -519,23 +544,47 @@ public class MainUI_HJH : MonoBehaviour
 
     public void EnforceEnd()
     {
-        for(int i =0; i< 3; i++)
+        switch (cardSize)
         {
-            if (threeList.transform.GetChild(i).GetComponent<BigCard_HJH>().imOn)
-            {
-                idx = threeList.transform.GetChild(i).GetComponent<BigCard_HJH>().idx;
-            }
+            case 1:
+                for (int i = 0; i < 3; i++)
+                {
+                    if (threeList.transform.GetChild(i).GetComponent<BigCard_HJH>().imOn)
+                    {
+                        idx = threeList.transform.GetChild(i).GetComponent<BigCard_HJH>().idx;
+                    }
+                }
+                break;
+            case 2:
+                for (int i = 0; i < 2; i++)
+                {
+                    if (twoList.transform.GetChild(i).GetComponent<BigCard_HJH>().imOn)
+                    {
+                        idx = twoList.transform.GetChild(i).GetComponent<BigCard_HJH>().idx;
+                    }
+                }
+                break;
+            case 3:
+                for (int i = 0; i < 1; i++)
+                {
+                    if (oneList.transform.GetChild(i).GetComponent<BigCard_HJH>().imOn)
+                    {
+                        idx = oneList.transform.GetChild(i).GetComponent<BigCard_HJH>().idx;
+                    }
+                }
+                break;
+
         }
-        if(idx >= playerDeck.hand.Count + playerDeck.deck.Count)
+        if (idx >= playerDeck.hand.Count + playerDeck.deck.Count)
         {
-            if(playerDeck.trash[idx - playerDeck.hand.Count - playerDeck.deck.Count] > 0)
+            if (playerDeck.trash[idx - playerDeck.hand.Count - playerDeck.deck.Count] > 0)
             {
                 playerDeck.trash[idx - playerDeck.hand.Count - playerDeck.deck.Count] *= -1;
             }
         }
-        else if(idx >= playerDeck.hand.Count)
+        else if (idx >= playerDeck.hand.Count)
         {
-            if(playerDeck.deck[idx - playerDeck.hand.Count] > 0)
+            if (playerDeck.deck[idx - playerDeck.hand.Count] > 0)
             {
                 playerDeck.deck[idx - playerDeck.hand.Count] *= -1;
             }
@@ -558,7 +607,7 @@ public class MainUI_HJH : MonoBehaviour
         {
             Destroy(dectContent.transform.GetChild(i).gameObject);
         }
-        for (int i =0; i< playerDeck.hand.Count; i++)
+        for (int i = 0; i < playerDeck.hand.Count; i++)
         {
             GameObject card = Instantiate(cardPrefab, dectContent.transform);
             card.transform.GetChild(4).gameObject.SetActive(false);
@@ -587,7 +636,7 @@ public class MainUI_HJH : MonoBehaviour
             }
 
         }
-        for (int i =0; i<playerDeck.deck.Count; i++)
+        for (int i = 0; i < playerDeck.deck.Count; i++)
         {
             GameObject card = Instantiate(cardPrefab, dectContent.transform);
             card.transform.GetChild(4).gameObject.SetActive(false);
@@ -616,7 +665,7 @@ public class MainUI_HJH : MonoBehaviour
             }
 
         }
-        for(int i =0; i<playerDeck.trash.Count; i++)
+        for (int i = 0; i < playerDeck.trash.Count; i++)
         {
             GameObject card = Instantiate(cardPrefab, dectContent.transform);
             card.transform.GetChild(4).gameObject.SetActive(false);
@@ -751,10 +800,10 @@ public class MainUI_HJH : MonoBehaviour
     {
         float disTance = float.MaxValue;
         int idx = 0;
-        for(int i =0; i<GamePlayManager.Instance.players.Count; i++)
+        for (int i = 0; i < GamePlayManager.Instance.players.Count; i++)
         {
             Transform myPos = myPlayer.transform;
-            if(i != GamePlayManager.Instance.myIdx)
+            if (i != GamePlayManager.Instance.myIdx)
             {
                 if ((GamePlayManager.Instance.players[i].transform.position - myPos.position).magnitude < disTance)
                 {
