@@ -372,11 +372,11 @@ public class MainUI_HJH : MonoBehaviour
         activeButton.GetComponent<Button>().onClick.RemoveAllListeners();
         activeButton.GetComponent<Button>().onClick.AddListener(EnforceEnd);
         activeButton.transform.GetChild(0).GetComponent<TMP_Text>().text = "카드 강화하기";
-        threeList.SetActive(true);
+        allList.SetActive(true);
     }
     public void EnforceOff()
     {
-        threeList.SetActive(false);
+        allList.SetActive(false);
     }
 
     public void DeleteStart()
@@ -471,7 +471,7 @@ public class MainUI_HJH : MonoBehaviour
         activeButton.GetComponent<Button>().onClick.RemoveAllListeners();
         activeButton.GetComponent<Button>().onClick.AddListener(DeleteEnd);
         activeButton.transform.GetChild(0).GetComponent<TMP_Text>().text = "카드 삭제하기";
-        threeList.SetActive(true);
+        allList.SetActive(true);
     }
 
     public void DeleteEnd()
