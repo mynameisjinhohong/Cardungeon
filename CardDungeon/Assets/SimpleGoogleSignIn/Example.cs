@@ -11,7 +11,7 @@ namespace Assets.SimpleGoogleSignIn
     {
         public GoogleAuth GoogleAuth;
         private String Log;
-        public TextMeshProUGUI Output;
+        public String Output;
 
         [SerializeField]
         private UserInfo googleUserData;
@@ -47,7 +47,7 @@ namespace Assets.SimpleGoogleSignIn
         public void SignOut()
         {
             GoogleAuth.SignOut(revokeAccessToken: true);
-            Output.text = "Not signed in";
+            Output = "Not signed in";
         }
 
         public void GetAccessToken()
@@ -57,7 +57,7 @@ namespace Assets.SimpleGoogleSignIn
 
         private void OnSignIn(bool success, string error, UserInfo userInfo)
         {
-            Output.text = success ? $"Hello, {userInfo.name}!" : error;
+            Output = success ? $"Hello, {userInfo.name}!" : error;
 
             googleUserData = userInfo;
             
@@ -69,7 +69,7 @@ namespace Assets.SimpleGoogleSignIn
 
         private void OnGetAccessToken(bool success, string error, TokenResponse tokenResponse)
         {
-            Output.text = success ? $"Access token: {tokenResponse.AccessToken}" : error;
+            Output = success ? $"Access token: {tokenResponse.AccessToken}" : error;
 
             if (!success) return;
 
@@ -84,8 +84,8 @@ namespace Assets.SimpleGoogleSignIn
 
         private void OnValidateSignature(bool success, string error)
         {
-            Output.text += Environment.NewLine;
-            Output.text += success ? "JWT signature validated" : error;
+            Output += Environment.NewLine;
+            Output += success ? "JWT signature validated" : error;
         }
 
         public void Navigate(string url)
