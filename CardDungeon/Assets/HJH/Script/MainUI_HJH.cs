@@ -336,7 +336,6 @@ public class MainUI_HJH : MonoBehaviour
             }
             card.GetComponent<Button>().interactable = true;
             card.GetComponent<BigCard_HJH>().idx = ran[i];
-            card.GetComponent<BigCard_HJH>().mainUi = this;
             card.GetComponent<BigCard_HJH>().imOn = false;
             card.transform.GetChild(4).gameObject.SetActive(false);
             card.transform.GetChild(5).gameObject.SetActive(false);
@@ -395,7 +394,62 @@ public class MainUI_HJH : MonoBehaviour
     {
         allList.SetActive(false);
     }
-
+    public void EnforceEnd()
+    {
+        switch (cardSize)
+        {
+            case 1:
+                for (int i = 0; i < 1; i++)
+                {
+                    if (oneList.transform.GetChild(i).GetComponent<BigCard_HJH>().imOn)
+                    {
+                        idx = oneList.transform.GetChild(i).GetComponent<BigCard_HJH>().idx;
+                    }
+                }
+                break;
+            case 2:
+                for (int i = 0; i < 2; i++)
+                {
+                    if (twoList.transform.GetChild(i).GetComponent<BigCard_HJH>().imOn)
+                    {
+                        idx = twoList.transform.GetChild(i).GetComponent<BigCard_HJH>().idx;
+                    }
+                }
+                break;
+            case 3:
+                for (int i = 0; i < 3; i++)
+                {
+                    if (threeList.transform.GetChild(i).GetComponent<BigCard_HJH>().imOn)
+                    {
+                        idx = threeList.transform.GetChild(i).GetComponent<BigCard_HJH>().idx;
+                    }
+                }
+                break;
+        }
+        if (idx >= playerDeck.hand.Count + playerDeck.deck.Count)
+        {
+            if (playerDeck.trash[idx - playerDeck.hand.Count - playerDeck.deck.Count] > 0)
+            {
+                playerDeck.trash[idx - playerDeck.hand.Count - playerDeck.deck.Count] *= -1;
+            }
+        }
+        else if (idx >= playerDeck.hand.Count)
+        {
+            if (playerDeck.deck[idx - playerDeck.hand.Count] > 0)
+            {
+                playerDeck.deck[idx - playerDeck.hand.Count] *= -1;
+            }
+        }
+        else
+        {
+            if (playerDeck.hand[idx] > 0)
+            {
+                playerDeck.hand[idx] *= -1;
+            }
+        }
+        allList.SetActive(false);
+        playerDeck.HandVisible();
+    }
     public void DeleteStart()
     {
         int[] ran = RandomCard(true);
@@ -435,7 +489,6 @@ public class MainUI_HJH : MonoBehaviour
             }
             card.GetComponent<Button>().interactable = true;
             card.GetComponent<BigCard_HJH>().idx = ran[i];
-            card.GetComponent<BigCard_HJH>().mainUi = this;
             card.GetComponent<BigCard_HJH>().imOn = false;
             card.transform.GetChild(4).gameObject.SetActive(false);
             card.transform.GetChild(5).gameObject.SetActive(false);
@@ -496,11 +549,11 @@ public class MainUI_HJH : MonoBehaviour
         switch (cardSize)
         {
             case 1:
-                for (int i = 0; i < 3; i++)
+                for (int i = 0; i < 1; i++)
                 {
-                    if (threeList.transform.GetChild(i).GetComponent<BigCard_HJH>().imOn)
+                    if (oneList.transform.GetChild(i).GetComponent<BigCard_HJH>().imOn)
                     {
-                        idx = threeList.transform.GetChild(i).GetComponent<BigCard_HJH>().idx;
+                        idx = oneList.transform.GetChild(i).GetComponent<BigCard_HJH>().idx;
                     }
                 }
                 break;
@@ -514,15 +567,14 @@ public class MainUI_HJH : MonoBehaviour
                 }
                 break;
             case 3:
-                for (int i = 0; i < 1; i++)
+                for (int i = 0; i < 3; i++)
                 {
-                    if (oneList.transform.GetChild(i).GetComponent<BigCard_HJH>().imOn)
+                    if (threeList.transform.GetChild(i).GetComponent<BigCard_HJH>().imOn)
                     {
-                        idx = oneList.transform.GetChild(i).GetComponent<BigCard_HJH>().idx;
+                        idx = threeList.transform.GetChild(i).GetComponent<BigCard_HJH>().idx;
                     }
                 }
                 break;
-
         }
 
         if (idx >= playerDeck.hand.Count + playerDeck.deck.Count)
@@ -542,63 +594,7 @@ public class MainUI_HJH : MonoBehaviour
         playerDeck.HandVisible();
     }
 
-    public void EnforceEnd()
-    {
-        switch (cardSize)
-        {
-            case 1:
-                for (int i = 0; i < 3; i++)
-                {
-                    if (threeList.transform.GetChild(i).GetComponent<BigCard_HJH>().imOn)
-                    {
-                        idx = threeList.transform.GetChild(i).GetComponent<BigCard_HJH>().idx;
-                    }
-                }
-                break;
-            case 2:
-                for (int i = 0; i < 2; i++)
-                {
-                    if (twoList.transform.GetChild(i).GetComponent<BigCard_HJH>().imOn)
-                    {
-                        idx = twoList.transform.GetChild(i).GetComponent<BigCard_HJH>().idx;
-                    }
-                }
-                break;
-            case 3:
-                for (int i = 0; i < 1; i++)
-                {
-                    if (oneList.transform.GetChild(i).GetComponent<BigCard_HJH>().imOn)
-                    {
-                        idx = oneList.transform.GetChild(i).GetComponent<BigCard_HJH>().idx;
-                    }
-                }
-                break;
 
-        }
-        if (idx >= playerDeck.hand.Count + playerDeck.deck.Count)
-        {
-            if (playerDeck.trash[idx - playerDeck.hand.Count - playerDeck.deck.Count] > 0)
-            {
-                playerDeck.trash[idx - playerDeck.hand.Count - playerDeck.deck.Count] *= -1;
-            }
-        }
-        else if (idx >= playerDeck.hand.Count)
-        {
-            if (playerDeck.deck[idx - playerDeck.hand.Count] > 0)
-            {
-                playerDeck.deck[idx - playerDeck.hand.Count] *= -1;
-            }
-        }
-        else
-        {
-            if (playerDeck.hand[idx] > 0)
-            {
-                playerDeck.hand[idx] *= -1;
-            }
-        }
-        allList.SetActive(false);
-        playerDeck.HandVisible();
-    }
     #endregion
     #region µ¦,¹¦Áö ¸®½ºÆ®
     public void FullDeckListOn()
