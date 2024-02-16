@@ -1212,7 +1212,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -1599,6 +1599,8 @@ GameObject:
   - component: {fileID: 3008784755275418597}
   - component: {fileID: 6365656304359617681}
   - component: {fileID: 862321141083063068}
+  - component: {fileID: 2427466221469142445}
+  - component: {fileID: 4787671739427622306}
   m_Layer: 5
   m_Name: UI_Settings
   m_TagString: Untagged
@@ -1668,6 +1670,42 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2427466221469142445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4861372906580432593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 541bf55966e43c3439791b3173b8216c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvasGroup: {fileID: 4787671739427622306}
+  txt_ScreenModeTxt: {fileID: 826142836521928193}
+  btn_ScreenModeLeft: {fileID: 3588769129877141919}
+  btn_ScreenModeRight: {fileID: 2325180841020410987}
+  txt_ResolutionTxt: {fileID: 1300175733352113439}
+  btn_ResolutionLeft: {fileID: 1032946794968154487}
+  btn_ResolutionRight: {fileID: 7876865524739305575}
+  sld_BgmSlider: {fileID: 6544377102962319700}
+  sld_SfxSlider: {fileID: 2495335140647418099}
+  btn_Confirm: {fileID: 8070688573962232056}
+  btn_Cancel: {fileID: 5445162216803113765}
+  btn_CopyEmail: {fileID: 1157059518053364734}
+--- !u!225 &4787671739427622306
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4861372906580432593}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &5376007465623268141
 GameObject:
   m_ObjectHideFlags: 0
@@ -2281,7 +2319,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -2639,7 +2677,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 50}
+  m_SizeDelta: {x: 300, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3460119112549273961
 CanvasRenderer:
@@ -2985,7 +3023,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 50}
+  m_SizeDelta: {x: 300, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5520182695692955674
 CanvasRenderer:
