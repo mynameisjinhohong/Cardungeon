@@ -7,11 +7,6 @@ using UnityEngine.UI;
 
 public class UI_Setting_PCI : MonoBehaviour
 {
-    private enum ScreenMode
-    {
-        Windowed,
-        Fullscreen
-    }
     public CanvasGroup canvasGroup;
     public TMPro.TextMeshProUGUI txt_ScreenModeTxt;
     public Button btn_ScreenModeLeft, btn_ScreenModeRight;
@@ -21,7 +16,7 @@ public class UI_Setting_PCI : MonoBehaviour
     public Button btn_Confirm, btn_Cancel;
     public Button btn_CopyEmail;
 
-    private ScreenMode screenMode;
+    private FullScreenMode screenMode;
     private List<Resolution> resolutions;
     private int screenModeIdx = 0;
     private int ScreenModeIdx
@@ -32,10 +27,13 @@ public class UI_Setting_PCI : MonoBehaviour
             screenModeIdx = value;
             switch (value)
             {
-                case (int)ScreenMode.Windowed:
+                case (int)FullScreenMode.Windowed:
                     txt_ScreenModeTxt.text = "창모드";
                     break;
-                case (int)ScreenMode.Fullscreen:
+                case (int)FullScreenMode.FullScreenWindow:
+                    txt_ScreenModeTxt.text = "전체 창모드";
+                    break;
+                case (int)FullScreenMode.ExclusiveFullScreen:
                     txt_ScreenModeTxt.text = "전체화면";
                     break;
             }
@@ -72,11 +70,21 @@ public class UI_Setting_PCI : MonoBehaviour
         btn_ResolutionLeft.onClick.AddListener(ResolutionLeft);
         btn_ResolutionRight.onClick.AddListener(ResolutionRight);
         sld_BgmSlider.onValueChanged.AddListener(SetBgmVolume);
-        sld_SfxSlider.onValueChanged.AddListener(SetBgmVolume);
+        sld_SfxSlider.onValueChanged.AddListener(SetSfxVolume);
         btn_CopyEmail.onClick.AddListener(CopyEmail);
+        btn_Confirm.onClick.AddListener(ConfirmSetting);
+        btn_Cancel.onClick.AddListener(CancelSetting);
 
         ScreenModeIdx = 0;
         ResolutionIdx = 0;
+        for (int i = 0; i < resolutions.Count; i++)
+        {
+            if (resolutions[i].width == Screen.currentResolution.width && resolutions[i].height == Screen.currentResolution.height && resolutions[i].refreshRate == Screen.currentResolution.refreshRate)
+            {
+                ResolutionIdx = i;
+            }
+        }
+ 
     }
 
     // Update is called once per frame
@@ -101,12 +109,12 @@ public class UI_Setting_PCI : MonoBehaviour
 
     private void ScreenModeLeft()
     {
-        ScreenModeIdx = (screenModeIdx + Enum.GetValues(typeof(ScreenMode)).Length - 1) % (Enum.GetValues(typeof(ScreenMode)).Length);
+        ScreenModeIdx = (screenModeIdx + Enum.GetValues(typeof(FullScreenMode)).Length - 1) % (Enum.GetValues(typeof(FullScreenMode)).Length);
     }
 
     private void ScreenModeRight()
     {
-        ScreenModeIdx = (screenModeIdx  + 1) % (Enum.GetValues(typeof(ScreenMode)).Length);
+        ScreenModeIdx = (screenModeIdx  + 1) % (Enum.GetValues(typeof(FullScreenMode)).Length);
     }
 
     private void ResolutionLeft()
@@ -121,12 +129,13 @@ public class UI_Setting_PCI : MonoBehaviour
 
     private void SetBgmVolume(float value)
     {
-
+        AudioPlayer.Instance.bgmPlayer.volume = value;
     }
 
     private void SetSfxVolume(float value)
     {
-
+        AudioPlayer.Instance.sfxPlayer.volume = value;
+        AudioPlayer.Instance.PlayClip(1);
     }
 
     private void CopyEmail()
@@ -136,6 +145,7 @@ public class UI_Setting_PCI : MonoBehaviour
 
     private void ConfirmSetting()
     {
+        Screen.SetResolution(resolutions[resolutionIdx].width, resolutions[resolutionIdx].height, screenMode, resolutions[resolutionIdx].refreshRate);
         Hide();
     }
 
@@ -145,6 +155,9 @@ public class UI_Setting_PCI : MonoBehaviour
         ResolutionIdx = temp_resolutionIdx;
         sld_BgmSlider.value = temp_bgm;
         sld_SfxSlider.value = temp_sfx;
+        Screen.SetResolution(resolutions[resolutionIdx].width, resolutions[resolutionIdx].height, screenMode, resolutions[resolutionIdx].refreshRate);
+        AudioPlayer.Instance.bgmPlayer.volume = sld_BgmSlider.value;
+        AudioPlayer.Instance.sfxPlayer.volume = sld_SfxSlider.value;
         Hide();
     }
 }
