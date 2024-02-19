@@ -21,6 +21,7 @@ public class MainUI_HJH : MonoBehaviour
 
     public Image mpCoolTime;
     public Image reRollButton;
+    public Image reRollCoolTime;
 
     public Player_HJH myPlayer;
     public PlayerDeck_HJH playerDeck;
@@ -203,6 +204,7 @@ public class MainUI_HJH : MonoBehaviour
             yield return null;
             currentTime += Time.deltaTime;
             reRollButton.fillAmount = currentTime / reRollCool;
+            reRollCoolTime.fillAmount = currentTime / reRollCool;
             if (currentTime / reRollCool > 1)
             {
                 reRollButton.raycastTarget = true;
