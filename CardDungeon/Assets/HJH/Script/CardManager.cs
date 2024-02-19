@@ -106,6 +106,7 @@ public class CardManager : Singleton<CardManager>
 
     }
 
+    //카드가 사용 가능한지
     public bool OnCardCheck(Player_HJH player, int cardIdx)
     {
         bool ret = true;

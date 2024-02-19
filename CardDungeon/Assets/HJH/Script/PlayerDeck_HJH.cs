@@ -164,6 +164,10 @@ public class PlayerDeck_HJH : MonoBehaviour
             }
             DrawFirst();
         }
+        else
+        {
+            GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].Mp--;
+        }
 
     }
 
@@ -183,6 +187,7 @@ public class PlayerDeck_HJH : MonoBehaviour
         }
         else
         {
+            GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].Mp -= CardManager.Instance.cardList.cards[Mathf.Abs(a)].useMP;
             return false;
         }
 
