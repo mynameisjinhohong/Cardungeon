@@ -1447,6 +1447,10 @@ MonoBehaviour:
   bigMinimap: {fileID: 1507103281}
   smallMinimap: {fileID: 1227594448}
   reRollNow: 0
+  keys:
+  - {fileID: 5965329826531084012}
+  - {fileID: 6515002242029535049}
+  - {fileID: 3659074405519227142}
 --- !u!1001 &598045457
 PrefabInstance:
   m_ObjectHideFlags: 0

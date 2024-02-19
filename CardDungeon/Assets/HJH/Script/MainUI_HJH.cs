@@ -67,6 +67,19 @@ public class MainUI_HJH : MonoBehaviour
     public GameObject smallMinimap;
 
     public bool reRollNow = false;
+
+    public List<GameObject> keys = new List<GameObject>();
+
+    private void OnEnable()
+    {
+        myPlayer.KeysOnValueChanged += SetKeysUI;
+    }
+
+    private void OnDisable()
+    {
+        myPlayer.KeysOnValueChanged -= SetKeysUI;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -813,4 +826,16 @@ public class MainUI_HJH : MonoBehaviour
         Camera.main.transform.SetParent(GamePlayManager.Instance.players[idx].transform);
     }
 
+    private void SetKeysUI(int value)
+    {
+        try
+        {
+            if (value < 3)
+                keys[value - 1].SetActive(true);
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogWarning(e);
+        }
+    }
 }

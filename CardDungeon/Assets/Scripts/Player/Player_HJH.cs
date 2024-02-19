@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -26,6 +27,16 @@ public class Player_HJH : MonoBehaviour
     public Animator animator;
     public SpriteRenderer sr;
     public int keys;
+    public int Keys
+    {
+        get { return keys; }
+        set
+        {
+            keys = value;
+            KeysOnValueChanged?.Invoke(value);
+        }
+    }
+    public Action<int> KeysOnValueChanged;
     public GameObject[] hpSprites;
     public GameObject barrierPrefab;
     public SpriteRenderer playerTile;
