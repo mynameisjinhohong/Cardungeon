@@ -261,5 +261,6 @@ public class Player_HJH : MonoBehaviour
         }
         mpTextTime = 0;
         mpText.SetActive(false);
+        mpTextCo = null;
     }
 }
