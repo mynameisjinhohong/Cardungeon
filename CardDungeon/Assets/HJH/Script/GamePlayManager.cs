@@ -287,7 +287,6 @@ public class GamePlayManager : Singleton<GamePlayManager>
                         }
                         else
                         {
-
                             Debug.Log(msg.playerIdx + "  " + msg.cardIdx);
                             CardRealGo(msg.playerIdx, msg.cardIdx);
                         }
