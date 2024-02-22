@@ -18,8 +18,7 @@ public enum TransactionType
 
 public enum UserDataType
 {
-    UserLoginData,
-    Inventory
+    UserBattleInfo
 }
 
 public enum ServerState

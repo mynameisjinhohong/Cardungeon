@@ -8,8 +8,6 @@ using UnityEngine;
 
 public class DataManager : Singleton<DataManager>
 {
-    private static DataManager instance;
-    
     public bool LoadStatus = false;
     
     public SystemLanguage systemLanguage;
@@ -18,6 +16,8 @@ public class DataManager : Singleton<DataManager>
     
     public UserBattleInfo          userData             = new();
  
+    public DateTime LocalTime;
+    
     public string TimeValue;
     
     public string ServerTimeValue;
@@ -27,18 +27,15 @@ public class DataManager : Singleton<DataManager>
     private float oldTime = 0;
     private DateTime serverTime;
     
-    public DateTime LocalTime;
-
-    void Awake()
+    public void Initialize()
     {
-        if (instance != null)
-        {
-            Destroy(instance);
-        }
+        SetData();
+        DataDic.Clear();
+    }
 
-        instance = this;
-        // 모든 씬에서 유지
-        DontDestroyOnLoad(this.gameObject);
+    public void SetDefaultData()
+    {
+        SetUserData();
     }
     
     public void SetLocalTime(DateTime servertime)
@@ -78,13 +75,7 @@ public class DataManager : Singleton<DataManager>
             ServerTimeValue = serverTime.ToString();
         }
     }
-    
-    public void Initialize()
-    {
-        SetData();
-        DataDic.Clear();
-    }
-    
+
     public void SetData()
     {
         systemLanguage = SystemLanguage.Korean;
@@ -94,25 +85,23 @@ public class DataManager : Singleton<DataManager>
         //     ChartFileNameList.Add(((ServerDataType)i).ToString());
         // }
     }
-    
-    public void SetDefaultData()
-    {
-        SetUserData();
-    }
 
     public void SetUserData()
     {
         BackendManager.Instance.userInfo.Nickname = Backend.UserNickName;
         
         userData.LastConnect = LocalTime.ToString();
+        userData.totalBattleCount = 0;
+        userData.winCount = 0;
+        userData.winRate = 0;
     }
     
     public void SetUserData(UserDataType type, JsonData json)
     {
         switch (type)
         {
-            case UserDataType.UserLoginData:
-                userData.rowIndate            = json["inDate"].ToString();
+            case UserDataType.UserBattleInfo:
+                userData.RowIndate            = json["inDate"].ToString();
                          
                 userData.totalBattleCount     = Int32.Parse(json["totalBattleCount"].ToString());
                 userData.winCount             = Int32.Parse(json["winCount"].ToString());
@@ -132,9 +121,9 @@ public class DataManager : Singleton<DataManager>
         paramUserData.Add("winRate", userData.winRate);
         paramUserData.Add("LastConnect", userData.LastConnect);
         if(type == ServerSaveType.Insert)
-            BackendManager.Instance.AddTransactionInsert(UserDataType.UserLoginData, paramUserData);
+            BackendManager.Instance.AddTransactionInsert(UserDataType.UserBattleInfo, paramUserData);
         else
-            BackendManager.Instance.AddTransactionUpdate(UserDataType.UserLoginData, userData.rowIndate, paramUserData);
+            BackendManager.Instance.AddTransactionUpdate(UserDataType.UserBattleInfo, userData.RowIndate, paramUserData);
     }
     
     public void SaveAllDataAtFirst()
@@ -142,15 +131,37 @@ public class DataManager : Singleton<DataManager>
         Debug.Log("신규 데이터 삽입");
         SaveUserBattleInfo(ServerSaveType.Insert);
 
-        BackendManager.Instance.SendTransaction(TransactionType.Insert, this);
+        BackendManager.Instance.SendTransaction(TransactionType.Insert, userData);
     }
     public void SetRowInDate(UserDataType table, string inDate)
     {
         switch (table)
         {
-            case UserDataType.UserLoginData:
-                userData.rowIndate          = inDate;
+            case UserDataType.UserBattleInfo:
+                userData.RowIndate          = inDate;
                 break;
         }
     }
+    
+    
+    public void DataLoadComplete()
+    {
+        // 푸시 정보 설정
+        // SetupManager.Instance.RegistPush();
+        // SetOffLineReward(DateTime.Parse(userData.LastConnect));
+        // CheckMissionRefresh();
+        
+        //StartCoroutine(nameof(AutoSave));
+    }
+    
+    private WaitForSeconds saveDelay = new WaitForSeconds(60f);
+    private TimeSpan playerTimeOneMin = new TimeSpan(0, 1, 0);
+    // private IEnumerator AutoSave()
+    // {
+    //     while (true)
+    //     {
+    //         yield return saveDelay;
+    //         userInfo.PlayTime = userInfo.PlayTime.Add(playerTimeOneMin);
+    //     }
+    // }
 }

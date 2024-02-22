@@ -11,7 +11,7 @@ namespace Assets.SimpleGoogleSignIn
     {
         public GoogleAuth GoogleAuth;
         private String Log;
-        public TextMeshProUGUI Output;
+        public String Output;
 
         [SerializeField]
         private UserInfo googleUserData;
@@ -25,19 +25,31 @@ namespace Assets.SimpleGoogleSignIn
         public void SignIn()
         {
             GoogleAuth.SignIn(OnSignIn, caching: true);
-
-            BackendManager.Instance.GetServerTime();
             
-            DataManager.Instance.userData.rowIndate = Backend.UserInDate;
-
+            Backend.BMember.CheckNicknameDuplication( "googleUserData.email", ( callback ) =>
+            {
+                Debug.Log("해당 닉네임으로 수정 가능합니다");
+            });
+            
+            
             if (GoogleAuth.SavedAuth == null)
             {
+                BackendManager.Instance.TryCustomSignin(googleUserData.name, googleUserData.sub, googleUserData.email);
+                
+                BackendManager.Instance.GetServerTime();
+
+                DataManager.Instance.userData.RowIndate = Backend.UserInDate;
+                
                 DataManager.Instance.SaveUserBattleInfo(ServerSaveType.Insert);
 
                 BackendManager.Instance.SendTransaction(TransactionType.Insert);
             }
             else
             {
+                BackendManager.Instance.GetServerTime();
+
+                DataManager.Instance.userData.RowIndate = Backend.UserInDate;
+                
                 DataManager.Instance.SaveUserBattleInfo(ServerSaveType.Update);
 
                 BackendManager.Instance.SendTransaction(TransactionType.Update);
@@ -47,7 +59,7 @@ namespace Assets.SimpleGoogleSignIn
         public void SignOut()
         {
             GoogleAuth.SignOut(revokeAccessToken: true);
-            Output.text = "Not signed in";
+            Output = "Not signed in";
         }
 
         public void GetAccessToken()
@@ -57,7 +69,7 @@ namespace Assets.SimpleGoogleSignIn
 
         private void OnSignIn(bool success, string error, UserInfo userInfo)
         {
-            Output.text = success ? $"Hello, {userInfo.name}!" : error;
+            Output = success ? $"Hello, {userInfo.name}!" : error;
 
             googleUserData = userInfo;
             
@@ -69,7 +81,7 @@ namespace Assets.SimpleGoogleSignIn
 
         private void OnGetAccessToken(bool success, string error, TokenResponse tokenResponse)
         {
-            Output.text = success ? $"Access token: {tokenResponse.AccessToken}" : error;
+            Output = success ? $"Access token: {tokenResponse.AccessToken}" : error;
 
             if (!success) return;
 
@@ -84,8 +96,8 @@ namespace Assets.SimpleGoogleSignIn
 
         private void OnValidateSignature(bool success, string error)
         {
-            Output.text += Environment.NewLine;
-            Output.text += success ? "JWT signature validated" : error;
+            Output += Environment.NewLine;
+            Output += success ? "JWT signature validated" : error;
         }
 
         public void Navigate(string url)
