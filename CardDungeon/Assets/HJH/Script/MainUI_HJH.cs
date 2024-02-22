@@ -21,6 +21,7 @@ public class MainUI_HJH : MonoBehaviour
 
     public Image mpCoolTime;
     public Image reRollButton;
+    public Image reRollCoolTime;
 
     public Player_HJH myPlayer;
     public PlayerDeck_HJH playerDeck;
@@ -66,6 +67,19 @@ public class MainUI_HJH : MonoBehaviour
     public GameObject smallMinimap;
 
     public bool reRollNow = false;
+
+    public List<GameObject> keys = new List<GameObject>();
+
+    private void OnEnable()
+    {
+        myPlayer.KeysOnValueChanged += SetKeysUI;
+    }
+
+    private void OnDisable()
+    {
+        myPlayer.KeysOnValueChanged -= SetKeysUI;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -203,6 +217,7 @@ public class MainUI_HJH : MonoBehaviour
             yield return null;
             currentTime += Time.deltaTime;
             reRollButton.fillAmount = currentTime / reRollCool;
+            reRollCoolTime.fillAmount = currentTime / reRollCool;
             if (currentTime / reRollCool > 1)
             {
                 reRollButton.raycastTarget = true;
@@ -348,10 +363,10 @@ public class MainUI_HJH : MonoBehaviour
                 card.transform.GetChild(3).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i] - playerDeck.hand.Count - playerDeck.deck.Count]].itemImage;
                 GameObject card2 = card.transform.GetChild(5).gameObject;
                 card2.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i] - playerDeck.hand.Count - playerDeck.deck.Count]].bigCardType;
-                card2.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i]] - playerDeck.hand.Count - playerDeck.deck.Count].useMP.ToString();
-                card2.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i]] - playerDeck.hand.Count - playerDeck.deck.Count].cardName;
-                card2.transform.GetChild(2).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i]] - playerDeck.hand.Count - playerDeck.deck.Count].description;
-                card2.transform.GetChild(3).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i]] - playerDeck.hand.Count - playerDeck.deck.Count].itemImage;
+                card2.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i] - playerDeck.hand.Count - playerDeck.deck.Count]].useMP.ToString();
+                card2.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i] - playerDeck.hand.Count - playerDeck.deck.Count]].cardName;
+                card2.transform.GetChild(2).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i] - playerDeck.hand.Count - playerDeck.deck.Count]].description;
+                card2.transform.GetChild(3).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i] - playerDeck.hand.Count - playerDeck.deck.Count]].itemImage;
 
             }
             else if (ran[i] >= playerDeck.hand.Count)
@@ -500,11 +515,11 @@ public class MainUI_HJH : MonoBehaviour
                 card.transform.GetChild(2).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i] - playerDeck.hand.Count - playerDeck.deck.Count]].description;
                 card.transform.GetChild(3).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i] - playerDeck.hand.Count - playerDeck.deck.Count]].itemImage;
                 GameObject card2 = card.transform.GetChild(5).gameObject;
-                card2.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i]] - playerDeck.hand.Count - playerDeck.deck.Count].bigCardType;
-                card2.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i]] - playerDeck.hand.Count - playerDeck.deck.Count].useMP.ToString();
-                card2.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i]] - playerDeck.hand.Count - playerDeck.deck.Count].cardName;
-                card2.transform.GetChild(2).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i]] - playerDeck.hand.Count - playerDeck.deck.Count].description;
-                card2.transform.GetChild(3).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i]] - playerDeck.hand.Count - playerDeck.deck.Count].itemImage;
+                card2.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i] - playerDeck.hand.Count - playerDeck.deck.Count]].bigCardType;
+                card2.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i] - playerDeck.hand.Count - playerDeck.deck.Count]].useMP.ToString();
+                card2.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i] - playerDeck.hand.Count - playerDeck.deck.Count]].cardName;
+                card2.transform.GetChild(2).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i] - playerDeck.hand.Count - playerDeck.deck.Count]].description;
+                card2.transform.GetChild(3).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[playerDeck.trash[ran[i] - playerDeck.hand.Count - playerDeck.deck.Count]].itemImage;
 
             }
             else if (ran[i] >= playerDeck.hand.Count)
@@ -811,4 +826,16 @@ public class MainUI_HJH : MonoBehaviour
         Camera.main.transform.SetParent(GamePlayManager.Instance.players[idx].transform);
     }
 
+    private void SetKeysUI(int value)
+    {
+        try
+        {
+            if (value < 3)
+                keys[value - 1].SetActive(true);
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogWarning(e);
+        }
+    }
 }

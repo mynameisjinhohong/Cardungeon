@@ -28,6 +28,10 @@ public class PlayerDeck_HJH : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(!mainUi.reRollNow && hand.Count <1)
+        {
+            Reroll();
+        }
         
     }
     #region 덱 관리 관련 스크립트
@@ -164,6 +168,10 @@ public class PlayerDeck_HJH : MonoBehaviour
             }
             DrawFirst();
         }
+        else
+        {
+            GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].Mp--;
+        }
 
     }
 
@@ -183,6 +191,7 @@ public class PlayerDeck_HJH : MonoBehaviour
         }
         else
         {
+            GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].Mp -= CardManager.Instance.cardList.cards[Mathf.Abs(a)].useMP;
             return false;
         }
 

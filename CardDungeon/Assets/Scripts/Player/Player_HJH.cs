@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -10,6 +11,11 @@ public class Player_HJH : MonoBehaviour
     public int maxMp;
     public float mpCoolTime;
     public TMP_Text PlayerName;
+    //mpText용
+    public GameObject mpText;
+    float mpTextTime;
+    Coroutine mpTextCo;
+    
     public string PlayerToken;
     public bool isSuperGamer;
     public bool isMine;
@@ -21,6 +27,16 @@ public class Player_HJH : MonoBehaviour
     public Animator animator;
     public SpriteRenderer sr;
     public int keys;
+    public int Keys
+    {
+        get { return keys; }
+        set
+        {
+            keys = value;
+            KeysOnValueChanged?.Invoke(value);
+        }
+    }
+    public Action<int> KeysOnValueChanged;
     public GameObject[] hpSprites;
     public GameObject barrierPrefab;
     public SpriteRenderer playerTile;
@@ -90,24 +106,39 @@ public class Player_HJH : MonoBehaviour
         }
         set
         {
-            mp = value;
-            if (mp < maxMp)
+            if(value < 0)
             {
-                if (!cool)
+                if(mpTextCo != null)
                 {
-                    cool = true;
-                    currentTime = 0;
+                    mpTextTime = 0;
+                }
+                else
+                {
+                    mpTextCo = StartCoroutine(mpTextOn(1f));
                 }
             }
             else
             {
-                currentTime = 0;
-                cool = false;
+                mp = value;
+                if (mp < maxMp)
+                {
+                    if (!cool)
+                    {
+                        cool = true;
+                        currentTime = 0;
+                    }
+                }
+                else
+                {
+                    currentTime = 0;
+                    cool = false;
+                }
+                if (isMine)
+                {
+                    GamePlayManager.Instance.mainUi.ReNewMp();
+                }
             }
-            if (isMine)
-            {
-                GamePlayManager.Instance.mainUi.ReNewMp();
-            }
+
         }
     }
 
@@ -218,5 +249,18 @@ public class Player_HJH : MonoBehaviour
         }
         color = Color.white;
         playerSprite.color = color;
+    }
+
+    IEnumerator mpTextOn(float time)
+    {
+        mpText.SetActive(true);
+        while(mpTextTime < time)
+        {
+            mpTextTime += Time.deltaTime;
+            yield return null;
+        }
+        mpTextTime = 0;
+        mpText.SetActive(false);
+        mpTextCo = null;
     }
 }

@@ -25,19 +25,31 @@ namespace Assets.SimpleGoogleSignIn
         public void SignIn()
         {
             GoogleAuth.SignIn(OnSignIn, caching: true);
-
-            BackendManager.Instance.GetServerTime();
             
-            DataManager.Instance.userData.rowIndate = Backend.UserInDate;
-
+            Backend.BMember.CheckNicknameDuplication( "googleUserData.email", ( callback ) =>
+            {
+                Debug.Log("해당 닉네임으로 수정 가능합니다");
+            });
+            
+            
             if (GoogleAuth.SavedAuth == null)
             {
+                BackendManager.Instance.TryCustomSignin(googleUserData.name, googleUserData.sub, googleUserData.email);
+                
+                BackendManager.Instance.GetServerTime();
+
+                DataManager.Instance.userData.RowIndate = Backend.UserInDate;
+                
                 DataManager.Instance.SaveUserBattleInfo(ServerSaveType.Insert);
 
                 BackendManager.Instance.SendTransaction(TransactionType.Insert);
             }
             else
             {
+                BackendManager.Instance.GetServerTime();
+
+                DataManager.Instance.userData.RowIndate = Backend.UserInDate;
+                
                 DataManager.Instance.SaveUserBattleInfo(ServerSaveType.Update);
 
                 BackendManager.Instance.SendTransaction(TransactionType.Update);

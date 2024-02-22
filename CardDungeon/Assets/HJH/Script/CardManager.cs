@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class CardManager : Singleton<CardManager>
 {
+    //카드 기능 모은 스크립트
     public CardObject_HJH cardList;
     public GameObject Idx6Effect;
     public GameObject Idx7Effect;
@@ -67,6 +68,12 @@ public class CardManager : Singleton<CardManager>
                         Idx9EnforceFunc(player.GetComponent<Player_HJH>());
                     }
                     break;
+                case -10:
+                    Idx10EnforceFunc(player);
+                    break;
+                case -11:
+                    Idx11EnforceFunc(player);
+                    break;
             }
         }
         else
@@ -100,12 +107,19 @@ public class CardManager : Singleton<CardManager>
                 case 9:
                     Idx9Func(player.GetComponent<Player_HJH>());
                     break;
+                case 10:
+                    Idx10Func(player);
+                    break;
+                case 11:
+                    Idx11Func(player);
+                    break;
             }
         }
 
 
     }
 
+    //카드가 사용 가능한지
     public bool OnCardCheck(Player_HJH player, int cardIdx)
     {
         bool ret = true;
@@ -535,5 +549,27 @@ public class CardManager : Singleton<CardManager>
     {
         player.ShieldOn(5);
     }
+    //덩쿨 설치
+    void Idx10Func(Transform player)
+    {
 
+    }
+    //강화 덩쿨 설치
+    void Idx10EnforceFunc(Transform player)
+    {
+
+    }
+    //카드 2장 뽑기
+    void Idx11Func(Transform player)
+    {
+        GamePlayManager.Instance.playerDeck.DrawOne();
+        GamePlayManager.Instance.playerDeck.DrawOne();
+    }
+    //카드 3장 뽑기
+    void Idx11EnforceFunc(Transform player)
+    {
+        GamePlayManager.Instance.playerDeck.DrawOne();
+        GamePlayManager.Instance.playerDeck.DrawOne();
+        GamePlayManager.Instance.playerDeck.DrawOne();
+    }
 }

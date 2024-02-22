@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class UserBattleInfo
 {
-    public string rowIndate;
+    public string RowIndate;
 
     public int totalBattleCount;
     public int winCount;

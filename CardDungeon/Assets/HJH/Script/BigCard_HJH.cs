@@ -11,8 +11,16 @@ public class BigCard_HJH : MonoBehaviour
     {
         if (imOn)
         {
-            Debug.Log(mainUi.gameObject.name);
-            mainUi.EnforceEnd();
+            Debug.Log(idx);
+            if (mainUi != null)
+            {
+                mainUi.EnforceEnd();
+            }
+            else
+            {
+                mainUi = GamePlayManager.Instance.mainUi;
+                mainUi.EnforceEnd();
+            }
         }
         else
         {
