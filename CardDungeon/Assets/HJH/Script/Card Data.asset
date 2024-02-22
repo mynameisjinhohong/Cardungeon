@@ -140,7 +140,7 @@ MonoBehaviour:
     enforceDescription: "\uC9C0\uAE08 \uC788\uB294 \uC704\uCE58\uC5D0 \uB3C4\uCC29\uD558\uBA74\n5\uCD08\uAC04
       \uD589\uB3D9\uBD88\uB2A5\uC774 \uB418\uB294 \uD568\uC815\uC744 \uC124\uCE58\uD55C\uB2E4"
   - cardName: "\uCE74\uB4DC \uBF51\uAE30"
-    useMP: 1
+    useMP: 0
     cardType: {fileID: 21300000, guid: add0048181bc6054f9ad00a6fe3c04f5, type: 3}
     bigCardType: {fileID: 21300000, guid: d8b80cb56cbea484c8dc03a9f92b252a, type: 3}
     itemImage: {fileID: 21300000, guid: a1d8fef93de70334e8d50c5e7bb78d94, type: 3}
