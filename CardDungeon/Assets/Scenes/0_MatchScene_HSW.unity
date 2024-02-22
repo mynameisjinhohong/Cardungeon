@@ -3250,7 +3250,7 @@ MonoBehaviour:
   LoadStatus: 0
   systemLanguage: 23
   userData:
-    rowIndate: 
+    RowIndate: 
     totalBattleCount: 0
     winCount: 0
     winRate: 0
@@ -6529,6 +6529,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   serverType: 0
   platformType: 0
+  SuccessLoadDataCount: 0
   userInfo:
     UserIndate: 
     Nickname: 
@@ -6550,7 +6551,6 @@ MonoBehaviour:
     currentCount: 0
   isFastMatch: 0
   matchCardListDownLoaded: 0
-  SuccessLoadDataCount: 0
   matchCardList: []
 --- !u!1 &1303124231
 GameObject:
