@@ -28,6 +28,10 @@ public class PlayerDeck_HJH : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(!mainUi.reRollNow && hand.Count <1)
+        {
+            Reroll();
+        }
         
     }
     #region 덱 관리 관련 스크립트
