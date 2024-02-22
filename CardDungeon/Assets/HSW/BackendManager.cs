@@ -18,6 +18,8 @@ public class BackendManager : Singleton<BackendManager>
     public ServerType serverType;
     public PlatformType platformType;
 
+    public int SuccessLoadDataCount = 0;
+    
     [Header("유저정보")]
     public UserInfo userInfo;
     
@@ -39,9 +41,7 @@ public class BackendManager : Singleton<BackendManager>
     private int initTimeCount = 0;
 
     public bool matchCardListDownLoaded;
-    
-    public int SuccessLoadDataCount = 0;
-    
+
     [SerializeField]
     List<TransactionValue> transactionList = new List<TransactionValue>();
     
@@ -62,7 +62,7 @@ public class BackendManager : Singleton<BackendManager>
         DontDestroyOnLoad(this.gameObject);
         //SetResolution();
 
-        UseAutoLogin = PlayerPrefs.GetInt("NotAutoLogin") == 0;
+        UseAutoLogin = PlayerPrefs.GetInt("NotAutoLogin") != 0;
     }
 
     public void SetResolution()
@@ -178,11 +178,6 @@ public class BackendManager : Singleton<BackendManager>
             checkLoginWayData = PlayerPrefs.GetInt("LoginWay");
         }
         Debug.LogError(PlayerPrefs.HasKey("LoginWay") + checkLoginWayData.ToString());
-        
-        if (checkLoginWayData >= 0)
-        {
-            StartTokenLogin();
-        }
     }
 
     // public void GuestLoginSequense()
@@ -224,12 +219,15 @@ public class BackendManager : Singleton<BackendManager>
                 
                     UIManager.Instance.PopupListPop();
                 
+                    Debug.Log("신규 회원으로 시작합니다");
+                    SetNewUserDataSaveToServer();
+
                     // 닉네임 생성 팝업 만들기
                     UIManager.Instance.OpenPopup(nicknamePopup);
 
                     PlayerPrefs.SetInt("LoginWay", 0);
 
-                    DataManager.Instance.SaveAllDataAtFirst();
+                    checkLoginWayData = PlayerPrefs.GetInt("LoginWay");
                 });
             }
             else
@@ -310,6 +308,7 @@ public class BackendManager : Singleton<BackendManager>
                 case "201": //로그인
                     Debug.Log("자동 로그인 하여 서버에서 유저 데이터 불러오기 성공");
                     GetUserDataFromServer();
+                    InsertLog(GameLogType.Login, $"{type}/{Application.version}");
                     break;
             }
         }
@@ -317,11 +316,6 @@ public class BackendManager : Singleton<BackendManager>
         {
             switch (bro.GetStatusCode())
             {
-                case "201": //신규 회원가입
-                    Debug.Log("신규 회원으로 시작합니다");
-                    SetNewUserDataSaveToServer();
-                    InsertLog(GameLogType.Signin, $"{type}/{Application.version}");
-                    break;
                 case "200": //로그인
                     Debug.Log("일반 로그인");
                     GetUserDataFromServer();
@@ -329,7 +323,7 @@ public class BackendManager : Singleton<BackendManager>
                     break;
             }
         }
-
+        DataManager.Instance.DataLoadComplete();
         StartCoroutine(nameof(RefreshToken));
     }
 
@@ -916,7 +910,7 @@ public class BackendManager : Singleton<BackendManager>
         transactionList.Clear();
         for(int i = 0; i < Enum.GetValues(typeof(UserDataType)).Length; i++)
             AddTransactionSetGet((UserDataType)i);
-        SendTransaction(TransactionType.SetGet, this);
+        SendTransaction(TransactionType.SetGet, DataManager.Instance.userData);
     }
     
     public void AddTransactionSetGet(UserDataType table)
@@ -952,10 +946,13 @@ public class BackendManager : Singleton<BackendManager>
             switch (type)
             {
                 case TransactionType.Insert:
-                    JsonData json = bro.GetReturnValuetoJSON()["putItem"];
-                    for (int i = 0; i < json.Count; i++)
+                    BackendReturnObject broInsert = Backend.GameData.TransactionWriteV2(transactionList);
+                    if (broInsert.IsSuccess())
                     {
-                        DataManager.Instance.SetRowInDate((UserDataType)Enum.Parse(typeof(UserDataType), json[i]["table"].ToString()), json[i]["inDate"].ToString());
+                        JsonData json = broInsert.GetReturnValuetoJSON()["putItem"];
+                        for (int i = 0; i < json.Count; i++)
+                            DataManager.Instance.SetRowInDate((UserDataType)Enum.Parse(typeof(UserDataType), json[i]["table"].ToString()), json[i]["inDate"].ToString());
+                        SuccessLoadDataCount += json.Count;
                     }
                     break;
                 case TransactionType.SetGet:
@@ -1092,7 +1089,7 @@ public class BackendManager : Singleton<BackendManager>
                                             Debug.LogError($"GetData {bro.IsSuccess()} {bro.GetStatusCode()} {bro.GetErrorCode()} {bro.GetMessage()}");
                                         }
                                     }
-                                    SendTransaction(TransactionType.Insert, this);
+                                    SendTransaction(TransactionType.Insert, DataManager.Instance.userData);
                                 }
                                 break;
                         }
@@ -1111,7 +1108,7 @@ public class BackendManager : Singleton<BackendManager>
                 transactionList.RemoveAt(i);
         transactionList.Add(TransactionValue.SetUpdateV2(table.ToString(), indate, Backend.UserInDate,  param));
         if (transactionList.Count > 9)
-            SendTransaction(TransactionType.Update, this);
+            SendTransaction(TransactionType.Update, DataManager.Instance.userData);
     }
 }
 

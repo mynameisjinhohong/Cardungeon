@@ -53,6 +53,11 @@ public class AccountLoginPopup : MonoBehaviour
                 idInput.Select();
             }
         }
+        
+        if(Input.GetKeyDown(KeyCode.Return))
+        {
+            AccountLoginCheck();
+        }
     }
 
     public void BackBtnClick()

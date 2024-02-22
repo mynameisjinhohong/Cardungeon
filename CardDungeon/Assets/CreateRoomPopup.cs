@@ -33,4 +33,9 @@ public class CreateRoomPopup : MonoBehaviour
 
         MatchController.Instance.CreateRoom();
     }
+
+    public void UpDownButtonClick(bool isUp)
+    {
+        
+    }
 }
