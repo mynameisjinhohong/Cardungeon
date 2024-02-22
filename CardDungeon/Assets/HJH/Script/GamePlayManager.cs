@@ -91,7 +91,6 @@ public class GamePlayManager : Singleton<GamePlayManager>
                 players.Add(playerHjh);
                 playerHjh.isSuperGamer = BackendManager.Instance.UserDataList[i].isSuperGamer;
                 playerHjh.PlayerName.text = BackendManager.Instance.UserDataList[i].playerName;
-                playerHjh.PlayerName.color = colorList[i];
 
                 if (BackendManager.Instance.userInfo.Nickname == BackendManager.Instance.UserDataList[i].playerName)
                 {
