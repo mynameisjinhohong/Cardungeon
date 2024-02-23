@@ -15,6 +15,9 @@ public class Player_HJH : MonoBehaviour
     public GameObject mpText;
     float mpTextTime;
     Coroutine mpTextCo;
+    public GameObject enforceText;
+    float enforceTime;
+    Coroutine enforceTextCo;
     
     public string PlayerToken;
     public bool isSuperGamer;
@@ -262,5 +265,29 @@ public class Player_HJH : MonoBehaviour
         mpTextTime = 0;
         mpText.SetActive(false);
         mpTextCo = null;
+    }
+    public void EnforceTextOn()
+    {
+        if (enforceTextCo != null)
+        {
+            enforceTime = 0;
+        }
+        else
+        {
+            enforceTextCo = StartCoroutine(enforceTextOn(1f));
+        }
+    }
+
+    IEnumerator enforceTextOn(float time)
+    {
+        enforceText.SetActive(true);
+        while (enforceTime < time)
+        {
+            enforceTime += Time.deltaTime;
+            yield return null;
+        }
+        enforceTime = 0;
+        enforceText.SetActive(false);
+        enforceTextCo = null;
     }
 }
