@@ -33,6 +33,8 @@ public class UIManager : Singleton<UIManager>
 
     public GameObject RecyclePopupPrefab;
 
+    public GameObject SettingPopupPrefab;
+
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         FindCanvas();
