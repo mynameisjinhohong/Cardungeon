@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -47,7 +48,7 @@ public class AccountSignUp : MonoBehaviour
             inputFieldlist[selectedInputIndex].Select();
         }
         
-        if (Input.GetKeyDown(KeyCode.LeftShift) && Input.GetKey(KeyCode.Tab))
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Tab))
         {
             if (selectedInputIndex <= 0) return;
             
@@ -60,19 +61,19 @@ public class AccountSignUp : MonoBehaviour
     {
         if (pwVibileToggle.isOn)
         {
-            // ????? ???? ?????? ??й???? ???
+            // 토글이 켜져 있으면 비밀번호를 표시
             inputFieldlist[3].contentType = TMP_InputField.ContentType.Standard;
         }
         else
         {
-            // ????? ???? ?????? ??й???? ????
+            // 토글이 꺼져 있으면 비밀번호를 가림
             inputFieldlist[3].contentType = TMP_InputField.ContentType.Password;
         }
         
         visibleObject.SetActive(pwVibileToggle.isOn);
         unvisibleObject.SetActive(!pwVibileToggle.isOn);
 
-        // ??й?? ??? ??? ?????????? ????? ?????? ????
+        // 비밀번호 입력 필드를 업데이트하여 변경된 설정을 적용
         inputFieldlist[3].ForceLabelUpdate();
     }
     
@@ -81,7 +82,7 @@ public class AccountSignUp : MonoBehaviour
         System.Random random = new System.Random();
         int codeLength = 8;
 
-        // StringBuilder?? ?????? ????????? ????? ????
+        // StringBuilder를 사용하여 효율적으로 문자열 생성
         System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder(codeLength);
 
         for (int i = 0; i < codeLength; i++)
@@ -96,12 +97,7 @@ public class AccountSignUp : MonoBehaviour
     {
         selectedInputIndex = value;
     }
-    
-    public void CreateAccount()
-    {
-        CheckAllStatus();
-    }
-    
+
     public void CheckAllStatus()
     {
         int checkCount = 0;
@@ -116,11 +112,11 @@ public class AccountSignUp : MonoBehaviour
 
         if (checkCount > 0)
         {
-            UIManager.Instance.OpenRecyclePopup("???", "??????? ???? ????? ??????", null);
+            UIManager.Instance.OpenRecyclePopup("안내", "회원가입에 실패 했습니다", null);
         }
         else
         {
-            Debug.Log("???? ???? ???");
+            Debug.Log("회원가입 성공");
             BackendManager.Instance.TryCustomSignin(checkList[2].input.text, checkList[3].input.text, checkList[0].input.text);
         }
     }
@@ -131,12 +127,12 @@ public class AccountSignUp : MonoBehaviour
         
         if (target.input.text.Length > 20)
         {
-            target.infoText.text = "<color=red>????? ??? ????. ??? ??????????.";
+            target.infoText.text = "<color=red>아이디가 너무 깁니다.";
             target.isChecked = false;
         }
         else if (target.input.text.Length < 5)
         {
-            target.infoText.text = "<color=red>????? ??? ª?????. ??? ??????????.";
+            target.infoText.text = "<color=red>아이디는 4자 이상 입력해주세요.";
             target.isChecked = false;
         }
         else
@@ -152,22 +148,22 @@ public class AccountSignUp : MonoBehaviour
         
         if (target.input.text.Length > 20)
         {
-            target.infoText.text = "<color=red>??й???? ??? ????. ??? ??????????.";
+            target.infoText.text = "<color=red>비밀번호가 너무 깁니다. 다시 시도해주세요.";
             target.isChecked = false;
         }
         else if (target.input.text.Length < 5)
         {
-            target.infoText.text = "<color=red>??й???? ??? ª?????. ??? ??????????.";
+            target.infoText.text = "<color=red>비밀번호가 너무 짧습니다. 다시 시도해주세요.";
             target.isChecked = false;
         }
         else if (!IsPasswordValid(target.input.text))
         {
-            target.infoText.text = "<color=red>???????, ????, ????? ???? ????? ??????? ???? ??? ??? ??????? ????.";
+            target.infoText.text = "<color=red>특수문자, 숫자, 그리고 적어도 하나의 영문자를 각각 하나 이상 포함해야 합니다.";
             target.isChecked = false;
         }
         else
         {
-            target.infoText.text = "<color=black>??? ???? ????.";
+            target.infoText.text = "<color=white>사용 가능 합니다.";
             target.isChecked = true;
         }
     }
@@ -196,14 +192,14 @@ public class AccountSignUp : MonoBehaviour
 
         if (checkList[1].input.text != settingNumber)
         {
-            target.infoText.text = "<color=red>????????? ??????? ??????. ??? ??????????.";
+            target.infoText.text = "<color=red>비밀번호가 일치하지 않습니다.";
             target.isChecked = false;
             
             emailSendBtn.interactable = true;
         }
         else
         {
-            target.infoText.text = "<color=black>????????? ???????.";
+            target.infoText.text = "<color=white>사용 가능 합니다.";
             checkList[0].isChecked = true;
             target.isChecked = true;
             emailCheckBtn.interactable = false;
@@ -221,31 +217,31 @@ public class AccountSignUp : MonoBehaviour
 
         MailMessage mail = new MailMessage();
 
-        mail.From = new MailAddress("GangToeSal@gmail.com"); // ????????
+        mail.From = new MailAddress("GangToeSal@gmail.com"); // 보내는사람
 
         if (target.input.text.Contains("@"))
         {
             mail.To.Add(target.input.text);
-            target.infoText.text = "<color=black>????????? ???? ??????.";
+            target.infoText.text = "<color=white>인증번호가 전송 됐습니다.";
 
             settingNumber = GenerateAuthenticationCode();
             emailSendBtn.interactable = false;
         }
         else
         {
-            target.infoText.text = "<color=red>????? ?????? ?????? ??????.";
+            target.infoText.text = "<color=red>이메일 형식이 올바르지 않습니다.";
             return;
         }
 
-        mail.Subject = "???????? ??? ???´? ???? ????";
+        mail.Subject = "강한토끼만 살아 남는다 인증 메일";
 
-        mail.Body = $"????? ???? ??? ????????\n \n???? ?????? ???? ??????? ???? ????????.\n??? ????????? ?????? ????? ???? ???????????.\n{settingNumber}";
+        mail.Body = $"이메일 인증 코드를 입력하세요\n \n본인 인증을 위해 자동으로 발송된 메일입니다.\n아래 인증번호를 사용하여 이메일 주소를 인증해주세요.\n{settingNumber}";
 
         using (SmtpClient smtpServer = new SmtpClient("smtp.gmail.com"))
         {
             smtpServer.Port = 587;
 
-            smtpServer.Credentials = new System.Net.NetworkCredential("gangtoesal@gmail.com", "rmgnahrysuztsyof") as ICredentialsByHost; // ???????? ??? ?? ??й?? ???
+            smtpServer.Credentials = new System.Net.NetworkCredential("gangtoesal@gmail.com", "rmgnahrysuztsyof") as ICredentialsByHost; // 보내는사람 주소 및 비밀번호 확인
 
             smtpServer.EnableSsl = true;
 
@@ -260,12 +256,12 @@ public class AccountSignUp : MonoBehaviour
 
     static bool IsPasswordValid(string password)
     {
-        // ???????, ????, ????? ???? ????? ??????? ???? ??? ??? ??????? ????.
+        // 특수문자, 숫자, 그리고 적어도 하나의 영문자를 각각 하나 이상 포함해야 합니다.
         bool hasSpecialChar = password.Any(c => char.IsSymbol(c) || char.IsPunctuation(c));
         bool hasDigit       = password.Any(char.IsDigit);
         bool hasLetter      = password.Any(char.IsLetter);
 
-        // ??? ?????? ??????? true?? ???????.
+        // 모든 조건을 만족하면 true를 반환합니다.
         return hasSpecialChar && hasDigit && hasLetter;
     }
 }

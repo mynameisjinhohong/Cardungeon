@@ -157,11 +157,6 @@ public class BackendManager : Singleton<BackendManager>
             
             CheckLoginWayData();
 
-            if (checkLoginWayData >= 0 && UseAutoLogin)
-            {
-                StartTokenLogin();
-            }
-            
             isInitialize = true;
         }
         else
@@ -1109,6 +1104,55 @@ public class BackendManager : Singleton<BackendManager>
         transactionList.Add(TransactionValue.SetUpdateV2(table.ToString(), indate, Backend.UserInDate,  param));
         if (transactionList.Count > 9)
             SendTransaction(TransactionType.Update, DataManager.Instance.userData);
+    }
+
+    public void FindID_WithEmail(string email)
+    {
+        Backend.BMember.FindCustomID( email, ( callback ) =>
+        {
+            
+            switch (callback.GetStatusCode())
+            {
+                case "204" :
+                    UIManager.Instance.PopupListPop();
+                    UIManager.Instance.OpenRecyclePopup("안내", "입력하신 이메일로 전송 완료 했습니다.", null);
+                    break;
+                case "404" :
+                    UIManager.Instance.OpenRecyclePopup("안내", "존재하지 않는 이메일 주소 입니다.", null);
+                    break;
+                case "429" :
+                    UIManager.Instance.OpenRecyclePopup("경고", "요청 횟수를 초과 하셨습니다.", null);
+                    break;
+                case "400" :
+                    UIManager.Instance.OpenRecyclePopup("Notice", "Project Name Error", null);
+                    break;
+            }
+        });
+    }
+
+    public void ResetPW_WithEmailandID(string ID, string Email)
+    {
+        Backend.BMember.ResetPassword(ID, Email, (callback) =>
+        {
+            UIManager.Instance.PopupListPop();
+            
+            switch (callback.GetStatusCode())
+            {
+                case "204" :
+                    UIManager.Instance.PopupListPop();
+                    UIManager.Instance.OpenRecyclePopup("안내", "입력하신 이메일로 전송 완료 했습니다.", null);
+                    break;
+                case "404" :
+                    UIManager.Instance.OpenRecyclePopup("안내", "존재하지 않는 이메일 주소 입니다.", null);
+                    break;
+                case "429" :
+                    UIManager.Instance.OpenRecyclePopup("경고", "요청 횟수를 초과 하셨습니다.", null);
+                    break;
+                case "400" :
+                    UIManager.Instance.OpenRecyclePopup("Notice", "Project Name Error", null);
+                    break;
+            }
+        });
     }
 }
 

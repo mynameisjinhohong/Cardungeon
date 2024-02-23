@@ -22,7 +22,8 @@ public class UIManager : Singleton<UIManager>
 
     public GameObject AccountLoginPrefab;
     public GameObject AccountSignUpPrefab;
-    public GameObject FindAccountPrefab;
+    public GameObject FindIDPrefab;
+    public GameObject ResetPWPrefab;
     
     public GameObject GoogleLoginPrefab;
 

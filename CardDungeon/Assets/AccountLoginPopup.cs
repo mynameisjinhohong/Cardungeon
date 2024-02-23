@@ -54,7 +54,7 @@ public class AccountLoginPopup : MonoBehaviour
             }
         }
         
-        if(Input.GetKeyDown(KeyCode.Return))
+        if(Input.GetKeyDown(KeyCode.Return) && UIManager.Instance.CurrentPopup == gameObject)
         {
             AccountLoginCheck();
         }
@@ -77,7 +77,12 @@ public class AccountLoginPopup : MonoBehaviour
         {
             Debug.Log("생성실패");
         }
-        
+
+        if (isClickedFindAccount)
+        {
+            isMoving = false;
+            FindAccountAnim();
+        }
     }
 
     public void AccountLoginCheck()
@@ -101,7 +106,7 @@ public class AccountLoginPopup : MonoBehaviour
                         errMSG = "차단된 계정입니다. 고객센터로 문의하세요.";
                         break;
                     case "400" :
-                        errMSG = "기기 정보가 없습니다.";
+                        errMSG = "아이디와 비밀번호를 입력 해주세요";
                         break;
                     case "410" :
                         errMSG = "탈퇴된 계정입니다.";
@@ -148,6 +153,28 @@ public class AccountLoginPopup : MonoBehaviour
             StartCoroutine(MoveObjectCoroutine(pwFindObject, 0));
         }
         isClickedFindAccount =! isClickedFindAccount;
+    }
+
+    public void FindIDButtonClick()
+    {
+        UIManager.Instance.OpenPopup(UIManager.Instance.FindIDPrefab);
+
+        if (isClickedFindAccount)
+        {
+            isMoving = false;
+            FindAccountAnim();
+        }
+    }
+
+    public void ResetPWButtonClick()
+    {
+        UIManager.Instance.OpenPopup(UIManager.Instance.ResetPWPrefab);
+
+        if (isClickedFindAccount)
+        {
+            isMoving = false;
+            FindAccountAnim();
+        }
     }
     
     IEnumerator MoveObjectCoroutine(Transform objTransform, float targetY)

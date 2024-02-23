@@ -1194,7 +1194,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1702428907}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -4525,7 +4525,8 @@ MonoBehaviour:
   CurrentUIStatus: 0
   AccountLoginPrefab: {fileID: 5063278758754645742, guid: d06b3bda27417b84c8ca20038292d2c4, type: 3}
   AccountSignUpPrefab: {fileID: 853597947298320963, guid: 11b9020a17c24a34d82b5f92c63ef819, type: 3}
-  FindAccountPrefab: {fileID: 4557327945877872313, guid: 58c443f8429c49243a255e3cc952fa5a, type: 3}
+  FindIDPrefab: {fileID: 4557327945877872313, guid: 58c443f8429c49243a255e3cc952fa5a, type: 3}
+  ResetPWPrefab: {fileID: 4557327945877872313, guid: 2fa3223a6d9991749b93ed3b3c730ab4, type: 3}
   GoogleLoginPrefab: {fileID: 5097887765796371620, guid: 513dbdf03e01cc5448020e691f5f3234, type: 3}
   GuestLoginPrefab: {fileID: 5097887765796371620, guid: 919e8e8d821778049b2e069557afa5f7, type: 3}
   NickNamePrefab: {fileID: 5097887765796371620, guid: 919e8e8d821778049b2e069557afa5f7, type: 3}
@@ -8253,9 +8254,8 @@ RectTransform:
   - {fileID: 1152192436}
   - {fileID: 1188491733}
   - {fileID: 1227878650}
-  - {fileID: 224412805}
   - {fileID: 6389384079267800224}
-  - {fileID: 1822935557}
+  - {fileID: 224412805}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8610,42 +8610,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1769625217}
   m_CullTransparentMesh: 1
---- !u!1 &1822935556
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1822935557}
-  m_Layer: 5
-  m_Name: UI_CreateRoom
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1822935557
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1822935556}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1702428907}
-  m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1830692903
 GameObject:
   m_ObjectHideFlags: 0
@@ -10538,7 +10502,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3008784755275418597, guid: e61276f7826ad3446a3b4c15e8576136, type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3008784755275418597, guid: e61276f7826ad3446a3b4c15e8576136, type: 3}
       propertyPath: m_AnchorMax.x
