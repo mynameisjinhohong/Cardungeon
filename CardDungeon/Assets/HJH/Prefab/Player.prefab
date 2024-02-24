@@ -610,6 +610,7 @@ MonoBehaviour:
   isSuperGamer: 0
   isMine: 0
   animator: {fileID: 5531401151381640362}
+  playerShadow: {fileID: 5898363691524700565, guid: 67d4c82bd2d56444496591b57b223237, type: 3}
   sr: {fileID: 5898363692132139214}
   keys: 0
   hpSprites:

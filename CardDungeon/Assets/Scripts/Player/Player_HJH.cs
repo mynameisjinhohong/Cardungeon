@@ -28,6 +28,7 @@ public class Player_HJH : MonoBehaviour
     float currentTime;
     bool shield = false;
     public Animator animator;
+    public GameObject playerShadow;
     public SpriteRenderer sr;
     public int keys;
     public int Keys

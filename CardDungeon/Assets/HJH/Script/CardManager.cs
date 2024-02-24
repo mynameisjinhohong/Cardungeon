@@ -351,6 +351,7 @@ public class CardManager : Singleton<CardManager>
     // 플레이어가 3*3 안에서 랜덤하게 이동
     void Idx5Func(Transform player)
     {
+        Vector3 playerTransform = player.transform.position;
         Random.InitState(seed);
         int x = Random.Range(-1, 2);
         int y = Random.Range(-1, 2);
@@ -376,6 +377,7 @@ public class CardManager : Singleton<CardManager>
         Player_HJH p;
         if (player.TryGetComponent<Player_HJH>(out p))
         {
+            Instantiate(p.playerShadow, playerTransform, Quaternion.identity);
             p.animator.Play("Walk");
             if (x < 0) p.sr.flipX = false;
             else p.sr.flipX = true;
