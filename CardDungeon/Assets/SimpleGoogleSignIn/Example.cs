@@ -26,12 +26,11 @@ namespace Assets.SimpleGoogleSignIn
         {
             GoogleAuth.SignIn(OnSignIn, caching: true);
             
-            Backend.BMember.CheckNicknameDuplication( "googleUserData.email", ( callback ) =>
-            {
-                Debug.Log("해당 닉네임으로 수정 가능합니다");
-            });
-            
-            
+            // Backend.BMember.CheckNicknameDuplication( "googleUserData.email", ( callback ) =>
+            // {
+            //     Debug.Log("해당 닉네임으로 수정 가능합니다");
+            // });
+
             if (GoogleAuth.SavedAuth == null)
             {
                 BackendManager.Instance.TryCustomSignin(googleUserData.name, googleUserData.sub, googleUserData.email);

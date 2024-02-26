@@ -10,6 +10,14 @@ public class FindIDPopup : MonoBehaviour
     [SerializeField]
     TMP_InputField emailInputField;
     
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Return) && UIManager.Instance.CurrentPopup == gameObject)
+        {
+            FindAccountWithEmail();
+        }
+    }
+    
     public void FindAccountWithEmail()
     {
         BackendManager.Instance.FindID_WithEmail(emailInputField.text);

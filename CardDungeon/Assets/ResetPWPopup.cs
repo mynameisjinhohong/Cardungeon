@@ -11,7 +11,31 @@ public class ResetPWPopup : MonoBehaviour
     [SerializeField]
     TMP_InputField idInputField;
     
-    public void FindAccountWithEmail()
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            if (emailInputField.isFocused)
+            {
+                idInputField.Select();
+            }
+        }
+
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.Tab))
+        {
+            if (idInputField.isFocused)
+            {
+                emailInputField.Select();
+            }
+        }
+        
+        if(Input.GetKeyDown(KeyCode.Return) && UIManager.Instance.CurrentPopup == gameObject)
+        {
+            FindAccountWithEmailAndID();
+        }
+    }
+    
+    public void FindAccountWithEmailAndID()
     {
         BackendManager.Instance.ResetPW_WithEmailandID(idInputField.text, emailInputField.text);
     }

@@ -227,8 +227,26 @@ public class BackendManager : Singleton<BackendManager>
             }
             else
             {
-                Debug.LogWarning(callback.GetMessage());
-                UIManager.Instance.OpenRecyclePopup("안내", $"{callback.GetMessage()}", null);
+                Debug.LogWarning(callback.GetStatusCode() + callback.GetMessage());
+
+                string errmesage = "";
+                
+                switch (callback.GetStatusCode())
+                {
+                    case "409" :
+                        errmesage = "중복된 아이디 입니다.";
+                        break;
+                    case "401" :
+                        errmesage = "서버상태가 좋지 않습니다.\n다시 시도해주세요.";
+                        break;
+                    case "400" :
+                        errmesage = "아이디와 이메일을 다시 확인 해주세요.";
+                        break;
+                    case "403" :
+                        errmesage = "차단당한 계정입니다.\n고객센터로 문의 주세요";
+                        break;
+                }
+                UIManager.Instance.OpenRecyclePopup("안내", $"{errmesage}", null);
             }
         });
     }
