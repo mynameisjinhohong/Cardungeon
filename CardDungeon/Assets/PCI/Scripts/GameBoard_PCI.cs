@@ -261,4 +261,18 @@ public class GameBoard_PCI : MonoBehaviour
 
         return false;
     }
+
+    public bool SetTile(TileObject_PCI obj, Vector2Int cord)
+    {
+        int x = cord.x;
+        int y = cord.y;
+        if (!IsValidCoordinate(cord)) return false;
+        if (!IsPathable(cord)) return false;
+        if (IsInteractable(cord)) return false;
+
+        var newTileObject = Instantiate(obj, new Vector3(x, y, 0), Quaternion.identity, board[x, y].transform);
+        board[x, y].AddTileObject(newTileObject);
+
+        return false;
+    }
 }
