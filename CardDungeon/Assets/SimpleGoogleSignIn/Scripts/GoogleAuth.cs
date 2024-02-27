@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -388,6 +390,9 @@ namespace Assets.SimpleGoogleSignIn.Scripts
                     Log($"TokenExchangeResponse={request.downloadHandler.text}");
 
                     TokenResponse = TokenResponse.Parse(request.downloadHandler.text);
+
+                    ChangeTokenToStirng(request.downloadHandler.text);
+
                     SavedAuth = new SavedAuth(_settings.ClientId, TokenResponse);
                     SavedAuth.Save();
 
@@ -469,6 +474,7 @@ namespace Assets.SimpleGoogleSignIn.Scripts
                     TokenResponse.RefreshToken = refreshToken;
                     SavedAuth.TokenResponse = TokenResponse;
                     SavedAuth.Save();
+
                     callback(true, null, TokenResponse);
                 }
                 else
@@ -484,7 +490,9 @@ namespace Assets.SimpleGoogleSignIn.Scripts
         private void RevokeAccessToken(string accessToken)
         {
             var request = UnityWebRequest.Post($"{RevocationEndpoint}?token={accessToken}", "");
-
+            
+            Debug.Log(accessToken);
+            
             Log($"Revoking access token: {request.url}");
 
             request.SendWebRequest().completed += _ => Log(request.error ?? "Access token revoked!");
@@ -495,6 +503,25 @@ namespace Assets.SimpleGoogleSignIn.Scripts
             if (DebugLog)
             {
                 Debug.Log(message); // TODO: Remove in Release.
+            }
+        }
+
+        private void ChangeTokenToStirng(string tokenExchangeResponse)
+        {
+            string pattern = @"""id_token""\s*:\s*""([^""]+)""";
+            Match match = Regex.Match(tokenExchangeResponse, pattern);
+
+            if (match.Success)
+            {
+                // 그룹 1에서 추출한 id_token 값
+                string idToken = match.Groups[1].Value;
+                
+                BackendManager.Instance.TryAuthorizeFederation(idToken);
+                Debug.Log($"Extracted id_token: {idToken}");
+            }
+            else
+            {
+                Debug.Log("id_token not found in the response.");
             }
         }
     }

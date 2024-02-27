@@ -25,34 +25,6 @@ namespace Assets.SimpleGoogleSignIn
         public void SignIn()
         {
             GoogleAuth.SignIn(OnSignIn, caching: true);
-            
-            // Backend.BMember.CheckNicknameDuplication( "googleUserData.email", ( callback ) =>
-            // {
-            //     Debug.Log("해당 닉네임으로 수정 가능합니다");
-            // });
-
-            if (GoogleAuth.SavedAuth == null)
-            {
-                BackendManager.Instance.TryCustomSignin(googleUserData.name, googleUserData.sub, googleUserData.email);
-                
-                BackendManager.Instance.GetServerTime();
-
-                DataManager.Instance.userData.RowIndate = Backend.UserInDate;
-                
-                DataManager.Instance.SaveUserBattleInfo(ServerSaveType.Insert);
-
-                BackendManager.Instance.SendTransaction(TransactionType.Insert);
-            }
-            else
-            {
-                BackendManager.Instance.GetServerTime();
-
-                DataManager.Instance.userData.RowIndate = Backend.UserInDate;
-                
-                DataManager.Instance.SaveUserBattleInfo(ServerSaveType.Update);
-
-                BackendManager.Instance.SendTransaction(TransactionType.Update);
-            }
         }
 
         public void SignOut()
@@ -71,11 +43,11 @@ namespace Assets.SimpleGoogleSignIn
             Output = success ? $"Hello, {userInfo.name}!" : error;
 
             googleUserData = userInfo;
-            
-            BackendManager.Instance.GetUserInfo();
+
+            //BackendManager.Instance.GetUserInfo();
             //BackendManager.Instance.userInfo.playerID = userInfo.email;
             //BackendManager.Instance.userInfo.Email = userInfo.email;
-            MatchController.Instance.ChangeUI(1);
+            //MatchController.Instance.ChangeUI(1);
         }
 
         private void OnGetAccessToken(bool success, string error, TokenResponse tokenResponse)

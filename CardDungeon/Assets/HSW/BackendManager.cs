@@ -62,7 +62,7 @@ public class BackendManager : Singleton<BackendManager>
         DontDestroyOnLoad(this.gameObject);
         //SetResolution();
 
-        UseAutoLogin = PlayerPrefs.GetInt("NotAutoLogin") != 0;
+        UseAutoLogin = PlayerPrefs.GetInt("NotAutoLogin") == 0;
     }
 
     public void SetResolution()
@@ -258,6 +258,15 @@ public class BackendManager : Singleton<BackendManager>
         {
             StartCoroutine(LoginProcess(callback, LoginType.Auto));
         });
+    }
+
+    public void TryAuthorizeFederation(string Token)
+    {
+        Debug.Log("구글 토큰 로그인 시도" + Token);
+        Backend.BMember.AuthorizeFederation ( Token, FederationType.Google, "Google로 가입함", callback =>
+        {
+            // 여기에 닉네임 체크 추가
+        } );
     }
     
     private IEnumerator LoginProcess(BackendReturnObject bro, LoginType type)
