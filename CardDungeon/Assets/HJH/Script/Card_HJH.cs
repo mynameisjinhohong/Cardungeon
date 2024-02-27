@@ -216,6 +216,7 @@ public class Card_HJH : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
             }
             else
             {
+                transform.position = defaultPos;
                 Instantiate(cardEffect, transform);
                 ChildRayCast(true);
             }

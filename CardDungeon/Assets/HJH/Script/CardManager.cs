@@ -7,6 +7,7 @@ public class CardManager : Singleton<CardManager>
     public GameObject Idx6Effect;
     public GameObject Idx7Effect;
     public GameObject Idx8Effect;
+    public TileObject_PCI trapPrefab;
     public int seed;
     public void OnCardStart(Transform player, int cardIdx)
     {
@@ -554,12 +555,12 @@ public class CardManager : Singleton<CardManager>
     //µ¢Äð ¼³Ä¡
     void Idx10Func(Transform player)
     {
-
+        GamePlayManager.Instance.gameBoard.SetTile(trapPrefab, (int)player.transform.position.x, (int)player.transform.position.y,3);
     }
     //°­È­ µ¢Äð ¼³Ä¡
     void Idx10EnforceFunc(Transform player)
     {
-
+        GamePlayManager.Instance.gameBoard.SetTile(trapPrefab, (int)player.transform.position.x, (int)player.transform.position.y, 5);
     }
     //Ä«µå 2Àå »Ì±â
     void Idx11Func(Transform player)

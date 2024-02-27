@@ -249,7 +249,7 @@ public class GameBoard_PCI : MonoBehaviour
         board[target.x, target.y].OnInteracted(player);
     }
 
-    public bool SetTile(TileObject_PCI obj, int x, int y)
+    public bool SetTile(TileObject_PCI obj, int x, int y, int time)
     {
         Vector2Int vec = new Vector2Int(x, y);
         if (!IsValidCoordinate(vec)) return false;
@@ -257,6 +257,11 @@ public class GameBoard_PCI : MonoBehaviour
         if (IsInteractable(vec)) return false;
 
         var newTileObject = Instantiate(obj, new Vector3(x, y, 0), Quaternion.identity, board[x, y].transform);
+        Vine_PCI trap = null;
+        if(newTileObject.TryGetComponent<Vine_PCI>(out trap))
+        {
+            trap.stunTime = time;
+        }
         board[x, y].AddTileObject(newTileObject);
 
         return false;

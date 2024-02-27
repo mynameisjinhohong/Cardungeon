@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -20,6 +21,7 @@ public class PlayerDeck_HJH : MonoBehaviour
     public GameObject[] cards;
     public GameObject[] cardTrash;
     public Ease ease = Ease.OutQuart;
+    bool stun = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -70,9 +72,97 @@ public class PlayerDeck_HJH : MonoBehaviour
                     card.transform.GetChild(1).GetComponent<TMP_Text>().color = Color.yellow;
                     card.transform.GetChild(2).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[-hand[i]].itemImage;
                 }
-                Vector3 goPos = card.GetComponent<RectTransform>().anchoredPosition;
+
+            }
+            else
+            {
+                GameObject card = cards[i];
+                card.SetActive(false);
+            }
+
+        }
+    }
+
+    public void RerollVisible(int su)
+    {
+        for (int i = 0; i < cardTrash.Length; i++)
+        {
+            if (i < su)
+            {
+                GameObject cardT = cardTrash[i];
+                cardT.SetActive(true);
+                if (hand[i] > 0)
+                {
+                    cardT.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[hand[i]].cardType;
+                    cardT.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[hand[i]].cardName;
+                    cardT.transform.GetChild(0).GetComponent<TMP_Text>().color = Color.white;
+                    cardT.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[hand[i]].useMP.ToString(); //나중에 변경
+                    cardT.transform.GetChild(1).GetComponent<TMP_Text>().color = Color.white;
+                    cardT.transform.GetChild(2).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[hand[i]].itemImage;
+                }
+                else
+                {
+                    cardT.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[-hand[i]].enforceSmallCard;
+                    cardT.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[-hand[i]].cardName + "+";
+                    cardT.transform.GetChild(0).GetComponent<TMP_Text>().color = Color.yellow;
+                    cardT.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[-hand[i]].useMP.ToString(); //나중에 변경
+                    cardT.transform.GetChild(1).GetComponent<TMP_Text>().color = Color.yellow;
+                    cardT.transform.GetChild(2).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[-hand[i]].itemImage;
+                }
+                Vector3 goPos = cardT.GetComponent<RectTransform>().anchoredPosition;
+                Color co2 = cardT.GetComponent<Image>().color;
+                co2.a = 1f;
+                cardT.GetComponent<Image>().color = co2;
+                cardT.transform.GetChild(2).GetComponent<Image>().color = co2;
+                Sequence se = DOTween.Sequence(cardT)
+                    .Append(cardT.GetComponent<RectTransform>().DOAnchorPos(trashPos.anchoredPosition, 1f).SetEase(ease))
+                    .Join(cardT.GetComponent<Image>().DOFade(0.0f, 1f).SetEase(ease))
+                    .Join(cardT.transform.GetChild(2).GetComponent<Image>().DOFade(0.0f, 1f).SetEase(ease))
+                    .Join(cardT.transform.GetChild(0).GetComponent<TMP_Text>().DOFade(0.0f,1f).SetEase(ease))
+                    .Join(cardT.transform.GetChild(1).GetComponent<TMP_Text>().DOFade(0.0f,1f).SetEase(ease))
+                    .Append(DOTween.To(()=>0f, x => cardT.SetActive(false),0f,0f))
+                    .Append(cardT.GetComponent<RectTransform>().DOAnchorPos(goPos, 1f).SetEase(ease));
+                se.Play();
+            }
+            else
+            {
+                GameObject card = cardTrash[i];
+                card.SetActive(false);
+            }
+        }
+        for (int i = 0; i < cards.Length; i++)
+        {
+            if (i < hand.Count)
+            {
+                GameObject card = cards[i];
+                card.SetActive(true);
+                if (hand[i] > 0)
+                {
+                    card.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[hand[i]].cardType;
+                    card.GetComponent<Card_HJH>().handIdx = i;
+                    card.GetComponent<Card_HJH>().cardIdx = hand[i];
+                    card.GetComponent<Card_HJH>().playerDeck = this;
+                    card.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[hand[i]].cardName;
+                    card.transform.GetChild(0).GetComponent<TMP_Text>().color = Color.white;
+                    card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[hand[i]].useMP.ToString(); //나중에 변경
+                    card.transform.GetChild(1).GetComponent<TMP_Text>().color = Color.white;
+                    card.transform.GetChild(2).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[hand[i]].itemImage;
+                }
+                else
+                {
+                    card.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[-hand[i]].enforceSmallCard;
+                    card.GetComponent<Card_HJH>().handIdx = i;
+                    card.GetComponent<Card_HJH>().cardIdx = hand[i];
+                    card.GetComponent<Card_HJH>().playerDeck = this;
+                    card.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[-hand[i]].cardName + "+";
+                    card.transform.GetChild(0).GetComponent<TMP_Text>().color = Color.yellow;
+                    card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[-hand[i]].useMP.ToString(); //나중에 변경
+                    card.transform.GetChild(1).GetComponent<TMP_Text>().color = Color.yellow;
+                    card.transform.GetChild(2).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[-hand[i]].itemImage;
+                }
+                Vector3 goCard = card.GetComponent<RectTransform>().anchoredPosition;
                 card.GetComponent<RectTransform>().anchoredPosition = deckPos.GetComponent<RectTransform>().anchoredPosition;
-                card.GetComponent<RectTransform>().DOAnchorPos(goPos, 1f).SetEase(ease);
+                card.GetComponent<RectTransform>().DOAnchorPos(goCard, 1f).SetEase(ease);
                 Color co = card.GetComponent<Image>().color;
                 co.a = 0;
                 card.GetComponent<Image>().color = co;
@@ -86,54 +176,6 @@ public class PlayerDeck_HJH : MonoBehaviour
                 card.SetActive(false);
             }
 
-        }
-    }
-    public void RerollVisible(int su)
-    {
-        for (int i = 0; i < cardTrash.Length; i++)
-        {
-            if (i < su)
-            {
-                GameObject card = cardTrash[i];
-                card.SetActive(true);
-                if (hand[i] > 0)
-                {
-                    card.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[hand[i]].cardType;
-                    card.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[hand[i]].cardName;
-                    card.transform.GetChild(0).GetComponent<TMP_Text>().color = Color.white;
-                    card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[hand[i]].useMP.ToString(); //나중에 변경
-                    card.transform.GetChild(1).GetComponent<TMP_Text>().color = Color.white;
-                    card.transform.GetChild(2).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[hand[i]].itemImage;
-                }
-                else
-                {
-                    card.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[-hand[i]].enforceSmallCard;
-                    card.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[-hand[i]].cardName + "+";
-                    card.transform.GetChild(0).GetComponent<TMP_Text>().color = Color.yellow;
-                    card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[-hand[i]].useMP.ToString(); //나중에 변경
-                    card.transform.GetChild(1).GetComponent<TMP_Text>().color = Color.yellow;
-                    card.transform.GetChild(2).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[-hand[i]].itemImage;
-                }
-                Vector3 goPos = card.GetComponent<RectTransform>().anchoredPosition;
-                Color co = card.GetComponent<Image>().color;
-                co.a = 1f;
-                card.GetComponent<Image>().color = co;
-                card.transform.GetChild(2).GetComponent<Image>().color = co;
-                Sequence se = DOTween.Sequence(card)
-                    .Append(card.GetComponent<RectTransform>().DOAnchorPos(trashPos.anchoredPosition, 1f).SetEase(ease))
-                    .Join(card.GetComponent<Image>().DOFade(0.0f, 1f).SetEase(ease))
-                    .Join(card.transform.GetChild(2).GetComponent<Image>().DOFade(0.0f, 1f).SetEase(ease))
-                    .Join(card.transform.GetChild(0).GetComponent<TMP_Text>().DOFade(0.0f,1f).SetEase(ease))
-                    .Join(card.transform.GetChild(1).GetComponent<TMP_Text>().DOFade(0.0f,1f).SetEase(ease))
-                    .Append(DOTween.To(()=>0f, x => card.SetActive(false),0f,0f))
-                    .Append(card.GetComponent<RectTransform>().DOAnchorPos(goPos, 1f).SetEase(ease));
-                se.Play();
-            }
-            else
-            {
-                GameObject card = cardTrash[i];
-                card.SetActive(false);
-            }
         }
     }
 
@@ -151,6 +193,7 @@ public class PlayerDeck_HJH : MonoBehaviour
 
     public void DrawFirst()
     {
+        int hd = hand.Count;
         for (int i = 0; i < firstHandCount; i++)
         {
             if (deck.Count > 0)
@@ -166,7 +209,7 @@ public class PlayerDeck_HJH : MonoBehaviour
                 i--;
             }
         }
-        HandVisible();
+        RerollVisible(hd);
     }
     public void DrawOne()
     {
@@ -184,8 +227,43 @@ public class PlayerDeck_HJH : MonoBehaviour
             TrashToDeck();
             SuffelDeck();
             DrawOne();
+            return;
         }
-        HandVisible();
+        GameObject card = cards[hand.Count -1];
+        card.SetActive(true);
+        if (hand[hand.Count - 1] > 0)
+        {
+            card.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[hand[hand.Count - 1]].cardType;
+            card.GetComponent<Card_HJH>().handIdx = hand.Count - 1;
+            card.GetComponent<Card_HJH>().cardIdx = hand[hand.Count - 1];
+            card.GetComponent<Card_HJH>().playerDeck = this;
+            card.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[hand[hand.Count - 1]].cardName;
+            card.transform.GetChild(0).GetComponent<TMP_Text>().color = Color.white;
+            card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[hand[hand.Count - 1]].useMP.ToString(); //나중에 변경
+            card.transform.GetChild(1).GetComponent<TMP_Text>().color = Color.white;
+            card.transform.GetChild(2).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[hand[hand.Count - 1]].itemImage;
+        }
+        else
+        {
+            card.GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[-hand[hand.Count - 1]].enforceSmallCard;
+            card.GetComponent<Card_HJH>().handIdx = hand.Count - 1;
+            card.GetComponent<Card_HJH>().cardIdx = hand[hand.Count - 1];
+            card.GetComponent<Card_HJH>().playerDeck = this;
+            card.transform.GetChild(0).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[-hand[hand.Count - 1]].cardName + "+";
+            card.transform.GetChild(0).GetComponent<TMP_Text>().color = Color.yellow;
+            card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[-hand[hand.Count - 1]].useMP.ToString(); //나중에 변경
+            card.transform.GetChild(1).GetComponent<TMP_Text>().color = Color.yellow;
+            card.transform.GetChild(2).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[-hand[hand.Count - 1]].itemImage;
+        }
+        Vector3 goCard = card.GetComponent<RectTransform>().anchoredPosition;
+        card.GetComponent<RectTransform>().anchoredPosition = deckPos.GetComponent<RectTransform>().anchoredPosition;
+        card.GetComponent<RectTransform>().DOAnchorPos(goCard, 1f).SetEase(ease);
+        Color co = card.GetComponent<Image>().color;
+        co.a = 0;
+        card.GetComponent<Image>().color = co;
+        card.transform.GetChild(2).GetComponent<Image>().color = co;
+        card.GetComponent<Image>().DOFade(1.0f, 1f).SetEase(ease);
+        card.transform.GetChild(2).GetComponent<Image>().DOFade(1.0f, 1f).SetEase(ease);
     }
     public void ButtonReroll()
     {
@@ -202,7 +280,6 @@ public class PlayerDeck_HJH : MonoBehaviour
     public void Reroll()
     {
         int hd = hand.Count;
-        RerollVisible(hd);
         for (int i = 0; i < hd; i++)
         {
             int a = hand[0];
@@ -220,7 +297,6 @@ public class PlayerDeck_HJH : MonoBehaviour
         {
             GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].Mp--;
             int hd = hand.Count;
-            RerollVisible(hd);
             for (int i = 0; i < hd; i++)
             {
                 int a = hand[0];
@@ -241,7 +317,7 @@ public class PlayerDeck_HJH : MonoBehaviour
     {
         int a = hand[handIdx];
 
-        if (GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].Mp >= CardManager.Instance.cardList.cards[Mathf.Abs(a)].useMP && CardManager.Instance.OnCardCheck(GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx], a))
+        if (GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].Mp >= CardManager.Instance.cardList.cards[Mathf.Abs(a)].useMP && CardManager.Instance.OnCardCheck(GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx], a) && !stun)
         {
             GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].Mp -= CardManager.Instance.cardList.cards[Mathf.Abs(a)].useMP;
             GamePlayManager.Instance.CardGo(GamePlayManager.Instance.myIdx, a);
@@ -269,5 +345,18 @@ public class PlayerDeck_HJH : MonoBehaviour
         }
     }
     #endregion
+
+    public void StunGo(int time)
+    {
+        StartCoroutine(Stun(time));
+    }
+
+    IEnumerator Stun(int time)
+    {
+        stun = true;
+        yield return new WaitForSeconds(time);
+        stun = false;
+        
+    }
 
 }

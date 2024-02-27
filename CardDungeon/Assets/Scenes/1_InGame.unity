@@ -5442,7 +5442,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -353.6, y: 155.5}
+  m_AnchoredPosition: {x: -353.60004, y: 155.5}
   m_SizeDelta: {x: 400, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1345405495
@@ -5621,7 +5621,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainUi: {fileID: 556443424}
   reRollCoolTime: 5
-  deck: 01000000010000000200000002000000030000000300000004000000040000000600000005000000
+  deck: 01000000010000000200000002000000030000000300000004000000040000000a0000000b000000
   trash: 
   hand: 
   firstHandCount: 5
@@ -6736,6 +6736,7 @@ MonoBehaviour:
   Idx6Effect: {fileID: 1896288763350077544, guid: 454a96eac6d94294893d6067fbb9dc43, type: 3}
   Idx7Effect: {fileID: 6019862433396250530, guid: 7d57c7281f7721248a0fd78309d2a946, type: 3}
   Idx8Effect: {fileID: 1685256311984502220, guid: c6a51151af0861f45a13b3607aaeae0c, type: 3}
+  trapPrefab: {fileID: 3809555173165759390, guid: 8ba29649d57ed514181aad68274d1667, type: 3}
   seed: 0
 --- !u!4 &1726656504
 Transform:
