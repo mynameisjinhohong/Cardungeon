@@ -248,4 +248,17 @@ public class GameBoard_PCI : MonoBehaviour
         if (!IsInteractable(target)) return;
         board[target.x, target.y].OnInteracted(player);
     }
+
+    public bool SetTile(TileObject_PCI obj, int x, int y)
+    {
+        Vector2Int vec = new Vector2Int(x, y);
+        if (!IsValidCoordinate(vec)) return false;
+        if(!IsPathable(vec)) return false;
+        if (IsInteractable(vec)) return false;
+
+        var newTileObject = Instantiate(obj, new Vector3(x, y, 0), Quaternion.identity, board[x, y].transform);
+        board[x, y].AddTileObject(newTileObject);
+
+        return false;
+    }
 }
