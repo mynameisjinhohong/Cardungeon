@@ -30,7 +30,7 @@ public class Player_HJH : MonoBehaviour
     public Animator animator;
     public GameObject playerShadow;
     public SpriteRenderer sr;
-    public int keys;
+    private int keys;
     public int Keys
     {
         get { return keys; }

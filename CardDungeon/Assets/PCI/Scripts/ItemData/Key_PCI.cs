@@ -8,7 +8,7 @@ public class Key_PCI : ItemData_PCI
 {
     public override void OnInteracted(Player_HJH player)
     {
-        player.keys++;
+        player.Keys++;
         base.OnInteracted(player);
     }
 }

@@ -7,10 +7,10 @@ public class ItemData_PCI : ScriptableObject
     public string itemName;
     [TextArea]
     public string description;
-    public Sprite image;
+    public Sprite image; // for effect
     public int amount;
 
-    public List<Sprite> sprites = new List<Sprite>();
+    public List<Sprite> sprites = new List<Sprite>(); // actual image
     public virtual void OnInteracted(Player_HJH player)
     {
         if (!player.isMine)

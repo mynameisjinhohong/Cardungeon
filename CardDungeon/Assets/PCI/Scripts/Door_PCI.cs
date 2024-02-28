@@ -6,7 +6,7 @@ public class Door_PCI : TileObject_PCI
 {
     public override void OnInteracted(Player_HJH player)
     {
-        if(player.keys > 2)
+        if(player.Keys > 2)
         {
             if (player.isMine)
             { 
