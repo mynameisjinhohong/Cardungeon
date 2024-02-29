@@ -26,7 +26,7 @@ public class PlayerDeck_HJH : MonoBehaviour
     void Start()
     {
         SuffelDeck();
-        DrawFirst();
+        DrawFirst(0);
     }
 
 
@@ -123,6 +123,7 @@ public class PlayerDeck_HJH : MonoBehaviour
                     .Append(DOTween.To(()=>0f, x => cardT.SetActive(false),0f,0f))
                     .Append(cardT.GetComponent<RectTransform>().DOAnchorPos(goPos, 1f).SetEase(ease));
                 se.Play();
+                Debug.Log("??");
             }
             else
             {
@@ -191,9 +192,8 @@ public class PlayerDeck_HJH : MonoBehaviour
         }
     }
 
-    public void DrawFirst()
+    public void DrawFirst(int hd)
     {
-        int hd = hand.Count;
         for (int i = 0; i < firstHandCount; i++)
         {
             if (deck.Count > 0)
@@ -287,7 +287,7 @@ public class PlayerDeck_HJH : MonoBehaviour
             trash.Add(a);
         }
         mainUi.Reroll(reRollCoolTime);
-        DrawFirst();
+        DrawFirst(hd);
     }
 
     public void mpReroll()
@@ -303,7 +303,7 @@ public class PlayerDeck_HJH : MonoBehaviour
                 hand.RemoveAt(0);
                 trash.Add(a);
             }
-            DrawFirst();
+            DrawFirst(hd);
         }
         else
         {

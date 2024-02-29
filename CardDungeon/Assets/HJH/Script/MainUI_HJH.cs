@@ -286,6 +286,7 @@ public class MainUI_HJH : MonoBehaviour
 
         }
         int[] ran;
+        Debug.Log(canCardList.Count);
         if (canCardList.Count == 1)
         {
             ran = new int[1];
@@ -299,7 +300,7 @@ public class MainUI_HJH : MonoBehaviour
             ran[1] = canCardList[1];
             cardSize = 2;
         }
-        else if(canCardList.Count == 3)
+        else if(canCardList.Count >= 3)
         {
             ran = new int[3];
             int a = Random.Range(0, canCardList.Count - 2);
@@ -319,6 +320,7 @@ public class MainUI_HJH : MonoBehaviour
     public void EnforceOn()
     {
         int[] ran = RandomCard(false);
+        Debug.Log(ran);
         if(ran != null)
         {
             allList.SetActive(true);
