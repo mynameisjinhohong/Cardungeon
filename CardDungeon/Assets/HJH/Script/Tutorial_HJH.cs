@@ -34,12 +34,39 @@ public class Tutorial_HJH : MonoBehaviour
     // Start is called before the first frame update
     public void OnEnable()
     {
-        idx = 0;
+        Idx = 0;
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+    }
+
+    public void IdxGo()
+    {
+        if(Idx < pages.Length-1)
+        {
+            Idx++;
+        }
+        else
+        {
+            Idx = 0;
+        }
+    }
+    public void IdxBack()
+    {
+        if(Idx > 0)
+        {
+            Idx--;
+        }
+        else
+        {
+            Idx = pages.Length-1;
+        }
+    }
+    public void XButton()
+    {
+        gameObject.SetActive(false);
     }
 }
