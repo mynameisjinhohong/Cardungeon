@@ -70,6 +70,8 @@ public class MainUI_HJH : MonoBehaviour
 
     public List<GameObject> keys = new List<GameObject>();
 
+    public GameObject tutorial;
+
     private void OnEnable()
     {
         myPlayer.KeysOnValueChanged += SetKeysUI;
@@ -850,6 +852,18 @@ public class MainUI_HJH : MonoBehaviour
         catch (System.Exception e)
         {
             Debug.LogWarning(e);
+        }
+    }
+
+    public void TutorialButton()
+    {
+        if (tutorial.activeInHierarchy)
+        {
+            tutorial.SetActive(false);
+        }
+        else
+        {
+            tutorial.SetActive(true);
         }
     }
 }
