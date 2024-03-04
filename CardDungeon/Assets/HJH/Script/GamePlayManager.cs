@@ -96,6 +96,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
                 {
                     playerHjh.isMine = true;
                     mainUi.myPlayer = playerHjh;
+                    mainUi.myPlayer.KeysOnValueChanged += mainUi.SetKeysUI;
                 }
                 playerHjh.PlayerToken = BackendManager.Instance.UserDataList[i].playerToken;
 

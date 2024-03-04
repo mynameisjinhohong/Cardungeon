@@ -37,6 +37,7 @@ public class Player_HJH : MonoBehaviour
         set
         {
             keys = value;
+            Debug.Log($"set : {value}");
             KeysOnValueChanged?.Invoke(value);
         }
     }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -71,16 +72,6 @@ public class MainUI_HJH : MonoBehaviour
     public List<GameObject> keys = new List<GameObject>();
 
     public GameObject tutorial;
-
-    private void OnEnable()
-    {
-        myPlayer.KeysOnValueChanged += SetKeysUI;
-    }
-
-    private void OnDisable()
-    {
-        myPlayer.KeysOnValueChanged -= SetKeysUI;
-    }
 
     // Start is called before the first frame update
     void Start()
@@ -480,6 +471,7 @@ public class MainUI_HJH : MonoBehaviour
         }
         allList.SetActive(false);
         playerDeck.HandVisible();
+        GamePlayManager.Instance.mainUi.toastMsgContainer.AddMessage("카드를 강화했습니다", 3.0f);
     }
     public void DeleteStart()
     {
@@ -842,8 +834,9 @@ public class MainUI_HJH : MonoBehaviour
         Camera.main.transform.SetParent(GamePlayManager.Instance.players[idx].transform);
     }
 
-    private void SetKeysUI(int value)
+    public void SetKeysUI(int value)
     {
+        Debug.LogError(value);
         try
         {
             if (value < 3)
