@@ -7,7 +7,7 @@ using TMPro;
 
 namespace Assets.SimpleGoogleSignIn
 {
-    public class Example : MonoBehaviour
+    public class Example : Singleton<Example>
     {
         public GoogleAuth GoogleAuth;
         private String Log;

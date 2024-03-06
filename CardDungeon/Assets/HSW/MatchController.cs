@@ -56,7 +56,7 @@ public class MatchController : Singleton<MatchController>
     
     public void TryAutoLogin()
     {
-        if(_backendManager.checkLoginWayData == -1 || _backendManager.userInfo.Nickname == "")
+        if(_backendManager.checkLoginWayData == -1 && !BackendManager.Instance.UseAutoLogin)
         {
             Debug.Log("로그인 정보 없음");
             TryLogin();
@@ -64,10 +64,7 @@ public class MatchController : Singleton<MatchController>
         else
         {
             Debug.Log("자동로그인 실행 테스트");
-            if (!_backendManager.isInitialize)
-                _backendManager.StartTokenLogin();
-            
-            ChangeUI(1);
+            _backendManager.StartTokenLogin();
         }
     }
 
@@ -122,6 +119,8 @@ public class MatchController : Singleton<MatchController>
         _backendManager.GetMatchList();
 
         StartCoroutine(FindMatchIndex());
+        
+        ChangeUI(2);
     }
 
     public void LeaveMatchingRoom()
@@ -173,6 +172,9 @@ public class MatchController : Singleton<MatchController>
     public void MatchCancel()
     {
         Backend.Match.CancelMatchMaking();
+
+        _backendManager.LeaveMatchMaking();
+        
         ChangeUI(1);
     }
 

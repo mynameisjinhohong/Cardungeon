@@ -91,6 +91,7 @@ public class AccountLoginPopup : MonoBehaviour
             if(callback.IsSuccess())
             {
                 Debug.Log("계정 로그인 성공");
+                PlayerPrefs.SetInt("LoginWay", 0);
                 BackendManager.Instance.GetUserInfo();
             }
             else

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using Assets.SimpleGoogleSignIn;
 using BackEnd;
 using BackEnd.Tcp;
 using LitJson;
@@ -29,6 +30,7 @@ public class BackendManager : Singleton<BackendManager>
     public bool isLoadGame   = false;
     public bool UseAutoLogin = false; 
     public int matchIndex = 0;
+    public bool isMatching = false;
     
     [Header("전체 유저 데이터 리스트")] 
     public List<UserData> UserDataList;
@@ -39,8 +41,6 @@ public class BackendManager : Singleton<BackendManager>
     public bool isFastMatch;
     
     private int initTimeCount = 0;
-
-    public bool matchCardListDownLoaded;
 
     [SerializeField]
     List<TransactionValue> transactionList = new List<TransactionValue>();
@@ -173,6 +173,8 @@ public class BackendManager : Singleton<BackendManager>
             checkLoginWayData = PlayerPrefs.GetInt("LoginWay");
         }
         Debug.LogError(PlayerPrefs.HasKey("LoginWay") + checkLoginWayData.ToString());
+
+        UseAutoLogin = PlayerPrefs.GetInt("UseAutoLogin") == 1;
     }
 
     // public void GuestLoginSequense()
@@ -254,10 +256,20 @@ public class BackendManager : Singleton<BackendManager>
     public void StartTokenLogin()
     {
         Debug.Log("자동 로그인");
-        Backend.BMember.LoginWithTheBackendToken((callback) =>
+
+        switch (PlayerPrefs.GetInt("LoginWay"))
         {
-            StartCoroutine(LoginProcess(callback, LoginType.Auto));
-        });
+            case 0 :
+                Backend.BMember.LoginWithTheBackendToken((callback) =>
+                {
+                    StartCoroutine(LoginProcess(callback, LoginType.Auto));
+                });
+                break;
+            case 1 :
+                Example.Instance.SignIn();
+                break;
+        }
+        
     }
 
     public void TryAuthorizeFederation(string Token)
@@ -265,7 +277,7 @@ public class BackendManager : Singleton<BackendManager>
         Debug.Log("구글 토큰 로그인 시도" + Token);
         Backend.BMember.AuthorizeFederation ( Token, FederationType.Google, "Google로 가입함", callback =>
         {
-            // 여기에 닉네임 체크 추가
+            CheckNickNameCreated();
         } );
     }
     
@@ -310,10 +322,6 @@ public class BackendManager : Singleton<BackendManager>
                 GetUserInfo();
                 Debug.LogError("계정 로그인에 성공했습니다.");
                 break;
-            case LoginType.Google:
-                GetUserInfo();
-                Debug.LogError("구글 로그인에 성공했습니다.");
-                break;
             case LoginType.Auto:
                 GetUserInfo();
                 Debug.LogError("자동 로그인에 성공했습니다.");
@@ -346,9 +354,23 @@ public class BackendManager : Singleton<BackendManager>
             }
         }
         DataManager.Instance.DataLoadComplete();
+        CheckNickNameCreated();
+        
         StartCoroutine(nameof(RefreshToken));
     }
 
+    public void CheckNickNameCreated()
+    {
+        if (Backend.UserNickName.Length <= 1)
+        {
+            UIManager.Instance.OpenPopup(UIManager.Instance.NickNamePrefab);
+        }
+        else
+        {
+            MatchController.Instance.ChangeUI(1);
+        }
+    }
+    
     public void SetNewUserDataSaveToServer()
     {
         DataManager.Instance.SaveAllDataAtFirst();
@@ -514,6 +536,7 @@ public class BackendManager : Singleton<BackendManager>
     public void JoinMatchMakingServer()
     {
         Debug.Log("서버접속 시도");
+        isMatching = true;
         
         Backend.Match.OnException = (Exception e) => { Debug.LogError(e.ToString()); };
 
@@ -561,7 +584,7 @@ public class BackendManager : Singleton<BackendManager>
                 
                 Debug.Log("3-2. OnMatchMakingResponse 매칭 신청 진행중");
 
-                int second = matchCardList[BackendManager.Instance.matchIndex].transit_to_sandbox_timeout_ms / 1000;
+                int second = matchCardList[matchIndex].transit_to_sandbox_timeout_ms / 1000;
                 
                 if (second > 0) {
                     Debug.Log($"{second}초 뒤에 샌드박스 활성화가 됩니다.");
@@ -571,8 +594,10 @@ public class BackendManager : Singleton<BackendManager>
             } else if (args.ErrInfo == ErrorCode.Success) {
                 Debug.Log("3-3. OnMatchMakingResponse 매칭 성사 완료");
                 JoinGameServer(args.RoomInfo);
+                isMatching = false;
             } else {
                 Debug.LogError("3-2. OnMatchMakingResponse 매칭 신청 진행중 에러 발생 : " + args.ToString());
+                isMatching = false;
             }
         };
         
@@ -590,7 +615,10 @@ public class BackendManager : Singleton<BackendManager>
     
     IEnumerator WaitFor10Seconds(int second) {
         var delay = new WaitForSeconds(1.0f);
-        for (int i = 0; i < second; i++) {
+        for (int i = 0; i < second; i++)
+        {
+            if (!isMatching) break;
+            
             Debug.Log($"{i}초 경과");
             yield return delay;
         }
@@ -709,8 +737,6 @@ public class BackendManager : Singleton<BackendManager>
                 Debug.Log($"{i} 번째 매치카드 : \n" + matchCardList[i].ToString());
             }
         });
-
-        matchCardListDownLoaded = true;
     }
 
     [Serializable]
@@ -772,7 +798,7 @@ public class BackendManager : Singleton<BackendManager>
     MatchInGameRoomInfo currentGameRoomInfo;
     Dictionary<string, MatchUserGameRecord> inGameUserList = new Dictionary<string, MatchUserGameRecord>();
 
-    private void LeaveMatchMaking() {
+    public void LeaveMatchMaking() {
         Backend.Match.OnLeaveMatchMakingServer = (LeaveChannelEventArgs args) => {
             Debug.Log("OnLeaveMatchMakingServer - 매칭 서버 접속 종료 : " + args.ToString());
         };
@@ -780,6 +806,12 @@ public class BackendManager : Singleton<BackendManager>
         Debug.Log($"5-a. LeaveMatchMakingServer 매치메이킹 서버 접속 종료 요청");
         
         Backend.Match.LeaveMatchMakingServer();
+        
+        isFastMatch = false;
+
+        isMatching = false;
+        
+        matchIndex = 0;
     }
 
     public void JoinGameServer(MatchInGameRoomInfo gameRoomInfo) {
