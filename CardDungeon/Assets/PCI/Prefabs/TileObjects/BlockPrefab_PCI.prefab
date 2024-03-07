@@ -107,10 +107,7 @@ MonoBehaviour:
   sprites:
   - {fileID: 21300000, guid: eaec22bf17ee4da489b3d78bef42d306, type: 3}
   - {fileID: 21300000, guid: ddccefd966a5a6b4faee4dbea944b6bb, type: 3}
-  - {fileID: 21300000, guid: d0dc2cefaf5ed604192c7f54d07b5ad6, type: 3}
   - {fileID: 21300000, guid: 1b4303eb21d8b804da58ad659c4e0e8a, type: 3}
-  - {fileID: 21300000, guid: 7e871ae148e44c14e8b1623ac929ca24, type: 3}
-  - {fileID: 21300000, guid: be150e157e19ea947aa089a354650f7d, type: 3}
   - {fileID: 21300000, guid: 523b6d1c4f9428d4a8b13e46072a6afe, type: 3}
   - {fileID: 21300000, guid: 14397b6d5de97e245ad93b15d8ec56ad, type: 3}
 --- !u!1 &7091735636031344838
