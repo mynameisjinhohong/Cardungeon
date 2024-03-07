@@ -282,7 +282,24 @@ public class GamePlayManager : Singleton<GamePlayManager>
                     {
                         if (msg.playerIdx == -10)
                         {
-                            gameBoard.Generate(msg.cardIdx);
+                            int head = BackendManager.Instance.roomSettingData.roomHeadCount;
+                            switch (head)
+                            {
+                                case 2:
+                                    gameBoard.Generate(msg.cardIdx, 20, 20);
+                                    break;
+                                case 3:
+                                case 4:
+                                case 5:
+                                case 6:
+                                    gameBoard.Generate(msg.cardIdx, 30, 30);
+                                    break;
+                                case 7:
+                                case 8:
+                                default:
+                                    gameBoard.Generate(msg.cardIdx, 40, 40);
+                                    break;
+                            }
                             CardManager.Instance.seed = msg.cardIdx;
                         }
                         else
@@ -302,7 +319,24 @@ public class GamePlayManager : Singleton<GamePlayManager>
             m.cardIdx = Random.Range(0, 100);
             SendData(m);
             CardManager.Instance.seed = m.cardIdx;
-            gameBoard.Generate(m.cardIdx);
+            int head = BackendManager.Instance.roomSettingData.roomHeadCount;
+            switch (head)
+            {
+                case 2:
+                    gameBoard.Generate(m.cardIdx, 20, 20);
+                    break;
+                case 3:
+                case 4:
+                case 5:
+                case 6:
+                    gameBoard.Generate(m.cardIdx, 30, 30);
+                    break;
+                case 7:
+                case 8:
+                default:
+                    gameBoard.Generate(m.cardIdx, 40, 40);
+                    break;
+            }
         }
 
         //gameRecord = new Stack<SessionId>();
