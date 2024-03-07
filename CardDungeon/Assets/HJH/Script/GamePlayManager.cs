@@ -285,6 +285,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
                             int head = BackendManager.Instance.roomSettingData.roomHeadCount;
                             switch (head)
                             {
+                                case 0:
                                 case 1:
                                 case 2:
                                     gameBoard.Generate(msg.cardIdx, 20, 20);
@@ -323,6 +324,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
             int head = BackendManager.Instance.roomSettingData.roomHeadCount;
             switch (head)
             {
+                case 0:
                 case 1:
                 case 2:
                     gameBoard.Generate(m.cardIdx, 20, 20);

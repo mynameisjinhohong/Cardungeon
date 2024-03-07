@@ -53,6 +53,7 @@ public class GameBoard_PCI : MonoBehaviour
     {
         this.width = width;
         this.height = height;
+        offset = new (int, int)[] { (padding, padding), (padding, height / 2), (padding, height - padding), (width / 2, padding), (width / 2, height - padding), (width - padding, padding), (width - padding, height / 2), (width - padding, height - padding) };
         board = new Tile_PCI[width, height];
         int[,] tempBoard = new int[width, height];
 
