@@ -51,6 +51,8 @@ public class GameBoard_PCI : MonoBehaviour
 
     public void Generate(int seed, int width, int height)
     {
+        this.width = width;
+        this.height = height;
         board = new Tile_PCI[width, height];
         int[,] tempBoard = new int[width, height];
 
