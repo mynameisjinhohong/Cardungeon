@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,6 +8,9 @@ public class UI_Lobby_PCI : MonoBehaviour
 {
     public CanvasGroup canvasGroup;
     public List<UI_UserIDPanel_PCI> slots = new List<UI_UserIDPanel_PCI>();
+
+    public TMP_Text roomNameText;
+    
     public TMPro.TextMeshProUGUI invitationCode, userCount;
 
     public Button btn_MatchStart, btn_ExitRoom;
@@ -56,7 +60,7 @@ public class UI_Lobby_PCI : MonoBehaviour
 
     }
 
-    // TODO : 유저 데이터 컨테이너 필요
+    // TODO : ???? ?????? ??????? ???
     private void AddUser(string TODO_userDataContainer)
     {
         foreach(var e in slots)
@@ -68,7 +72,7 @@ public class UI_Lobby_PCI : MonoBehaviour
         }
     }
 
-    // TODO : 유저 데이터 컨테이너 필요
+    // TODO : ???? ?????? ??????? ???
     private void RemoveUser(string TODO_userDataContainer)
     {
         foreach(var e in slots)

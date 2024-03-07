@@ -605,7 +605,7 @@ public class BackendManager : Singleton<BackendManager>
 
         MatchModeType settedType;
 
-        if (roomSettingData.maxCount >= 2)
+        if (roomSettingData.roomHeadCount >= 2)
             settedType = MatchModeType.OneOnOne;
         else
             settedType = MatchModeType.Melee;
@@ -1221,10 +1221,11 @@ public class RoomSettingData
 {
     [Header("방설정 정보")]
     public int mapType;
-    public int maxCount;
+    public int roomHeadCount;
+    public int roomIndexNum;
         
     public string roomName;
-    public RoomType roomType;
+    //public RoomType roomType;
 
 
     [Header("방 서버 정보")]

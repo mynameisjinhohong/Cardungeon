@@ -135,8 +135,7 @@ public class MatchController : Singleton<MatchController>
 
         for (int i = 0; i < _backendManager.matchCardList.Count; i++)
         {
-            if (_backendManager.matchCardList[i].matchHeadCount ==
-                _backendManager.roomSettingData.maxCount)
+            if (_backendManager.matchCardList[i].matchHeadCount == _backendManager.roomSettingData.roomHeadCount)
             {
                 _backendManager.matchIndex = i;
                 
