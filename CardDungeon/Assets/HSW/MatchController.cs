@@ -155,6 +155,10 @@ public class MatchController : Singleton<MatchController>
         _backendManager.matchIndex = 6;
         
         _backendManager.JoinMatchMakingServer();
+
+        _backendManager.roomSettingData.roomHeadCount = 2;
+
+        _backendManager.roomSettingData.roomIndexNum = 0;
     }
     
     IEnumerator waitInitDataCor()

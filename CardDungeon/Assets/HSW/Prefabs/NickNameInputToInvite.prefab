@@ -198,9 +198,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: LoginTest, Assembly-CSharp
-        m_MethodName: UpdateNickname
+      - m_Target: {fileID: 6054672629263086089}
+        m_TargetAssemblyTypeName: NickNameInputToInvite, Assembly-CSharp
+        m_MethodName: BackButtonClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -571,6 +571,7 @@ GameObject:
   - component: {fileID: 6149991500178447227}
   - component: {fileID: 8083300133106487380}
   - component: {fileID: 8458103338118245301}
+  - component: {fileID: 6054672629263086089}
   m_Layer: 5
   m_Name: NickNameInputToInvite
   m_TagString: Untagged
@@ -638,6 +639,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6054672629263086089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5097887765796371620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 449ab4e41abc8ed4588e2a13b1d58b97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7724915180147299685
 GameObject:
   m_ObjectHideFlags: 0
