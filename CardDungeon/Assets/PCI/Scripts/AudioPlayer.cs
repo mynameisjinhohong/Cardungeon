@@ -74,6 +74,8 @@ public class AudioPlayer : Singleton<AudioPlayer>
     /// 8. rabbit_walk1
     /// 9. rabbit_walk2
     /// 10. rabbit_walk3
+    /// 11. box_open
+    /// 12 . cardd_stop
     /// </summary>
     /// <param name="idx"></param>
     public void PlayClip(int idx)
