@@ -1,0 +1,152 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce03e9d2f49730246a089d0959c05db5, type: 3}
+  m_Name: Card Data
+  m_EditorClassIdentifier: 
+  cards:
+  - cardName: None
+    useMP: 0
+    cardType: {fileID: 0}
+    bigCardType: {fileID: 0}
+    itemImage: {fileID: 0}
+    enforceBigCard: {fileID: 0}
+    enforceSmallCard: {fileID: 0}
+    type: 0
+    description: 
+    cardIdx: 0
+    enforceDescription: 
+  - cardName: "\uC704\uB85C \uAE61\uCD1D"
+    useMP: 0
+    cardType: {fileID: 21300000, guid: f6db1223d286f52428b38d93da6f7297, type: 3}
+    bigCardType: {fileID: 21300000, guid: 04f0308d540937a4fab4f97e1a4a8431, type: 3}
+    itemImage: {fileID: 21300000, guid: 344ee8c910674f5419b3c4775b0ab590, type: 3}
+    enforceBigCard: {fileID: 21300000, guid: 4620bfa2c185121479f1c19216be5310, type: 3}
+    enforceSmallCard: {fileID: 21300000, guid: 32201042e7b8d0f469e9d294391c083c, type: 3}
+    type: 0
+    description: "\uC704\uB85C \uD55C \uCE78\n\uC774\uB3D9\uD55C\uB2E4."
+    cardIdx: 1
+    enforceDescription: "\uC704\uB85C \uB450 \uCE78\n\uC774\uB3D9\uD55C\uB2E4."
+  - cardName: "\uC6B0\uB85C \uAE61\uCD1D"
+    useMP: 0
+    cardType: {fileID: 21300000, guid: f6db1223d286f52428b38d93da6f7297, type: 3}
+    bigCardType: {fileID: 21300000, guid: 04f0308d540937a4fab4f97e1a4a8431, type: 3}
+    itemImage: {fileID: 21300000, guid: 639fd0e376eb2264998fdd32b0968b7a, type: 3}
+    enforceBigCard: {fileID: 21300000, guid: 4620bfa2c185121479f1c19216be5310, type: 3}
+    enforceSmallCard: {fileID: 21300000, guid: 32201042e7b8d0f469e9d294391c083c, type: 3}
+    type: 0
+    description: "\uC624\uB978\uCABD\uC73C\uB85C \n\uD55C \uCE78 \uC774\uB3D9\uD55C\uB2E4."
+    cardIdx: 2
+    enforceDescription: "\uC624\uB978\uCABD\uC73C\uB85C \n\uB450 \uCE78 \uC774\uB3D9\uD55C\uB2E4."
+  - cardName: "\uC88C\uB85C \uAE61\uCD1D"
+    useMP: 0
+    cardType: {fileID: 21300000, guid: f6db1223d286f52428b38d93da6f7297, type: 3}
+    bigCardType: {fileID: 21300000, guid: 04f0308d540937a4fab4f97e1a4a8431, type: 3}
+    itemImage: {fileID: 21300000, guid: c465b1f7a04bb8448a481bb36ae2f759, type: 3}
+    enforceBigCard: {fileID: 21300000, guid: 4620bfa2c185121479f1c19216be5310, type: 3}
+    enforceSmallCard: {fileID: 21300000, guid: 32201042e7b8d0f469e9d294391c083c, type: 3}
+    type: 0
+    description: "\uC67C\uCABD\uC73C\uB85C \n\uD55C \uCE78 \uC774\uB3D9\uD55C\uB2E4."
+    cardIdx: 3
+    enforceDescription: "\uC67C\uCABD\uC73C\uB85C \n\uB450 \uCE78 \uC774\uB3D9\uD55C\uB2E4."
+  - cardName: "\uC544\uB798\uB85C \uAE61\uCD1D"
+    useMP: 0
+    cardType: {fileID: 21300000, guid: f6db1223d286f52428b38d93da6f7297, type: 3}
+    bigCardType: {fileID: 21300000, guid: 04f0308d540937a4fab4f97e1a4a8431, type: 3}
+    itemImage: {fileID: 21300000, guid: bb685cf1411d2034a907a99a2cd155c2, type: 3}
+    enforceBigCard: {fileID: 21300000, guid: 4620bfa2c185121479f1c19216be5310, type: 3}
+    enforceSmallCard: {fileID: 21300000, guid: 32201042e7b8d0f469e9d294391c083c, type: 3}
+    type: 0
+    description: "\uC544\uB798\uB85C \uD55C \uCE78\n\uC774\uB3D9\uD55C\uB2E4."
+    cardIdx: 4
+    enforceDescription: "\uC544\uB798\uB85C \uB450 \uCE78\n\uC774\uB3D9\uD55C\uB2E4."
+  - cardName: "\uD798\uAECF \uAE61\uCD1D"
+    useMP: 1
+    cardType: {fileID: 21300000, guid: f6db1223d286f52428b38d93da6f7297, type: 3}
+    bigCardType: {fileID: 21300000, guid: 04f0308d540937a4fab4f97e1a4a8431, type: 3}
+    itemImage: {fileID: 21300000, guid: d30e2f4e4aa72e34183394c93810861c, type: 3}
+    enforceBigCard: {fileID: 21300000, guid: 4620bfa2c185121479f1c19216be5310, type: 3}
+    enforceSmallCard: {fileID: 21300000, guid: 32201042e7b8d0f469e9d294391c083c, type: 3}
+    type: 0
+    description: "\uC0AC\uBC29 3\uCE78 \uC548\uC5D0\n\uBB34\uC791\uC704\uB85C \uC774\uB3D9\uD55C\uB2E4."
+    cardIdx: 5
+    enforceDescription: "\uC0AC\uBC29 5\uCE78 \uC548\uC5D0\n\uBB34\uC791\uC704\uB85C
+      \uC774\uB3D9\uD55C\uB2E4."
+  - cardName: "\uB2F9\uADFC \uD718\uB450\uB974\uAE30"
+    useMP: 1
+    cardType: {fileID: 21300000, guid: ca0fafb909f16804a9f3b244aee7729c, type: 3}
+    bigCardType: {fileID: 21300000, guid: c2309d1c4586ccc4393bb804ba62351a, type: 3}
+    itemImage: {fileID: 21300000, guid: cac09a2dec0377e46852e93724535908, type: 3}
+    enforceBigCard: {fileID: 21300000, guid: 3f7e5389c2cfc3d4bb9d70511cf6d032, type: 3}
+    enforceSmallCard: {fileID: 21300000, guid: dcb220f64cb05ae4caaa92254df9f8f8, type: 3}
+    type: 1
+    description: "\uC704\uC544\uB798\n\uACF5\uACA9\uD55C\uB2E4. "
+    cardIdx: 6
+    enforceDescription: "\uB354 \uAC15\uB825\uD558\uAC8C\n\uC704\uC544\uB798\uB97C
+      \uACF5\uACA9\uD55C\uB2E4."
+  - cardName: "\uB2F9\uADFC \uCC0C\uB974\uAE30"
+    useMP: 1
+    cardType: {fileID: 21300000, guid: ca0fafb909f16804a9f3b244aee7729c, type: 3}
+    bigCardType: {fileID: 21300000, guid: c2309d1c4586ccc4393bb804ba62351a, type: 3}
+    itemImage: {fileID: 21300000, guid: 3105b8be78236fe45b67f82e6833d68f, type: 3}
+    enforceBigCard: {fileID: 21300000, guid: 3f7e5389c2cfc3d4bb9d70511cf6d032, type: 3}
+    enforceSmallCard: {fileID: 21300000, guid: dcb220f64cb05ae4caaa92254df9f8f8, type: 3}
+    type: 1
+    description: "\uC591 \uC606\uC744\n\uACF5\uACA9\uD55C\uB2E4 "
+    cardIdx: 7
+    enforceDescription: "\uB354 \uAC15\uB825\uD558\uAC8C \n\uC591 \uC606 \uACF5\uACA9\uD55C\uB2E4."
+  - cardName: "\uB2F9\uADFC \uB0B4\uB824\uCE58\uAE30"
+    useMP: 2
+    cardType: {fileID: 21300000, guid: ca0fafb909f16804a9f3b244aee7729c, type: 3}
+    bigCardType: {fileID: 21300000, guid: c2309d1c4586ccc4393bb804ba62351a, type: 3}
+    itemImage: {fileID: 21300000, guid: 43fae6bfcc827cd41ba8b1badb2583a9, type: 3}
+    enforceBigCard: {fileID: 21300000, guid: 3f7e5389c2cfc3d4bb9d70511cf6d032, type: 3}
+    enforceSmallCard: {fileID: 21300000, guid: dcb220f64cb05ae4caaa92254df9f8f8, type: 3}
+    type: 1
+    description: "\uBAA8\uB4E0 \uBC29\uD5A5\uC744 \uACF5\uACA9\uD55C\uB2E4."
+    cardIdx: 8
+    enforceDescription: "\uB354 \uAC15\uB825\uD558\uAC8C \n\uBAA8\uB4E0 \uBC29\uD5A5
+      \uACF5\uACA9\uD55C\uB2E4. "
+  - cardName: "\uD1A0\uB07C\uBCF4\uD638\uAD6C\uC5ED"
+    useMP: 1
+    cardType: {fileID: 21300000, guid: add0048181bc6054f9ad00a6fe3c04f5, type: 3}
+    bigCardType: {fileID: 21300000, guid: d8b80cb56cbea484c8dc03a9f92b252a, type: 3}
+    itemImage: {fileID: 21300000, guid: fc4e7eea15119e749ac8ddb9f1d4ee89, type: 3}
+    enforceBigCard: {fileID: 21300000, guid: e48ebc4aef5b8004d8227fda15846384, type: 3}
+    enforceSmallCard: {fileID: 21300000, guid: a7028f4a663ca9648914a244c46a4113, type: 3}
+    type: 2
+    description: "3\uCD08 \uC548\uC5D0 \n\uACF5\uACA9\uC744 \uD55C\uBC88 \uB9C9\uB294\uB2E4."
+    cardIdx: 9
+    enforceDescription: "5\uCD08 \uC548\uC5D0 \n\uACF5\uACA9\uC744 \uD55C\uBC88 \uB9C9\uB294\uB2E4."
+  - cardName: "\uB369\uCFE8 \uC124\uCE58"
+    useMP: 1
+    cardType: {fileID: 21300000, guid: add0048181bc6054f9ad00a6fe3c04f5, type: 3}
+    bigCardType: {fileID: 21300000, guid: d8b80cb56cbea484c8dc03a9f92b252a, type: 3}
+    itemImage: {fileID: 21300000, guid: 9a1f4eeffeb731045a7e75ac20242676, type: 3}
+    enforceBigCard: {fileID: 21300000, guid: e48ebc4aef5b8004d8227fda15846384, type: 3}
+    enforceSmallCard: {fileID: 21300000, guid: a7028f4a663ca9648914a244c46a4113, type: 3}
+    type: 2
+    description: "\uC9C0\uAE08 \uC788\uB294 \uC704\uCE58\uC5D0 \uB3C4\uCC29\uD558\uBA74\n3\uCD08\uAC04
+      \uD589\uB3D9\uBD88\uB2A5\uC774 \uB418\uB294 \uD568\uC815\uC744 \uC124\uCE58\uD55C\uB2E4"
+    cardIdx: 10
+    enforceDescription: "\uC9C0\uAE08 \uC788\uB294 \uC704\uCE58\uC5D0 \uB3C4\uCC29\uD558\uBA74\n5\uCD08\uAC04
+      \uD589\uB3D9\uBD88\uB2A5\uC774 \uB418\uB294 \uD568\uC815\uC744 \uC124\uCE58\uD55C\uB2E4"
+  - cardName: "\uCE74\uB4DC \uBF51\uAE30"
+    useMP: 0
+    cardType: {fileID: 21300000, guid: add0048181bc6054f9ad00a6fe3c04f5, type: 3}
+    bigCardType: {fileID: 21300000, guid: d8b80cb56cbea484c8dc03a9f92b252a, type: 3}
+    itemImage: {fileID: 21300000, guid: a1d8fef93de70334e8d50c5e7bb78d94, type: 3}
+    enforceBigCard: {fileID: 21300000, guid: e48ebc4aef5b8004d8227fda15846384, type: 3}
+    enforceSmallCard: {fileID: 21300000, guid: a7028f4a663ca9648914a244c46a4113, type: 3}
+    type: 2
+    description: "\uCE74\uB4DC \uB450 \uC7A5\uC744\n\uC0C8\uB85C \uBF51\uB294\uB2E4."
+    cardIdx: 11
+    enforceDescription: "\uCE74\uB4DC \uC138 \uC7A5\uC744 \uC0C8\uB85C \uBF51\uB294\uB2E4."
