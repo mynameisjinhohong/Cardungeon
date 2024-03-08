@@ -271,7 +271,7 @@ namespace Assets.SimpleGoogleSignIn.Scripts
             _callbackU?.Invoke(false, error, null);
         }
 
-        private void UseSavedToken()
+        public void UseSavedToken()
         {
             if (SavedAuth == null || SavedAuth.ClientId != _settings.ClientId)
             {
@@ -516,7 +516,15 @@ namespace Assets.SimpleGoogleSignIn.Scripts
                 // 그룹 1에서 추출한 id_token 값
                 string idToken = match.Groups[1].Value;
                 
-                BackendManager.Instance.TryAuthorizeFederation(idToken);
+                Debug.Log("구글 데이터 접속완료 뒤끝 연동 시도");
+
+                if (PlayerPrefs.GetInt("LoginWay") == -1)
+                {
+                    BackendManager.Instance.TryAuthorizeFederation(idToken);
+                    PlayerPrefs.SetInt("LoginWay", 1);
+                    BackendManager.Instance.CheckLoginWayData();
+                }
+                
                 Debug.Log($"Extracted id_token: {idToken}");
             }
             else

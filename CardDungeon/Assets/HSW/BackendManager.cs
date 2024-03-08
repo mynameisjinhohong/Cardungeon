@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using Assets.SimpleGoogleSignIn;
+using Assets.SimpleGoogleSignIn.Scripts;
 using BackEnd;
 using BackEnd.Tcp;
 using LitJson;
@@ -173,8 +174,6 @@ public class BackendManager : Singleton<BackendManager>
             checkLoginWayData = PlayerPrefs.GetInt("LoginWay");
         }
         Debug.LogError(PlayerPrefs.HasKey("LoginWay") + checkLoginWayData.ToString());
-
-        UseAutoLogin = PlayerPrefs.GetInt("UseAutoLogin") == 1;
     }
 
     // public void GuestLoginSequense()
@@ -257,15 +256,17 @@ public class BackendManager : Singleton<BackendManager>
     {
         Debug.Log("자동 로그인");
 
-        switch (PlayerPrefs.GetInt("LoginWay"))
+        switch (checkLoginWayData)
         {
             case 0 :
+                Debug.Log("0으로 로그인");
                 Backend.BMember.LoginWithTheBackendToken((callback) =>
                 {
                     StartCoroutine(LoginProcess(callback, LoginType.Auto));
                 });
                 break;
             case 1 :
+                Debug.Log("1으로 로그인");
                 Example.Instance.SignIn();
                 break;
         }
@@ -277,6 +278,13 @@ public class BackendManager : Singleton<BackendManager>
         Debug.Log("구글 토큰 로그인 시도" + Token);
         Backend.BMember.AuthorizeFederation ( Token, FederationType.Google, "Google로 가입함", callback =>
         {
+            userInfo.UserIndate = Backend.UserInDate;
+            userInfo.Nickname = Backend.UserNickName;
+            userInfo.UID = Backend.UID;
+            
+            PlayerPrefs.SetInt("LoginWay", 1); 
+            CheckLoginWayData();
+            
             CheckNickNameCreated();
         } );
     }

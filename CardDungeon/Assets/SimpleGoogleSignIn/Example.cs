@@ -44,10 +44,11 @@ namespace Assets.SimpleGoogleSignIn
 
             googleUserData = userInfo;
 
-            //BackendManager.Instance.GetUserInfo();
-            //BackendManager.Instance.userInfo.playerID = userInfo.email;
-            //BackendManager.Instance.userInfo.Email = userInfo.email;
-            //MatchController.Instance.ChangeUI(1);
+            GetAccessToken();
+            
+            BackendManager.Instance.userInfo.UserIndate = Backend.UserInDate;
+            BackendManager.Instance.userInfo.Nickname = Backend.UserNickName;
+            BackendManager.Instance.userInfo.UID = Backend.UID;
         }
 
         private void OnGetAccessToken(bool success, string error, TokenResponse tokenResponse)
@@ -61,6 +62,8 @@ namespace Assets.SimpleGoogleSignIn
             Debug.Log($"JSON Web Token (JWT) Payload: {jwt.Payload}");
             
             jwt.ValidateSignature(GoogleAuth.ClientId, OnValidateSignature);
+            
+            BackendManager.Instance.TryAuthorizeFederation(tokenResponse.IdToken);
             
             Debug.Log(Log);
         }

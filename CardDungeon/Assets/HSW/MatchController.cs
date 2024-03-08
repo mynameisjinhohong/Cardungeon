@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using BackEnd;
+using BackEnd.Tcp;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -87,13 +88,15 @@ public class MatchController : Singleton<MatchController>
         {
             userNickNameText.text = BackendManager.Instance.userInfo.Nickname;
             StartCoroutine(RabbitBlinkEye());
-            Debug.Log("깜빡");
+            
+            Backend.Match.OnMatchMakingRoomSomeoneInvited += (args) => {
+                Debug.Log("초대받음");
+            };
         }
 
         if (index == 3)
         {
             StartCoroutine(RandomTipTextCor());
-            Debug.Log("텍스트");
         }
     }
 

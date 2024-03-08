@@ -7,14 +7,13 @@ using UnityEngine.UI;
 
 public class UI_Setting_PCI : MonoBehaviour
 {
-    public CanvasGroup canvasGroup;
     public TMPro.TextMeshProUGUI txt_ScreenModeTxt;
     public Button btn_ScreenModeLeft, btn_ScreenModeRight;
     public TMPro.TextMeshProUGUI txt_ResolutionTxt;
     public Button btn_ResolutionLeft, btn_ResolutionRight;
     public Slider sld_BgmSlider, sld_SfxSlider;
     public Button btn_Confirm, btn_Cancel;
-    public Button btn_CopyEmail;
+    public Toggle toggle_AutoLogin;
 
     private FullScreenMode screenMode;
     private List<Resolution> resolutions;
@@ -48,7 +47,7 @@ public class UI_Setting_PCI : MonoBehaviour
             try
             {
                 resolutionIdx = value;
-                txt_ResolutionTxt.text = resolutions[resolutionIdx].ToString();
+                txt_ResolutionTxt.text = resolutions[resolutionIdx].width + " x " + resolutions[resolutionIdx].height;
             }
             catch(Exception ex)
             {
@@ -71,9 +70,9 @@ public class UI_Setting_PCI : MonoBehaviour
         btn_ResolutionRight.onClick.AddListener(ResolutionRight);
         sld_BgmSlider.onValueChanged.AddListener(SetBgmVolume);
         sld_SfxSlider.onValueChanged.AddListener(SetSfxVolume);
-        btn_CopyEmail.onClick.AddListener(CopyEmail);
         btn_Confirm.onClick.AddListener(ConfirmSetting);
         btn_Cancel.onClick.AddListener(CancelSetting);
+        toggle_AutoLogin.onValueChanged.AddListener(AutoLoginSetting);
 
         ScreenModeIdx = 0;
         ResolutionIdx = 0;
@@ -86,27 +85,7 @@ public class UI_Setting_PCI : MonoBehaviour
         }
  
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void Show()
-    {
-        canvasGroup.alpha = 1;
-        canvasGroup.interactable = true;
-        canvasGroup.blocksRaycasts = true;
-    }
-
-    public void Hide()
-    {
-        canvasGroup.alpha = 0;
-        canvasGroup.interactable = false;
-        canvasGroup.blocksRaycasts = false;
-    }
-
+    
     private void ScreenModeLeft()
     {
         ScreenModeIdx = (screenModeIdx + Enum.GetValues(typeof(FullScreenMode)).Length - 1) % (Enum.GetValues(typeof(FullScreenMode)).Length);
@@ -138,15 +117,16 @@ public class UI_Setting_PCI : MonoBehaviour
         AudioPlayer.Instance.PlayClip(1);
     }
 
-    private void CopyEmail()
-    {
-        GUIUtility.systemCopyBuffer = "gangtoesal@gmail.com";
-    }
+    // private void CopyEmail()
+    // {
+    //     GUIUtility.systemCopyBuffer = "gangtoesal@gmail.com";
+    // }
 
     private void ConfirmSetting()
     {
         Screen.SetResolution(resolutions[resolutionIdx].width, resolutions[resolutionIdx].height, screenMode, resolutions[resolutionIdx].refreshRate);
-        Hide();
+        
+        UIManager.Instance.PopupListPop();
     }
 
     private void CancelSetting()
@@ -158,6 +138,14 @@ public class UI_Setting_PCI : MonoBehaviour
         Screen.SetResolution(resolutions[resolutionIdx].width, resolutions[resolutionIdx].height, screenMode, resolutions[resolutionIdx].refreshRate);
         AudioPlayer.Instance.bgmPlayer.volume = sld_BgmSlider.value;
         AudioPlayer.Instance.sfxPlayer.volume = sld_SfxSlider.value;
-        Hide();
+        
+        UIManager.Instance.PopupListPop();
+    }
+
+    private void AutoLoginSetting(bool toggleValue)
+    {
+        int boolValue = toggleValue ? 1 : 0;
+        
+        PlayerPrefs.SetInt("UseAutoLogin", boolValue);
     }
 }
