@@ -427,6 +427,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8787522441298779875, guid: e36e36b8cb80c004d8e7795049669df8, type: 3}
+      propertyPath: width
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8787522441298779875, guid: e36e36b8cb80c004d8e7795049669df8, type: 3}
+      propertyPath: height
+      value: 20
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e36e36b8cb80c004d8e7795049669df8, type: 3}
 --- !u!4 &103219520 stripped
@@ -5779,6 +5787,8 @@ MonoBehaviour:
   - {fileID: 799288972}
   - {fileID: 236509253}
   - {fileID: 1512911070}
+  cardsAnc: []
+  cardsTrashAnc: []
   ease: 0
 --- !u!114 &1490756470
 MonoBehaviour:
