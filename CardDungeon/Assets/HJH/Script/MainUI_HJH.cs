@@ -840,7 +840,10 @@ public class MainUI_HJH : MonoBehaviour
         try
         {
             if (value < 3)
-                keys[value - 1].SetActive(true);
+            {
+                keys[value - 1].SetActive(false);
+                keys[value + 2].SetActive(true);
+            }
         }
         catch (System.Exception e)
         {
