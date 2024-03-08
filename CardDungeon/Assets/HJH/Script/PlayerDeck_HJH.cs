@@ -21,13 +21,28 @@ public class PlayerDeck_HJH : MonoBehaviour
     public RectTransform trashPos;
     public GameObject[] cards;
     public GameObject[] cardTrash;
+    public List<Vector3> cardsAnc;
+    public List<Vector3> cardsTrashAnc;
     public Ease ease = Ease.OutQuart;
     bool stun = false;
     // Start is called before the first frame update
+    private void Awake()
+    {
+        for (int i = 0; i < cards.Length; i++)
+        {
+            cardsAnc.Add(cards[i].GetComponent<RectTransform>().anchoredPosition);
+        }
+        for (int i = 0; i < cardTrash.Length; i++)
+        {
+            cardsTrashAnc.Add(cardTrash[i].GetComponent<RectTransform>().anchoredPosition);
+        }
+    }
+
     void Start()
     {
         SuffelDeck();
         DrawFirst(0);
+
     }
 
 
@@ -110,7 +125,7 @@ public class PlayerDeck_HJH : MonoBehaviour
                     cardT.transform.GetChild(1).GetComponent<TMP_Text>().color = Color.yellow;
                     cardT.transform.GetChild(2).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[-hand[i]].itemImage;
                 }
-                Vector3 goPos = cardT.GetComponent<RectTransform>().anchoredPosition;
+                Vector3 goPos = cardsTrashAnc[i];
                 Color co2 = cardT.GetComponent<Image>().color;
                 co2.a = 1f;
                 cardT.GetComponent<Image>().color = co2;
@@ -161,7 +176,7 @@ public class PlayerDeck_HJH : MonoBehaviour
                     card.transform.GetChild(1).GetComponent<TMP_Text>().color = Color.yellow;
                     card.transform.GetChild(2).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[-hand[i]].itemImage;
                 }
-                Vector3 goCard = card.GetComponent<RectTransform>().anchoredPosition;
+                Vector3 goCard = cardsAnc[i];
                 card.GetComponent<RectTransform>().anchoredPosition = deckPos.GetComponent<RectTransform>().anchoredPosition;
                 card.GetComponent<RectTransform>().DOAnchorPos(goCard, 1f).SetEase(ease);
                 Color co = card.GetComponent<Image>().color;
