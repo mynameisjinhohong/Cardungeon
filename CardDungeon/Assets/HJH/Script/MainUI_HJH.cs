@@ -279,7 +279,7 @@ public class MainUI_HJH : MonoBehaviour
 
         }
         int[] ran;
-        Debug.Log(canCardList.Count);
+
         if (canCardList.Count == 1)
         {
             ran = new int[1];

@@ -25,7 +25,7 @@ public class Card_HJH : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
     }
     void IBeginDragHandler.OnBeginDrag(UnityEngine.EventSystems.PointerEventData eventData)
     {
-        defaultPos = transform.position;
+        defaultPos = gameObject.GetComponent<RectTransform>().anchoredPosition;
         ChildRayCast(false);
         switch (Mathf.Abs(cardIdx))
         {
@@ -207,23 +207,23 @@ public class Card_HJH : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
             Destroy(tileEffects[i]);
         }
         tileEffects.Clear();
-        if (!EventSystem.current.IsPointerOverGameObject() || Mathf.Abs(((Vector2)transform.position - defaultPos).magnitude) <50)
+        if (!EventSystem.current.IsPointerOverGameObject() && Mathf.Abs(((Vector2)gameObject.GetComponent<RectTransform>().anchoredPosition - defaultPos).magnitude) > 75)
         {
             if (!playerDeck.UseCard(handIdx))
             {
-                transform.position = defaultPos;
+                gameObject.GetComponent<RectTransform>().anchoredPosition = defaultPos;
                 ChildRayCast(true);
             }
             else
             {
-                transform.position = defaultPos;
+                gameObject.GetComponent<RectTransform>().anchoredPosition = defaultPos;
                 Instantiate(cardEffect, transform);
                 ChildRayCast(true);
             }
         }
         else
         {
-            transform.position = defaultPos;
+            gameObject.GetComponent<RectTransform>().anchoredPosition = defaultPos;
             GetComponent<Image>().raycastTarget = true;
             ChildRayCast(true);
         }

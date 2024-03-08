@@ -347,6 +347,7 @@ public class PlayerDeck_HJH : MonoBehaviour
             {
                 GamePlayManager.Instance.mainUi.toastMsgContainer.AddMessage("덫에걸려 움직일수 없습니다", 3.0f);
             }
+            AudioPlayer.Instance.PlayClip(12);
             GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].Mp -= CardManager.Instance.cardList.cards[Mathf.Abs(a)].useMP;
             return false;
         }
