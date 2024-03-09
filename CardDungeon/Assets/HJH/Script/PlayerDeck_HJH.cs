@@ -346,6 +346,7 @@ public class PlayerDeck_HJH : MonoBehaviour
             if (stun)
             {
                 GamePlayManager.Instance.mainUi.toastMsgContainer.AddMessage("덫에걸려 움직일수 없습니다", 3.0f);
+                GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].transform.DOShakePosition(0.2f);
             }
             AudioPlayer.Instance.PlayClip(12);
             GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].Mp -= CardManager.Instance.cardList.cards[Mathf.Abs(a)].useMP;
