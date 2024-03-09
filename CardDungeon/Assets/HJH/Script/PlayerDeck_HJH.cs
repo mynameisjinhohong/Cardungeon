@@ -2,7 +2,6 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -134,9 +133,9 @@ public class PlayerDeck_HJH : MonoBehaviour
                     .Append(cardT.GetComponent<RectTransform>().DOAnchorPos(trashPos.anchoredPosition, 1f).SetEase(ease))
                     .Join(cardT.GetComponent<Image>().DOFade(0.0f, 1f).SetEase(ease))
                     .Join(cardT.transform.GetChild(2).GetComponent<Image>().DOFade(0.0f, 1f).SetEase(ease))
-                    .Join(cardT.transform.GetChild(0).GetComponent<TMP_Text>().DOFade(0.0f,1f).SetEase(ease))
-                    .Join(cardT.transform.GetChild(1).GetComponent<TMP_Text>().DOFade(0.0f,1f).SetEase(ease))
-                    .Append(DOTween.To(()=>0f, x => cardT.SetActive(false),0f,0f))
+                    .Join(cardT.transform.GetChild(0).GetComponent<TMP_Text>().DOFade(0.0f, 1f).SetEase(ease))
+                    .Join(cardT.transform.GetChild(1).GetComponent<TMP_Text>().DOFade(0.0f, 1f).SetEase(ease))
+                    .Append(DOTween.To(() => 0f, x => cardT.SetActive(false), 0f, 0f))
                     .Append(cardT.GetComponent<RectTransform>().DOAnchorPos(goPos, 1f).SetEase(ease));
                 se.Play();
             }
@@ -244,7 +243,7 @@ public class PlayerDeck_HJH : MonoBehaviour
             DrawOne();
             return;
         }
-        GameObject card = cards[hand.Count -1];
+        GameObject card = cards[hand.Count - 1];
         card.SetActive(true);
         if (hand[hand.Count - 1] > 0)
         {
@@ -346,7 +345,15 @@ public class PlayerDeck_HJH : MonoBehaviour
             if (stun)
             {
                 GamePlayManager.Instance.mainUi.toastMsgContainer.AddMessage("덫에걸려 움직일수 없습니다", 3.0f);
-                GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].transform.DOShakePosition(0.2f);
+                GameObject player = GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].gameObject;
+                Vector3 lo = GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].transform.localPosition;
+                DG.Tweening.Sequence se = DOTween.Sequence(GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx])
+                    .Append(player.transform.DOLocalMoveX(0.05f, 0.05f))
+                    .Append(player.transform.DOLocalMoveX(-0.1f, 0.05f))
+                    .Append(player.transform.DOLocalMoveX(0.1f, 0.05f))
+                    .Append(player.transform.DOLocalMoveX(-0.05f, 0.05f))
+                    .Append(player.transform.DOLocalMove(lo, 0.05f));
+                se.Play();
             }
             AudioPlayer.Instance.PlayClip(12);
             GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].Mp -= CardManager.Instance.cardList.cards[Mathf.Abs(a)].useMP;
@@ -377,7 +384,7 @@ public class PlayerDeck_HJH : MonoBehaviour
         stun = true;
         yield return new WaitForSeconds(time);
         stun = false;
-        
+
     }
 
 }

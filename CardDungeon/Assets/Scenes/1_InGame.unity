@@ -1651,6 +1651,7 @@ GameObject:
   - component: {fileID: 556443421}
   - component: {fileID: 556443420}
   - component: {fileID: 556443424}
+  - component: {fileID: 556443425}
   m_Layer: 5
   m_Name: PlayerCanvas
   m_TagString: PlayerCanvas
@@ -1690,7 +1691,7 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 1080, y: 1920}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
@@ -1842,6 +1843,18 @@ MonoBehaviour:
   - {fileID: 1185660809}
   - {fileID: 1660329497}
   tutorial: {fileID: 2103204932}
+--- !u!114 &556443425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 556443419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86d055329a68c10458cb4d6ecc37b74c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &598045457
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5767,7 +5780,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainUi: {fileID: 556443424}
   reRollCoolTime: 5
-  deck: 01000000010000000200000002000000030000000300000004000000040000000600000007000000
+  deck: 01000000010000000200000002000000030000000300000004000000040000000500000005000000
   trash: 
   hand: 
   firstHandCount: 5
