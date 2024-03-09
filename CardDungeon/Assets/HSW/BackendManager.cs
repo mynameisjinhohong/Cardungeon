@@ -63,9 +63,18 @@ public class BackendManager : Singleton<BackendManager>
         DontDestroyOnLoad(this.gameObject);
         //SetResolution();
 
-        UseAutoLogin = PlayerPrefs.GetInt("UseAutoLogin") == 0;
+        if (!PlayerPrefs.HasKey("UseAutoLogin"))
+            UseAutoLogin = false;
+        else
+            UseAutoLogin = CheckAutoLoginUse();
     }
 
+    public bool CheckAutoLoginUse()
+    {
+        Debug.Log("오토로그인 검증" + PlayerPrefs.GetInt("UseAutoLogin"));
+        
+        return PlayerPrefs.GetInt("UseAutoLogin") == 1;
+    }
     public void SetResolution()
     {
         int setWidth = 1920; // 사용자 설정 너비

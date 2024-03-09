@@ -63,6 +63,7 @@ public class UI_Setting_PCI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        toggle_AutoLogin.isOn = PlayerPrefs.GetInt("UseAutoLogin") == 1;
         resolutions = new List<Resolution>(Screen.resolutions);
         btn_ScreenModeLeft.onClick.AddListener(ScreenModeLeft);
         btn_ScreenModeRight.onClick.AddListener(ScreenModeRight);
