@@ -57,15 +57,15 @@ public class MatchController : Singleton<MatchController>
     
     public void TryAutoLogin()
     {
-        if(_backendManager.checkLoginWayData == -1 && !BackendManager.Instance.UseAutoLogin)
-        {
-            Debug.Log("로그인 정보 없음");
-            TryLogin();
-        }
-        else
+        if(_backendManager.checkLoginWayData != -1 && BackendManager.Instance.UseAutoLogin)
         {
             Debug.Log("자동로그인 실행 테스트");
             _backendManager.StartTokenLogin();
+        }
+        else
+        {
+            Debug.Log("로그인 정보 없음");
+            TryLogin();
         }
     }
 

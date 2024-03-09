@@ -63,7 +63,7 @@ public class BackendManager : Singleton<BackendManager>
         DontDestroyOnLoad(this.gameObject);
         //SetResolution();
 
-        UseAutoLogin = PlayerPrefs.GetInt("NotAutoLogin") == 0;
+        UseAutoLogin = PlayerPrefs.GetInt("UseAutoLogin") == 0;
     }
 
     public void SetResolution()
@@ -294,6 +294,7 @@ public class BackendManager : Singleton<BackendManager>
         if (!bro.IsSuccess())
         {
             PlayerPrefs.SetInt("LoginWay", -1);
+            CheckLoginWayData();
             Debug.LogError($"{bro.IsSuccess()} / {bro.GetStatusCode()} / {bro.GetErrorCode()} / {bro.GetMessage()}");
             switch (bro.GetStatusCode())
             {
