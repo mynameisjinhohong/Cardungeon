@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using UnityEditor.TerrainTools;
 
 [CustomEditor(typeof(GameBoard_PCI))]
 public class GameBoardEditor_PCI : Editor
