@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(GameBoard_PCI))]
 public class GameBoardEditor_PCI : Editor
 {
@@ -18,3 +19,4 @@ public class GameBoardEditor_PCI : Editor
         }
     }
 }
+#endif
