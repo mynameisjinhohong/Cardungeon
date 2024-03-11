@@ -563,7 +563,7 @@ public class BackendManager : Singleton<BackendManager>
             
             if (args.ErrInfo == ErrorInfo.Success) {
                 Debug.Log("1-2. OnJoinMatchMakingServer 성공");
-                CreateMatchRoom();
+                //CreateMatchRoom();
             } else {
                 Debug.LogError("1-2. OnJoinMatchMakingServer 실패");
             }

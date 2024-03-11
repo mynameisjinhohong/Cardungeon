@@ -89,6 +89,8 @@ public class MatchController : Singleton<MatchController>
             userNickNameText.text = BackendManager.Instance.userInfo.Nickname;
             StartCoroutine(RabbitBlinkEye());
             
+            _backendManager.JoinMatchMakingServer();
+            
             Backend.Match.OnMatchMakingRoomSomeoneInvited += (args) => {
                 Debug.Log("초대받음");
             };
@@ -143,8 +145,6 @@ public class MatchController : Singleton<MatchController>
                 _backendManager.matchIndex = i;
                 
                 Debug.Log(i + "번째 매치카드 선택됨");
-                
-                _backendManager.JoinMatchMakingServer();
             }
         }
     }
