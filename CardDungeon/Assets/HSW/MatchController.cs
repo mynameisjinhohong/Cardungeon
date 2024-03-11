@@ -92,12 +92,11 @@ public class MatchController : Singleton<MatchController>
             _backendManager.JoinMatchMakingServer();
             
             Backend.Match.OnMatchMakingRoomSomeoneInvited += (args) => {
-                //args.InviteUserInfo.m_nickName
                 Debug.Log("초대받음");
 
                 string inviter = args.InviteUserInfo.m_nickName + "님이 초대하셨습니다.\n초대를 수락하시면 매칭룸으로 이동합니다.";
-                
-                UIManager.Instance.OpenInvitePopup(inviter, args.RoomId, args.RoomToken, UIManager.Instance.PopupListPop);
+                Debug.Log(inviter+"가 초대" + args.RoomId + args.RoomToken);
+                UIManager.Instance.OpenInvitePopup(inviter, args.RoomId, args.RoomToken);
             };
         }
 

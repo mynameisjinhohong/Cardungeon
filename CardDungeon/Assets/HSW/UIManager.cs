@@ -158,7 +158,7 @@ public class UIManager : Singleton<UIManager>
         PopupListAddNoneABB(Popup);
     }
 
-    public void OpenInvitePopup(String title, SessionId sessionID, string roomToken, Action action)
+    public void OpenInvitePopup(String title, SessionId sessionID, string roomToken)
     {
         GameObject Popup = Instantiate(GetInvitePopupPrefab, PopupListParent);
 
@@ -166,10 +166,10 @@ public class UIManager : Singleton<UIManager>
 
         target.InvitedRoomID = sessionID;
         target.InvitedRoomToken = roomToken;
+
+        BackendManager.Instance.roomSettingData.roomId = sessionID;
+        BackendManager.Instance.roomSettingData.roomToken = roomToken;
         
-        if (target.action == null)
-            target.action = PopupListPop;
-        else
-            target.action = action;
+        PopupListAddABB(Popup, PopupListPop);
     }
 }

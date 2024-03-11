@@ -18,12 +18,30 @@ public class InvitePopup : MonoBehaviour
     {
         Backend.Match.AcceptInvitation(InvitedRoomID, InvitedRoomToken);
         
+        Backend.Match.OnMatchMakingRoomJoin = (MatchMakingGamerInfoInRoomEventArgs args) =>
+        {
+            Debug.Log("매칭방 접속");
+            Debug.Log(args.ErrInfo + args.Reason);
+        };
+
+        Backend.Match.OnMatchMakingRoomUserList = (MatchMakingGamerInfoListInRoomEventArgs args) =>
+        {
+            int userCount = 0;
+            userCount = args.UserInfos.Count;
+            Debug.Log(args.UserInfos.Count + "명 조회");
+
+            for (int i = 0; i < userCount; i++)
+            {
+                Debug.Log(args.UserInfos[i].m_nickName + "님 참가중" + args.UserInfos[i].m_sessionId);
+            }
+        };
         //방정보 동기화 해야함
         MatchController.Instance.ChangeUI(2);
     }
 
     public void RefuseButtonClick()
     {
+        Backend.Match.DeclineInvitation(InvitedRoomID, InvitedRoomToken);
         UIManager.Instance.PopupListPop();
     }
 }
