@@ -586,6 +586,7 @@ public class BackendManager : Singleton<BackendManager>
                     RequestMatchMaking();
                 else
                     MatchController.Instance.ChangeUI(2);
+                
             } else {
                 Debug.LogError("2-2. OnMatchMakingRoomCreate 실패");
             }
@@ -613,19 +614,19 @@ public class BackendManager : Singleton<BackendManager>
                 JoinGameServer(args.RoomInfo);
                 isMatching = false;
             } else {
-                Debug.LogError("3-2. OnMatchMakingResponse 매칭 신청 진행중 에러 발생 : " + args.ToString());
+                Debug.LogError("3-2. OnMatchMakingResponse 매칭 신청 진행중 에러 발생 : " + args.ErrInfo + args.Reason + args.ToString());
                 isMatching = false;
             }
         };
         
         Debug.Log("3-1. RequestMatchMaking 매칭 신청 시작");
-
+ 
         MatchModeType settedType;
 
-        if (roomSettingData.roomHeadCount >= 2)
-            settedType = MatchModeType.OneOnOne;
-        else
+        if (roomSettingData.roomHeadCount <= 2)
             settedType = MatchModeType.Melee;
+        else
+            settedType = MatchModeType.TeamOnTeam;
         
         Backend.Match.RequestMatchMaking(matchCardList[matchIndex].matchType, settedType, matchCardList[matchIndex].inDate);
     }
