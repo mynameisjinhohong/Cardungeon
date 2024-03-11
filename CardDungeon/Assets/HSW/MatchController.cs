@@ -39,7 +39,7 @@ public class MatchController : Singleton<MatchController>
 
     public void Start()
     {
-        StartCoroutine(waitInitDataCor());
+        StartCoroutine(WaitInitDataCor());
 
         TipStrings.Add("뒤끝 서버가\n토끼들의 성장을 돕고있어요");
         TipStrings.Add("잠시만 기다려 주세요\n토끼들을 모아 훈련하는 중입니다.");
@@ -160,14 +160,14 @@ public class MatchController : Singleton<MatchController>
 
         _backendManager.matchIndex = 6;
         
-        _backendManager.CreateMatchRoom();
-
         _backendManager.roomSettingData.roomHeadCount = 2;
 
         _backendManager.roomSettingData.roomIndexNum = 0;
+
+        StartCoroutine(WaitMatchList());
     }
     
-    IEnumerator waitInitDataCor()
+    IEnumerator WaitInitDataCor()
     {
         yield return new WaitUntil(() => _backendManager.isInitialize);
 
@@ -176,6 +176,13 @@ public class MatchController : Singleton<MatchController>
         loginCheckButton.interactable = true;
         
         DataManager.Instance.Initialize();
+    }
+
+    IEnumerator WaitMatchList()
+    {
+        yield return new WaitUntil(() => _backendManager.matchCardList.Count >= 6);
+        
+        _backendManager.CreateMatchRoom();
     }
     
     public void MatchCancel()
