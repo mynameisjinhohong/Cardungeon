@@ -2367,7 +2367,7 @@ MonoBehaviour:
   GuestLoginPrefab: {fileID: 5097887765796371620, guid: 919e8e8d821778049b2e069557afa5f7, type: 3}
   NickNamePrefab: {fileID: 5097887765796371620, guid: 919e8e8d821778049b2e069557afa5f7, type: 3}
   RecyclePopupPrefab: {fileID: 5097887765796371620, guid: 35c811efe1a2a6f438b0ed61269621f5, type: 3}
-  SettingPopupPrefab: {fileID: 4861372906580432593, guid: e61276f7826ad3446a3b4c15e8576136, type: 3}
+  GetInvitePopupPrefab: {fileID: 4557327945877872313, guid: c9792187ec66ad74ca0bfa5fc8374700, type: 3}
 --- !u!4 &835534843
 Transform:
   m_ObjectHideFlags: 0

@@ -889,6 +889,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d2d1b043839e6545a7a5824f9d75b34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  titleText: {fileID: 3033797737254889803}
+  InvitedRoomID: 0
+  InvitedRoomToken: 
 --- !u!1 &6699740691223086524
 GameObject:
   m_ObjectHideFlags: 0
