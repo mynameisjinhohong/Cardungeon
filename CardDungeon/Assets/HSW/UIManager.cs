@@ -33,7 +33,7 @@ public class UIManager : Singleton<UIManager>
 
     public GameObject RecyclePopupPrefab;
 
-    public GameObject SettingPopupPrefab;
+    public GameObject GetInvitePopupPrefab;
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -155,5 +155,12 @@ public class UIManager : Singleton<UIManager>
             target.action = action;
 
         PopupListAddNoneABB(Popup);
+    }
+
+    public void OpenInvitePopup(String title, Action action)
+    {
+        GameObject Popup = Instantiate(GetInvitePopupPrefab, PopupListParent);
+        
+        
     }
 }

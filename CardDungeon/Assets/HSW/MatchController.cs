@@ -92,6 +92,7 @@ public class MatchController : Singleton<MatchController>
             _backendManager.JoinMatchMakingServer();
             
             Backend.Match.OnMatchMakingRoomSomeoneInvited += (args) => {
+                //args.InviteUserInfo.m_nickName
                 Debug.Log("초대받음");
             };
         }
@@ -126,6 +127,8 @@ public class MatchController : Singleton<MatchController>
         StartCoroutine(FindMatchIndex());
         
         ChangeUI(2);
+        
+        _backendManager.CreateMatchRoom();
     }
 
     public void LeaveMatchingRoom()
@@ -157,7 +160,7 @@ public class MatchController : Singleton<MatchController>
 
         _backendManager.matchIndex = 6;
         
-        _backendManager.JoinMatchMakingServer();
+        _backendManager.CreateMatchRoom();
 
         _backendManager.roomSettingData.roomHeadCount = 2;
 

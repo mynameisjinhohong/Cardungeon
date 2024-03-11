@@ -22,6 +22,11 @@ public class NickNameInputToInvite : MonoBehaviour
         
         Backend.Match.OnMatchMakingRoomInvite = (MatchMakingInteractionEventArgs args) => {
             Debug.Log("에러인포 :" + args.ErrInfo + "이유:" + args.Reason);
+            
+            if (args.ErrInfo == ErrorCode.Success)
+                UIManager.Instance.OpenRecyclePopup("초대 결과", "초대 요청에 성공 했습니다.", UIManager.Instance.PopupListPop);
+            else
+                UIManager.Instance.OpenRecyclePopup("초대 결과", args.Reason, null);
         };
     }
 }
