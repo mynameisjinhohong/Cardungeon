@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using BackEnd.Tcp;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -157,10 +158,18 @@ public class UIManager : Singleton<UIManager>
         PopupListAddNoneABB(Popup);
     }
 
-    public void OpenInvitePopup(String title, Action action)
+    public void OpenInvitePopup(String title, SessionId sessionID, string roomToken, Action action)
     {
         GameObject Popup = Instantiate(GetInvitePopupPrefab, PopupListParent);
+
+        InvitePopup target = Popup.GetComponent<InvitePopup>();
+
+        target.InvitedRoomID = sessionID;
+        target.InvitedRoomToken = roomToken;
         
-        
+        if (target.action == null)
+            target.action = PopupListPop;
+        else
+            target.action = action;
     }
 }
