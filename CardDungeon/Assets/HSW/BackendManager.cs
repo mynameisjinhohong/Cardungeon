@@ -32,7 +32,7 @@ public class BackendManager : Singleton<BackendManager>
     public bool UseAutoLogin = false; 
     public int matchIndex = 0;
     public bool isMatching = false;
-    
+
     [Header("전체 유저 데이터 리스트")] 
     public List<UserData> UserDataList;
     
@@ -842,7 +842,7 @@ public class BackendManager : Singleton<BackendManager>
             }
             
             // 게임 서버에 정상적으로 접속했으면 매칭 서버를 종료
-            // LeaveMatchMaking();
+            LeaveMatchMaking();
             JoinGameRoom();
             SceneManager.LoadScene(1);
         };
@@ -877,8 +877,16 @@ public class BackendManager : Singleton<BackendManager>
         Backend.Match.OnMatchInGameAccess = (MatchInGameSessionEventArgs args) => {
             if (args.ErrInfo == ErrorCode.Success) {
                 Debug.Log($"5-3. OnMatchInGameAccess - 유저가 접속했습니다 : {args.GameRecord.m_nickname}({args.GameRecord.m_sessionId})");
-                if (!inGameUserList.ContainsKey(args.GameRecord.m_nickname)) {
+                if (!inGameUserList.ContainsKey(args.GameRecord.m_nickname))
+                {
                     inGameUserList.Add(args.GameRecord.m_nickname, args.GameRecord);
+
+                    UserData userData = new UserData();
+
+                    userData.playerName = args.GameRecord.m_nickname;
+                    userData.playerToken = args.GameRecord.m_sessionId.ToString();
+
+                    UserDataList.Add(userData);
                 }
             } else {
                 Debug.LogError("5-3. OnMatchInGameAccess : " + args.ErrInfo.ToString());
@@ -897,19 +905,22 @@ public class BackendManager : Singleton<BackendManager>
                 data.playerName = list.Value.m_nickname;
                 data.isSuperGamer = list.Value.m_isSuperGamer;
                 
-                BackendManager.Instance.UserDataList.Add(data);
+                UserDataList.Add(data);
             }
 
-            Debug.Log("6-1. OnMatchInGameStart 인게임 시작");
-            Debug.Log(userListString);
-            Debug.Log("데이터를 보낼 수 있습니다!");
-            BackendManager.Instance.isLoadGame = true;
+            if (UserDataList.Count >= roomSettingData.roomHeadCount)
+            {
+                isLoadGame = true;
+                
+                Debug.Log("6-1. OnMatchInGameStart 인게임 시작");
+                Debug.Log(userListString);
+                Debug.Log("데이터를 보낼 수 있습니다!");
+            }
         };
         
         Debug.Log($"5-1. JoinGameRoom 게임룸 접속 요청 : 토큰({currentGameRoomInfo.m_inGameRoomToken}");
         Backend.Match.JoinGameRoom(currentGameRoomInfo.m_inGameRoomToken);
     }
-    
     // 릴레이할 데이터
     public class Message {
         public string message;
