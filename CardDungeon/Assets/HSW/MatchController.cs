@@ -134,7 +134,7 @@ public class MatchController : Singleton<MatchController>
     {
         _backendManager.GetMatchList();
 
-        StartCoroutine(FindMatchIndex());
+        StartCoroutine(FindMatchIndexCor());
         
         ChangeUI(2);
         
@@ -147,7 +147,12 @@ public class MatchController : Singleton<MatchController>
         ChangeUI(1);
     }
 
-    IEnumerator FindMatchIndex()
+    public void FindMatchIndex()
+    {
+        StartCoroutine(FindMatchIndexCor());
+    }
+    
+    IEnumerator FindMatchIndexCor()
     {
         yield return new WaitUntil(() => _backendManager.matchCardList.Count >= 7);
 
