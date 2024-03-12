@@ -869,6 +869,18 @@ public class BackendManager : Singleton<BackendManager>
                     }
                     inGameUserList.Add(list.m_nickname, list);
                 }
+
+                for (int i = 0; i < inGameUserList.Count; i++)
+                {
+                    UserData userData = new UserData();
+
+                    userData.playerName = args.GameRecords[i].m_nickname;
+                    userData.playerToken = args.GameRecords[i].m_sessionId.ToString();
+                    userData.isSuperGamer = args.GameRecords[i].m_isSuperGamer;
+                    
+                    UserDataList.Add(userData);
+                }
+                
             } else {
                 Debug.LogError("5-2. OnSessionListInServer : " + args.ToString());
             }
@@ -909,7 +921,10 @@ public class BackendManager : Singleton<BackendManager>
             }
         };
         
-        if (UserDataList.Count >= roomSettingData.roomHeadCount)
+        ///
+        /// 이부분 절대로 수정할것 강제로 2로 고정시켜둔 상태라 인원수에 맞춰야함
+        ///
+        if (UserDataList.Count >= 2)
         {
             isLoadGame = true;
                 
