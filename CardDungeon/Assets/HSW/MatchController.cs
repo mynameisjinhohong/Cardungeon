@@ -100,6 +100,13 @@ public class MatchController : Singleton<MatchController>
             };
         }
 
+        if (index == 2)
+        {
+            Backend.Match.OnMatchMakingResponse = (MatchMakingResponseEventArgs args) => {
+                Debug.Log("방정보" + args.RoomInfo + "카드정보" + args.MatchCardIndate + "원인" + args.Reason + "결과정보" + args.ErrInfo);
+            };
+        }
+
         if (index == 3)
         {
             StartCoroutine(RandomTipTextCor());
