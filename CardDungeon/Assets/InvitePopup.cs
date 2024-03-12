@@ -29,6 +29,11 @@ public class InvitePopup : MonoBehaviour
             int userCount = 0;
             userCount = args.UserInfos.Count;
             Debug.Log(args.UserInfos.Count + "¸í Á¶È¸");
+            BackendManager.Instance.roomSettingData.roomHeadCount = args.UserInfos.Count;
+            
+            BackendManager.Instance.GetMatchList();
+            
+            MatchController.Instance.FindMatchIndex();
 
             for (int i = 0; i < userCount; i++)
             {

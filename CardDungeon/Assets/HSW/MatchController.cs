@@ -104,6 +104,10 @@ public class MatchController : Singleton<MatchController>
         {
             Backend.Match.OnMatchMakingResponse = (MatchMakingResponseEventArgs args) => {
                 Debug.Log("방정보" + args.RoomInfo + "카드정보" + args.MatchCardIndate + "원인" + args.Reason + "결과정보" + args.ErrInfo);
+
+                //BackendManager.Instance.RequestMatchMaking();
+
+                BackendManager.Instance.JoinGameServer(args.RoomInfo);
             };
         }
 
@@ -163,6 +167,7 @@ public class MatchController : Singleton<MatchController>
                 _backendManager.matchIndex = i;
                 
                 Debug.Log(i + "번째 매치카드 선택됨");
+                _backendManager.roomSettingData.roomIndexNum = i;
             }
         }
     }
