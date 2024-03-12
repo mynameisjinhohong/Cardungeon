@@ -868,19 +868,15 @@ public class BackendManager : Singleton<BackendManager>
                         continue;
                     }
                     inGameUserList.Add(list.m_nickname, list);
-                }
 
-                for (int i = 0; i < inGameUserList.Count; i++)
-                {
                     UserData userData = new UserData();
 
-                    userData.playerName = args.GameRecords[i].m_nickname;
-                    userData.playerToken = args.GameRecords[i].m_sessionId.ToString();
-                    userData.isSuperGamer = args.GameRecords[i].m_isSuperGamer;
-                    
+                    userData.playerName = list.m_nickname;
+                    userData.playerToken = list.m_sessionId.ToString();
+                    userData.isSuperGamer = list.m_isSuperGamer;
+
                     UserDataList.Add(userData);
                 }
-                
             } else {
                 Debug.LogError("5-2. OnSessionListInServer : " + args.ToString());
             }
