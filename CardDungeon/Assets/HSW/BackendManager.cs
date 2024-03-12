@@ -885,7 +885,7 @@ public class BackendManager : Singleton<BackendManager>
 
                     userData.playerName = args.GameRecord.m_nickname;
                     userData.playerToken = args.GameRecord.m_sessionId.ToString();
-
+                    userData.isSuperGamer = args.GameRecord.m_isSuperGamer;
                     UserDataList.Add(userData);
                 }
             } else {
@@ -907,16 +907,15 @@ public class BackendManager : Singleton<BackendManager>
                 
                 UserDataList.Add(data);
             }
-
-            if (UserDataList.Count >= roomSettingData.roomHeadCount)
-            {
-                isLoadGame = true;
-                
-                Debug.Log("6-1. OnMatchInGameStart 인게임 시작");
-                Debug.Log(userListString);
-                Debug.Log("데이터를 보낼 수 있습니다!");
-            }
         };
+        
+        if (UserDataList.Count >= roomSettingData.roomHeadCount)
+        {
+            isLoadGame = true;
+                
+            Debug.Log("6-1. OnMatchInGameStart 인게임 시작");
+            Debug.Log("데이터를 보낼 수 있습니다!");
+        }
         
         Debug.Log($"5-1. JoinGameRoom 게임룸 접속 요청 : 토큰({currentGameRoomInfo.m_inGameRoomToken}");
         Backend.Match.JoinGameRoom(currentGameRoomInfo.m_inGameRoomToken);
