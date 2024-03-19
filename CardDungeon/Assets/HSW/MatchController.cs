@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Assets.SimpleGoogleSignIn.Scripts;
 using BackEnd;
 using BackEnd.Tcp;
 using TMPro;
@@ -120,8 +121,8 @@ public class MatchController : Singleton<MatchController>
                 getdata.isSuperGamer = false;
                 
                 BackendManager.Instance.UserDataList.Add(getdata);
-                
-                
+
+                DataInit();
             };
             
             // 방 입장시 방에 있는 유저 정보 로드
@@ -296,6 +297,14 @@ public class MatchController : Singleton<MatchController>
         lobbyScript.slots[0].txt_userName.text = BackendManager.Instance.userInfo.Nickname;
         lobbyScript.slots[0].txt_userWinRate.text = DataManager.Instance.userData.winRate.ToString();
 
+        UserData mydata = new UserData();
+
+        mydata.playerName = BackendManager.Instance.userInfo.Nickname;
+        mydata.playerToken = "";
+        mydata.isSuperGamer = false;
+        
+        BackendManager.Instance.UserDataList.Add(mydata);
+        
         int getHeadCount = 0;
 
         getHeadCount = (BackendManager.Instance.roomSettingData.roomHeadCount / 2);
@@ -312,16 +321,19 @@ public class MatchController : Singleton<MatchController>
     public void DataInit()
     {
         int getHeadCount = 0;
-
+        
         getHeadCount = (BackendManager.Instance.roomSettingData.roomHeadCount / 2);
         
-        for (int i = 0; i < BackendManager.Instance.UserDataList.Count; i++)
+        for (int i = 0; i < lobbyScript.slots.Count; i++)
         {
-            lobbyScript.slots[i].gameObject.SetActive(i < getHeadCount);
-            lobbyScript.slots[i].emptyObject.SetActive(i < getHeadCount);
-            lobbyScript.slots[i].txt_userName.text = BackendManager.Instance.userInfo.Nickname;
-            lobbyScript.slots[i].txt_userWinRate.text = DataManager.Instance.userData.winRate.ToString();
+            lobbyScript.slots[i].gameObject.SetActive(i < _backendManager.UserDataList.Count);
+            lobbyScript.slots[i].emptyObject.SetActive(i >= _backendManager.UserDataList.Count);
+            lobbyScript.slots[i].txt_userName.text = BackendManager.Instance.UserDataList[i].playerName;
+            //승률정보
+            //lobbyScript.slots[i].txt_userWinRate.text = BackendManager.Instance.UserDataList[i].
         }
+
+        lobbyScript.userCount.text = BackendManager.Instance.UserDataList.Count + "/" + getHeadCount;
     }
 
 }
