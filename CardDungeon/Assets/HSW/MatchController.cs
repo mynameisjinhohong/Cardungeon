@@ -102,16 +102,38 @@ public class MatchController : Singleton<MatchController>
 
         if (index == 2)
         {
+            // 추가 인원 접속체크
             Backend.Match.OnMatchMakingRoomJoin = (MatchMakingGamerInfoInRoomEventArgs args) =>
             {
-                Debug.Log("args.UserInfo.m_nickName님이 매칭방 접속");
+                Debug.Log(args.UserInfo.m_nickName + "님이 매칭방 접속");
                 Debug.Log(args.ErrInfo + args.Reason);
+                
+                UserData getdata = new UserData();
+
+                getdata.playerName = args.UserInfo.m_nickName;
+                getdata.playerToken = args.UserInfo.m_sessionId.ToString();
+                getdata.isSuperGamer = false;
+                
+                BackendManager.Instance.UserDataList.Add(getdata);
             };
             
+            Backend.Match.OnMatchMakingRoomUserList = (MatchMakingGamerInfoListInRoomEventArgs args) => {
+                
+                foreach (var userInfo in args.UserInfos)
+                {
+                    UserData getdata = new UserData();
+
+                    getdata.playerName = userInfo.m_nickName;
+                    getdata.playerToken = userInfo.m_sessionId.ToString();
+                    getdata.isSuperGamer = false;
+                    
+                    BackendManager.Instance.UserDataList.Add(getdata);
+                }
+            };
+            
+            // 매칭룸 접속 결과
             Backend.Match.OnMatchMakingResponse = (MatchMakingResponseEventArgs args) => {
                 Debug.Log("방정보" + args.RoomInfo + "카드정보" + args.MatchCardIndate + "원인" + args.Reason + "결과정보" + args.ErrInfo);
-
-                //BackendManager.Instance.RequestMatchMaking();
 
                 BackendManager.Instance.JoinGameServer(args.RoomInfo);
             };

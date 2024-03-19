@@ -889,12 +889,12 @@ public class BackendManager : Singleton<BackendManager>
                 {
                     inGameUserList.Add(args.GameRecord.m_nickname, args.GameRecord);
 
-                    UserData userData = new UserData();
-
-                    userData.playerName = args.GameRecord.m_nickname;
-                    userData.playerToken = args.GameRecord.m_sessionId.ToString();
-                    userData.isSuperGamer = args.GameRecord.m_isSuperGamer;
-                    UserDataList.Add(userData);
+                    // UserData userData = new UserData();
+                    //
+                    // userData.playerName = args.GameRecord.m_nickname;
+                    // userData.playerToken = args.GameRecord.m_sessionId.ToString();
+                    // userData.isSuperGamer = args.GameRecord.m_isSuperGamer;
+                    // UserDataList.Add(userData);
                     
                     Debug.Log(UserDataList.Count + "명 접속 확인 됐음");
                     if (UserDataList.Count >= 2)
