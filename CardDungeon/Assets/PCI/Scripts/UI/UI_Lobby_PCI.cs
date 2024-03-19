@@ -7,7 +7,6 @@ using UnityEngine.UI;
 public class UI_Lobby_PCI : MonoBehaviour
 {
     public CanvasGroup canvasGroup;
-    public List<UI_UserIDPanel_PCI> slots = new List<UI_UserIDPanel_PCI>();
 
     public TMP_Text roomNameText;
     

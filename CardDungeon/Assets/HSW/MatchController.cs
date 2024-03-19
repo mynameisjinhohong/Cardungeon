@@ -34,6 +34,10 @@ public class MatchController : Singleton<MatchController>
     private BackendManager _backendManager;
     private UI_Lobby_PCI lobbyScript;
 
+    public Transform DataPanelParent;
+    public GameObject userInfoDataPanelObj;
+    public GameObject emptyDataPanelObj;
+    
     private void Awake()
     {
         _backendManager = BackendManager.Instance;
@@ -129,7 +133,7 @@ public class MatchController : Singleton<MatchController>
             
             // 방 입장시 방에 있는 유저 정보 로드
             Backend.Match.OnMatchMakingRoomUserList = (MatchMakingGamerInfoListInRoomEventArgs args) => {
-                
+
                 foreach (var userInfo in args.UserInfos)
                 {
                     UserData getdata = new UserData();
@@ -158,6 +162,29 @@ public class MatchController : Singleton<MatchController>
         }
     }
 
+    private void DataInit()
+    {
+        foreach (Transform child in DataPanelParent)
+        {
+            Destroy(child.gameObject);
+        }
+        
+        for (int i = 0; i < 5; i++)
+        {
+            if (i < BackendManager.Instance.UserDataList.Count)
+            {
+                GameObject userDataPanel = Instantiate(userInfoDataPanelObj, DataPanelParent);
+
+                userDataPanel.GetComponent<UI_UserIDPanel_PCI>().txt_userName.text =
+                    BackendManager.Instance.UserDataList[i].playerName;
+            }
+            else
+            {
+                Instantiate(emptyDataPanelObj, DataPanelParent);
+            }
+        }
+    }
+    
     IEnumerator RandomTipTextCor()
     {
         int currentTipIndex = 0;
@@ -179,11 +206,11 @@ public class MatchController : Singleton<MatchController>
     {
         _backendManager.GetMatchList();
 
-        StartCoroutine(FindMatchIndexCor());
-        
-        ChangeUI(2);
-        
+        //StartCoroutine(FindMatchIndexCor());
+
         _backendManager.CreateMatchRoom();
+        
+        SelfDataInit();
     }
 
     public void LeaveMatchingRoom()
@@ -212,7 +239,7 @@ public class MatchController : Singleton<MatchController>
             }
         }
     }
-    
+
     public void FastMatch()
     {
         _backendManager.isFastMatch = true;
@@ -293,9 +320,14 @@ public class MatchController : Singleton<MatchController>
 
     public void SelfDataInit()
     {
-        lobbyScript.slots[0].emptyObject.SetActive(false);
-        lobbyScript.slots[0].txt_userName.text = BackendManager.Instance.userInfo.Nickname;
-        lobbyScript.slots[0].txt_userWinRate.text = DataManager.Instance.userData.winRate.ToString();
+        lobbyScript.roomNameText.text = BackendManager.Instance.userInfo.Nickname + "의 방";
+        lobbyScript.userCount.text = "1/5";
+        
+        GameObject getDataPanel = Instantiate(userInfoDataPanelObj, DataPanelParent);
+
+        UI_UserIDPanel_PCI panelData = getDataPanel.GetComponent<UI_UserIDPanel_PCI>();
+        
+        panelData.txt_userName.text = BackendManager.Instance.userInfo.Nickname;
 
         UserData mydata = new UserData();
 
@@ -304,41 +336,11 @@ public class MatchController : Singleton<MatchController>
         mydata.isSuperGamer = false;
         
         BackendManager.Instance.UserDataList.Add(mydata);
-        
-        int getHeadCount = 0;
 
-        getHeadCount = (BackendManager.Instance.roomSettingData.roomHeadCount / 2);
-        
-        lobbyScript.userCount.text = "1 /" + getHeadCount;
-        
-        for (int i = 0; i < lobbyScript.slots.Count; i++)
+        for (int i = 0; i < 4; i++)
         {
-            lobbyScript.slots[i].gameObject.SetActive(i < getHeadCount);
+            Instantiate(emptyDataPanelObj, DataPanelParent);
         }
-        lobbyScript.slots[0].emptyObject.SetActive(false);
-    }
-
-    public void DataInit()
-    {
-        int getHeadCount = 0;
-        
-        getHeadCount = (BackendManager.Instance.roomSettingData.roomHeadCount / 2);
-        
-        for (int i = 0; i < lobbyScript.slots.Count; i++)
-        {
-            lobbyScript.slots[i].gameObject.SetActive(i < _backendManager.UserDataList.Count);
-            lobbyScript.slots[i].emptyObject.SetActive(i >= _backendManager.UserDataList.Count);
-
-            if (i < BackendManager.Instance.UserDataList.Count)
-                lobbyScript.slots[i].txt_userName.text = BackendManager.Instance.UserDataList[i].playerName;
-            
-            //승률정보
-            //lobbyScript.slots[i].txt_userWinRate.text = BackendManager.Instance.UserDataList[i].
-        }
-
-        lobbyScript.userCount.text = BackendManager.Instance.UserDataList.Count + "/" + getHeadCount;
-        
-        Debug.Log(BackendManager.Instance.UserDataList.Count);
     }
 
 }
