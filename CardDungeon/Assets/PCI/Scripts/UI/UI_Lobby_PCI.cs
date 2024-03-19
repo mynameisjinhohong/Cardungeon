@@ -16,7 +16,7 @@ public class UI_Lobby_PCI : MonoBehaviour
     public Button btn_MatchStart, btn_ExitRoom;
 
     private string TODO_lobbyData;
-
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -55,37 +55,8 @@ public class UI_Lobby_PCI : MonoBehaviour
         Hide();
     }
 
-    private void SetLobbyData(string TODO_lobbyDataContainer)
+    public void SettingRoomUI()
     {
-        userCount.text = "1 + " + BackendManager.Instance.UserDataList.Count;
-    }
-
-    // TODO : ???? ?????? ??????? ???
-    private void AddUser(string TODO_userDataContainer)
-    {
-        foreach(var e in slots)
-        {
-            if (e.isEmpty)
-            {
-                e.SetUserData(TODO_userDataContainer);
-            }
-        }
-    }
-
-    // TODO : ???? ?????? ??????? ???
-    private void RemoveUser(string TODO_userDataContainer)
-    {
-        foreach(var e in slots)
-        {
-            if(e.TODO_userDataContainer == TODO_userDataContainer)
-            {
-                e.ClearUserData();
-            }
-        }
-    }
-
-    private void CopyInvitaionCode()
-    {
-        GUIUtility.systemCopyBuffer = "gangtoesal@gmail.com";
+        
     }
 }

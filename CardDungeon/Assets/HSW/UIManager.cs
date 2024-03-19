@@ -167,9 +167,6 @@ public class UIManager : Singleton<UIManager>
         target.InvitedRoomID = sessionID;
         target.InvitedRoomToken = roomToken;
 
-        BackendManager.Instance.roomSettingData.roomId = sessionID;
-        BackendManager.Instance.roomSettingData.roomToken = roomToken;
-        
         PopupListAddABB(Popup, PopupListPop);
     }
 }

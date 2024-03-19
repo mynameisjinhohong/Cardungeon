@@ -579,13 +579,17 @@ public class BackendManager : Singleton<BackendManager>
 
     public void CreateMatchRoom() {
         Backend.Match.OnMatchMakingRoomCreate = (MatchMakingInteractionEventArgs args) => {
-            if (args.ErrInfo == ErrorCode.Success) {
+            if (args.ErrInfo == ErrorCode.Success)
+            {
                 Debug.Log("2-2. OnMatchMakingRoomCreate 성공");
-                
                 if(isFastMatch)
                     RequestMatchMaking();
                 else
+                {
+                    
                     MatchController.Instance.ChangeUI(2);
+                }
+                    
                 
             } else {
                 Debug.LogError("2-2. OnMatchMakingRoomCreate 실패");
@@ -601,7 +605,7 @@ public class BackendManager : Singleton<BackendManager>
             if (args.ErrInfo == ErrorCode.Match_InProgress) {
                 
                 Debug.Log("3-2. OnMatchMakingResponse 매칭 신청 진행중");
-
+                
                 int second = matchCardList[matchIndex].transit_to_sandbox_timeout_ms / 1000;
                 
                 if (second > 0) {
@@ -1267,13 +1271,4 @@ public class RoomSettingData
     public int roomIndexNum;
         
     public string roomName;
-    //public RoomType roomType;
-
-
-    [Header("방 서버 정보")]
-    public SessionId roomId;
-
-    public string roomToken;
-
-    public int currentCount;
 }

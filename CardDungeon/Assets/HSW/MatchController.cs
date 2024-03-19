@@ -31,10 +31,12 @@ public class MatchController : Singleton<MatchController>
     public List<String> TipStrings;
 
     private BackendManager _backendManager;
+    private UI_Lobby_PCI lobbyScript;
 
     private void Awake()
     {
         _backendManager = BackendManager.Instance;
+        lobbyScript = uIList[2].GetComponent<UI_Lobby_PCI>();
     }
 
     public void Start()
@@ -105,6 +107,9 @@ public class MatchController : Singleton<MatchController>
             // 추가 인원 접속체크
             Backend.Match.OnMatchMakingRoomJoin = (MatchMakingGamerInfoInRoomEventArgs args) =>
             {
+                // 본인 제외
+                if (args.UserInfo.m_nickName == BackendManager.Instance.userInfo.Nickname) return;
+                
                 Debug.Log(args.UserInfo.m_nickName + "님이 매칭방 접속");
                 Debug.Log(args.ErrInfo + args.Reason);
                 
@@ -115,8 +120,11 @@ public class MatchController : Singleton<MatchController>
                 getdata.isSuperGamer = false;
                 
                 BackendManager.Instance.UserDataList.Add(getdata);
+                
+                
             };
             
+            // 방 입장시 방에 있는 유저 정보 로드
             Backend.Match.OnMatchMakingRoomUserList = (MatchMakingGamerInfoListInRoomEventArgs args) => {
                 
                 foreach (var userInfo in args.UserInfos)
@@ -129,6 +137,8 @@ public class MatchController : Singleton<MatchController>
                     
                     BackendManager.Instance.UserDataList.Add(getdata);
                 }
+
+                DataInit();
             };
             
             // 매칭룸 접속 결과
@@ -171,6 +181,8 @@ public class MatchController : Singleton<MatchController>
         ChangeUI(2);
         
         _backendManager.CreateMatchRoom();
+        
+        
     }
 
     public void LeaveMatchingRoom()
@@ -276,6 +288,40 @@ public class MatchController : Singleton<MatchController>
     {
         Rabbit1.GameObject().SetActive(isOn);
         Rabbit2.GameObject().SetActive(!isOn);
+    }
+
+    public void SelfDataInit()
+    {
+        lobbyScript.slots[0].emptyObject.SetActive(false);
+        lobbyScript.slots[0].txt_userName.text = BackendManager.Instance.userInfo.Nickname;
+        lobbyScript.slots[0].txt_userWinRate.text = DataManager.Instance.userData.winRate.ToString();
+
+        int getHeadCount = 0;
+
+        getHeadCount = (BackendManager.Instance.roomSettingData.roomHeadCount / 2);
+        
+        lobbyScript.userCount.text = "1 /" + getHeadCount;
+        
+        for (int i = 0; i < lobbyScript.slots.Count; i++)
+        {
+            lobbyScript.slots[i].gameObject.SetActive(i < getHeadCount);
+        }
+        lobbyScript.slots[0].emptyObject.SetActive(false);
+    }
+
+    public void DataInit()
+    {
+        int getHeadCount = 0;
+
+        getHeadCount = (BackendManager.Instance.roomSettingData.roomHeadCount / 2);
+        
+        for (int i = 0; i < BackendManager.Instance.UserDataList.Count; i++)
+        {
+            lobbyScript.slots[i].gameObject.SetActive(i < getHeadCount);
+            lobbyScript.slots[i].emptyObject.SetActive(i < getHeadCount);
+            lobbyScript.slots[i].txt_userName.text = BackendManager.Instance.userInfo.Nickname;
+            lobbyScript.slots[i].txt_userWinRate.text = DataManager.Instance.userData.winRate.ToString();
+        }
     }
 
 }
