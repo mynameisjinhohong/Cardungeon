@@ -40,6 +40,8 @@ public class BackendManager : Singleton<BackendManager>
     public RoomSettingData roomSettingData;
 
     public bool isFastMatch;
+
+    public string inviterName;
     
     private int initTimeCount = 0;
 

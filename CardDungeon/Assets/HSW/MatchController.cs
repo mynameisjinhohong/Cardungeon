@@ -100,6 +100,7 @@ public class MatchController : Singleton<MatchController>
                 //string inviter = args.InviteUserInfo.m_nickName + "님이 초대하셨습니다.\n초대를 수락하시면 매칭룸으로 이동합니다.";
 
                 //Debug.Log(inviter+"가 초대" + args.RoomId + args.RoomToken);
+                BackendManager.Instance.inviterName = args.InviteUserInfo.m_nickName;
                 UIManager.Instance.OpenInvitePopup(args.InviteUserInfo.m_nickName, args.RoomId, args.RoomToken); 
             };
         }
