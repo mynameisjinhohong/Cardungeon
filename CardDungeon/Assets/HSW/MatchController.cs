@@ -328,12 +328,16 @@ public class MatchController : Singleton<MatchController>
         {
             lobbyScript.slots[i].gameObject.SetActive(i < _backendManager.UserDataList.Count);
             lobbyScript.slots[i].emptyObject.SetActive(i >= _backendManager.UserDataList.Count);
-            lobbyScript.slots[i].txt_userName.text = BackendManager.Instance.UserDataList[i].playerName;
+
+            if (i < BackendManager.Instance.UserDataList.Count)
+                lobbyScript.slots[i].txt_userName.text = BackendManager.Instance.UserDataList[i].playerName;
             //승률정보
             //lobbyScript.slots[i].txt_userWinRate.text = BackendManager.Instance.UserDataList[i].
         }
 
         lobbyScript.userCount.text = BackendManager.Instance.UserDataList.Count + "/" + getHeadCount;
+        
+        Debug.Log(BackendManager.Instance.UserDataList.Count);
     }
 
 }

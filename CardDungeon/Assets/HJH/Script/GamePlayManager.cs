@@ -30,6 +30,8 @@ public class GamePlayManager : Singleton<GamePlayManager>
     void Start()
     {
         //SetResolution();
+        BackendManager.Instance.UserDataList.Clear();
+        
         StartCoroutine(WaitforGameStart());
     }
     public void SetResolution()
