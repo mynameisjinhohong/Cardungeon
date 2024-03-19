@@ -72,6 +72,9 @@ public class MainUI_HJH : MonoBehaviour
     public List<GameObject> keys = new List<GameObject>();
 
     public GameObject tutorial;
+    public GameObject lookaroundbuttons;
+
+    private int m_lookAt;
 
     // Start is called before the first frame update
     void Start()
@@ -817,21 +820,50 @@ public class MainUI_HJH : MonoBehaviour
     }
     public void LookAround()
     {
-        float disTance = float.MaxValue;
+        gameOver.SetActive(false);
+        lookaroundbuttons.SetActive(true);
+        float distance = float.MaxValue;
         int idx = 0;
         for (int i = 0; i < GamePlayManager.Instance.players.Count; i++)
         {
             Transform myPos = myPlayer.transform;
             if (i != GamePlayManager.Instance.myIdx)
             {
-                if ((GamePlayManager.Instance.players[i].transform.position - myPos.position).magnitude < disTance)
+                if ((GamePlayManager.Instance.players[i].transform.position - myPos.position).magnitude < distance)
                 {
-                    disTance = (GamePlayManager.Instance.players[i].transform.position - myPos.position).magnitude;
+                    distance = (GamePlayManager.Instance.players[i].transform.position - myPos.position).magnitude;
                     idx = i;
                 }
             }
         }
-        Camera.main.transform.SetParent(GamePlayManager.Instance.players[idx].transform);
+        m_lookAt = idx;
+        Camera.main.transform.SetParent(GamePlayManager.Instance.players[m_lookAt].transform);
+    }
+
+    public void LookNext()
+    {
+        do
+        {
+            m_lookAt++;
+            if (m_lookAt > GamePlayManager.Instance.players.Count)
+            {
+                m_lookAt = 0;
+            }
+        } while (GamePlayManager.Instance.players[m_lookAt] == null);
+        Camera.main.transform.SetParent(GamePlayManager.Instance.players[m_lookAt].transform);
+    }
+
+    public void LookPrev()
+    {
+        do
+        {
+            m_lookAt--;
+            if (m_lookAt < 0)
+            {
+                m_lookAt = GamePlayManager.Instance.players.Count - 1;
+            }
+        } while (GamePlayManager.Instance.players[m_lookAt] == null);
+        Camera.main.transform.SetParent(GamePlayManager.Instance.players[m_lookAt].transform);
     }
 
     public void SetKeysUI(int value)
