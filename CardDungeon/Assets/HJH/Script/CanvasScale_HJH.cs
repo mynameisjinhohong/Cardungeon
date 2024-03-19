@@ -9,11 +9,26 @@ public class CanvasScale_HJH : MonoBehaviour
 
     private void Awake()
     {
-        canvasScaler = GetComponent<CanvasScaler>();
+        Camera camera = GetComponent<Camera>();
+        Rect r = camera.rect;
+        float scaleheight = ((float)Screen.width / Screen.height) / (16f / 9f);
+        float scalewidth = 1f / scaleheight;
+        if (scaleheight < 1f)
+        {
+            r.height = scaleheight;
+            r.y = (1f - scaleheight) / 2f; 
+        }
+        else 
+        {
+            r.width = scalewidth;
+            r.x = (1f - scalewidth) / 2f; 
+        }
+        camera.rect = r;
+        //canvasScaler = GetComponent<CanvasScaler>();
     }
     private void Start()
     {
-        SetResolution(); 
+         //SetResolution(); 
     }
     public void SetResolution()
     {
