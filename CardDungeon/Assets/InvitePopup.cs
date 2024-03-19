@@ -36,6 +36,8 @@ public class InvitePopup : MonoBehaviour
         };
         //방정보 동기화 해야함
         MatchController.Instance.ChangeUI(2);
+
+        MatchController.Instance.DataInit();
     }
     public void RefuseButtonClick()
     {
