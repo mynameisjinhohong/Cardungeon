@@ -607,7 +607,7 @@ public class BackendManager : Singleton<BackendManager>
                 Debug.Log("3-2. OnMatchMakingResponse 매칭 신청 진행중");
                 
                 int second = matchCardList[matchIndex].transit_to_sandbox_timeout_ms / 1000;
-                
+
                 if (second > 0) {
                     Debug.Log($"{second}초 뒤에 샌드박스 활성화가 됩니다.");
                     StartCoroutine(WaitFor10Seconds(second));

@@ -161,11 +161,13 @@ public class UIManager : Singleton<UIManager>
     public void OpenInvitePopup(String title, SessionId sessionID, string roomToken)
     {
         GameObject Popup = Instantiate(GetInvitePopupPrefab, PopupListParent);
-
+        
         InvitePopup target = Popup.GetComponent<InvitePopup>();
 
+        target.titleText.text = title + "님이 초대하셨습니다.\n초대를 수락하시면 매칭룸으로 이동합니다.";
         target.InvitedRoomID = sessionID;
         target.InvitedRoomToken = roomToken;
+        target.inviterName = title;
 
         PopupListAddABB(Popup, PopupListPop);
     }

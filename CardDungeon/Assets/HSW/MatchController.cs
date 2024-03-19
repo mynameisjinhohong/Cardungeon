@@ -97,9 +97,10 @@ public class MatchController : Singleton<MatchController>
             Backend.Match.OnMatchMakingRoomSomeoneInvited += (args) => {
                 Debug.Log("초대받음");
 
-                string inviter = args.InviteUserInfo.m_nickName + "님이 초대하셨습니다.\n초대를 수락하시면 매칭룸으로 이동합니다.";
-                Debug.Log(inviter+"가 초대" + args.RoomId + args.RoomToken);
-                UIManager.Instance.OpenInvitePopup(inviter, args.RoomId, args.RoomToken);
+                //string inviter = args.InviteUserInfo.m_nickName + "님이 초대하셨습니다.\n초대를 수락하시면 매칭룸으로 이동합니다.";
+
+                //Debug.Log(inviter+"가 초대" + args.RoomId + args.RoomToken);
+                UIManager.Instance.OpenInvitePopup(args.InviteUserInfo.m_nickName, args.RoomId, args.RoomToken); 
             };
         }
 
@@ -143,11 +144,11 @@ public class MatchController : Singleton<MatchController>
             };
             
             // 매칭룸 접속 결과
-            Backend.Match.OnMatchMakingResponse = (MatchMakingResponseEventArgs args) => {
-                Debug.Log("방정보" + args.RoomInfo + "카드정보" + args.MatchCardIndate + "원인" + args.Reason + "결과정보" + args.ErrInfo);
-
-                BackendManager.Instance.JoinGameServer(args.RoomInfo);
-            };
+            // Backend.Match.OnMatchMakingResponse = (MatchMakingResponseEventArgs args) => {
+            //     Debug.Log("방정보" + args.RoomInfo + "카드정보" + args.MatchCardIndate + "원인" + args.Reason + "결과정보" + args.ErrInfo);
+            //
+            //     BackendManager.Instance.JoinGameServer(args.RoomInfo);
+            // };
         }
 
         if (index == 3)
@@ -182,8 +183,6 @@ public class MatchController : Singleton<MatchController>
         ChangeUI(2);
         
         _backendManager.CreateMatchRoom();
-        
-        
     }
 
     public void LeaveMatchingRoom()
@@ -331,6 +330,7 @@ public class MatchController : Singleton<MatchController>
 
             if (i < BackendManager.Instance.UserDataList.Count)
                 lobbyScript.slots[i].txt_userName.text = BackendManager.Instance.UserDataList[i].playerName;
+            
             //승률정보
             //lobbyScript.slots[i].txt_userWinRate.text = BackendManager.Instance.UserDataList[i].
         }

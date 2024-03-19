@@ -9,7 +9,8 @@ using UnityEngine;
 public class InvitePopup : MonoBehaviour
 {
     public TextMeshProUGUI titleText;
-    
+
+    public string inviterName;
     public SessionId InvitedRoomID;
     public string InvitedRoomToken;
     public Action action;
@@ -33,11 +34,11 @@ public class InvitePopup : MonoBehaviour
             {
                 Debug.Log(args.UserInfos[i].m_nickName + "님 참가중" + args.UserInfos[i].m_sessionId);
             }
+
+            MatchController.Instance.uIList[2].GetComponent<UI_Lobby_PCI>().roomNameText.text = inviterName + "의 방";
         };
         //방정보 동기화 해야함
         MatchController.Instance.ChangeUI(2);
-
-        MatchController.Instance.DataInit();
     }
     public void RefuseButtonClick()
     {
