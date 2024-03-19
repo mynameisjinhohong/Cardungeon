@@ -18,24 +18,23 @@ public class InvitePopup : MonoBehaviour
     {
         Backend.Match.AcceptInvitation(InvitedRoomID, InvitedRoomToken);
 
-        Backend.Match.OnMatchMakingRoomUserList = (MatchMakingGamerInfoListInRoomEventArgs args) =>
-        {
-            int userCount = 0;
-            userCount = args.UserInfos.Count;
-            Debug.Log(args.UserInfos.Count + "명 조회");
-            BackendManager.Instance.roomSettingData.roomHeadCount = args.UserInfos.Count;
-            
-            BackendManager.Instance.GetMatchList();
-            
-            MatchController.Instance.FindMatchIndex();
-
-            for (int i = 0; i < userCount; i++)
-            {
-                Debug.Log(args.UserInfos[i].m_nickName + "님 참가중" + args.UserInfos[i].m_sessionId);
-            }
-
-            MatchController.Instance.uIList[2].GetComponent<UI_Lobby_PCI>().roomNameText.text = BackendManager.Instance.inviterName + "의 방";
-        };
+        // Backend.Match.OnMatchMakingRoomUserList = (MatchMakingGamerInfoListInRoomEventArgs args) =>
+        // {
+        //     int userCount = 0;
+        //     userCount = args.UserInfos.Count;
+        //     Debug.Log(args.UserInfos.Count + "명 조회");
+        //     BackendManager.Instance.roomSettingData.roomHeadCount = args.UserInfos.Count;
+        //     
+        //     BackendManager.Instance.GetMatchList();
+        //     
+        //     MatchController.Instance.FindMatchIndex();
+        //
+        //     for (int i = 0; i < userCount; i++)
+        //     {
+        //         Debug.Log(args.UserInfos[i].m_nickName + "님 참가중" + args.UserInfos[i].m_sessionId);
+        //     }
+        // };
+        MatchController.Instance.uIList[2].GetComponent<UI_Lobby_PCI>().roomNameText.text = BackendManager.Instance.inviterName + "의 방";
         //방정보 동기화 해야함
         MatchController.Instance.ChangeUI(2);
     }
