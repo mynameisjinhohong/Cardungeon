@@ -884,7 +884,7 @@ public class BackendManager : Singleton<BackendManager>
 
         Backend.Match.OnMatchInGameAccess = (MatchInGameSessionEventArgs args) => {
             if (args.ErrInfo == ErrorCode.Success) {
-                Debug.Log($"5-3. OnMatchInGameAccess - 유저가 접속했습니다 : {args.GameRecord.m_nickname}({args.GameRecord.m_sessionId})");
+                Debug.Log($"5-3. OnMatchInGameAccess - 했습니다 : {args.GameRecord.m_nickname}({args.GameRecord.m_sessionId})");
                 if (!inGameUserList.ContainsKey(args.GameRecord.m_nickname))
                 {
                     inGameUserList.Add(args.GameRecord.m_nickname, args.GameRecord);
@@ -895,6 +895,15 @@ public class BackendManager : Singleton<BackendManager>
                     userData.playerToken = args.GameRecord.m_sessionId.ToString();
                     userData.isSuperGamer = args.GameRecord.m_isSuperGamer;
                     UserDataList.Add(userData);
+                    
+                    Debug.Log(UserDataList.Count + "명 접속 확인 됐음");
+                    if (UserDataList.Count >= 2)
+                    {
+                        isLoadGame = true;
+                
+                        Debug.Log("6-1. OnMatchInGameStart 인게임 시작");
+                        Debug.Log("데이터를 보낼 수 있습니다!");
+                    }
                 }
             } else {
                 Debug.LogError("5-3. OnMatchInGameAccess : " + args.ErrInfo.ToString());
@@ -905,6 +914,10 @@ public class BackendManager : Singleton<BackendManager>
             string userListString = "접속한 유저 : \n";
             foreach (var list in inGameUserList)
             {
+                if (inGameUserList.ContainsKey(list.Value.m_nickname)) {
+                    continue;
+                }
+                
                 userListString += $"{list.Value.m_nickname}({list.Value.m_sessionId})" + (list.Value.m_isSuperGamer == true ? "슈퍼게이머" : "");
 
                 UserData data = new UserData();
@@ -916,18 +929,8 @@ public class BackendManager : Singleton<BackendManager>
                 UserDataList.Add(data);
             }
         };
-        
-        ///
-        /// 이부분 절대로 수정할것 강제로 2로 고정시켜둔 상태라 인원수에 맞춰야함
-        ///
-        if (UserDataList.Count >= 2)
-        {
-            isLoadGame = true;
-                
-            Debug.Log("6-1. OnMatchInGameStart 인게임 시작");
-            Debug.Log("데이터를 보낼 수 있습니다!");
-        }
-        
+
+
         Debug.Log($"5-1. JoinGameRoom 게임룸 접속 요청 : 토큰({currentGameRoomInfo.m_inGameRoomToken}");
         Backend.Match.JoinGameRoom(currentGameRoomInfo.m_inGameRoomToken);
     }

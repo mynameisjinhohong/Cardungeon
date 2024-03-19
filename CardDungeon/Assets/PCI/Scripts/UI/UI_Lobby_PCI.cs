@@ -57,7 +57,7 @@ public class UI_Lobby_PCI : MonoBehaviour
 
     private void SetLobbyData(string TODO_lobbyDataContainer)
     {
-
+        userCount.text = "1 + " + BackendManager.Instance.UserDataList.Count;
     }
 
     // TODO : ???? ?????? ??????? ???

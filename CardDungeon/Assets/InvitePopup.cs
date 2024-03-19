@@ -41,12 +41,21 @@ public class InvitePopup : MonoBehaviour
             }
         };
         //방정보 동기화 해야함
+        CheckResult();
         MatchController.Instance.ChangeUI(2);
     }
-
     public void RefuseButtonClick()
     {
         Backend.Match.DeclineInvitation(InvitedRoomID, InvitedRoomToken);
         UIManager.Instance.PopupListPop();
+        CheckResult();
+    }
+
+    public void CheckResult()
+    {
+        Backend.Match.OnMatchMakingRoomInviteResponse = (MatchMakingInteractionEventArgs args) => {
+            // TODO
+            Debug.Log("이유 : " + args.Reason + "에러인포 : " + args.ErrInfo);
+        };
     }
 }
