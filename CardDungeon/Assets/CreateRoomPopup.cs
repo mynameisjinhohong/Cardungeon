@@ -46,7 +46,7 @@ public class CreateRoomPopup : MonoBehaviour
     public void CreateRoomWithSettingData()
     {
         settedData.roomName = settedRoomName.text;
-        settedData.roomIndexNum = FindRoomIndex(settedMaxCount.text);
+        //settedData.roomIndexNum = FindRoomIndex(settedMaxCount.text);
         settedData.roomHeadCount = Int32.Parse(settedMaxCount.text);
 
         BackendManager.Instance.roomSettingData = settedData;
@@ -72,20 +72,20 @@ public class CreateRoomPopup : MonoBehaviour
         settedMaxCount.text = currentValue.ToString();
     }
 
-    private int FindRoomIndex(string currentRoomIndex)
-    {
-        int exValue = Int32.Parse(currentRoomIndex);
-        
-        for (int i = 0; i < BackendManager.Instance.matchCardList.Count; i++)
-        {
-            if (exValue == BackendManager.Instance.matchCardList[i].matchHeadCount)
-            {
-                return BackendManager.Instance.matchIndex = i;
-            }
-        }
-
-        return 0;
-    }
+    // private int FindRoomIndex(string currentRoomIndex)
+    // {
+    //     int exValue = Int32.Parse(currentRoomIndex);
+    //     
+    //     for (int i = 0; i < BackendManager.Instance.matchCardList.Count; i++)
+    //     {
+    //         if (exValue == BackendManager.Instance.matchCardList[i].matchHeadCount)
+    //         {
+    //             return BackendManager.Instance.matchIndex = i;
+    //         }
+    //     }
+    //
+    //     return 0;
+    // }
 
     public void CancelButton()
     {

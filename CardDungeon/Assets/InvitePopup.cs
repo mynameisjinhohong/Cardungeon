@@ -17,7 +17,9 @@ public class InvitePopup : MonoBehaviour
     public void AcceptButtonClick()
     {
         Backend.Match.AcceptInvitation(InvitedRoomID, InvitedRoomToken);
-        MatchController.Instance.uIList[2].GetComponent<UI_Lobby_PCI>().roomNameText.text = BackendManager.Instance.inviterName + "의 방";
+        MatchController.Instance.lobbyScript.roomNameText.text = BackendManager.Instance.inviterName + "의 방";
+        MatchController.Instance.lobbyScript.btn_Invite.interactable = false;
+        MatchController.Instance.lobbyScript.btn_MatchStart.interactable = false;
         //방정보 동기화 해야함
         MatchController.Instance.ChangeUI(2);
     }

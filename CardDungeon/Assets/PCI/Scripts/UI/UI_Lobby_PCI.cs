@@ -10,9 +10,9 @@ public class UI_Lobby_PCI : MonoBehaviour
 
     public TMP_Text roomNameText;
     
-    public TMPro.TextMeshProUGUI invitationCode, userCount;
+    public TextMeshProUGUI userCount;
 
-    public Button btn_MatchStart, btn_ExitRoom;
+    public Button btn_MatchStart, btn_ExitRoom, btn_Invite;
 
     private string TODO_lobbyData;
     

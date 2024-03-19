@@ -544,8 +544,14 @@ public class BackendManager : Singleton<BackendManager>
         });
     }
     
-    [Header("매치카드 리스트")]
-    public List<MatchCard> matchCardList = new List<MatchCard>();
+    [Header("전체 매치카드 리스트")]
+    public List<MatchCard> allMatchCardList = new List<MatchCard>();
+    
+    [Header("친선전 매치카드 리스트")]
+    public List<MatchCard> teamMatchCardList = new List<MatchCard>();
+    
+    [Header("개인전 매치카드 리스트")]
+    public List<MatchCard> soloMatchCardList = new List<MatchCard>();
 
     void Update() {
         if (Backend.IsInitialized) {
@@ -608,7 +614,7 @@ public class BackendManager : Singleton<BackendManager>
                 
                 Debug.Log("3-2. OnMatchMakingResponse 매칭 신청 진행중");
                 
-                int second = matchCardList[matchIndex].transit_to_sandbox_timeout_ms / 1000;
+                int second = allMatchCardList[matchIndex].transit_to_sandbox_timeout_ms / 1000;
 
                 if (second > 0) {
                     Debug.Log($"{second}초 뒤에 샌드박스 활성화가 됩니다.");
@@ -634,7 +640,7 @@ public class BackendManager : Singleton<BackendManager>
         else
             settedType = MatchModeType.TeamOnTeam;
         
-        Backend.Match.RequestMatchMaking(matchCardList[matchIndex].matchType, settedType, matchCardList[matchIndex].inDate);
+        Backend.Match.RequestMatchMaking(allMatchCardList[matchIndex].matchType, settedType, allMatchCardList[matchIndex].inDate);
     }
     
     IEnumerator WaitFor10Seconds(int second) {
@@ -650,7 +656,7 @@ public class BackendManager : Singleton<BackendManager>
 
     public void GetMatchList()
     {
-        matchCardList.Clear();
+        allMatchCardList.Clear();
 
         Backend.Match.GetMatchList( callback => {
             if (!callback.IsSuccess()) {
@@ -689,21 +695,6 @@ public class BackendManager : Singleton<BackendManager>
 
                     case "mmr":
                         matchCard.matchType = MatchType.MMR;
-                        break;
-                }
-
-                switch (matchModeType) {
-                    case "OneOnOne":
-                        matchCard.matchModeType = MatchModeType.OneOnOne;
-                        break;
-
-                    case "TeamOnTeam":
-                        matchCard.matchModeType = MatchModeType.TeamOnTeam;
-
-                        break;
-
-                    case "Melee":
-                        matchCard.matchModeType = MatchModeType.Melee;
                         break;
                 }
 
@@ -752,13 +743,29 @@ public class BackendManager : Singleton<BackendManager>
                     }
                 }
 
-                matchCardList.Add(matchCard);
-            }
-            
-            Debug.Log("아래 출력되는 매치카드중에서 하나를 골라 인풋에 index를 입력해주세요");
+                switch (matchModeType) {
+                    case "OneOnOne":
+                        matchCard.matchModeType = MatchModeType.OneOnOne;
+                        soloMatchCardList.Add(matchCard);
+                        break;
 
-            for (int i = 0; i < matchCardList.Count; i++) {
-                Debug.Log($"{i} 번째 매치카드 : \n" + matchCardList[i].ToString());
+                    case "TeamOnTeam":
+                        matchCard.matchModeType = MatchModeType.TeamOnTeam;
+                        teamMatchCardList.Add(matchCard);
+                        break;
+
+                    case "Melee":
+                        matchCard.matchModeType = MatchModeType.Melee;
+                        soloMatchCardList.Add(matchCard);
+                        break;
+
+                    default :
+                        matchCard.matchModeType = MatchModeType.Melee;
+                        soloMatchCardList.Add(matchCard);
+                        break;
+                }
+                
+                allMatchCardList.Add(matchCard);
             }
         });
     }

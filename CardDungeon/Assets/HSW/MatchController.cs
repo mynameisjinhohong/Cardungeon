@@ -32,7 +32,9 @@ public class MatchController : Singleton<MatchController>
     public List<String> TipStrings;
 
     private BackendManager _backendManager;
-    private UI_Lobby_PCI lobbyScript;
+    
+    [HideInInspector]
+    public UI_Lobby_PCI lobbyScript;
 
     public Transform DataPanelParent;
     public GameObject userInfoDataPanelObj;
@@ -183,6 +185,8 @@ public class MatchController : Singleton<MatchController>
                 Instantiate(emptyDataPanelObj, DataPanelParent);
             }
         }
+
+        lobbyScript.userCount.text = BackendManager.Instance.UserDataList.Count + "/" + 5; 
     }
     
     IEnumerator RandomTipTextCor()
@@ -219,26 +223,26 @@ public class MatchController : Singleton<MatchController>
         ChangeUI(1);
     }
 
-    public void FindMatchIndex()
-    {
-        StartCoroutine(FindMatchIndexCor());
-    }
-    
-    IEnumerator FindMatchIndexCor()
-    {
-        yield return new WaitUntil(() => _backendManager.matchCardList.Count >= 7);
-
-        for (int i = 0; i < _backendManager.matchCardList.Count; i++)
-        {
-            if (_backendManager.matchCardList[i].matchHeadCount == _backendManager.roomSettingData.roomHeadCount)
-            {
-                _backendManager.matchIndex = i;
-                
-                Debug.Log(i + "번째 매치카드 선택됨");
-                _backendManager.roomSettingData.roomIndexNum = i;
-            }
-        }
-    }
+    // public void FindMatchIndex()
+    // {
+    //     StartCoroutine(FindMatchIndexCor());
+    // }
+    //
+    // IEnumerator FindMatchIndexCor()
+    // {
+    //     yield return new WaitUntil(() => _backendManager.matchCardList.Count >= 7);
+    //
+    //     for (int i = 0; i < _backendManager.matchCardList.Count; i++)
+    //     {
+    //         if (_backendManager.matchCardList[i].matchHeadCount == BackendManager.Instance.UserDataList.Count * 2)
+    //         {
+    //             _backendManager.matchIndex = i;
+    //             
+    //             Debug.Log(i + "번째 매치카드 선택됨");
+    //             _backendManager.roomSettingData.roomIndexNum = i;
+    //         }
+    //     }
+    // }
 
     public void FastMatch()
     {
@@ -268,7 +272,7 @@ public class MatchController : Singleton<MatchController>
 
     IEnumerator WaitMatchList()
     {
-        yield return new WaitUntil(() => _backendManager.matchCardList.Count >= 6);
+        yield return new WaitUntil(() => _backendManager.allMatchCardList.Count >= 6);
         
         _backendManager.CreateMatchRoom();
     }
@@ -322,6 +326,8 @@ public class MatchController : Singleton<MatchController>
     {
         lobbyScript.roomNameText.text = BackendManager.Instance.userInfo.Nickname + "의 방";
         lobbyScript.userCount.text = "1/5";
+        lobbyScript.btn_Invite.interactable = true;
+        lobbyScript.btn_MatchStart.interactable = true;
         
         GameObject getDataPanel = Instantiate(userInfoDataPanelObj, DataPanelParent);
 
