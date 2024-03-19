@@ -21,6 +21,7 @@ public class NickNameInputToInvite : MonoBehaviour
         Backend.Match.InviteUser(nickNameInput.text);
         
         Backend.Match.OnMatchMakingRoomInvite = (MatchMakingInteractionEventArgs args) => {
+
             Debug.Log("에러인포 :" + args.ErrInfo + "이유:" + args.Reason);
 
             if (args.ErrInfo == ErrorCode.Success)
@@ -29,6 +30,7 @@ public class NickNameInputToInvite : MonoBehaviour
             }
             else
                 UIManager.Instance.OpenRecyclePopup("초대 결과", args.Reason, null);
+
         };
     }
 }

@@ -102,6 +102,12 @@ public class MatchController : Singleton<MatchController>
 
         if (index == 2)
         {
+            Backend.Match.OnMatchMakingRoomJoin = (MatchMakingGamerInfoInRoomEventArgs args) =>
+            {
+                Debug.Log("args.UserInfo.m_nickName님이 매칭방 접속");
+                Debug.Log(args.ErrInfo + args.Reason);
+            };
+            
             Backend.Match.OnMatchMakingResponse = (MatchMakingResponseEventArgs args) => {
                 Debug.Log("방정보" + args.RoomInfo + "카드정보" + args.MatchCardIndate + "원인" + args.Reason + "결과정보" + args.ErrInfo);
 
