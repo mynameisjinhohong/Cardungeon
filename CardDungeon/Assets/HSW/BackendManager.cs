@@ -877,6 +877,9 @@ public class BackendManager : Singleton<BackendManager>
                     userData.isSuperGamer = list.m_isSuperGamer;
 
                     UserDataList.Add(userData);
+                    
+                    Debug.Log(args.GameRecords.Count + "명의 유저중" + UserDataList.Count + "접속 완료");
+                    isLoadGame = true;
                 }
 
             } else {
@@ -899,6 +902,8 @@ public class BackendManager : Singleton<BackendManager>
                     UserDataList.Add(userData);
                     
                     Debug.Log(UserDataList.Count + "명 접속 확인 됐음");
+                    
+                    isLoadGame = true;
                 }
             } else {
                 Debug.LogError("5-3. OnMatchInGameAccess : " + args.ErrInfo.ToString());
