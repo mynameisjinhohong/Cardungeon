@@ -57,7 +57,11 @@ public class GamePlayManager : Singleton<GamePlayManager>
     }
     IEnumerator WaitforGameStart()
     {
-        yield return new WaitUntil(() => BackendManager.Instance.isLoadGame);
+        float timeValue = BackendManager.Instance.isMeSuperGamer ? 5 : 3;
+
+        yield return new WaitForSeconds(timeValue);
+
+        //yield return new WaitUntil(() => BackendManager.Instance.isLoadGame);
         BackendManager.Instance.UserDataList.Sort((UserData lhs, UserData rhs) =>
         {
             if (int.Parse(lhs.playerToken) < int.Parse(rhs.playerToken))
