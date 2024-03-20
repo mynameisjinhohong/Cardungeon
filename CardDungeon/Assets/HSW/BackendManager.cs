@@ -901,13 +901,6 @@ public class BackendManager : Singleton<BackendManager>
                     UserDataList.Add(userData);
                     
                     Debug.Log(UserDataList.Count + "명 접속 확인 됐음");
-                    if (inGameUserList.Count >= UserDataList.Count)
-                    {
-                        isLoadGame = true;
-                
-                        Debug.Log("6-1. OnMatchInGameStart 인게임 시작");
-                        Debug.Log("데이터를 보낼 수 있습니다!");
-                    }
                 }
             } else {
                 Debug.LogError("5-3. OnMatchInGameAccess : " + args.ErrInfo.ToString());
