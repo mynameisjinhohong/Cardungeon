@@ -374,7 +374,6 @@ public class BackendManager : Singleton<BackendManager>
             }
         }
         DataManager.Instance.DataLoadComplete();
-        CheckNickNameCreated();
         
         StartCoroutine(nameof(RefreshToken));
     }
@@ -387,7 +386,17 @@ public class BackendManager : Singleton<BackendManager>
         }
         else
         {
-            MatchController.Instance.ChangeUI(1);
+            Backend.BMember.GetUserInfo((callback) =>
+            {
+                JsonData json = callback.GetReturnValuetoJSON()["row"];
+                Debug.LogError(callback.GetReturnValue());
+                Debug.Log(Backend.UserNickName + Backend.UserInDate);
+                userInfo.UserIndate  = Backend.UserInDate;
+                userInfo.Nickname    = Backend.UserNickName;
+                userInfo.UID         = Backend.UID;
+            
+                MatchController.Instance.ChangeUI(1);
+            });
         }
     }
     
@@ -531,17 +540,7 @@ public class BackendManager : Singleton<BackendManager>
     
     public void GetUserInfo()
     {
-        Backend.BMember.GetUserInfo((callback) =>
-        {
-            JsonData json = callback.GetReturnValuetoJSON()["row"];
-            Debug.LogError(callback.GetReturnValue());
-            Debug.Log(Backend.UserNickName + Backend.UserInDate);
-            userInfo.UserIndate  = Backend.UserInDate;
-            userInfo.Nickname    = Backend.UserNickName;
-            userInfo.UID         = Backend.UID;
-            
-            MatchController.Instance.ChangeUI(1);
-        });
+        CheckNickNameCreated();
     }
     
     [Header("전체 매치카드 리스트")]
