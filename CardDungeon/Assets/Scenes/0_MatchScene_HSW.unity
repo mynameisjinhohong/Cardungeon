@@ -3590,14 +3590,9 @@ MonoBehaviour:
   isInitialize: 0
   isLoadGame: 0
   UseAutoLogin: 1
-  matchIndex: 0
+  matchIndex: 8
   isMatching: 0
   UserDataList: []
-  roomSettingData:
-    mapType: 0
-    roomHeadCount: 0
-    roomIndexNum: 0
-    roomName: 
   isFastMatch: 0
   inviterName: 
   allMatchCardList: []
@@ -6472,7 +6467,7 @@ MonoBehaviour:
   userCount: {fileID: 8486474553677297737}
   btn_MatchStart: {fileID: 8913298501967253567}
   btn_ExitRoom: {fileID: 8913298502478585273}
-  btn_Invite: {fileID: 8913298501967253567}
+  btn_Invite: {fileID: 6833632608797785096}
 --- !u!1 &3553867118215429087
 GameObject:
   m_ObjectHideFlags: 0
