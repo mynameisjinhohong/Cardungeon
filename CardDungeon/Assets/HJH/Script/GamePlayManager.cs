@@ -284,7 +284,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
                     {
                         if (msg.playerIdx == -10)
                         {
-                            int head = BackendManager.Instance.roomSettingData.roomHeadCount;
+                            int head = BackendManager.Instance.UserDataList.Count;
                             switch (head)
                             {
                                 case 0:
@@ -323,7 +323,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
             m.cardIdx = Random.Range(0, 100);
             SendData(m);
             CardManager.Instance.seed = m.cardIdx;
-            int head = BackendManager.Instance.roomSettingData.roomHeadCount;
+            int head = BackendManager.Instance.UserDataList.Count;
             switch (head)
             {
                 case 0:

@@ -49,7 +49,7 @@ public class CreateRoomPopup : MonoBehaviour
         //settedData.roomIndexNum = FindRoomIndex(settedMaxCount.text);
         settedData.roomHeadCount = Int32.Parse(settedMaxCount.text);
 
-        BackendManager.Instance.roomSettingData = settedData;
+        //BackendManager.Instance.roomSettingData = settedData;
 
         MatchController.Instance.CreateRoom();
 
@@ -137,13 +137,13 @@ public class CreateRoomPopup : MonoBehaviour
         {
             roomUIData.roomNameText.text = BackendManager.Instance.userInfo.Nickname + "ÀÇ ¹æ";
             
-            BackendManager.Instance.roomSettingData.roomName = roomUIData.roomNameText.text;
+            //BackendManager.Instance.roomSettingData.roomName = roomUIData.roomNameText.text;
         }
         else
         {
             roomUIData.roomNameText.text = settedRoomName.text;
 
-            BackendManager.Instance.roomSettingData.roomName = roomUIData.roomNameText.text;
+            //BackendManager.Instance.roomSettingData.roomName = roomUIData.roomNameText.text;
         }
             
     }

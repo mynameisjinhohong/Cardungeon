@@ -150,12 +150,12 @@ public class MatchController : Singleton<MatchController>
                 DataInit();
             };
             
-            // 매칭룸 접속 결과
-            // Backend.Match.OnMatchMakingResponse = (MatchMakingResponseEventArgs args) => {
-            //     Debug.Log("방정보" + args.RoomInfo + "카드정보" + args.MatchCardIndate + "원인" + args.Reason + "결과정보" + args.ErrInfo);
-            //
-            //     BackendManager.Instance.JoinGameServer(args.RoomInfo);
-            // };
+            //매칭룸 접속 결과
+            Backend.Match.OnMatchMakingResponse = (MatchMakingResponseEventArgs args) => {
+                Debug.Log("방정보" + args.RoomInfo + "카드정보" + args.MatchCardIndate + "원인" + args.Reason + "결과정보" + args.ErrInfo);
+            
+                BackendManager.Instance.JoinGameServer(args.RoomInfo);
+            };
         }
 
         if (index == 3)
@@ -248,11 +248,11 @@ public class MatchController : Singleton<MatchController>
         
         _backendManager.GetMatchList();
 
-        _backendManager.matchIndex = 6;
+        _backendManager.matchIndex = 10;
         
-        _backendManager.roomSettingData.roomHeadCount = 2;
+        //_backendManager.roomSettingData.roomHeadCount = 2;
 
-        _backendManager.roomSettingData.roomIndexNum = 0;
+        //_backendManager.roomSettingData.roomIndexNum = 0;
 
         StartCoroutine(WaitMatchList());
     }
@@ -270,7 +270,7 @@ public class MatchController : Singleton<MatchController>
 
     IEnumerator WaitMatchList()
     {
-        yield return new WaitUntil(() => _backendManager.allMatchCardList.Count >= 6);
+        yield return new WaitUntil(() => _backendManager.allMatchCardList.Count >= 11);
         
         _backendManager.CreateMatchRoom();
     }

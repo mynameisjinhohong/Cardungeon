@@ -36,8 +36,8 @@ public class BackendManager : Singleton<BackendManager>
     [Header("전체 유저 데이터 리스트")] 
     public List<UserData> UserDataList;
     
-    [Header("방정보")]
-    public RoomSettingData roomSettingData;
+    //[Header("방정보")]
+    //public RoomSettingData roomSettingData;
 
     public bool isFastMatch;
 
@@ -556,8 +556,7 @@ public class BackendManager : Singleton<BackendManager>
     public void JoinMatchMakingServer()
     {
         Debug.Log("서버접속 시도");
-        isMatching = true;
-        
+
         Backend.Match.OnException = (Exception e) => { Debug.LogError(e.ToString()); };
 
         Backend.Match.OnJoinMatchMakingServer = (JoinChannelEventArgs args) => {
@@ -584,6 +583,7 @@ public class BackendManager : Singleton<BackendManager>
             if (args.ErrInfo == ErrorCode.Success)
             {
                 Debug.Log("2-2. OnMatchMakingRoomCreate 성공");
+
                 if(isFastMatch)
                     RequestMatchMaking();
                 else
@@ -602,7 +602,10 @@ public class BackendManager : Singleton<BackendManager>
 
     public void RequestMatchMaking()
     {
-        FindTeamMatchCard(UserDataList.Count);
+        if(!isFastMatch)
+            FindTeamMatchCard(UserDataList.Count);
+
+        isMatching = true;
         
         Backend.Match.OnMatchMakingResponse = (MatchMakingResponseEventArgs args) => {
             if (args.ErrInfo == ErrorCode.Match_InProgress) {
@@ -628,6 +631,7 @@ public class BackendManager : Singleton<BackendManager>
         
         Debug.Log("3-1. RequestMatchMaking 매칭 신청 시작");
 
+        Debug.Log("매칭 신청정보 : " + allMatchCardList[matchIndex].matchType + "/" + allMatchCardList[matchIndex].matchModeType + "/" + allMatchCardList[matchIndex].inDate);
         Backend.Match.RequestMatchMaking(allMatchCardList[matchIndex].matchType, allMatchCardList[matchIndex].matchModeType, allMatchCardList[matchIndex].inDate);
     }
     
@@ -874,6 +878,9 @@ public class BackendManager : Singleton<BackendManager>
 
                     UserDataList.Add(userData);
                 }
+
+                StartCoroutine(WaitingAllUsersCor());
+
             } else {
                 Debug.LogError("5-2. OnSessionListInServer : " + args.ToString());
             }
@@ -894,7 +901,7 @@ public class BackendManager : Singleton<BackendManager>
                     UserDataList.Add(userData);
                     
                     Debug.Log(UserDataList.Count + "명 접속 확인 됐음");
-                    if (UserDataList.Count >= 2)
+                    if (inGameUserList.Count >= UserDataList.Count)
                     {
                         isLoadGame = true;
                 
@@ -1269,6 +1276,13 @@ public class BackendManager : Singleton<BackendManager>
     private void FindSoloMatchCard(int headCount)
     {
         
+    }
+
+    IEnumerator WaitingAllUsersCor()
+    {
+        yield return new WaitUntil(() => inGameUserList.Count >= UserDataList.Count);
+
+        isLoadGame = true;
     }
 }
 
