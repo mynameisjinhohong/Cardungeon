@@ -834,19 +834,25 @@ public class BackendManager : Singleton<BackendManager>
     }
 
     public void JoinGameServer(MatchInGameRoomInfo gameRoomInfo) {
-        Backend.Match.OnSessionJoinInServer = (JoinChannelEventArgs args) => {
-            if (args.ErrInfo == ErrorInfo.Success) {
-                Debug.Log("4-2. OnSessionJoinInServer 게임 서버 접속 성공 : " + args.ToString());
-                Debug.Log("이제 게임방에 접속할 수 있습니다!");
-            } else {
-                Debug.LogError("4-2. OnSessionJoinInServer 게임 서버 접속 실패 : " + args.ToString());
-            }
-            
-            // 게임 서버에 정상적으로 접속했으면 매칭 서버를 종료
+        
+        Backend.Match.OnSessionJoinInServer += (args) => {
             LeaveMatchMaking();
             JoinGameRoom();
             SceneManager.LoadScene(1);
         };
+        
+        // Backend.Match.OnSessionJoinInServer = (JoinChannelEventArgs args) => {
+        //     if (args.ErrInfo == ErrorInfo.Success) {
+        //         Debug.Log("4-2. OnSessionJoinInServer 게임 서버 접속 성공 : " + args.ToString());
+        //         Debug.Log("이제 게임방에 접속할 수 있습니다!");
+        //     } else {
+        //         Debug.LogError("4-2. OnSessionJoinInServer 게임 서버 접속 실패 : " + args.ToString());
+        //         JoinGameServer(gameRoomInfo);
+        //     }
+        //     
+        //     // 게임 서버에 정상적으로 접속했으면 매칭 서버를 종료
+        //
+        // };
 
         Debug.Log("4-1. JoinGameServer 인게임 서버 접속 요청");
         
@@ -879,6 +885,7 @@ public class BackendManager : Singleton<BackendManager>
                     
                     Debug.Log(args.GameRecords.Count + "명의 유저중" + UserDataList.Count + "접속 완료");
                 }
+
             } else {
                 Debug.LogError("5-2. OnSessionListInServer : " + args.ToString());
             }
@@ -896,6 +903,7 @@ public class BackendManager : Singleton<BackendManager>
                     userData.playerName = args.GameRecord.m_nickname;
                     userData.playerToken = args.GameRecord.m_sessionId.ToString();
                     userData.isSuperGamer = args.GameRecord.m_isSuperGamer;
+
                     UserDataList.Add(userData);
                     
                     Debug.Log(UserDataList.Count + "명 접속 확인 됐음");
@@ -924,9 +932,7 @@ public class BackendManager : Singleton<BackendManager>
                 UserDataList.Add(data);
             }
         };
-
-
-        StartCoroutine(CheckHostCheck());
+        
         Debug.Log($"5-1. JoinGameRoom 게임룸 접속 요청 : 토큰({currentGameRoomInfo.m_inGameRoomToken}");
         Backend.Match.JoinGameRoom(currentGameRoomInfo.m_inGameRoomToken);
     }
@@ -1270,10 +1276,8 @@ public class BackendManager : Singleton<BackendManager>
         
     }
 
-    IEnumerator CheckHostCheck()
+    IEnumerator CheckSuperGamgerisMeCor()
     {
-        Debug.Log("슈퍼게이머 검증");
-        
         UserData myData = new UserData();
         
         for (int i = 0; i < UserDataList.Count; i++)
@@ -1286,19 +1290,16 @@ public class BackendManager : Singleton<BackendManager>
 
         if (myData.isSuperGamer)
         {
-            Debug.Log("슈퍼게이머라서 대기 후 로딩합니다.");
-            
+            Debug.Log("슈퍼게이머라서 대기합니다");
             yield return new WaitForSeconds(1);
-            
+
             isLoadGame = true;
         }
         else
         {
-            Debug.Log("슈퍼게이머가 아니라 바로 로딩합니다.");
+            Debug.Log("슈퍼게이머가 아니라서 바로 로딩합니다");
             isLoadGame = true;
         }
-        
-        
     }
 }
 
