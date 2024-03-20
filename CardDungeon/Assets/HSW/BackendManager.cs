@@ -877,8 +877,6 @@ public class BackendManager : Singleton<BackendManager>
                     userData.isSuperGamer = list.m_isSuperGamer;
 
                     UserDataList.Add(userData);
-
-                    isLoadGame = UserDataList.Count >= args.GameRecords.Count;
                 }
 
             } else {
