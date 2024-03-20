@@ -20,6 +20,8 @@ public class NickNameInputToInvite : MonoBehaviour
         Debug.Log("초대 보내기 시도");
         Backend.Match.InviteUser(nickNameInput.text);
         
+        UIManager.Instance.PopupListPop();
+        
         Backend.Match.OnMatchMakingRoomInvite = (MatchMakingInteractionEventArgs args) => {
 
             Debug.Log("에러인포 :" + args.ErrInfo + "이유:" + args.Reason);
@@ -30,7 +32,6 @@ public class NickNameInputToInvite : MonoBehaviour
             }
             else
                 UIManager.Instance.OpenRecyclePopup("초대 결과", args.Reason, null);
-
         };
     }
 }
