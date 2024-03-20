@@ -911,6 +911,13 @@ public class BackendManager : Singleton<BackendManager>
             } else {
                 Debug.LogError("5-3. OnMatchInGameAccess : " + args.ErrInfo.ToString());
             }
+            for (int i = 0; i < UserDataList.Count; i++)
+            {
+                if (UserDataList[i].playerName == userInfo.Nickname)
+                {
+                    Debug.Log("참가자인 나는 슈퍼게이머인가? :" + UserDataList[i].isSuperGamer);
+                }
+            }
         };
         
         Backend.Match.OnMatchInGameStart = () => {
