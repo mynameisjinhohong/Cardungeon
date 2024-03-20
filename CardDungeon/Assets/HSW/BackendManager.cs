@@ -546,12 +546,6 @@ public class BackendManager : Singleton<BackendManager>
     
     [Header("전체 매치카드 리스트")]
     public List<MatchCard> allMatchCardList = new List<MatchCard>();
-    
-    [Header("친선전 매치카드 리스트")]
-    public List<MatchCard> teamMatchCardList = new List<MatchCard>();
-    
-    [Header("개인전 매치카드 리스트")]
-    public List<MatchCard> soloMatchCardList = new List<MatchCard>();
 
     void Update() {
         if (Backend.IsInitialized) {
@@ -608,7 +602,10 @@ public class BackendManager : Singleton<BackendManager>
         Backend.Match.CreateMatchRoom();
     }
 
-    public void RequestMatchMaking() {
+    public void RequestMatchMaking()
+    {
+        FindTeamMatchCard(UserDataList.Count);
+        
         Backend.Match.OnMatchMakingResponse = (MatchMakingResponseEventArgs args) => {
             if (args.ErrInfo == ErrorCode.Match_InProgress) {
                 
@@ -746,22 +743,18 @@ public class BackendManager : Singleton<BackendManager>
                 switch (matchModeType) {
                     case "OneOnOne":
                         matchCard.matchModeType = MatchModeType.OneOnOne;
-                        soloMatchCardList.Add(matchCard);
                         break;
 
                     case "TeamOnTeam":
                         matchCard.matchModeType = MatchModeType.TeamOnTeam;
-                        teamMatchCardList.Add(matchCard);
                         break;
 
                     case "Melee":
                         matchCard.matchModeType = MatchModeType.Melee;
-                        soloMatchCardList.Add(matchCard);
                         break;
 
                     default :
                         matchCard.matchModeType = MatchModeType.Melee;
-                        soloMatchCardList.Add(matchCard);
                         break;
                 }
                 
@@ -1267,6 +1260,24 @@ public class BackendManager : Singleton<BackendManager>
                     break;
             }
         });
+    }
+
+    private void FindTeamMatchCard(int headCount)
+    {
+        int findValue = headCount * 2;
+
+        for (int i = 0; i < allMatchCardList.Count; i++)
+        {
+            if (allMatchCardList[i].matchHeadCount == findValue && allMatchCardList[i].matchModeType == MatchModeType.TeamOnTeam)
+            {
+                matchIndex = i;
+            }
+        }
+    }
+
+    private void FindSoloMatchCard(int headCount)
+    {
+        
     }
 }
 
