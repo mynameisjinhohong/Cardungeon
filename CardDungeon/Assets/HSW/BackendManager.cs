@@ -879,7 +879,7 @@ public class BackendManager : Singleton<BackendManager>
                     UserDataList.Add(userData);
                 }
 
-                StartCoroutine(WaitingAllUsersCor());
+                //StartCoroutine(WaitingAllUsersCor());
 
             } else {
                 Debug.LogError("5-2. OnSessionListInServer : " + args.ToString());
