@@ -879,7 +879,8 @@ public class BackendManager : Singleton<BackendManager>
                     
                     Debug.Log(args.GameRecords.Count + "명의 유저중" + UserDataList.Count + "접속 완료");
                 }
-
+                
+                StartCoroutine(CheckHostCheck());
             } else {
                 Debug.LogError("5-2. OnSessionListInServer : " + args.ToString());
             }
@@ -924,7 +925,6 @@ public class BackendManager : Singleton<BackendManager>
                 
                 UserDataList.Add(data);
             }
-            StartCoroutine(CheckHostCheck());
         };
 
 
@@ -1279,7 +1279,8 @@ public class BackendManager : Singleton<BackendManager>
             {
                 if (UserDataList[i].isSuperGamer)
                 {
-                    yield return new WaitForSeconds(0.5f);
+                    Debug.Log("내가 슈퍼게이머로 선정되어 천천히 로딩됩니다.");
+                    yield return new WaitForSeconds(1f);
                 }
             }
         }
