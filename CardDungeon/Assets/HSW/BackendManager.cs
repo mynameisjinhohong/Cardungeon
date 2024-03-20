@@ -917,6 +917,7 @@ public class BackendManager : Singleton<BackendManager>
                 if (UserDataList[i].playerName == userInfo.Nickname)
                 {
                     Debug.Log("참가자인 나는 슈퍼게이머인가? :" + UserDataList[i].isSuperGamer);
+                    isMeSuperGamer = UserDataList[i].isSuperGamer;
                 }
             }
         };
