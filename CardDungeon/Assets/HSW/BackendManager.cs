@@ -879,8 +879,6 @@ public class BackendManager : Singleton<BackendManager>
                     
                     Debug.Log(args.GameRecords.Count + "명의 유저중" + UserDataList.Count + "접속 완료");
                 }
-                
-                StartCoroutine(CheckHostCheck());
             } else {
                 Debug.LogError("5-2. OnSessionListInServer : " + args.ToString());
             }
@@ -928,6 +926,7 @@ public class BackendManager : Singleton<BackendManager>
         };
 
 
+        StartCoroutine(CheckHostCheck());
         Debug.Log($"5-1. JoinGameRoom 게임룸 접속 요청 : 토큰({currentGameRoomInfo.m_inGameRoomToken}");
         Backend.Match.JoinGameRoom(currentGameRoomInfo.m_inGameRoomToken);
     }
@@ -1273,19 +1272,33 @@ public class BackendManager : Singleton<BackendManager>
 
     IEnumerator CheckHostCheck()
     {
+        Debug.Log("슈퍼게이머 검증");
+        
+        UserData myData = new UserData();
+        
         for (int i = 0; i < UserDataList.Count; i++)
         {
             if (UserDataList[i].playerName == userInfo.Nickname)
             {
-                if (UserDataList[i].isSuperGamer)
-                {
-                    Debug.Log("내가 슈퍼게이머로 선정되어 천천히 로딩됩니다.");
-                    yield return new WaitForSeconds(1f);
-                }
+                myData = UserDataList[i];
             }
         }
+
+        if (myData.isSuperGamer)
+        {
+            Debug.Log("슈퍼게이머라서 대기 후 로딩합니다.");
+            
+            yield return new WaitForSeconds(1);
+            
+            isLoadGame = true;
+        }
+        else
+        {
+            Debug.Log("슈퍼게이머가 아니라 바로 로딩합니다.");
+            isLoadGame = true;
+        }
         
-        isLoadGame = true;
+        
     }
 }
 
