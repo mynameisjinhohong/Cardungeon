@@ -629,15 +629,8 @@ public class BackendManager : Singleton<BackendManager>
         };
         
         Debug.Log("3-1. RequestMatchMaking 매칭 신청 시작");
- 
-        MatchModeType settedType;
 
-        if (roomSettingData.roomHeadCount <= 2)
-            settedType = MatchModeType.Melee;
-        else
-            settedType = MatchModeType.TeamOnTeam;
-        
-        Backend.Match.RequestMatchMaking(allMatchCardList[matchIndex].matchType, settedType, allMatchCardList[matchIndex].inDate);
+        Backend.Match.RequestMatchMaking(allMatchCardList[matchIndex].matchType, allMatchCardList[matchIndex].matchModeType, allMatchCardList[matchIndex].inDate);
     }
     
     IEnumerator WaitFor10Seconds(int second) {

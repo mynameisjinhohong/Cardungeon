@@ -3601,8 +3601,6 @@ MonoBehaviour:
   isFastMatch: 0
   inviterName: 
   allMatchCardList: []
-  teamMatchCardList: []
-  soloMatchCardList: []
 --- !u!1 &1303124231
 GameObject:
   m_ObjectHideFlags: 0
@@ -6474,7 +6472,7 @@ MonoBehaviour:
   userCount: {fileID: 8486474553677297737}
   btn_MatchStart: {fileID: 8913298501967253567}
   btn_ExitRoom: {fileID: 8913298502478585273}
-  btn_Invite: {fileID: 0}
+  btn_Invite: {fileID: 8913298501967253567}
 --- !u!1 &3553867118215429087
 GameObject:
   m_ObjectHideFlags: 0
