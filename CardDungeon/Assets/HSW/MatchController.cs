@@ -32,6 +32,8 @@ public class MatchController : Singleton<MatchController>
     public List<String> TipStrings;
 
     private BackendManager _backendManager;
+
+    public int currentUIIndex;
     
     [HideInInspector]
     public UI_Lobby_PCI lobbyScript;
@@ -39,6 +41,8 @@ public class MatchController : Singleton<MatchController>
     public Transform DataPanelParent;
     public GameObject userInfoDataPanelObj;
     public GameObject emptyDataPanelObj;
+    
+    private Coroutine blinkCoroutine;
     
     private void Awake()
     {
@@ -86,17 +90,25 @@ public class MatchController : Singleton<MatchController>
 
     public void ChangeUI(int index)
     {
-        UIManager.Instance.AllPopupClear();
+        currentUIIndex = index;
         
+        UIManager.Instance.AllPopupClear();
+
         for (int i = 0; i < uIList.Count; i++)
         {
             uIList[i].SetActive(i == index);
         }
 
+        if (blinkCoroutine != null)
+        {
+            StopCoroutine(blinkCoroutine);
+        }
+        
         if (index == 1)
         {
             userNickNameText.text = BackendManager.Instance.userInfo.Nickname;
-            StartCoroutine(RabbitBlinkEye());
+            
+            blinkCoroutine = StartCoroutine(RabbitBlinkEye());
             
             _backendManager.JoinMatchMakingServer();
             

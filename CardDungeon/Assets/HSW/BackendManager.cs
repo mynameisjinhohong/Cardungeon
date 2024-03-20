@@ -877,9 +877,9 @@ public class BackendManager : Singleton<BackendManager>
                     userData.isSuperGamer = list.m_isSuperGamer;
 
                     UserDataList.Add(userData);
-                }
 
-                //StartCoroutine(WaitingAllUsersCor());
+                    isLoadGame = UserDataList.Count >= args.GameRecords.Count;
+                }
 
             } else {
                 Debug.LogError("5-2. OnSessionListInServer : " + args.ToString());
@@ -1269,13 +1269,6 @@ public class BackendManager : Singleton<BackendManager>
     private void FindSoloMatchCard(int headCount)
     {
         
-    }
-
-    IEnumerator WaitingAllUsersCor()
-    {
-        yield return new WaitUntil(() => inGameUserList.Count >= UserDataList.Count);
-
-        isLoadGame = true;
     }
 }
 
