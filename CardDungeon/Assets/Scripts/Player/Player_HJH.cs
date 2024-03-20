@@ -95,7 +95,7 @@ public class Player_HJH : MonoBehaviour
                 }
                 else
                 {
-                    Destroy(gameObject);
+                    gameObject.SetActive(false);
                 }
             }
         }
