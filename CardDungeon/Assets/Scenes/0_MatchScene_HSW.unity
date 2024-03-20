@@ -3590,7 +3590,7 @@ MonoBehaviour:
   isInitialize: 0
   isLoadGame: 0
   UseAutoLogin: 1
-  matchIndex: 8
+  matchIndex: -1
   isMatching: 0
   UserDataList: []
   isFastMatch: 0
@@ -5565,6 +5565,7 @@ MonoBehaviour:
   Rabbit1: {fileID: 2070873575}
   Rabbit2: {fileID: 1505109940}
   TipStrings: []
+  currentUIIndex: 0
   lobbyScript: {fileID: 0}
   DataPanelParent: {fileID: 8913298501677147689}
   userInfoDataPanelObj: {fileID: 6053263733253158925, guid: 9ef41992750850f479bb19862fa5a1b9, type: 3}
@@ -6462,11 +6463,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f1aafdfbf0d0c248812a13d9e8c928f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canvasGroup: {fileID: 5820717399744243590}
   roomNameText: {fileID: 8913298501845650667}
   userCount: {fileID: 8486474553677297737}
   btn_MatchStart: {fileID: 8913298501967253567}
-  btn_ExitRoom: {fileID: 8913298502478585273}
   btn_Invite: {fileID: 6833632608797785096}
 --- !u!1 &3553867118215429087
 GameObject:
@@ -7746,7 +7745,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1841941305}
         m_TargetAssemblyTypeName: MatchController, Assembly-CSharp
         m_MethodName: LeaveMatchingRoom
         m_Mode: 1
