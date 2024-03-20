@@ -210,8 +210,6 @@ public class MatchController : Singleton<MatchController>
     {
         _backendManager.GetMatchList();
 
-        //StartCoroutine(FindMatchIndexCor());
-
         _backendManager.CreateMatchRoom();
         
         SelfDataInit();

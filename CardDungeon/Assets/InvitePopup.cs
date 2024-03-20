@@ -17,6 +17,7 @@ public class InvitePopup : MonoBehaviour
     public void AcceptButtonClick()
     {
         Backend.Match.AcceptInvitation(InvitedRoomID, InvitedRoomToken);
+        Debug.Log(InvitedRoomToken + "구분" + InvitedRoomID);
         MatchController.Instance.lobbyScript.roomNameText.text = BackendManager.Instance.inviterName + "의 방";
         MatchController.Instance.lobbyScript.btn_Invite.interactable = false;
         MatchController.Instance.lobbyScript.btn_MatchStart.interactable = false;

@@ -588,11 +588,9 @@ public class BackendManager : Singleton<BackendManager>
                     RequestMatchMaking();
                 else
                 {
-                    
                     MatchController.Instance.ChangeUI(2);
                 }
-                    
-                
+
             } else {
                 Debug.LogError("2-2. OnMatchMakingRoomCreate 실패");
             }
@@ -610,7 +608,6 @@ public class BackendManager : Singleton<BackendManager>
             if (args.ErrInfo == ErrorCode.Match_InProgress) {
                 
                 Debug.Log("3-2. OnMatchMakingResponse 매칭 신청 진행중");
-                
                 int second = allMatchCardList[matchIndex].transit_to_sandbox_timeout_ms / 1000;
 
                 if (second > 0) {
@@ -620,6 +617,7 @@ public class BackendManager : Singleton<BackendManager>
 
             } else if (args.ErrInfo == ErrorCode.Success) {
                 Debug.Log("3-3. OnMatchMakingResponse 매칭 성사 완료");
+                Debug.Log(args.MatchCardIndate);
                 JoinGameServer(args.RoomInfo);
                 isMatching = false;
             } else {
@@ -812,6 +810,7 @@ public class BackendManager : Singleton<BackendManager>
         public string Nickname    = string.Empty;
         public string UID         = string.Empty;
     }
+    
     MatchInGameRoomInfo currentGameRoomInfo;
     Dictionary<string, MatchUserGameRecord> inGameUserList = new Dictionary<string, MatchUserGameRecord>();
 
@@ -853,7 +852,6 @@ public class BackendManager : Singleton<BackendManager>
 
         if (Backend.Match.JoinGameServer(currentGameRoomInfo.m_inGameServerEndPoint.m_address, currentGameRoomInfo.m_inGameServerEndPoint.m_port, false, out errorInfo) == false) {
             Debug.LogError("JoinGameServer 중 로컬 에러가 발생했습니다." + errorInfo);
-            return;
         }
     }
 
