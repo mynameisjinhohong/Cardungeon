@@ -230,6 +230,7 @@ public class MatchController : Singleton<MatchController>
     public void LeaveMatchingRoom()
     {
         Backend.Match.LeaveMatchMakingServer();
+        BackendManager.Instance.UserDataList.Clear();
         ChangeUI(1);
     }
 
