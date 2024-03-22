@@ -231,7 +231,9 @@ public class MainUI_HJH : MonoBehaviour
             bigCardImg.sprite = CardManager.Instance.cardList.cards[cardIdx].bigCardType;
             bigCardMp.text = CardManager.Instance.cardList.cards[cardIdx].useMP.ToString();
             bigCardName.text = CardManager.Instance.cardList.cards[cardIdx].cardName;
+            bigCardName.color = Color.white;
             bigCardDescribe.text = CardManager.Instance.cardList.cards[cardIdx].description;
+            bigCardDescribe.color = Color.white;
             itemImage.sprite = CardManager.Instance.cardList.cards[cardIdx].itemImage;
         }
         else
@@ -240,7 +242,7 @@ public class MainUI_HJH : MonoBehaviour
             bigCardMp.text = CardManager.Instance.cardList.cards[-cardIdx].useMP.ToString();
             bigCardName.text = CardManager.Instance.cardList.cards[-cardIdx].cardName + "+";
             bigCardName.color = Color.yellow;
-            bigCardDescribe.text = CardManager.Instance.cardList.cards[-cardIdx].description;
+            bigCardDescribe.text = CardManager.Instance.cardList.cards[-cardIdx].enforceDescription;
             bigCardDescribe.color = Color.yellow;
             itemImage.sprite = CardManager.Instance.cardList.cards[-cardIdx].itemImage;
         }
@@ -868,7 +870,6 @@ public class MainUI_HJH : MonoBehaviour
 
     public void SetKeysUI(int value)
     {
-        Debug.LogError(value);
         try
         {
             if (value < 3)

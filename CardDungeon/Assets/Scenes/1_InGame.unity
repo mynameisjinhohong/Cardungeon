@@ -1129,7 +1129,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8574994597883999701, guid: 1ce410061526eff428e8fda2c10e6d4d, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -30
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8574994597883999701, guid: 1ce410061526eff428e8fda2c10e6d4d, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1271,6 +1271,39 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &374303242 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8574994597883999703, guid: 1ce410061526eff428e8fda2c10e6d4d, type: 3}
+  m_PrefabInstance: {fileID: 374303239}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &374303243 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8574994599264449569, guid: 1ce410061526eff428e8fda2c10e6d4d, type: 3}
+  m_PrefabInstance: {fileID: 374303239}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &374303244 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8574994598230452042, guid: 1ce410061526eff428e8fda2c10e6d4d, type: 3}
+  m_PrefabInstance: {fileID: 374303239}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &378796194
@@ -1803,10 +1836,10 @@ MonoBehaviour:
   winImage: {fileID: 1396666044}
   bigCard: {fileID: 234766323}
   bigCardImg: {fileID: 374303241}
-  bigCardMp: {fileID: 0}
-  bigCardName: {fileID: 0}
-  bigCardDescribe: {fileID: 0}
-  itemImage: {fileID: 0}
+  bigCardMp: {fileID: 374303244}
+  bigCardName: {fileID: 374303243}
+  bigCardDescribe: {fileID: 374303242}
+  itemImage: {fileID: 980950732}
   deckList: {fileID: 704791869}
   dectContent: {fileID: 1317725566}
   cardPrefab: {fileID: 8574994598966932390, guid: 1ce410061526eff428e8fda2c10e6d4d, type: 3}
@@ -4316,6 +4349,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 86d055329a68c10458cb4d6ecc37b74c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &980950732 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2450687624868347114, guid: 1ce410061526eff428e8fda2c10e6d4d, type: 3}
+  m_PrefabInstance: {fileID: 374303239}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &1012891289
