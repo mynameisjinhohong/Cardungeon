@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -73,7 +72,8 @@ public class MainUI_HJH : MonoBehaviour
 
     public GameObject tutorial;
     public GameObject lookaroundbuttons;
-
+    bool gameOverBool = false;
+    public GameObject[] gameOverFalseGameObject;
     private int m_lookAt;
 
     // Start is called before the first frame update
@@ -120,35 +120,62 @@ public class MainUI_HJH : MonoBehaviour
                 BigCardOff();
             }
         }
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (!gameOverBool)
         {
-            if (deckList.activeInHierarchy)
+            if (Input.GetKeyDown(KeyCode.Q))
             {
-                DeckListOff();
+                if (deckList.activeInHierarchy)
+                {
+                    DeckListOff();
+                }
+                else
+                {
+                    DeckListOn();
+                }
             }
-            else
+            else if (Input.GetKeyUp(KeyCode.W))
             {
-                DeckListOn();
+                if (deckList.activeInHierarchy)
+                {
+                    DeckListOff();
+                }
+                else
+                {
+                    TrashDeckListOn();
+                }
+            }
+            else if (Input.GetKeyDown(KeyCode.E))
+            {
+                MinimapChange();
+            }
+            else if (Input.GetKeyDown(KeyCode.R))
+            {
+                playerDeck.ButtonReroll();
             }
         }
-        else if (Input.GetKeyUp(KeyCode.W))
+        else
         {
-            if (deckList.activeInHierarchy)
+            if (GamePlayManager.Instance.players[m_lookAt].HP < 0)
             {
-                DeckListOff();
+                do
+                {
+                    m_lookAt++;
+                    if (m_lookAt >= GamePlayManager.Instance.players.Count)
+                    {
+                        m_lookAt = 0;
+                    }
+                } 
+                while (GamePlayManager.Instance.players[m_lookAt].HP  <= 0);
+                LookAt(m_lookAt);
             }
-            else
+            for (int i = 0; i < GamePlayManager.Instance.players.Count; i++)
             {
-                TrashDeckListOn();
+                if (GamePlayManager.Instance.players[i].HP < 0)
+                {
+                    GameObject target = lookaroundbuttons.transform.GetChild(i).gameObject;
+                    target.SetActive(false);
+                }
             }
-        }
-        else if (Input.GetKeyDown(KeyCode.E))
-        {
-            MinimapChange();
-        }
-        else if (Input.GetKeyDown(KeyCode.R))
-        {
-            playerDeck.ButtonReroll();
         }
     }
 
@@ -298,7 +325,7 @@ public class MainUI_HJH : MonoBehaviour
             ran[1] = canCardList[1];
             cardSize = 2;
         }
-        else if(canCardList.Count >= 3)
+        else if (canCardList.Count >= 3)
         {
             ran = new int[3];
             int a = Random.Range(0, canCardList.Count - 2);
@@ -319,7 +346,7 @@ public class MainUI_HJH : MonoBehaviour
     {
         int[] ran = RandomCard(false);
         Debug.Log(ran);
-        if(ran != null)
+        if (ran != null)
         {
             allList.SetActive(true);
             switch (ran.Length)
@@ -814,6 +841,7 @@ public class MainUI_HJH : MonoBehaviour
     public void GameOver()
     {
         gameOver.SetActive(true);
+        gameOverBool = true;
 
     }
     public void GotoLobby()
@@ -823,6 +851,10 @@ public class MainUI_HJH : MonoBehaviour
     public void LookAround()
     {
         gameOver.SetActive(false);
+        for (int i = 0; i < gameOverFalseGameObject.Length; i++)
+        {
+            gameOverFalseGameObject[i].gameObject.SetActive(false);
+        }
         lookaroundbuttons.SetActive(true);
         float distance = float.MaxValue;
         int idx = 0;
@@ -839,34 +871,61 @@ public class MainUI_HJH : MonoBehaviour
             }
         }
         m_lookAt = idx;
+        LookSetting();
         Camera.main.transform.SetParent(GamePlayManager.Instance.players[m_lookAt].transform);
     }
 
-    public void LookNext()
+    void LookSetting()
     {
-        do
+        for (int i = 0; i < GamePlayManager.Instance.players.Count; i++)
         {
-            m_lookAt++;
-            if (m_lookAt > GamePlayManager.Instance.players.Count)
+            if (GamePlayManager.Instance.players[i].HP > 0)
             {
-                m_lookAt = 0;
+                GameObject target = lookaroundbuttons.transform.GetChild(i).gameObject;
+                target.SetActive(true);
+                target.GetComponent<Image>().color = GamePlayManager.Instance.colorList[i];
+                target.transform.GetChild(0).GetComponent<Image>().sprite = icons[i];
+                target.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(() => LookAt(i));
             }
-        } while (GamePlayManager.Instance.players[m_lookAt] == null);
-        Camera.main.transform.SetParent(GamePlayManager.Instance.players[m_lookAt].transform);
+            else
+            {
+                GameObject target = lookaroundbuttons.transform.GetChild(i).gameObject;
+                target.SetActive(false);
+            }
+        }
     }
 
-    public void LookPrev()
+    public void LookAt(int idx)
     {
-        do
-        {
-            m_lookAt--;
-            if (m_lookAt < 0)
-            {
-                m_lookAt = GamePlayManager.Instance.players.Count - 1;
-            }
-        } while (GamePlayManager.Instance.players[m_lookAt] == null);
-        Camera.main.transform.SetParent(GamePlayManager.Instance.players[m_lookAt].transform);
+        m_lookAt = idx;
+        Camera.main.transform.SetParent(GamePlayManager.Instance.players[idx].transform);
     }
+
+    //public void LookNext()
+    //{
+    //    do
+    //    {
+    //        m_lookAt++;
+    //        if (m_lookAt > GamePlayManager.Instance.players.Count)
+    //        {
+    //            m_lookAt = 0;
+    //        }
+    //    } while (GamePlayManager.Instance.players[m_lookAt] == null);
+    //    Camera.main.transform.SetParent(GamePlayManager.Instance.players[m_lookAt].transform);
+    //}
+
+    //public void LookPrev()
+    //{
+    //    do
+    //    {
+    //        m_lookAt--;
+    //        if (m_lookAt < 0)
+    //        {
+    //            m_lookAt = GamePlayManager.Instance.players.Count - 1;
+    //        }
+    //    } while (GamePlayManager.Instance.players[m_lookAt] == null);
+    //    Camera.main.transform.SetParent(GamePlayManager.Instance.players[m_lookAt].transform);
+    //}
 
     public void SetKeysUI(int value)
     {

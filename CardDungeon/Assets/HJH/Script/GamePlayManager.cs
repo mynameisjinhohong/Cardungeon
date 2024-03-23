@@ -450,10 +450,12 @@ public class GamePlayManager : Singleton<GamePlayManager>
             Vector2Int vec = new Vector2Int((int)players[i].transform.position.x, (int)players[i].transform.position.y);
             if (vec == pos)
             {
-                players[i].HP -= damage;
+                if (players[i].HP > 0)
+                {
+                    players[i].HP -= damage;
+                }
             }
         }
-
         for (int i = 0; i < players.Count; i++)
         {
             if (players[i].isMine) continue;
