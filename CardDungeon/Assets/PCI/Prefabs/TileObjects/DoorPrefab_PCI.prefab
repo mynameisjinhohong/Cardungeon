@@ -100,6 +100,6 @@ MonoBehaviour:
   isPathable: 1
   isDestructable: 0
   isInteractable: 1
-  sortOrder: 0
+  sortOrder: 100
   tile: {fileID: 0}
   spriteRenderer: {fileID: 5287133779152199657}
