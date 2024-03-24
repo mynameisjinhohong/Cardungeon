@@ -931,7 +931,7 @@ public class MainUI_HJH : MonoBehaviour
     {
         try
         {
-            if (value < 3)
+            if (value < 4)
             {
                 keys[value - 1].SetActive(false);
                 keys[value + 2].SetActive(true);
