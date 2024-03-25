@@ -90,8 +90,7 @@ MonoBehaviour:
     type: 1
     description: "\uC704\uC544\uB798\n\uACF5\uACA9\uD55C\uB2E4. "
     cardIdx: 6
-    enforceDescription: "\uB354 \uAC15\uB825\uD558\uAC8C\n\uC704\uC544\uB798\uB97C
-      \uACF5\uACA9\uD55C\uB2E4."
+    enforceDescription: "\uC704\uC544\uB798\uB97C \n\uB450\uBC88 \uACF5\uACA9\uD55C\uB2E4."
   - cardName: "\uB2F9\uADFC \uCC0C\uB974\uAE30"
     useMP: 1
     cardType: {fileID: 21300000, guid: ca0fafb909f16804a9f3b244aee7729c, type: 3}
@@ -102,7 +101,7 @@ MonoBehaviour:
     type: 1
     description: "\uC591 \uC606\uC744\n\uACF5\uACA9\uD55C\uB2E4 "
     cardIdx: 7
-    enforceDescription: "\uB354 \uAC15\uB825\uD558\uAC8C \n\uC591 \uC606 \uACF5\uACA9\uD55C\uB2E4."
+    enforceDescription: "\uC591 \uC606\uC744 \n\uB450 \uBC88 \uACF5\uACA9\uD55C\uB2E4"
   - cardName: "\uB2F9\uADFC \uB0B4\uB824\uCE58\uAE30"
     useMP: 2
     cardType: {fileID: 21300000, guid: ca0fafb909f16804a9f3b244aee7729c, type: 3}
@@ -113,8 +112,7 @@ MonoBehaviour:
     type: 1
     description: "\uBAA8\uB4E0 \uBC29\uD5A5\uC744 \uACF5\uACA9\uD55C\uB2E4."
     cardIdx: 8
-    enforceDescription: "\uB354 \uAC15\uB825\uD558\uAC8C \n\uBAA8\uB4E0 \uBC29\uD5A5
-      \uACF5\uACA9\uD55C\uB2E4. "
+    enforceDescription: "\uBAA8\uB4E0 \uBC29\uD5A5\uC744 \n\uB450\uBC88 \uACF5\uACA9\uD55C\uB2E4"
   - cardName: "\uD1A0\uB07C\uBCF4\uD638\uAD6C\uC5ED"
     useMP: 1
     cardType: {fileID: 21300000, guid: add0048181bc6054f9ad00a6fe3c04f5, type: 3}
