@@ -10,7 +10,7 @@ public class ItemData_PCI : ScriptableObject
     public Sprite image; // for effect
     public int amount;
 
-    public List<Sprite> sprites = new List<Sprite>(); // actual image
+    public List<Sprite> sprites = new List<Sprite>(); // actual object image
     public virtual void OnInteracted(Player_HJH player)
     {
         if (!player.isMine)

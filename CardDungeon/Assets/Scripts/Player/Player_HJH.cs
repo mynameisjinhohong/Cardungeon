@@ -47,6 +47,10 @@ public class Player_HJH : MonoBehaviour
     public SpriteRenderer playerTile;
     public Sprite shieldTileSprite;
     public Sprite nomalTileSprite;
+    public GameObject darkFog;
+    private float darkTimer;
+    private bool isDark;
+
     Coroutine shieldCo;
     public int HP
     {
@@ -176,7 +180,14 @@ public class Player_HJH : MonoBehaviour
         {
             playerTile.sprite = nomalTileSprite;
         }
+        if (isDark)
+        {
+            darkTimer -= Time.deltaTime;
+            if(darkTimer < 0)
+                DarkOff();
+        }
     }
+
     public void HpRenew(int nowHp)
     {
         for(int i = 0; i < maxHp; i++)
@@ -215,6 +226,20 @@ public class Player_HJH : MonoBehaviour
         shield = false;
     }
     //주석 하나 씀
+
+    public void DarkOn()
+    {
+        darkFog.SetActive(true);
+        darkTimer = 3.0f;
+        isDark = true;
+    }
+
+    private void DarkOff()
+    {
+        isDark = false;
+        darkFog.SetActive(false);
+    }
+
     IEnumerator GetDamage(float howLongTime, int speed)
     {
         SpriteRenderer playerSprite = transform.GetChild(0).GetComponent<SpriteRenderer>();
