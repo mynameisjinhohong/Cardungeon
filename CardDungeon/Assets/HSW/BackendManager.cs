@@ -944,12 +944,6 @@ public class BackendManager : Singleton<BackendManager>
         
         Debug.Log($"5-1. JoinGameRoom 게임룸 접속 요청 : 토큰({currentGameRoomInfo.m_inGameRoomToken}");
         Backend.Match.JoinGameRoom(currentGameRoomInfo.m_inGameRoomToken);
-
-        if (UserDataList.Count > 0)
-        {
-            if (UserDataList[0].isSuperGamer)
-                isLoadGame = false;
-        }
     }
     // 릴레이할 데이터
     public class Message {

@@ -168,6 +168,24 @@ public class MatchController : Singleton<MatchController>
             
                 BackendManager.Instance.JoinGameServer(args.RoomInfo);
             };
+            
+            Backend.Match.OnMatchMakingRoomLeave = (MatchMakingGamerInfoInRoomEventArgs args) => {
+                Debug.Log(args.UserInfo.m_nickName + "님이 나감");
+
+                int leaveUserIndex = 0;
+                
+                for (int i = 0; i < BackendManager.Instance.UserDataList.Count; i++)
+                {
+                    if (BackendManager.Instance.UserDataList[i].playerName == args.UserInfo.m_nickName)
+                    {
+                        leaveUserIndex = i;
+                        
+                        BackendManager.Instance.UserDataList.RemoveAt(leaveUserIndex);
+                    }
+                }
+                
+                DataInit();
+            };
         }
 
         if (index == 3)
@@ -223,6 +241,13 @@ public class MatchController : Singleton<MatchController>
         _backendManager.GetMatchList();
 
         _backendManager.CreateMatchRoom();
+
+        BackendManager.Instance.UserDataList.Clear();
+
+        foreach (Transform child in DataPanelParent.transform)
+        {
+            Destroy(child.gameObject);
+        }
         
         SelfDataInit();
     }

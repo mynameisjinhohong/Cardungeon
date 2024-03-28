@@ -222,7 +222,7 @@ public class AccountSignUp : MonoBehaviour
         if (target.input.text.Contains("@"))
         {
             mail.To.Add(target.input.text);
-            target.infoText.text = "<color=white>인증번호가 전송 됐습니다.";
+            target.infoText.text = "<color=white>인증번호 전송을 요청했습니다. 잠시후 확인 해주세요.";
 
             settingNumber = GenerateAuthenticationCode();
             emailSendBtn.interactable = false;

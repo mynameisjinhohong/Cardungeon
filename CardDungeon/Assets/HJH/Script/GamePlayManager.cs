@@ -57,10 +57,12 @@ public class GamePlayManager : Singleton<GamePlayManager>
     }
     IEnumerator WaitforGameStart()
     {
-        float timeValue = BackendManager.Instance.isMeSuperGamer ? 5 : 3;
+        float timeValue = BackendManager.Instance.isMeSuperGamer ? 3 : 5;
 
         yield return new WaitForSeconds(timeValue);
 
+        BackendManager.Instance.isLoadGame = true;
+        
         //yield return new WaitUntil(() => BackendManager.Instance.isLoadGame);
         BackendManager.Instance.UserDataList.Sort((UserData lhs, UserData rhs) =>
         {
@@ -355,6 +357,10 @@ public class GamePlayManager : Singleton<GamePlayManager>
         //myPlayerIndex = SessionId.None;
         //SetPlayerAttribute();
         //OnGameStart();
+        
+        Backend.Match.OnSessionOffline = (MatchInGameSessionEventArgs args) => {
+            Debug.Log(args.GameRecord.m_nickname + "님이 연결을 종료하셨습니다.");
+        };
     }
     // Update is called once per frame
     void Update()

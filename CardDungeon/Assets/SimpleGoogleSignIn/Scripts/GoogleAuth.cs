@@ -45,13 +45,22 @@ namespace Assets.SimpleGoogleSignIn.Scripts
 
             SafariViewController.DidCompleteInitialLoad += DidCompleteInitialLoad;
             SafariViewController.DidFinish += UserCancelledHook;
-
+            Debug.Log("DeviceType = IOS");
+            
             #endif
 
             #if UNITY_STANDALONE_WIN && !UNITY_EDITOR
 
             WindowsDeepLinking.Initialize(_settings.CustomUriScheme, OnDeepLinkActivated);
+            Debug.Log("DeviceType = UNITY_STANDALONE_WIN");
 
+            #endif
+            
+            #if UNITY_EDITOR64
+            
+            WindowsDeepLinking.Initialize(_settings.CustomUriScheme, OnDeepLinkActivated);
+            Debug.Log("DeviceType = UNITY_EDITOR64");
+            
             #endif
         }
 
