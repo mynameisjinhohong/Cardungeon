@@ -954,4 +954,20 @@ public class MainUI_HJH : MonoBehaviour
             tutorial.SetActive(true);
         }
     }
+
+    private bool toggleExitPopup = false;
+    public GameObject exitPopup;
+    public void ToggleExitPopup()
+    {
+        if (toggleExitPopup)
+        {
+            toggleExitPopup = false;
+            exitPopup.SetActive(false);
+        }
+        else
+        {
+            toggleExitPopup = true;
+            exitPopup.SetActive(true);
+        }
+    }
 }
