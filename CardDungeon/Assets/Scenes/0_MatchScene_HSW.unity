@@ -5382,7 +5382,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1721779407}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 835534842}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: OpenPopup
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 6867880555949617580, guid: 5c3a3c9cf385e79469854aa664800969, type: 3}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1721779407
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5403,7 +5415,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: d1afe787a667a4140aa233e766b8875d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 26c0796b25a5ab84eae569c3aea93982, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5813,6 +5825,7 @@ MonoBehaviour:
   DataPanelParent: {fileID: 8913298501677147689}
   userInfoDataPanelObj: {fileID: 6053263733253158925, guid: 9ef41992750850f479bb19862fa5a1b9, type: 3}
   emptyDataPanelObj: {fileID: 8841204118712879602, guid: 0adb6f53c575d3a4692e3f69d44ae166, type: 3}
+  tutorialPanelObj: {fileID: 6867880555949617580, guid: 5c3a3c9cf385e79469854aa664800969, type: 3}
 --- !u!4 &1841941306
 Transform:
   m_ObjectHideFlags: 0

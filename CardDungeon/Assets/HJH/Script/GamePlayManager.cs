@@ -20,7 +20,6 @@ public class GamePlayManager : Singleton<GamePlayManager>
     public Transform[] PlayerSpawnPosition;
     public bool isDataCheck = false;
     #region 호스트
-    public bool isHost;
     public Queue<Message> messageQueue;
     #endregion
     
@@ -34,6 +33,13 @@ public class GamePlayManager : Singleton<GamePlayManager>
         
         StartCoroutine(WaitforGameStart());
     }
+
+    public void SetReady()
+    {
+        BackendManager.Instance.isLoadGame = true;
+        
+    }
+    
     public void SetResolution()
     {
         int setWidth = 1920; // 사용자 설정 너비
@@ -57,13 +63,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
     }
     IEnumerator WaitforGameStart()
     {
-        float timeValue = BackendManager.Instance.isMeSuperGamer ? 3 : 5;
-
-        yield return new WaitForSeconds(timeValue);
-
-        BackendManager.Instance.isLoadGame = true;
-        
-        //yield return new WaitUntil(() => BackendManager.Instance.isLoadGame);
+        yield return new WaitUntil(() => BackendManager.Instance.isLoadGame);
         BackendManager.Instance.UserDataList.Sort((UserData lhs, UserData rhs) =>
         {
             if (int.Parse(lhs.playerToken) < int.Parse(rhs.playerToken))
@@ -129,9 +129,6 @@ public class GamePlayManager : Singleton<GamePlayManager>
                 Camera.main.transform.SetParent(parentTransform.GetChild(0));
 
                 Camera.main.transform.localPosition = new Vector3(0.5f, 0.5f, -10f);
-
-                if (myIdx == SuperGamerIdx)
-                    isHost = true;
             }
         }
 
@@ -265,7 +262,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
     public void InitializeGame()
     {
-        if (isHost)
+        if (BackendManager.Instance.isMeSuperGamer)
         {
             messageQueue = new Queue<Message>();
         }
@@ -280,7 +277,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
                 var strByte = System.Text.Encoding.Default.GetString(args.BinaryUserData);
                 Message msg = JsonUtility.FromJson<Message>(strByte);
 
-                if (isHost)
+                if (BackendManager.Instance.isMeSuperGamer)
                 {
                     messageQueue.Enqueue(msg);
                 }
@@ -322,7 +319,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
                 //Debug.Log($"서버에서 받은 데이터 : {args.From.NickName} : {msg.ToString()}");
             };
         }
-        if (isHost)
+        if (BackendManager.Instance.isMeSuperGamer)
         {
             Message m = new Message();
             m.playerIdx = -10;
@@ -365,7 +362,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
     // Update is called once per frame
     void Update()
     {
-        if (isHost)
+        if (BackendManager.Instance.isMeSuperGamer)
         {
             if (messageQueue.Count > 0)
             {
@@ -418,7 +415,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
     public void CardGo(int playerIdx, int cardIdx) //카드 사용, 서버와 통신 해야됨
     {
-        if (isHost)
+        if (BackendManager.Instance.isMeSuperGamer)
         {
             Message mes = new Message();
             mes.playerIdx = playerIdx;

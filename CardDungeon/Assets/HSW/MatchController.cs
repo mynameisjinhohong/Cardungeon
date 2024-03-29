@@ -41,6 +41,7 @@ public class MatchController : Singleton<MatchController>
     public Transform DataPanelParent;
     public GameObject userInfoDataPanelObj;
     public GameObject emptyDataPanelObj;
+    public GameObject tutorialPanelObj;
     
     private Coroutine blinkCoroutine;
     
@@ -121,6 +122,11 @@ public class MatchController : Singleton<MatchController>
                 BackendManager.Instance.inviterName = args.InviteUserInfo.m_nickName;
                 UIManager.Instance.OpenInvitePopup(args.InviteUserInfo.m_nickName, args.RoomId, args.RoomToken); 
             };
+            
+            if(PlayerPrefs.GetInt("isFirstPlay") != 1)
+            {
+                UIManager.Instance.OpenPopup(tutorialPanelObj);
+            }
         }
 
         if (index == 2)

@@ -41,6 +41,8 @@ public class Tutorial_HJH : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+            XButton();
     }
 
     public void IdxGo()
@@ -67,6 +69,7 @@ public class Tutorial_HJH : MonoBehaviour
     }
     public void XButton()
     {
-        gameObject.SetActive(false);
+        UIManager.Instance.PopupListPop();
+        PlayerPrefs.SetInt("isFirstPlay", 1);
     }
 }

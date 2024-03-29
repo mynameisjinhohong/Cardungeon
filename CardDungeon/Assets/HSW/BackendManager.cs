@@ -555,9 +555,9 @@ public class BackendManager : Singleton<BackendManager>
     
     public void JoinMatchMakingServer()
     {
-         Debug.Log("서버접속 시도");
+        Debug.Log("서버접속 시도");
 
-        Backend.Match.OnException = (Exception e) => { Debug.LogError(e.ToString()); };
+        Backend.Match.OnException = (Exception e) => { MatchController.Instance.ChangeUI(3); };
 
         Backend.Match.OnJoinMatchMakingServer = (JoinChannelEventArgs args) => {
             Debug.Log(args.ErrInfo);
@@ -602,17 +602,29 @@ public class BackendManager : Singleton<BackendManager>
 
     public void RequestMatchMaking()
     {
-        if(!isFastMatch)
-            FindTeamMatchCard(UserDataList.Count);
-
         isMatching = true;
         
+        if (!isFastMatch)
+        {
+            FindTeamMatchCard(UserDataList.Count);
+
+            TryMatch();
+        }
+        else
+        {
+            StartCoroutine(FastMatchLotation());
+        }
+    }
+
+    public void TryMatch()
+    {
         Backend.Match.OnMatchMakingResponse = (MatchMakingResponseEventArgs args) => {
             if (args.ErrInfo == ErrorCode.Match_InProgress) {
                 
                 Debug.Log("3-2. OnMatchMakingResponse 매칭 신청 진행중");
                 int second = allMatchCardList[matchIndex].transit_to_sandbox_timeout_ms / 1000;
-
+                
+                MatchController.Instance.ChangeUI(3);
                 if (second > 0) {
                     Debug.Log($"{second}초 뒤에 샌드박스 활성화가 됩니다.");
                     StartCoroutine(WaitFor10Seconds(second));
@@ -630,9 +642,26 @@ public class BackendManager : Singleton<BackendManager>
         };
         
         Debug.Log("3-1. RequestMatchMaking 매칭 신청 시작");
-
+            
         Debug.Log("매칭 신청정보 : " + allMatchCardList[matchIndex].matchType + "/" + allMatchCardList[matchIndex].matchModeType + "/" + allMatchCardList[matchIndex].inDate);
         Backend.Match.RequestMatchMaking(allMatchCardList[matchIndex].matchType, allMatchCardList[matchIndex].matchModeType, allMatchCardList[matchIndex].inDate);
+    }
+
+    IEnumerator FastMatchLotation()
+    {
+        for (int i = 8; i >= 2; i--)
+        {
+            Debug.Log(i + "명 매칭 탐색중");
+            FindSoloMatchCard(i);
+            
+            TryMatch();
+            
+            yield return new WaitForSeconds(10);
+            
+            LeaveMatchMaking();
+        }
+        
+        Debug.Log("탐색실패");
     }
     
     IEnumerator WaitFor10Seconds(int second) {
@@ -886,7 +915,6 @@ public class BackendManager : Singleton<BackendManager>
                     
                     Debug.Log(args.GameRecords.Count + "명의 유저중" + UserDataList.Count + "접속 완료");
                 }
-
             } else {
                 Debug.LogError("5-2. OnSessionListInServer : " + args.ToString());
             }
@@ -918,6 +946,8 @@ public class BackendManager : Singleton<BackendManager>
                 {
                     Debug.Log("참가자인 나는 슈퍼게이머인가? :" + UserDataList[i].isSuperGamer);
                     isMeSuperGamer = UserDataList[i].isSuperGamer;
+                    
+                    StartCoroutine(WaitPlayerReady());
                 }
             }
         };
@@ -945,6 +975,16 @@ public class BackendManager : Singleton<BackendManager>
         Debug.Log($"5-1. JoinGameRoom 게임룸 접속 요청 : 토큰({currentGameRoomInfo.m_inGameRoomToken}");
         Backend.Match.JoinGameRoom(currentGameRoomInfo.m_inGameRoomToken);
     }
+
+    IEnumerator WaitPlayerReady()
+    {
+        float waitTime = isMeSuperGamer ? 4 : 2;
+        
+        yield return new WaitForSeconds(waitTime);
+
+        isLoadGame = true;
+    }
+    
     // 릴레이할 데이터
     public class Message {
         public string message;
@@ -1273,7 +1313,8 @@ public class BackendManager : Singleton<BackendManager>
 
         for (int i = 0; i < allMatchCardList.Count; i++)
         {
-            if (allMatchCardList[i].matchHeadCount == findValue && allMatchCardList[i].matchModeType == MatchModeType.TeamOnTeam)
+            if (allMatchCardList[i].matchHeadCount == findValue &&
+                allMatchCardList[i].matchModeType == MatchModeType.TeamOnTeam)
             {
                 matchIndex = i;
             }
@@ -1282,32 +1323,13 @@ public class BackendManager : Singleton<BackendManager>
 
     private void FindSoloMatchCard(int headCount)
     {
-        
-    }
-
-    IEnumerator CheckSuperGamgerisMeCor()
-    {
-        UserData myData = new UserData();
-        
-        for (int i = 0; i < UserDataList.Count; i++)
+        for (int i = 0; i < allMatchCardList.Count; i++)
         {
-            if (UserDataList[i].playerName == userInfo.Nickname)
+            if (allMatchCardList[i].matchHeadCount == headCount &&
+                allMatchCardList[i].matchModeType != MatchModeType.TeamOnTeam)
             {
-                myData = UserDataList[i];
+                matchIndex = i;
             }
-        }
-
-        if (myData.isSuperGamer)
-        {
-            Debug.Log("슈퍼게이머라서 대기합니다");
-            yield return new WaitForSeconds(1);
-
-            isLoadGame = true;
-        }
-        else
-        {
-            Debug.Log("슈퍼게이머가 아니라서 바로 로딩합니다");
-            isLoadGame = true;
         }
     }
 }

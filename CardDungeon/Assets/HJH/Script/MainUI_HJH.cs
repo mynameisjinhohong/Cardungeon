@@ -74,6 +74,8 @@ public class MainUI_HJH : MonoBehaviour
     public GameObject lookaroundbuttons;
     bool gameOverBool = false;
     public GameObject[] gameOverFalseGameObject;
+
+    public GameObject settingPopupObj;
     private int m_lookAt;
 
     // Start is called before the first frame update
@@ -86,7 +88,7 @@ public class MainUI_HJH : MonoBehaviour
     {
         ToonBG.SetActive(true);
 
-        yield return new WaitForSeconds(4.5f);
+        yield return new WaitForSeconds(6f);
 
         GetComponent<Canvas>().sortingOrder = 200;
 
@@ -195,6 +197,11 @@ public class MainUI_HJH : MonoBehaviour
 
     }
 
+    public void OpenSettingPopup()
+    {
+        UIManager.Instance.OpenPopup(settingPopupObj);
+    }
+    
     public void MinimapChange()
     {
         if (bigMinimap.activeInHierarchy)
