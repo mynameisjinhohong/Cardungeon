@@ -612,7 +612,11 @@ public class BackendManager : Singleton<BackendManager>
         }
         else
         {
-            StartCoroutine(FastMatchLotation());
+            FindSoloMatchCard(8);
+            
+            TryMatch();
+
+            //StartCoroutine(FastMatchLotation());
         }
     }
 
