@@ -356,7 +356,24 @@ public class GamePlayManager : Singleton<GamePlayManager>
         //OnGameStart();
         
         Backend.Match.OnSessionOffline = (MatchInGameSessionEventArgs args) => {
+            
             Debug.Log(args.GameRecord.m_nickname + "님이 연결을 종료하셨습니다.");
+
+            int OutUserIndex = 0;
+            
+            for (int i = 0; i < BackendManager.Instance.UserDataList.Count; i++)
+            {
+                if (BackendManager.Instance.UserDataList[i].playerName == args.GameRecord.m_nickname)
+                {
+                    OutUserIndex = i;
+                }
+            }
+
+            BackendManager.Instance.UserDataList.RemoveAt(OutUserIndex);
+            
+            Destroy(PlayerSpawnPosition[OutUserIndex].gameObject);
+            
+            //여기에 체크함수 넣으면됨
         };
     }
     // Update is called once per frame
