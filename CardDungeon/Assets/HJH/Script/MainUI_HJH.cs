@@ -161,6 +161,7 @@ public class MainUI_HJH : MonoBehaviour
             {
                 do
                 {
+                    lookaroundbuttons.transform.GetChild(m_lookAt).gameObject.SetActive(false);
                     m_lookAt++;
                     if (m_lookAt >= GamePlayManager.Instance.players.Count)
                     {
@@ -172,10 +173,18 @@ public class MainUI_HJH : MonoBehaviour
             }
             for (int i = 0; i < GamePlayManager.Instance.players.Count; i++)
             {
-                if (GamePlayManager.Instance.players[i].HP < 0)
+                int a = 0;
+                if (GamePlayManager.Instance.players[i].HP > 0)
                 {
-                    GameObject target = lookaroundbuttons.transform.GetChild(i).gameObject;
-                    target.SetActive(false);
+                    a++;
+                }
+                if(a > 1)
+                {
+                    break;
+                }
+                if(i == GamePlayManager.Instance.players.Count - 1)
+                {
+                    GamePlayManager.Instance.GoTitle();
                 }
             }
         }
