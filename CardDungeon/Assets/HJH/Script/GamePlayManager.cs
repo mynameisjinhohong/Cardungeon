@@ -372,8 +372,12 @@ public class GamePlayManager : Singleton<GamePlayManager>
             BackendManager.Instance.UserDataList.RemoveAt(OutUserIndex);
             
             Destroy(PlayerSpawnPosition[OutUserIndex].gameObject);
-            
-            //여기에 체크함수 넣으면됨
+
+            if (BackendManager.Instance.UserDataList.Count <= 1)
+            {
+                Debug.Log("승리처리");
+                GamePlayManager.Instance.GameWin();
+            }
         };
     }
     // Update is called once per frame
