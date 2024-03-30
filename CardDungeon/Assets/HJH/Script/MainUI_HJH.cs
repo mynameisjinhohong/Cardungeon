@@ -76,7 +76,7 @@ public class MainUI_HJH : MonoBehaviour
     public GameObject[] gameOverFalseGameObject;
 
     public GameObject settingPopupObj;
-    private int m_lookAt;
+    public int m_lookAt;
 
     // Start is called before the first frame update
     void Start()
@@ -880,24 +880,31 @@ public class MainUI_HJH : MonoBehaviour
         m_lookAt = idx;
         LookSetting();
         Camera.main.transform.SetParent(GamePlayManager.Instance.players[m_lookAt].transform);
+        Camera.main.transform.localPosition = new Vector3(0.5f,0.5f, -10);
     }
 
     void LookSetting()
     {
-        for (int i = 0; i < GamePlayManager.Instance.players.Count; i++)
+        for(int j = 0; j < lookaroundbuttons.transform.childCount; j++)
         {
-            if (GamePlayManager.Instance.players[i].HP > 0)
+            if(j < GamePlayManager.Instance.players.Count)
             {
-                GameObject target = lookaroundbuttons.transform.GetChild(i).gameObject;
-                target.SetActive(true);
-                target.GetComponent<Image>().color = GamePlayManager.Instance.colorList[i];
-                target.transform.GetChild(0).GetComponent<Image>().sprite = icons[i];
-                target.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(() => LookAt(i));
+                if (GamePlayManager.Instance.players[j].HP > 0)
+                {
+                    GameObject target = lookaroundbuttons.transform.GetChild(j).gameObject;
+                    target.SetActive(true);
+                    target.GetComponent<Image>().color = GamePlayManager.Instance.colorList[j];
+                    target.transform.GetChild(0).GetComponent<Image>().sprite = icons[j];
+                }
+                else
+                {
+                    GameObject target = lookaroundbuttons.transform.GetChild(j).gameObject;
+                    target.SetActive(false);
+                }
             }
             else
             {
-                GameObject target = lookaroundbuttons.transform.GetChild(i).gameObject;
-                target.SetActive(false);
+                lookaroundbuttons.transform.GetChild(j).gameObject.SetActive(false);
             }
         }
     }
@@ -906,6 +913,7 @@ public class MainUI_HJH : MonoBehaviour
     {
         m_lookAt = idx;
         Camera.main.transform.SetParent(GamePlayManager.Instance.players[idx].transform);
+        Camera.main.transform.localPosition = new Vector3(0.5f, 0.5f, -10);
     }
 
     //public void LookNext()

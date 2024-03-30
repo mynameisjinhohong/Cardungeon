@@ -1689,14 +1689,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 556443424}
         m_TargetAssemblyTypeName: MainUI_HJH, Assembly-CSharp
-        m_MethodName: DeckListOn
-        m_Mode: 1
+        m_MethodName: LookAt
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 6
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -2924,6 +2924,7 @@ MonoBehaviour:
   - {fileID: 8575494782545508464}
   - {fileID: 4433705898237429791}
   settingPopupObj: {fileID: 0}
+  m_lookAt: 0
   exitPopup: {fileID: 1943520751}
 --- !u!1001 &598045457
 PrefabInstance:
@@ -4133,14 +4134,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 556443424}
         m_TargetAssemblyTypeName: MainUI_HJH, Assembly-CSharp
-        m_MethodName: DeckListOn
-        m_Mode: 1
+        m_MethodName: LookAt
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -4267,14 +4268,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 556443424}
         m_TargetAssemblyTypeName: MainUI_HJH, Assembly-CSharp
-        m_MethodName: DeckListOn
-        m_Mode: 1
+        m_MethodName: LookAt
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 5
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -5808,14 +5809,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 556443424}
         m_TargetAssemblyTypeName: MainUI_HJH, Assembly-CSharp
-        m_MethodName: DeckListOn
-        m_Mode: 1
+        m_MethodName: LookAt
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 7
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -5942,14 +5943,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 556443424}
         m_TargetAssemblyTypeName: MainUI_HJH, Assembly-CSharp
-        m_MethodName: DeckListOn
-        m_Mode: 1
+        m_MethodName: LookAt
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -6479,10 +6480,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 556443424}
         m_TargetAssemblyTypeName: MainUI_HJH, Assembly-CSharp
-        m_MethodName: DeckListOn
-        m_Mode: 1
+        m_MethodName: LookAt
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -7293,14 +7294,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 556443424}
         m_TargetAssemblyTypeName: MainUI_HJH, Assembly-CSharp
-        m_MethodName: DeckListOn
-        m_Mode: 1
+        m_MethodName: LookAt
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 4
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -8514,14 +8515,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 556443424}
         m_TargetAssemblyTypeName: MainUI_HJH, Assembly-CSharp
-        m_MethodName: DeckListOn
-        m_Mode: 1
+        m_MethodName: LookAt
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
