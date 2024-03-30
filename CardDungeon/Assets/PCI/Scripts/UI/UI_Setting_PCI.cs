@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -63,7 +64,6 @@ public class UI_Setting_PCI : MonoBehaviour
     void Start()
     {
         toggle_AutoLogin.isOn = PlayerPrefs.GetInt("UseAutoLogin") == 1;
-        resolutions = new List<Resolution>(Screen.resolutions);
         btn_ScreenModeLeft.onClick.AddListener(ScreenModeLeft);
         btn_ScreenModeRight.onClick.AddListener(ScreenModeRight);
         btn_ResolutionLeft.onClick.AddListener(ResolutionLeft);
@@ -83,9 +83,43 @@ public class UI_Setting_PCI : MonoBehaviour
                 ResolutionIdx = i;
             }
         }
- 
     }
-    
+
+    private void OnEnable()
+    {
+        resolutions = new List<Resolution>(Screen.resolutions);
+
+        sld_BgmSlider.value = AudioPlayer.Instance.bgmPlayer.volume;
+        temp_bgm = sld_BgmSlider.value;
+
+        sld_SfxSlider.value = AudioPlayer.Instance.sfxPlayer.volume;
+        temp_sfx = sld_SfxSlider.value;
+
+        for (int i = 0; i < resolutions.Count; i++)
+        {
+            if (resolutions[i].width == Screen.currentResolution.width && resolutions[i].height == Screen.currentResolution.height && resolutions[i].refreshRate == Screen.currentResolution.refreshRate)
+            {
+                ResolutionIdx = i;
+            }
+        }
+        temp_resolutionIdx = resolutionIdx;
+
+        screenModeIdx = (int)Screen.fullScreenMode;
+        switch (screenModeIdx)
+        {
+            case (int)FullScreenMode.Windowed:
+                txt_ScreenModeTxt.text = "창모드";
+                break;
+            case (int)FullScreenMode.FullScreenWindow:
+                txt_ScreenModeTxt.text = "전체 창모드";
+                break;
+            case (int)FullScreenMode.ExclusiveFullScreen:
+                txt_ScreenModeTxt.text = "전체화면";
+                break;
+        }
+        temp_screenModeIdx = screenModeIdx;
+    }
+
     private void ScreenModeLeft()
     {
         ScreenModeIdx = (screenModeIdx + Enum.GetValues(typeof(FullScreenMode)).Length - 1) % (Enum.GetValues(typeof(FullScreenMode)).Length);
