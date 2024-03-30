@@ -376,7 +376,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
             if (BackendManager.Instance.UserDataList.Count <= 1)
             {
                 Debug.Log("½Â¸®Ã³¸®");
-                GamePlayManager.Instance.GameWin();
+                GameWin();
             }
         };
     }
