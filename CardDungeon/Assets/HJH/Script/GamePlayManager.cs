@@ -1,3 +1,4 @@
+using System;
 using BackEnd;
 using BackEnd.Tcp;
 using System.Collections;
@@ -5,6 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class GamePlayManager : Singleton<GamePlayManager>
 {
@@ -34,12 +36,6 @@ public class GamePlayManager : Singleton<GamePlayManager>
         StartCoroutine(WaitforGameStart());
     }
 
-    public void SetReady()
-    {
-        BackendManager.Instance.isLoadGame = true;
-        
-    }
-    
     public void SetResolution()
     {
         int setWidth = 1920; // 사용자 설정 너비
@@ -379,6 +375,23 @@ public class GamePlayManager : Singleton<GamePlayManager>
                 GameWin();
             }
         };
+        
+        Backend.Match.OnChangeSuperGamer = (MatchInGameChangeSuperGamerEventArgs args) => {
+            Debug.Log("슈퍼게이머가 접속을 종료하여 슈퍼게이머를 재선정합니다");
+            
+            for (int i = 0; i < BackendManager.Instance.UserDataList.Count; i++)
+            {
+                if (BackendManager.Instance.UserDataList[i].playerName == args.NewSuperUserRecord.m_nickname)
+                {
+                    Debug.Log("새로운 슈퍼게이머는" + BackendManager.Instance.UserDataList[i].playerName + "님 입니다");
+
+                    BackendManager.Instance.UserDataList[i].isSuperGamer = true;
+                    
+                    BackendManager.Instance.isMeSuperGamer =
+                        BackendManager.Instance.UserDataList[i].playerName == BackendManager.Instance.userInfo.Nickname;
+                }
+            }
+        };
     }
     // Update is called once per frame
     void Update()
@@ -510,4 +523,30 @@ public class GamePlayManager : Singleton<GamePlayManager>
         }
         SceneManager.LoadScene(0);
     }
+    
+    //재접속 코드 남겨둠
+    // Backend.Match.IsGameRoomActivate( callback =>
+    // {
+    //     switch (callback.GetStatusCode())
+    //     {
+    //         case "200" :
+    //             Debug.Log("방에 재접속이 가능합니다.");
+    //             var roomInfo = callback.GetReturnValuetoJSON();
+    //             var addr = roomInfo["serverPublicHostName"].ToString();
+    //             var port = Convert.ToUInt16(roomInfo["serverPort"].ToString());
+    //             ErrorInfo errorInfo = null;
+    //             
+    //             if(Backend.Match.JoinGameServer(addr, port, true, out errorInfo) == false)
+    //             {
+    //                 // 에러 확인
+    //                 Debug.Log("재접속 시도합니다.");
+    //                 return;
+    //             }
+    //             break;
+    //         case "404" :
+    //             Debug.Log("현재 재접속 가능한 방이 없습니다.");
+    //             UIManager.Instance.OpenRecyclePopup("안내", "재접속이 불가능합니다 타이틀로 이동합니다.", GoTitle);
+    //             break;
+    //     }
+    // });
 }
