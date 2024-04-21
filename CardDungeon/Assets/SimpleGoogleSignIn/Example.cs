@@ -25,6 +25,7 @@ namespace Assets.SimpleGoogleSignIn
         public void SignIn()
         {
             GoogleAuth.SignIn(OnSignIn, caching: true);
+            Debug.Log("로그인 시도 버튼 눌림");
         }
 
         public void SignOut()
@@ -49,6 +50,8 @@ namespace Assets.SimpleGoogleSignIn
             BackendManager.Instance.userInfo.UserIndate = Backend.UserInDate;
             BackendManager.Instance.userInfo.Nickname = Backend.UserNickName;
             BackendManager.Instance.userInfo.UID = Backend.UID;
+            
+            Debug.Log("로그인시도");
         }
 
         private void OnGetAccessToken(bool success, string error, TokenResponse tokenResponse)

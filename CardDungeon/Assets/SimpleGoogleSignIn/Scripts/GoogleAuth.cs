@@ -181,7 +181,9 @@ namespace Assets.SimpleGoogleSignIn.Scripts
         {
             _state = Guid.NewGuid().ToString();
             _codeVerifier = Guid.NewGuid().ToString();
-
+            
+            Debug.Log("Auth 실행");
+            
             if (!_settings.ManualCancellation)
             {
                 #if UNITY_IOS && !UNITY_EDITOR
@@ -201,6 +203,7 @@ namespace Assets.SimpleGoogleSignIn.Scripts
 
             if (_implementation == Implementation.AuthorizationMiddleware)
             {
+                Debug.Log("로그인 기능 분기 1");
                 AuthorizationMiddleware.Auth(_redirectUri, _state, authorizationRequest, (success, error, code) =>
                 {
                     if (success)
@@ -216,6 +219,7 @@ namespace Assets.SimpleGoogleSignIn.Scripts
             }
             else
             {
+                Debug.Log("로그인 기능 분기 2");
                 AuthorizationRequest(authorizationRequest);
 
                 switch (_implementation)
@@ -235,16 +239,19 @@ namespace Assets.SimpleGoogleSignIn.Scripts
 
             if (_settings.UseSafariViewController)
             {
+                Debug.Log("아이폰감지 사파리 오픈");
                 SafariViewController.OpenURL(url);
             }
             else
-            {
+            {   
+                Debug.Log("윈도우감지 로그인 URL 오픈")
                 Application.OpenURL(url);
             }
 
             #else
 
             Application.OpenURL(url);
+            Debug.Log("아무것도 감지안되서 걍 오픈");
 
             #endif
         }

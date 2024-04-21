@@ -858,7 +858,6 @@ public class MainUI_HJH : MonoBehaviour
     {
         gameOver.SetActive(true);
         gameOverBool = true;
-
     }
     public void GotoLobby()
     {
