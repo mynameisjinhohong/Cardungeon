@@ -11,7 +11,7 @@ public class GetMoveCard_PCI : ItemData_PCI
         if (player.isMine)
         {
             int cardIdx = Random.Range(1, 6);
-            GamePlayManager.Instance.playerDeck.deck.Add(cardIdx);
+            GamePlayManager.Instance.mainUi.CardSelect(cardIdx);
         }
     }
 }

@@ -11,7 +11,7 @@ public class GetAttackCard_PCI : ItemData_PCI
         if (player.isMine)
         {
             int cardIdx = Random.Range(6, 9);
-            GamePlayManager.Instance.playerDeck.deck.Add(cardIdx);
+            GamePlayManager.Instance.mainUi.CardSelect(cardIdx);
         }
     }
 }

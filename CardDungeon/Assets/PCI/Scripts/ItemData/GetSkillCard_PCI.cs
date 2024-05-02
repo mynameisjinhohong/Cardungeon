@@ -11,7 +11,7 @@ public class GetSkillCard_PCI : ItemData_PCI
         if (player.isMine)
         {
             int cardIdx = Random.Range(9, 12);
-            GamePlayManager.Instance.playerDeck.deck.Add(cardIdx);
+            GamePlayManager.Instance.mainUi.CardSelect(cardIdx);
         }
     }
 }

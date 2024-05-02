@@ -78,6 +78,15 @@ public class MainUI_HJH : MonoBehaviour
     public GameObject settingPopupObj;
     public int m_lookAt;
 
+
+    public GameObject cardSelect;
+    public GameObject cardSelectContent;
+    public Image cardSelectImg;
+    public TMP_Text cardSelectMp;
+    public TMP_Text cardSelectName;
+    public TMP_Text cardSelectDescribe;
+    public Image cardSelectImage;
+    int nowCardIdx = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -992,5 +1001,30 @@ public class MainUI_HJH : MonoBehaviour
             toggleExitPopup = true;
             exitPopup.SetActive(true);
         }
+    }
+
+    public void CardSelect(int cardIdx)
+    {
+        cardSelect.SetActive(true);
+        nowCardIdx = cardIdx;
+        cardSelectImage.sprite = CardManager.Instance.cardList.cards[cardIdx].bigCardType;
+        cardSelectMp.text = CardManager.Instance.cardList.cards[cardIdx].useMP.ToString();
+        cardSelectName.text = CardManager.Instance.cardList.cards[cardIdx].cardName;
+        cardSelectName.color = Color.white;
+        cardSelectDescribe.text = CardManager.Instance.cardList.cards[cardIdx].description;
+        cardSelectDescribe.color = Color.white;
+        cardSelectImage.sprite = CardManager.Instance.cardList.cards[cardIdx].itemImage;
+        playerDeck.HandVisible();
+    }
+    
+    public void AddCard()
+    {
+        playerDeck.deck.Add(nowCardIdx);
+        playerDeck.HandVisible();
+        cardSelect.SetActive(false);
+    }
+    public void DontAddCard()
+    {
+        cardSelect.SetActive(false);
     }
 }
