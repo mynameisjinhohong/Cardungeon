@@ -160,10 +160,11 @@ public class Card_HJH : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
                     tileEffects.Add(tile);
                     Vector3 playerPos = GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].transform.position;
                     tile.transform.position = new Vector3(playerPos.x + 1, playerPos.y, 0);
+                    Debug.Log(tile.transform.position);
                     GameObject tile2 = Instantiate(tileEffect[1]);
                     tileEffects.Add(tile2);
-                    tile.transform.position = new Vector3(playerPos.x - 1, playerPos.y , 0);
-
+                    tile2.transform.position = new Vector3(playerPos.x - 1, playerPos.y , 0);
+                    
                 }
                 else
                 {
@@ -173,7 +174,7 @@ public class Card_HJH : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
                     tile.transform.position = new Vector3(playerPos.x + 1, playerPos.y, 0);
                     GameObject tile2 = Instantiate(tileEffect[1]);
                     tileEffects.Add(tile2);
-                    tile.transform.position = new Vector3(playerPos.x - 1, playerPos.y, 0);
+                    tile2.transform.position = new Vector3(playerPos.x - 1, playerPos.y, 0);
                 }
                 break;
             case 8:

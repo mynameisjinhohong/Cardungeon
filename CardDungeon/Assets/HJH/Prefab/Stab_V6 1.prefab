@@ -4894,7 +4894,7 @@ GameObject:
   - component: {fileID: 7405645814760024531}
   - component: {fileID: 7405645814760024528}
   m_Layer: 0
-  m_Name: Stab_V6
+  m_Name: Stab_V6 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
