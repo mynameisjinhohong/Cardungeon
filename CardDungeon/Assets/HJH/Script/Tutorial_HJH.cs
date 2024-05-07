@@ -72,4 +72,9 @@ public class Tutorial_HJH : MonoBehaviour
         UIManager.Instance.PopupListPop();
         PlayerPrefs.SetInt("isFirstPlay", 1);
     }
+
+    public void InGameXButton()
+    {
+        gameObject.SetActive(false);
+    }
 }
