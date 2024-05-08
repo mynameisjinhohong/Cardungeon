@@ -3690,7 +3690,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 8a97d525af072234183288b1e3ec7abd, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f86cb52beb29f4b44bc780cc944966a3, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -9449,7 +9449,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6867880556157422137
 RectTransform:
   m_ObjectHideFlags: 0
@@ -12851,7 +12851,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 264628219956473533, guid: 4fce94221d260b4459d0e78d397c0bd5, type: 3}
       propertyPath: m_text
-      value: "\uC544\uB798\uB85C \uD55C\uAC78\uC74C"
+      value: "\uC544\uB798\uB85C \uAE61\uCD1D"
       objectReference: {fileID: 0}
     - target: {fileID: 264628219956473533, guid: 4fce94221d260b4459d0e78d397c0bd5, type: 3}
       propertyPath: m_fontColor.b
@@ -13647,7 +13647,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 264628219956473533, guid: 4fce94221d260b4459d0e78d397c0bd5, type: 3}
       propertyPath: m_text
-      value: "\uC544\uB798\uB85C \uD55C\uAC78\uC74C"
+      value: "\uC544\uB798\uB85C \uAE61\uCD1D"
       objectReference: {fileID: 0}
     - target: {fileID: 264628220489343201, guid: 4fce94221d260b4459d0e78d397c0bd5, type: 3}
       propertyPath: m_text
