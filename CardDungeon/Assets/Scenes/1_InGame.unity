@@ -3369,7 +3369,7 @@ MonoBehaviour:
   - {fileID: 6523134760993332390}
   - {fileID: 8575494782545508464}
   - {fileID: 4433705898237429791}
-  settingPopupObj: {fileID: 0}
+  settingPopupObj: {fileID: 4861372906580432593, guid: e61276f7826ad3446a3b4c15e8576136, type: 3}
   m_lookAt: 0
   cardSelect: {fileID: 187721197}
   cardSelectContent: {fileID: 590482957}
