@@ -28,6 +28,7 @@ public class MainUI_HJH : MonoBehaviour
 
     public ToastMsgContainer toastMsgContainer;
     public GameObject winImage;
+    public TextMeshProUGUI winTypeText;
 
     //카드 클릭했을 때 요소들
     public GameObject bigCard;
@@ -69,13 +70,10 @@ public class MainUI_HJH : MonoBehaviour
     public bool reRollNow = false;
 
     public List<GameObject> keys = new List<GameObject>();
-
-    public GameObject tutorial;
+    
     public GameObject lookaroundbuttons;
     bool gameOverBool = false;
     public GameObject[] gameOverFalseGameObject;
-
-    public GameObject settingPopupObj;
     public int m_lookAt;
 
 
@@ -217,7 +215,7 @@ public class MainUI_HJH : MonoBehaviour
 
     public void OpenSettingPopup()
     {
-        UIManager.Instance.OpenPopup(settingPopupObj);
+        UIManager.Instance.OpenPopup(UIManager.Instance.SettingPopupPrefab);
     }
     
     public void MinimapChange()
@@ -977,14 +975,7 @@ public class MainUI_HJH : MonoBehaviour
 
     public void TutorialButton()
     {
-        if (tutorial.activeInHierarchy)
-        {
-            tutorial.SetActive(false);
-        }
-        else
-        {
-            tutorial.SetActive(true);
-        }
+        UIManager.Instance.OpenPopup(UIManager.Instance.TutorialPopupPrefab);
     }
 
     private bool toggleExitPopup = false;

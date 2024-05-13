@@ -14,6 +14,19 @@ public class InvitePopup : MonoBehaviour
     public string InvitedRoomToken;
     public Action action;
     
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            RefuseButtonClick();
+        }
+        
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            AcceptButtonClick();
+        }
+    }
+    
     public void AcceptButtonClick()
     {
         Backend.Match.AcceptInvitation(InvitedRoomID, InvitedRoomToken);

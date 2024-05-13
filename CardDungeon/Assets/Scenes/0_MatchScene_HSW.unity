@@ -2601,6 +2601,7 @@ MonoBehaviour:
   PopupList: []
   CurrentPopup: {fileID: 0}
   CurrentUIStatus: 0
+  PopupListParent: {fileID: 0}
   AccountLoginPrefab: {fileID: 5063278758754645742, guid: d06b3bda27417b84c8ca20038292d2c4, type: 3}
   AccountSignUpPrefab: {fileID: 853597947298320963, guid: 11b9020a17c24a34d82b5f92c63ef819, type: 3}
   FindIDPrefab: {fileID: 4557327945877872313, guid: 58c443f8429c49243a255e3cc952fa5a, type: 3}
@@ -2610,6 +2611,8 @@ MonoBehaviour:
   NickNamePrefab: {fileID: 5097887765796371620, guid: 919e8e8d821778049b2e069557afa5f7, type: 3}
   RecyclePopupPrefab: {fileID: 5097887765796371620, guid: 35c811efe1a2a6f438b0ed61269621f5, type: 3}
   GetInvitePopupPrefab: {fileID: 4557327945877872313, guid: c9792187ec66ad74ca0bfa5fc8374700, type: 3}
+  SettingPopupPrefab: {fileID: 4861372906580432593, guid: e61276f7826ad3446a3b4c15e8576136, type: 3}
+  TutorialPopupPrefab: {fileID: 6867880555949617580, guid: 5c3a3c9cf385e79469854aa664800969, type: 3}
 --- !u!4 &835534843
 Transform:
   m_ObjectHideFlags: 0

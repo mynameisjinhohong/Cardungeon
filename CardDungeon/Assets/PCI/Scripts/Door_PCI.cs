@@ -10,7 +10,7 @@ public class Door_PCI : TileObject_PCI
         {
             if (player.isMine)
             { 
-                GamePlayManager.Instance.GameWin();
+                GamePlayManager.Instance.GameWin(true);
             }
             else
             {

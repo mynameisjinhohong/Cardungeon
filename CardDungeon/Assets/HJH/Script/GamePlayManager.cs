@@ -372,7 +372,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
             if (BackendManager.Instance.UserDataList.Count <= 1)
             {
                 Debug.Log("铰府贸府");
-                GameWin();
+                GameWin(false);
             }
         };
         
@@ -501,10 +501,10 @@ public class GamePlayManager : Singleton<GamePlayManager>
                 return;
             }
         }
-        GameWin();
+        GameWin(false);
     }
 
-    public void GameWin()
+    public void GameWin(bool isEscape)
     {
         mainUi.winImage.SetActive(true);
         if (mainUi.winImage.TryGetComponent<Button>(out Button btn))
@@ -512,6 +512,11 @@ public class GamePlayManager : Singleton<GamePlayManager>
             btn.onClick.AddListener(GoTitle);
         }
 
+        string allKillWin = "铰府窍看嚼聪促!";
+
+        string esacpeWin = "呕免 己傍!";
+
+        mainUi.winTypeText.text = isEscape ? esacpeWin : allKillWin;
     }
 
     public void GoTitle()

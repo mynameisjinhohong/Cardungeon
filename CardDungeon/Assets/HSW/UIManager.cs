@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 
 public class UIManager : Singleton<UIManager>
 {
+    private static UIManager instance;
+    
     private Canvas canvas;
 
     public int SceneNumber = 0;
@@ -17,7 +19,7 @@ public class UIManager : Singleton<UIManager>
 
     public CurrentUIStatus CurrentUIStatus; 
     
-    private Transform PopupListParent;
+    public Transform PopupListParent;
     
     private Action ABBAction;
 
@@ -35,6 +37,21 @@ public class UIManager : Singleton<UIManager>
     public GameObject RecyclePopupPrefab;
 
     public GameObject GetInvitePopupPrefab;
+
+    public GameObject SettingPopupPrefab;
+
+    public GameObject TutorialPopupPrefab;
+    
+    private void Awake()
+    {
+        if (instance != null)
+        {
+            Destroy(instance);
+        }
+        instance = this;
+        // 모든 씬에서 유지
+        DontDestroyOnLoad(this.gameObject);
+    }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -64,10 +81,19 @@ public class UIManager : Singleton<UIManager>
         canvas = null;
         
         canvas = FindObjectOfType<Canvas>();
+        
+        Transform popupParent = canvas.transform.Find("PopupTransform");
 
-        PopupListParent = canvas.transform.GetChild(canvas.transform.childCount - 1).transform;
+        if (popupParent != null)
+        {
+            PopupListParent = popupParent;
+        }
+        else
+        {
+            Debug.LogError("팝업 생성 위치 탐색 실패 오브젝트 이름이 PopupTransform 인지 확인해주세요");
+        }
     }
-    
+
     public void PopupListAddABB(GameObject gameObject, Action action)
     {
         PopupList.Add(gameObject);

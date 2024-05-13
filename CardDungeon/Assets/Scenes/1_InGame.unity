@@ -1354,7 +1354,7 @@ RectTransform:
   - {fileID: 1446800323}
   - {fileID: 26684352}
   m_Father: {fileID: 556443423}
-  m_RootOrder: 27
+  m_RootOrder: 26
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -3266,11 +3266,11 @@ RectTransform:
   - {fileID: 1758728395}
   - {fileID: 625370675}
   - {fileID: 1396666045}
-  - {fileID: 1830550434}
   - {fileID: 1512779684}
   - {fileID: 1221552188}
   - {fileID: 8885051221297116575}
   - {fileID: 187721198}
+  - {fileID: 1830550434}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3317,6 +3317,7 @@ MonoBehaviour:
   playerDeck: {fileID: 1490756469}
   toastMsgContainer: {fileID: 1221552189}
   winImage: {fileID: 1396666044}
+  winTypeText: {fileID: 357151197}
   bigCard: {fileID: 234766323}
   bigCardImg: {fileID: 374303241}
   bigCardMp: {fileID: 374303244}
@@ -3358,7 +3359,6 @@ MonoBehaviour:
   - {fileID: 1534260111}
   - {fileID: 1185660809}
   - {fileID: 1660329497}
-  tutorial: {fileID: 1287503533}
   lookaroundbuttons: {fileID: 1512779683}
   gameOverFalseGameObject:
   - {fileID: 2788331277720331083}
@@ -3369,7 +3369,6 @@ MonoBehaviour:
   - {fileID: 6523134760993332390}
   - {fileID: 8575494782545508464}
   - {fileID: 4433705898237429791}
-  settingPopupObj: {fileID: 4861372906580432593, guid: e61276f7826ad3446a3b4c15e8576136, type: 3}
   m_lookAt: 0
   cardSelect: {fileID: 187721197}
   cardSelectContent: {fileID: 590482957}
@@ -8225,7 +8224,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7975077980767190671, guid: b2fbc8e84754076499a1913d4dd615ce, type: 3}
       propertyPath: m_RootOrder
-      value: 25
+      value: 24
       objectReference: {fileID: 0}
     - target: {fileID: 7975077980767190671, guid: b2fbc8e84754076499a1913d4dd615ce, type: 3}
       propertyPath: m_AnchorMax.x
@@ -8676,11 +8675,6 @@ PrefabInstance:
 --- !u!224 &1287503532 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6867880555949617581, guid: 5c3a3c9cf385e79469854aa664800969, type: 3}
-  m_PrefabInstance: {fileID: 1287503531}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1287503533 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6867880555949617580, guid: 5c3a3c9cf385e79469854aa664800969, type: 3}
   m_PrefabInstance: {fileID: 1287503531}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1304568445
@@ -10050,7 +10044,7 @@ RectTransform:
   - {fileID: 809989941}
   - {fileID: 1677577885}
   m_Father: {fileID: 556443423}
-  m_RootOrder: 24
+  m_RootOrder: 23
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
@@ -12816,12 +12810,12 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 556443423}
-  m_RootOrder: 23
+  m_RootOrder: 27
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1834881258
 GameObject:
@@ -21619,7 +21613,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 556443423}
-  m_RootOrder: 26
+  m_RootOrder: 25
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
