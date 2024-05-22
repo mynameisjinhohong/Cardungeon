@@ -587,9 +587,14 @@ public class CardManager : Singleton<CardManager>
         }
         Instantiate(Idx8Effect, player);
         Player_HJH p;
+        Chaser c;
         if (player.TryGetComponent<Player_HJH>(out p))
         {
             p.animator.Play("SmashDown");
+        }
+        else if (player.TryGetComponent<Chaser>(out c))
+        {
+            c.animator.Play("SmashDown");
         }
         AudioPlayer.Instance.PlayClip(6);
     }

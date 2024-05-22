@@ -74,7 +74,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 100
   m_Sprite: {fileID: 21300000, guid: d2a41ab7c26d0b24681db608238bc47e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -206,12 +206,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fad178a7c582b54faf80a79904b02ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _particleSystem: {fileID: 4116328459416590605}
---- !u!198 &4116328459416590605 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 8475197869356226704, guid: e4e6878f91aaee24f8de1c1cbebc3664, type: 3}
-  m_PrefabInstance: {fileID: 5529806143674335645}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4116328459416590606 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8475197869356226707, guid: e4e6878f91aaee24f8de1c1cbebc3664, type: 3}
