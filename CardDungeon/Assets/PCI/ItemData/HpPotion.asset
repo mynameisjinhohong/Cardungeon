@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: "HP\uD3EC\uC158"
   description: "\uCCB4\uB825\uC744 \uD55C\uCE78 \uD68C\uBCF5\uD569\uB2C8\uB2E4"
   image: {fileID: 21300000, guid: 78a49689a8a65284fbd4bc1071809291, type: 3}
-  amount: 20
+  amount: 10
   sprites:
   - {fileID: 21300000, guid: 78a49689a8a65284fbd4bc1071809291, type: 3}
   value: 1

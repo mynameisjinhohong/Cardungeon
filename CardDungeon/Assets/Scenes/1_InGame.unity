@@ -486,6 +486,8 @@ MonoBehaviour:
   - {r: 0.16078432, g: 0.20000002, b: 0.49411768, a: 1}
   - {r: 0.7019608, g: 0.19215688, b: 0.77647066, a: 1}
   - {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  chaserObj: {fileID: 5898363691524700565, guid: ff58ab0ce393f2e47a4eafbe2891fe87, type: 3}
+  chaser: {fileID: 0}
 --- !u!4 &31816213
 Transform:
   m_ObjectHideFlags: 0
@@ -698,6 +700,10 @@ PrefabInstance:
       propertyPath: width
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 8787522441298779875, guid: e36e36b8cb80c004d8e7795049669df8, type: 3}
+      propertyPath: chaser
+      value: 
+      objectReference: {fileID: 5898363691524700565, guid: ff58ab0ce393f2e47a4eafbe2891fe87, type: 3}
     - target: {fileID: 8787522441298779875, guid: e36e36b8cb80c004d8e7795049669df8, type: 3}
       propertyPath: height
       value: 20

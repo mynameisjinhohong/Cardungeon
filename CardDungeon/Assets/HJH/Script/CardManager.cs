@@ -211,7 +211,6 @@ public class CardManager : Singleton<CardManager>
 
     }
 
-
     //플레이어 위로 1칸 이동
     void Idx0Func(Transform player)
     {

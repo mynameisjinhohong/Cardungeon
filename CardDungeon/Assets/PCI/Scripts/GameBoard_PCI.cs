@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Random = UnityEngine.Random;
+using Range = DG.DemiLib.Range;
 
 public class GameBoard_PCI : MonoBehaviour
 {
@@ -155,6 +157,7 @@ public class GameBoard_PCI : MonoBehaviour
         foreach (var item in itemList.itemDataList)
         {
             int k = item.amount;
+            
             while (k != 0)
             {
                 int x = UnityEngine.Random.Range(0, width);
@@ -195,6 +198,34 @@ public class GameBoard_PCI : MonoBehaviour
         var _tile = board[width / 2, height / 2];
         var door = Instantiate(doorPrefab, new Vector3(width / 2, height / 2, 0), Quaternion.identity, _tile.transform);
         _tile.AddTileObject(door);
+
+        
+        // 추격자토끼 생성
+        bool isPositionFound = false;
+        int chaserX = 0;
+        int chaserY = 0;
+        while (!isPositionFound)
+        {
+            int ranPosX = UnityEngine.Random.Range(1, 4);
+            int ranPosY = UnityEngine.Random.Range(1, 4);
+
+            chaserX = (width / 2) + ranPosX;
+            chaserY = (height / 2) + ranPosY;
+
+            // Check if the selected position is empty
+            if (board[chaserX, chaserY].onTileObjects.Count == 0)
+            {
+                isPositionFound = true;
+            }
+        }
+    
+        var _chaser = board[chaserX, chaserY];
+        var chaserObj = Instantiate(GamePlayManager.Instance.chaserObj, new Vector3(chaserX, chaserY, 0), Quaternion.identity, _chaser.transform);
+        Debug.Log("추격자 토끼 생성완료");
+
+        GamePlayManager.Instance.chaser = chaserObj.GetComponent<Chaser>();
+
+        StartCoroutine(SuddenDeathTimer(chaserObj));
     }
 
     public void Clear()
@@ -285,5 +316,16 @@ public class GameBoard_PCI : MonoBehaviour
         board[x, y].AddTileObject(newTileObject);
 
         return false;
+    }
+    
+    private IEnumerator SuddenDeathTimer(GameObject chaserObj)
+    {
+        int timeValue = Random.Range(1, 4);
+
+        yield return new WaitForSeconds(timeValue * 10);
+
+        chaserObj.GetComponent<Chaser>().StartChase();
+        
+        Debug.Log("추격 시작");
     }
 }
