@@ -103,4 +103,17 @@ public class Tile_PCI : MonoBehaviour
             }
         }
     }
+
+    public void ChaserOnInteracted(Chaser chaser)
+    {
+        foreach(var e in onTileObjects)
+        {
+            if (e.isInteractable)
+            {
+                e.ChaserOnInteracted(chaser);
+                Render();
+                break;
+            }
+        }
+    }
 }

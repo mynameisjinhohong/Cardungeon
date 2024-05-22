@@ -285,6 +285,12 @@ public class GameBoard_PCI : MonoBehaviour
         if (!IsInteractable(target)) return;
         board[target.x, target.y].OnInteracted(player);
     }
+    
+    public void InteractChaser(Vector2Int target, Chaser chaser)
+    {
+        if (!IsInteractable(target)) return;
+        board[target.x, target.y].ChaserOnInteracted(chaser);
+    }
 
     public bool SetTile(TileObject_PCI obj, int x, int y, int time)
     {

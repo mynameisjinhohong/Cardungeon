@@ -22,6 +22,11 @@ public class TileObject_PCI : MonoBehaviour
         Debug.Log($"Object Interacting : {gameObject.name}");
     }
 
+    public void ChaserOnInteracted(Chaser chaser)
+    {
+        Debug.Log($"Object Interacting with Chaser : {gameObject.name}");
+    }
+
     public void Show()
     {
         for(int i = 0; i < transform.childCount; i++)

@@ -214,18 +214,27 @@ public class CardManager : Singleton<CardManager>
     //플레이어 위로 1칸 이동
     void Idx0Func(Transform player)
     {
-        if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y + 1)))
-        {
-            GamePlayManager.Instance.gameBoard.Interact(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y + 1), player.GetComponent<Player_HJH>());
-            player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 1, player.transform.position.z);
-        }
         Player_HJH p;
+        Chaser c;
         if (player.TryGetComponent<Player_HJH>(out p))
         {
+            if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y + 1)))
+            {
+                GamePlayManager.Instance.gameBoard.Interact(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y + 1), p);
+                player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 1, player.transform.position.z);
+            }
+            
             p.animator.Play("Walk");
         }
+        else if(player.TryGetComponent<Chaser>(out c))
+        {
+            if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y + 1)))
+            {
+                GamePlayManager.Instance.gameBoard.InteractChaser(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y + 1), c);
+                player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 1, player.transform.position.z);
+            }
+        }
         AudioPlayer.Instance.PlayClip(8);
-
     }
     //플레이어 위로 2칸 이동
     void Idx0EnforceFunc(Transform player)
@@ -246,18 +255,30 @@ public class CardManager : Singleton<CardManager>
     //플레이어 오른쪽으로 1칸 이동
     void Idx1Func(Transform player)
     {
-        if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x + 1, (int)player.transform.position.y)))
-        {
-            GamePlayManager.Instance.gameBoard.Interact(new Vector2Int((int)player.transform.position.x + 1, (int)player.transform.position.y), player.GetComponent<Player_HJH>());
-            player.transform.position = new Vector3(player.transform.position.x + 1, player.transform.position.y, player.transform.position.z);
-
-        }
         Player_HJH p;
+        Chaser c;
         if (player.TryGetComponent<Player_HJH>(out p))
         {
+            if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x + 1, (int)player.transform.position.y)))
+            {
+                GamePlayManager.Instance.gameBoard.Interact(new Vector2Int((int)player.transform.position.x + 1, (int)player.transform.position.y), p);
+                player.transform.position = new Vector3(player.transform.position.x + 1, player.transform.position.y, player.transform.position.z);
+            }
+            
             p.animator.Play("Walk");
             p.sr.flipX = true;
         }
+        else if(player.TryGetComponent<Chaser>(out c))
+        {
+            if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x + 1, (int)player.transform.position.y)))
+            {
+                GamePlayManager.Instance.gameBoard.InteractChaser(new Vector2Int((int)player.transform.position.x + 1, (int)player.transform.position.y), c);
+                player.transform.position = new Vector3(player.transform.position.x + 1, player.transform.position.y, player.transform.position.z);
+            }
+            
+            c.chaserSR.flipX = true;
+        }
+        
         AudioPlayer.Instance.PlayClip(8);
 
     }
@@ -283,18 +304,30 @@ public class CardManager : Singleton<CardManager>
     //플레이어 왼쪽으로 1칸 이동
     void Idx2Func(Transform player)
     {
-        if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x - 1, (int)player.transform.position.y)))
-        {
-            GamePlayManager.Instance.gameBoard.Interact(new Vector2Int((int)player.transform.position.x - 1, (int)player.transform.position.y), player.GetComponent<Player_HJH>());
-            player.transform.position = new Vector3(player.transform.position.x - 1, player.transform.position.y, player.transform.position.z);
-        }
         Player_HJH p;
+        Chaser c;
         if (player.TryGetComponent<Player_HJH>(out p))
         {
+            if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x - 1, (int)player.transform.position.y)))
+            {
+                GamePlayManager.Instance.gameBoard.Interact(new Vector2Int((int)player.transform.position.x - 1, (int)player.transform.position.y), p);
+                player.transform.position = new Vector3(player.transform.position.x - 1, player.transform.position.y, player.transform.position.z);
+            }
+            
             p.animator.Play("Walk");
             p.sr.flipX = false;
-
         }
+        else if (player.TryGetComponent<Chaser>(out c))
+        {
+            if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x - 1, (int)player.transform.position.y)))
+            {
+                GamePlayManager.Instance.gameBoard.InteractChaser(new Vector2Int((int)player.transform.position.x - 1, (int)player.transform.position.y), c);
+                player.transform.position = new Vector3(player.transform.position.x - 1, player.transform.position.y, player.transform.position.z);
+            }
+            
+            c.chaserSR.flipX = false;
+        }
+        
         AudioPlayer.Instance.PlayClip(8);
 
     }
@@ -319,16 +352,28 @@ public class CardManager : Singleton<CardManager>
     //플레이어 아래로 1칸 이동
     void Idx3Func(Transform player)
     {
-        if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y - 1)))
-        {
-            GamePlayManager.Instance.gameBoard.Interact(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y - 1), player.GetComponent<Player_HJH>());
-            player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y - 1, player.transform.position.z);
-        }
         Player_HJH p;
+        Chaser c;
+        
         if (player.TryGetComponent<Player_HJH>(out p))
         {
+            if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y - 1)))
+            {
+                GamePlayManager.Instance.gameBoard.Interact(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y - 1), p);
+                player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y - 1, player.transform.position.z);
+            }
+            
             p.animator.Play("Walk");
         }
+        else if (player.TryGetComponent<Chaser>(out c))
+        {
+            if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y - 1)))
+            {
+                GamePlayManager.Instance.gameBoard.InteractChaser(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y - 1), c);
+                player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y - 1, player.transform.position.z);
+            }
+        }
+        
         AudioPlayer.Instance.PlayClip(8);
 
     }
@@ -510,10 +555,17 @@ public class CardManager : Singleton<CardManager>
         }
         Instantiate(Idx8Effect, player);
         Player_HJH p;
+        Chaser c;
+        
         if (player.TryGetComponent<Player_HJH>(out p))
         {
             p.animator.Play("SmashDown");
         }
+        else if (player.TryGetComponent<Chaser>(out c))
+        {
+            c.animator.Play("SmashDown");
+        }
+        
         AudioPlayer.Instance.PlayClip(6);
 
     }

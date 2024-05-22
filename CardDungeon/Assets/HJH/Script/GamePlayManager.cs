@@ -311,11 +311,6 @@ public class GamePlayManager : Singleton<GamePlayManager>
                         {
                             Debug.Log(msg.playerIdx + "  " + msg.cardIdx);
                             CardRealGo(msg.playerIdx, msg.cardIdx);
-
-                            if (msg.playerIdx == 9)
-                            {
-                                ChaserMove(msg.cardIdx);
-                            }
                         }
                     }
                 }
@@ -474,12 +469,14 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
     public void CardRealGo(int playerIdx, int cardIdx)
     {
-        CardManager.Instance.OnCardStart(players[playerIdx].transform, cardIdx);
-    }
-
-    public void ChaserMove(int cardIdx)
-    {
-        CardManager.Instance.OnCardStart(chaserObj.transform, cardIdx);
+        if (playerIdx == 9)
+        {
+            CardManager.Instance.OnCardStart(chaser.transform, cardIdx);
+        }
+        else
+        {
+            CardManager.Instance.OnCardStart(players[playerIdx].transform, cardIdx);
+        }
     }
 
     public void GameOver()
