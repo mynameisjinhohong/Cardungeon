@@ -24,8 +24,10 @@ public class GamePlayManager : Singleton<GamePlayManager>
     #region È£½ºÆ®
     public Queue<Message> messageQueue;
     #endregion
-    
     public List<Color> colorList;
+
+    public GameObject chaserObj;
+    public Chaser chaser;
     
     // Start is called before the first frame update
     void Start()
@@ -309,6 +311,11 @@ public class GamePlayManager : Singleton<GamePlayManager>
                         {
                             Debug.Log(msg.playerIdx + "  " + msg.cardIdx);
                             CardRealGo(msg.playerIdx, msg.cardIdx);
+
+                            if (msg.playerIdx == 9)
+                            {
+                                ChaserMove(msg.cardIdx);
+                            }
                         }
                     }
                 }
@@ -463,13 +470,16 @@ public class GamePlayManager : Singleton<GamePlayManager>
             mes.cardIdx = cardIdx;
             SendData(mes);
         }
-
     }
 
     public void CardRealGo(int playerIdx, int cardIdx)
     {
         CardManager.Instance.OnCardStart(players[playerIdx].transform, cardIdx);
+    }
 
+    public void ChaserMove(int cardIdx)
+    {
+        CardManager.Instance.OnCardStart(chaserObj.transform, cardIdx);
     }
 
     public void GameOver()
