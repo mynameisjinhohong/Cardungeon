@@ -422,7 +422,8 @@ public class CardManager : Singleton<CardManager>
         Player_HJH p;
         if (player.TryGetComponent<Player_HJH>(out p))
         {
-            Instantiate(p.playerShadow, playerTransform, Quaternion.identity);
+            GameObject shadow = Instantiate(p.playerShadow, playerTransform, Quaternion.identity);
+            shadow.GetComponent<PlayerShadow_HJH>().StartFadeOut(p.animator);
             p.animator.Play("Walk");
             if (x < 0) p.sr.flipX = false;
             else p.sr.flipX = true;
@@ -433,6 +434,7 @@ public class CardManager : Singleton<CardManager>
     // 플레이어가 5*5 안에서 랜덤하게 이동
     void Idx5EnforceFunc(Transform player)
     {
+        Vector3 playerTransform = player.transform.position;
         Random.InitState(seed);
         int x = Random.Range(-2, 3);
         int y = Random.Range(-2, 3);
@@ -458,7 +460,10 @@ public class CardManager : Singleton<CardManager>
         Player_HJH p;
         if (player.TryGetComponent<Player_HJH>(out p))
         {
+            GameObject shadow = Instantiate(p.playerShadow, playerTransform, Quaternion.identity);
+            shadow.GetComponent<PlayerShadow_HJH>().StartFadeOut(p.animator);
             p.animator.Play("Walk");
+            
             if (x < 0) p.sr.flipX = false;
             else p.sr.flipX = true;
         }

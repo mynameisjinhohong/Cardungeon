@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerSprite: {fileID: 5898363692132139214}
+  currentAnimator: {fileID: 5531401151381640362}
   shadowSpeed: 1
 --- !u!1 &5898363692132139200
 GameObject:

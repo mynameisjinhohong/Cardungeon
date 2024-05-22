@@ -5,22 +5,21 @@ using UnityEngine;
 public class PlayerShadow_HJH : MonoBehaviour
 {
     public SpriteRenderer playerSprite;
+    public Animator currentAnimator;
     public float shadowSpeed;
     // Start is called before the first frame update
-    void Start()
+    public void StartFadeOut(Animator getAnim)
     {
+        currentAnimator.runtimeAnimatorController = getAnim.runtimeAnimatorController;
         StartCoroutine(ShadowOn());
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     IEnumerator ShadowOn()
     {
         Color color = playerSprite.color;
+        
+        currentAnimator.Play("Walk");
+        
         while (true)
         {
             color.a -= shadowSpeed * Time.deltaTime;
