@@ -235,6 +235,10 @@ public class PlayerDeck_HJH : MonoBehaviour
                 deck.RemoveAt(0);
                 hand.Add(a);
             }
+            else
+            {
+                return;
+            }
         }
         else
         {
