@@ -49,8 +49,11 @@ public class Player_HJH : MonoBehaviour
     public Sprite nomalTileSprite;
     public GameObject fogEffect;
     public GameObject blindFog;
+    public GameObject stunEffect;
     private float darkTimer;
+    private float stunTimer;
     private bool isDark;
+    private bool isStunned;
 
     Coroutine shieldCo;
     public int HP
@@ -188,6 +191,13 @@ public class Player_HJH : MonoBehaviour
             if(darkTimer < 0)
                 DarkOff();
         }
+
+        if (isStunned)
+        {
+            stunTimer -= Time.deltaTime;
+            if (stunTimer < 0)
+                StunOff();
+        }
     }
 
     public void HpRenew(int nowHp)
@@ -247,6 +257,25 @@ public class Player_HJH : MonoBehaviour
     {
         isDark = false;
         fogEffect.SetActive(false);
+    }
+
+    public void StunOn(float stunTime)
+    {
+        stunEffect.SetActive(true);
+        stunTimer = stunTime;
+        isStunned = true;
+    }
+    
+    private void StunOff()
+    {
+        isStunned = false;
+        stunEffect.SetActive(false);
+    }
+
+    public void PlayerStunEffect(float stunTime)
+    {
+        GameObject stunEffect = Instantiate(this.stunEffect, transform);
+        stunEffect.GetComponent<selfDestroyEffect>().EffectStart(stunTime);
     }
 
     IEnumerator GetDamage(float howLongTime, int speed)

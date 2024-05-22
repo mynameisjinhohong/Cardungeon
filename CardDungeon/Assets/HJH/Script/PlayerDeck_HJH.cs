@@ -378,12 +378,12 @@ public class PlayerDeck_HJH : MonoBehaviour
     }
     #endregion
 
-    public void StunGo(int time)
+    public void StunGo(float time)
     {
         StartCoroutine(Stun(time));
     }
 
-    IEnumerator Stun(int time)
+    IEnumerator Stun(float time)
     {
         stun = true;
         yield return new WaitForSeconds(time);
