@@ -82,6 +82,7 @@ public class Player_HJH : MonoBehaviour
             else
             {
                 hp = value;
+                HpRenew(hp);
             }
             if (isMine)
             {

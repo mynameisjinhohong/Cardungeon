@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: DarkFog
   m_EditorClassIdentifier: 
   itemName: "\uC2DC\uC57C \uBC29\uD574"
-  description: "\uC8FC\uBCC0\uC758 \uC2DC\uC57C\uAC00 \uC5B4\uB450\uC6CC\uC84C\uB124\uC694.\r
-    \uC870\uC2EC\uD558\uC138\uC694!"
+  description: "\uC870\uC2EC\uD558\uC138\uC694! \uC8FC\uBCC0\uC758 \uC2DC\uC57C\uAC00
+    \uC5B4\uB450\uC6CC\uC84C\uB124\uC694"
   image: {fileID: 0}
   amount: 5
   sprites:
