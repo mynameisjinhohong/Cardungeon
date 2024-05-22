@@ -47,7 +47,8 @@ public class Player_HJH : MonoBehaviour
     public SpriteRenderer playerTile;
     public Sprite shieldTileSprite;
     public Sprite nomalTileSprite;
-    public GameObject darkFog;
+    public GameObject fogEffect;
+    public GameObject blindFog;
     private float darkTimer;
     private bool isDark;
 
@@ -228,17 +229,24 @@ public class Player_HJH : MonoBehaviour
     }
     //주석 하나 씀
 
-    public void DarkOn()
+    public void DarkOn(bool isMe)
     {
-        darkFog.SetActive(true);
+        fogEffect.SetActive(true);
         darkTimer = 3.0f;
+
+        if (isMe)
+        {
+            GameObject blindfogGet = Instantiate(blindFog, transform);
+            blindfogGet.GetComponent<selfDestroyEffect>().EffectStart(darkTimer);
+        }
+
         isDark = true;
     }
 
     private void DarkOff()
     {
         isDark = false;
-        darkFog.SetActive(false);
+        fogEffect.SetActive(false);
     }
 
     IEnumerator GetDamage(float howLongTime, int speed)

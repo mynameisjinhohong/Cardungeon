@@ -9,6 +9,6 @@ public class DarkFog_PCI : ItemData_PCI
     public override void OnInteracted(Player_HJH player)
     {
         base.OnInteracted(player);
-        player.DarkOn();
+        player.DarkOn(player.isMine);
     }
 }
