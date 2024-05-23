@@ -171,6 +171,10 @@ public class MainUI_HJH : MonoBehaviour
                 {
                     DeckListOff();
                 }
+                else if (bigMinimap.activeInHierarchy)
+                {
+                    MinimapChange();
+                }
             }
         }
         else
