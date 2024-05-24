@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -70,7 +71,9 @@ public class MainUI_HJH : MonoBehaviour
 
     public bool reRollNow = false;
 
-    public TMP_Text keysText;
+    public TMP_Text currentKeyText;
+    public TMP_Text maxKeyText;
+    public Image keyIcon;
     
     public GameObject lookaroundbuttons;
     bool gameOverBool = false;
@@ -977,10 +980,23 @@ public class MainUI_HJH : MonoBehaviour
     {
         try
         {
-            if (value < 4)
+            int displayedValue = value > 3 ? 3 : value;
+
+            if (value >= 3)
             {
-                keysText.text = $"*{value}/3";
+                currentKeyText.color = Color.green;
+                maxKeyText.color = Color.green;
+                
+                keyIcon.transform.DOShakePosition(0.5f, 10, 10, 90, false, true);
+                keyIcon.rectTransform.sizeDelta = new Vector2(1.2f, 1.2f);
             }
+            else
+            {
+                currentKeyText.color = Color.white;
+                maxKeyText.color = Color.red;
+            }
+            
+            currentKeyText.text = $"{displayedValue}/3";
         }
         catch (System.Exception e)
         {

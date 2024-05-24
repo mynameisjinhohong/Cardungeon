@@ -399,23 +399,49 @@ public class GamePlayManager : Singleton<GamePlayManager>
     // Update is called once per frame
     void Update()
     {
-        if (!isDataCheck) return;
-        
-        if (BackendManager.Instance.isMeSuperGamer)
+        try
         {
-            if (messageQueue.Count > 0)
+            if (!isDataCheck)
             {
-                Message m = messageQueue.Dequeue();
-                SendData(m);
-                //Debug.Log(m.playerIdx + "  " + m.cardIdx);
-                CardRealGo(m.playerIdx, m.cardIdx);
+                Debug.LogWarning("isDataCheck is false, skipping Update.");
+                return;
+            }
+
+            if (BackendManager.Instance == null)
+            {
+                Debug.LogError("BackendManager.Instance is null.");
+                return;
+            }
+
+            if (BackendManager.Instance.isMeSuperGamer)
+            {
+                if (messageQueue == null)
+                {
+                    Debug.LogError("messageQueue is null.");
+                    return;
+                }
+
+                if (messageQueue.Count > 0)
+                {
+                    Message m = messageQueue.Dequeue();
+                    if (m == null)
+                    {
+                        Debug.LogError("Dequeued message is null.");
+                        return;
+                    }
+
+                    SendData(m);
+                    Debug.Log($"Processing message for playerIdx: {m.playerIdx}, cardIdx: {m.cardIdx}");
+                    CardRealGo(m.playerIdx, m.cardIdx);
+                }
             }
         }
-
+        catch (System.Exception e)
+        {
+            Debug.LogError($"Exception in Update: {e}");
+        }
     }
-
-
-
+    
     //public void CardData(int cardIdx,int playerIdx )
     //{
     //    CardMessage msg;
