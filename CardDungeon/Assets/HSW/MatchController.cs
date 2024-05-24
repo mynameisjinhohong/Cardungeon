@@ -44,6 +44,7 @@ public class MatchController : Singleton<MatchController>
     public GameObject tutorialPanelObj;
     
     private Coroutine blinkCoroutine;
+    private Coroutine matchTextCoroutine;
     
     private void Awake()
     {
@@ -196,7 +197,10 @@ public class MatchController : Singleton<MatchController>
 
         if (index == 3)
         {
-            StartCoroutine(RandomTipTextCor());
+            if(matchTextCoroutine != null)
+                StopCoroutine(matchTextCoroutine);
+            
+            matchTextCoroutine = StartCoroutine(RandomTipTextCor());
         }
     }
 
