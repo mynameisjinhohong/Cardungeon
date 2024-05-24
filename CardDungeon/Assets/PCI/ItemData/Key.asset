@@ -18,3 +18,5 @@ MonoBehaviour:
   amount: 10
   sprites:
   - {fileID: 21300000, guid: 769c7e5176e854345b3f732f6c8a288b, type: 3}
+  announceAll: "\uB204\uAD70\uAC00\uAC00 \uC5F4\uC1E0\uB97C \uBAA8\uB450 \uBAA8\uC558\uC2B5\uB2C8\uB2E4!"
+  announceMe: "\uC5F4\uC1E0\uB97C \uBAA8\uB450 \uBAA8\uC558\uC2B5\uB2C8\uB2E4!"

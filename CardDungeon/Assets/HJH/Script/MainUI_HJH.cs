@@ -70,7 +70,7 @@ public class MainUI_HJH : MonoBehaviour
 
     public bool reRollNow = false;
 
-    public List<GameObject> keys = new List<GameObject>();
+    public TMP_Text keysText;
     
     public GameObject lookaroundbuttons;
     bool gameOverBool = false;
@@ -979,8 +979,7 @@ public class MainUI_HJH : MonoBehaviour
         {
             if (value < 4)
             {
-                keys[value - 1].SetActive(false);
-                keys[value + 2].SetActive(true);
+                keysText.text = $"*{value}/3";
             }
         }
         catch (System.Exception e)
