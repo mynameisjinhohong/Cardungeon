@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Unity.VisualScripting;
 using Random = UnityEngine.Random;
 using Range = DG.DemiLib.Range;
 
@@ -156,7 +157,17 @@ public class GameBoard_PCI : MonoBehaviour
         // Generate Items
         foreach (var item in itemList.itemDataList)
         {
-            int k = item.amount;
+            int k = 0;
+            
+            if (BackendManager.Instance.UserDataList.Count > 5)
+            {
+                k = item.amount * 2;
+            }
+            else
+            {
+                k = item.amount;
+            }
+            
             
             while (k != 0)
             {
@@ -333,5 +344,11 @@ public class GameBoard_PCI : MonoBehaviour
         chaserObj.GetComponent<Chaser>().StartChase();
         
         Debug.Log("추격 시작");
+        
+        GamePlayManager.Instance.mainUi.chaserWarning.SetActive(true);
+
+        yield return new WaitForSeconds(3);
+        
+        GamePlayManager.Instance.mainUi.chaserWarning.SetActive(false);
     }
 }

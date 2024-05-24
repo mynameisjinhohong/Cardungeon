@@ -18,7 +18,9 @@ public class CameraManager_HJH : MonoBehaviour
                 timer += Time.deltaTime;
                 yield return null;
             }
-            Camera.main.transform.position = startPos;
+
+            int userIndex = GamePlayManager.Instance.myIdx;
+            Camera.main.transform.position = GamePlayManager.Instance.players[userIndex].transform.position;
             isShaking = false;
         }
     }

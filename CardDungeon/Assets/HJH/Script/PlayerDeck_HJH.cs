@@ -20,6 +20,7 @@ public class PlayerDeck_HJH : MonoBehaviour
     public RectTransform trashPos;
     public GameObject[] cards;
     public GameObject[] cardTrash;
+    public List<Sprite> keyPadImageList;
     public List<Vector3> cardsAnc;
     public List<Vector3> cardsTrashAnc;
     public Ease ease = Ease.OutQuart;
@@ -41,7 +42,7 @@ public class PlayerDeck_HJH : MonoBehaviour
     {
         SuffelDeck();
         DrawFirst(0);
-
+        HandVisible();
     }
 
 
@@ -55,62 +56,88 @@ public class PlayerDeck_HJH : MonoBehaviour
         
         if(Input.GetKeyDown(KeyCode.Alpha1))
         {
+            if (hand.Count <= 0) return;
+            
             cards[0].GetComponent<Card_HJH>().OnBeginUseCard();
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
+            if (hand.Count <= 1) return;
+            
             cards[1].GetComponent<Card_HJH>().OnBeginUseCard();
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
+            if (hand.Count <= 2) return;
+            
             cards[2].GetComponent<Card_HJH>().OnBeginUseCard();
         }
         else if (Input.GetKeyDown(KeyCode.Alpha4))
         {
+            if (hand.Count <= 3) return;
+            
             cards[3].GetComponent<Card_HJH>().OnBeginUseCard();
         }
         else if (Input.GetKeyDown(KeyCode.Alpha5))
         {
+            if (hand.Count <= 4) return;
+            
             cards[4].GetComponent<Card_HJH>().OnBeginUseCard();
         }
         else if (Input.GetKeyDown(KeyCode.Alpha6))
         {
+            if (hand.Count <= 5) return;
+            
             cards[5].GetComponent<Card_HJH>().OnBeginUseCard();
         }
         else if (Input.GetKeyDown(KeyCode.Alpha7))
         {
+            if (hand.Count <= 6) return;
+            
             cards[6].GetComponent<Card_HJH>().OnBeginUseCard();
         }
         if(Input.GetKeyUp(KeyCode.Alpha1))
         {
+            if (hand.Count <= 0) return;
+            
             cards[0].GetComponent<Card_HJH>().EndUseCard(false);
         }
         else if (Input.GetKeyUp(KeyCode.Alpha2))
         {
+            if (hand.Count <= 1) return;
+            
             cards[1].GetComponent<Card_HJH>().EndUseCard(false);
         }
         else if (Input.GetKeyUp(KeyCode.Alpha3))
         {
+            if (hand.Count <= 2) return;
+            
             cards[2].GetComponent<Card_HJH>().EndUseCard(false);
         }
         else if (Input.GetKeyUp(KeyCode.Alpha4))
         {
+            if (hand.Count <= 3) return;
+            
             cards[3].GetComponent<Card_HJH>().EndUseCard(false);
         }
         else if (Input.GetKeyUp(KeyCode.Alpha5))
         {
+            if (hand.Count <= 4) return;
+            
             cards[4].GetComponent<Card_HJH>().EndUseCard(false);
 
         }
         else if (Input.GetKeyUp(KeyCode.Alpha6))
         {
+            if (hand.Count <= 5) return;
+            
             cards[5].GetComponent<Card_HJH>().EndUseCard(false);
-
         }
         else if (Input.GetKeyUp(KeyCode.Alpha7))
         {
+            if (hand.Count <= 6) return;
+            
             cards[6].GetComponent<Card_HJH>().EndUseCard(false);
-
         }
 
     }
@@ -134,6 +161,7 @@ public class PlayerDeck_HJH : MonoBehaviour
                     card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[hand[i]].useMP.ToString(); //나중에 변경
                     card.transform.GetChild(1).GetComponent<TMP_Text>().color = Color.white;
                     card.transform.GetChild(2).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[hand[i]].itemImage;
+                    card.GetComponent<Card_HJH>().keyPadImage.sprite = keyPadImageList[i];
                 }
                 else
                 {
@@ -146,6 +174,7 @@ public class PlayerDeck_HJH : MonoBehaviour
                     card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[-hand[i]].useMP.ToString(); //나중에 변경
                     card.transform.GetChild(1).GetComponent<TMP_Text>().color = Color.yellow;
                     card.transform.GetChild(2).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[-hand[i]].itemImage;
+                    card.GetComponent<Card_HJH>().keyPadImage.gameObject.SetActive(false);
                 }
 
             }

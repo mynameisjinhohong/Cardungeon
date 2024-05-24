@@ -15,6 +15,7 @@ public class Card_HJH : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
     public GameObject cardEffect;
     public GameObject[] tileEffect; // 0 - move, 1 - attack
     public List<GameObject> tileEffects;
+    public Image keyPadImage;
     #region �巡�� �� ���
 
     private void Update()

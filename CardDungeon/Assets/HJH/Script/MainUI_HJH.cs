@@ -29,6 +29,7 @@ public class MainUI_HJH : MonoBehaviour
     public ToastMsgContainer toastMsgContainer;
     public GameObject winImage;
     public TextMeshProUGUI winTypeText;
+    public GameObject chaserWarning;
 
     //카드 클릭했을 때 요소들
     public GameObject bigCard;

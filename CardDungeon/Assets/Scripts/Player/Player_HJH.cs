@@ -29,6 +29,7 @@ public class Player_HJH : MonoBehaviour
     bool shield = false;
     public Animator animator;
     public GameObject playerShadow;
+    public GameObject isMeIconObj;
     public SpriteRenderer sr;
     private int keys;
     public int Keys

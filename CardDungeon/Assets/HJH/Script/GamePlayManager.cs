@@ -102,6 +102,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
                 {
                     playerHjh.isMine = true;
                     mainUi.myPlayer = playerHjh;
+                    mainUi.myPlayer.isMeIconObj.SetActive(true);
                     mainUi.myPlayer.KeysOnValueChanged += mainUi.SetKeysUI;
                 }
                 playerHjh.PlayerToken = BackendManager.Instance.UserDataList[i].playerToken;
@@ -291,18 +292,18 @@ public class GamePlayManager : Singleton<GamePlayManager>
                                 case 0:
                                 case 1:
                                 case 2:
-                                    gameBoard.Generate(msg.cardIdx, 20, 20);
-                                    break;
                                 case 3:
                                 case 4:
                                 case 5:
+                                    gameBoard.Generate(msg.cardIdx, 20, 20);
+                                    break;
                                 case 6:
                                     gameBoard.Generate(msg.cardIdx, 30, 30);
                                     break;
                                 case 7:
                                 case 8:
                                 default:
-                                    gameBoard.Generate(msg.cardIdx, 40, 40);
+                                    gameBoard.Generate(msg.cardIdx, 30, 30);
                                     break;
                             }
                             CardManager.Instance.seed = msg.cardIdx;
