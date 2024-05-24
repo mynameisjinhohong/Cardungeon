@@ -295,10 +295,10 @@ public class GamePlayManager : Singleton<GamePlayManager>
                                 case 3:
                                 case 4:
                                 case 5:
-                                    gameBoard.Generate(msg.cardIdx, 20, 20);
+                                    gameBoard.Generate(msg.cardIdx, 14, 14);
                                     break;
                                 case 6:
-                                    gameBoard.Generate(msg.cardIdx, 30, 30);
+                                    gameBoard.Generate(msg.cardIdx, 20, 20);
                                     break;
                                 case 7:
                                 case 8:
