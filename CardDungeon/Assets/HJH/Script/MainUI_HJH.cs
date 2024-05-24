@@ -161,6 +161,21 @@ public class MainUI_HJH : MonoBehaviour
             {
                 playerDeck.ButtonReroll();
             }
+            else if(Input.GetKeyDown(KeyCode.Escape))
+            {
+                if (bigCard.activeInHierarchy)
+                {
+                    BigCardOff();
+                }
+                else if (deckList.activeInHierarchy)
+                {
+                    DeckListOff();
+                }
+                else if (bigMinimap.activeInHierarchy)
+                {
+                    MinimapChange();
+                }
+            }
         }
         else
         {
@@ -996,7 +1011,6 @@ public class MainUI_HJH : MonoBehaviour
 
     public void CardSelect(int cardIdx)
     {
-        Debug.Log(cardIdx);
         cardSelect.SetActive(true);
         nowCardIdx = cardIdx;
         cardSelectImg.sprite = CardManager.Instance.cardList.cards[cardIdx].bigCardType;
