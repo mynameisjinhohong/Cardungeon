@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -16,6 +17,10 @@ public class Card_HJH : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
     public List<GameObject> tileEffects;
     #region �巡�� �� ���
 
+    private void Update()
+    {
+    }
+
     void ChildRayCast(bool onOff)
     {
         GetComponent<Image>().raycastTarget = onOff;
@@ -23,7 +28,17 @@ public class Card_HJH : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
         transform.GetChild(1).GetComponent<TMP_Text>().raycastTarget = onOff;
         transform.GetChild(2).GetComponent<Image>().raycastTarget = onOff;
     }
-    void IBeginDragHandler.OnBeginDrag(UnityEngine.EventSystems.PointerEventData eventData)
+    void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
+    {
+        OnBeginUseCard();
+    }
+    void IDragHandler.OnDrag(PointerEventData eventData)
+    {
+        Vector2 currentPos = Camera.main.ScreenToWorldPoint(eventData.position);
+        transform.position = currentPos;
+    }
+
+    public void OnBeginUseCard()
     {
         defaultPos = gameObject.GetComponent<RectTransform>().anchoredPosition;
         ChildRayCast(false);
@@ -196,38 +211,61 @@ public class Card_HJH : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
         }
 
     }
-    void IDragHandler.OnDrag(UnityEngine.EventSystems.PointerEventData eventData)
-    {
-        Vector2 currentPos = Camera.main.ScreenToWorldPoint(eventData.position);
-        transform.position = currentPos;
-    }
-    void IEndDragHandler.OnEndDrag(UnityEngine.EventSystems.PointerEventData eventData)
+
+    public void EndUseCard(bool isDrag)
     {
         for(int i =0; i< tileEffects.Count; i++)
         {
             Destroy(tileEffects[i]);
         }
         tileEffects.Clear();
-        if (!EventSystem.current.IsPointerOverGameObject() && Mathf.Abs(((Vector2)gameObject.GetComponent<RectTransform>().anchoredPosition - defaultPos).magnitude) > 75)
+
+        if (isDrag)
         {
-            if (!playerDeck.UseCard(handIdx))
+            if (!EventSystem.current.IsPointerOverGameObject() && Mathf.Abs(((Vector2)gameObject.GetComponent<RectTransform>().anchoredPosition - defaultPos).magnitude) > 75)
             {
-                gameObject.GetComponent<RectTransform>().anchoredPosition = defaultPos;
-                ChildRayCast(true);
+                if (!playerDeck.UseCard(handIdx))
+                {
+                    Debug.Log(handIdx + "번 사용처리");
+                    gameObject.GetComponent<RectTransform>().anchoredPosition = defaultPos;
+                    ChildRayCast(true);
+                }
+                else
+                {
+                    Debug.Log(handIdx + "번 사용처리2");
+                    gameObject.GetComponent<RectTransform>().anchoredPosition = defaultPos;
+                    Instantiate(cardEffect, transform);
+                    ChildRayCast(true);
+                }
             }
             else
             {
                 gameObject.GetComponent<RectTransform>().anchoredPosition = defaultPos;
-                Instantiate(cardEffect, transform);
+                GetComponent<Image>().raycastTarget = true;
                 ChildRayCast(true);
             }
         }
         else
         {
-            gameObject.GetComponent<RectTransform>().anchoredPosition = defaultPos;
-            GetComponent<Image>().raycastTarget = true;
-            ChildRayCast(true);
+            if (!playerDeck.UseCard(handIdx))
+            {
+                Debug.Log(handIdx + "번 사용처리");
+                gameObject.GetComponent<RectTransform>().anchoredPosition = defaultPos;
+                ChildRayCast(true);
+            }
+            else
+            {
+                Debug.Log(handIdx + "번 사용처리2");
+                gameObject.GetComponent<RectTransform>().anchoredPosition = defaultPos;
+                Instantiate(cardEffect, transform);
+                ChildRayCast(true);
+            }
         }
+    }
+    
+    void IEndDragHandler.OnEndDrag(PointerEventData eventData)
+    {
+        EndUseCard(true);
     }
 
     public void OnClick()

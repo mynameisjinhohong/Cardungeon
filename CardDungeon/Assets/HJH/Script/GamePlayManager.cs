@@ -398,6 +398,8 @@ public class GamePlayManager : Singleton<GamePlayManager>
     // Update is called once per frame
     void Update()
     {
+        if (!isDataCheck) return;
+        
         if (BackendManager.Instance.isMeSuperGamer)
         {
             if (messageQueue.Count > 0)
@@ -533,7 +535,6 @@ public class GamePlayManager : Singleton<GamePlayManager>
         {
             btn.onClick.RemoveListener(GoTitle);
         }
-        SceneManager.LoadScene(0);
     }
     
     //재접속 코드 남겨둠

@@ -52,6 +52,65 @@ public class PlayerDeck_HJH : MonoBehaviour
         {
             Reroll();
         }
+        
+        if(Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            cards[0].GetComponent<Card_HJH>().OnBeginUseCard();
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            cards[1].GetComponent<Card_HJH>().OnBeginUseCard();
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            cards[2].GetComponent<Card_HJH>().OnBeginUseCard();
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            cards[3].GetComponent<Card_HJH>().OnBeginUseCard();
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            cards[4].GetComponent<Card_HJH>().OnBeginUseCard();
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha6))
+        {
+            cards[5].GetComponent<Card_HJH>().OnBeginUseCard();
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha7))
+        {
+            cards[6].GetComponent<Card_HJH>().OnBeginUseCard();
+        }
+        
+        
+        if(Input.GetKeyUp(KeyCode.Alpha1))
+        {
+            cards[1].GetComponent<Card_HJH>().EndUseCard(false);
+        }
+        else if (Input.GetKeyUp(KeyCode.Alpha2))
+        {
+            cards[2].GetComponent<Card_HJH>().EndUseCard(false);
+        }
+        else if (Input.GetKeyUp(KeyCode.Alpha3))
+        {
+            cards[3].GetComponent<Card_HJH>().EndUseCard(false);
+        }
+        else if (Input.GetKeyUp(KeyCode.Alpha4))
+        {
+            cards[4].GetComponent<Card_HJH>().EndUseCard(false);
+        }
+        else if (Input.GetKeyUp(KeyCode.Alpha5))
+        {
+            cards[5].GetComponent<Card_HJH>().EndUseCard(false);
+        }
+        else if (Input.GetKeyUp(KeyCode.Alpha6))
+        {
+            cards[6].GetComponent<Card_HJH>().EndUseCard(false);
+        }
+        else if (Input.GetKeyUp(KeyCode.Alpha7))
+        {
+            cards[7].GetComponent<Card_HJH>().EndUseCard(false);
+        }
 
     }
     #region 덱 관리 관련 스크립트
@@ -310,7 +369,6 @@ public class PlayerDeck_HJH : MonoBehaviour
 
     public void mpReroll()
     {
-
         if (GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].Mp > 0)
         {
             GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].Mp--;
@@ -327,20 +385,26 @@ public class PlayerDeck_HJH : MonoBehaviour
         {
             GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].Mp--;
         }
-
     }
 
 
     public bool UseCard(int handIdx)
     {
-        int a = hand[handIdx];
+        handIdx -= 1;
 
+        Debug.Log(handIdx+"인덱스번호");
+        int a = hand[handIdx];
+        
+        Debug.Log(a + "인덱스값의 카드");
+        
         if (GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].Mp >= CardManager.Instance.cardList.cards[Mathf.Abs(a)].useMP && CardManager.Instance.OnCardCheck(GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx], a) && !stun)
         {
             GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].Mp -= CardManager.Instance.cardList.cards[Mathf.Abs(a)].useMP;
             GamePlayManager.Instance.CardGo(GamePlayManager.Instance.myIdx, a);
             hand.RemoveAt(handIdx);
+            Debug.Log((handIdx + 1) +"번카드 삭제");
             trash.Add(a);
+            
             HandVisible();
             return true;
         }
