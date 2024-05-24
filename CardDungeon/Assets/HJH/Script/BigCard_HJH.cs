@@ -7,6 +7,8 @@ public class BigCard_HJH : MonoBehaviour
     public MainUI_HJH mainUi;
     public int idx;
     public bool imOn = false;
+    public bool isDeleteCard;
+    
     public void EnforceButton()
     {
         if (imOn)
@@ -41,4 +43,6 @@ public class BigCard_HJH : MonoBehaviour
             }
         }
     }
+    
+    
 }

@@ -20,7 +20,7 @@ public class PlayerDeck_HJH : MonoBehaviour
     public RectTransform trashPos;
     public GameObject[] cards;
     public GameObject[] cardTrash;
-    public List<Sprite> keyPadImageList;
+    public List<GameObject> keyPadImageList;
     public List<Vector3> cardsAnc;
     public List<Vector3> cardsTrashAnc;
     public Ease ease = Ease.OutQuart;
@@ -148,6 +148,8 @@ public class PlayerDeck_HJH : MonoBehaviour
         {
             if (i < hand.Count)
             {
+                keyPadImageList[i].SetActive(true);
+                
                 GameObject card = cards[i];
                 card.SetActive(true);
                 if (hand[i] > 0)
@@ -161,7 +163,6 @@ public class PlayerDeck_HJH : MonoBehaviour
                     card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[hand[i]].useMP.ToString(); //나중에 변경
                     card.transform.GetChild(1).GetComponent<TMP_Text>().color = Color.white;
                     card.transform.GetChild(2).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[hand[i]].itemImage;
-                    card.GetComponent<Card_HJH>().keyPadImage.sprite = keyPadImageList[i];
                 }
                 else
                 {
@@ -180,6 +181,8 @@ public class PlayerDeck_HJH : MonoBehaviour
             }
             else
             {
+                keyPadImageList[i].SetActive(false);
+                
                 GameObject card = cards[i];
                 card.SetActive(false);
             }
@@ -238,6 +241,8 @@ public class PlayerDeck_HJH : MonoBehaviour
         {
             if (i < hand.Count)
             {
+                keyPadImageList[i].SetActive(true);
+                
                 GameObject card = cards[i];
                 card.SetActive(true);
                 if (hand[i] > 0)
@@ -276,6 +281,7 @@ public class PlayerDeck_HJH : MonoBehaviour
             }
             else
             {
+                keyPadImageList[i].SetActive(false);
                 GameObject card = cards[i];
                 card.SetActive(false);
             }

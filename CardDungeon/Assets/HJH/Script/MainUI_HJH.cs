@@ -63,7 +63,8 @@ public class MainUI_HJH : MonoBehaviour
     public GameObject threeList;
     public GameObject twoList;
     public GameObject oneList;
-    public GameObject activeButton;
+    public GameObject cancelButton;
+    public TMP_Text functionTitleText;
     int cardSize = 0;
     //큰 미니맵 작은 미니맵
     public GameObject bigMinimap;
@@ -386,6 +387,8 @@ public class MainUI_HJH : MonoBehaviour
     }
     public void EnforceOn()
     {
+        functionTitleText.text = "카드 강화!";
+        
         int[] ran = RandomCard(false);
         Debug.Log(ran);
         if (ran != null)
@@ -425,6 +428,9 @@ public class MainUI_HJH : MonoBehaviour
                         break;
                 }
                 card.GetComponent<Button>().interactable = true;
+                card.GetComponent<Button>().onClick.RemoveAllListeners();
+                card.GetComponent<Button>().onClick.AddListener(EnforceEnd);
+                
                 card.GetComponent<BigCard_HJH>().idx = ran[i];
                 card.GetComponent<BigCard_HJH>().imOn = false;
                 card.transform.GetChild(4).gameObject.SetActive(false);
@@ -475,9 +481,9 @@ public class MainUI_HJH : MonoBehaviour
                 }
             }
             idx = 0;
-            activeButton.GetComponent<Button>().onClick.RemoveAllListeners();
-            activeButton.GetComponent<Button>().onClick.AddListener(EnforceEnd);
-            activeButton.transform.GetChild(0).GetComponent<TMP_Text>().text = "카드 강화하기";
+            cancelButton.GetComponent<Button>().onClick.RemoveAllListeners();
+            cancelButton.GetComponent<Button>().onClick.AddListener(EnforceOff);
+            cancelButton.transform.GetChild(0).GetComponent<TMP_Text>().text = "카드 강화 취소";
             allList.SetActive(true);
         }
         else
@@ -549,6 +555,8 @@ public class MainUI_HJH : MonoBehaviour
     }
     public void DeleteStart()
     {
+        functionTitleText.text = "카드 제거!";
+        
         int[] ran = RandomCard(true);
         allList.SetActive(true);
         switch (ran.Length)
@@ -585,6 +593,9 @@ public class MainUI_HJH : MonoBehaviour
                     break;
             }
             card.GetComponent<Button>().interactable = true;
+            card.GetComponent<Button>().onClick.RemoveAllListeners();
+            card.GetComponent<Button>().onClick.AddListener(DeleteEnd);
+            
             card.GetComponent<BigCard_HJH>().idx = ran[i];
             card.GetComponent<BigCard_HJH>().imOn = false;
             card.transform.GetChild(4).gameObject.SetActive(false);
@@ -635,10 +646,9 @@ public class MainUI_HJH : MonoBehaviour
             }
         }
         idx = 0;
-        activeButton.GetComponent<Button>().onClick.RemoveAllListeners();
-        activeButton.GetComponent<Button>().onClick.AddListener(DeleteEnd);
-        activeButton.transform.GetChild(0).GetComponent<TMP_Text>().text = "카드 삭제하기";
-        allList.SetActive(true);
+        cancelButton.GetComponent<Button>().onClick.RemoveAllListeners();
+        cancelButton.GetComponent<Button>().onClick.AddListener(EnforceOff);
+        cancelButton.transform.GetChild(0).GetComponent<TMP_Text>().text = "카드 삭제 취소";
     }
 
     public void DeleteEnd()
@@ -987,8 +997,7 @@ public class MainUI_HJH : MonoBehaviour
                 currentKeyText.color = Color.green;
                 maxKeyText.color = Color.green;
                 
-                keyIcon.transform.DOShakePosition(0.5f, 10, 10, 90, false, true);
-                keyIcon.rectTransform.sizeDelta = new Vector2(1.2f, 1.2f);
+                keyIcon.rectTransform.DOScale(new Vector2(1.2f, 1.2f), 0.5f).SetLoops(-1, LoopType.Yoyo);
             }
             else
             {
@@ -996,7 +1005,7 @@ public class MainUI_HJH : MonoBehaviour
                 maxKeyText.color = Color.red;
             }
             
-            currentKeyText.text = $"{displayedValue}/3";
+            currentKeyText.text = $"{displayedValue}";
         }
         catch (System.Exception e)
         {
