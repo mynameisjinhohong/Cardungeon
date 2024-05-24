@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class CardManager : Singleton<CardManager>
@@ -157,16 +158,6 @@ public class CardManager : Singleton<CardManager>
                 }
                 break;
             case 4:
-                if (cardIdx < 0)
-                {
-                    ret = GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y - 2));
-                }
-                else
-                {
-                    ret = GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y - 1));
-                }
-                break;
-            case 5:
                 if (cardIdx < 0)
                 {
                     ret = GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y - 2));
@@ -398,34 +389,27 @@ public class CardManager : Singleton<CardManager>
     {
         Vector3 playerTransform = player.transform.position;
         Random.InitState(seed);
-        int x = Random.Range(-1, 2);
-        int y = Random.Range(-1, 2);
-        if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x + x, (int)player.transform.position.y + y)))
+        int[] dx = { -1, 0, 1, -1, 1, -1, 0, 1 };
+        int[] dy = { -1, -1, -1, 0, 0, 1, 1, 1 };
+        List<int> list = new List<int>();
+        for(int i = 0; i < 8; i++)
         {
-            GamePlayManager.Instance.gameBoard.Interact(new Vector2Int((int)player.transform.position.x + x, (int)player.transform.position.y + y), player.GetComponent<Player_HJH>());
-            player.transform.position = new Vector3(player.transform.position.x + x, player.transform.position.y + y, player.transform.position.z);
-        }
-        else
-        {
-            for (int i = -1; i < 2; i++)
+            if(GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x + dx[i], (int)player.transform.position.y + dy[i])))
             {
-                for (int j = -1; j < 2; j++)
-                {
-                    if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x + j, (int)player.transform.position.y + i)))
-                    {
-                        GamePlayManager.Instance.gameBoard.Interact(new Vector2Int((int)player.transform.position.x + j, (int)player.transform.position.y + i), player.GetComponent<Player_HJH>());
-                        player.transform.position = new Vector3(player.transform.position.x + j, player.transform.position.y + i, player.transform.position.z);
-                    }
-                }
+                list.Add(i);
             }
         }
+        int rand = Random.Range(0, list.Count);
+        GamePlayManager.Instance.gameBoard.Interact(new Vector2Int((int)player.transform.position.x + dx[list[rand]], (int)player.transform.position.y + dy[list[rand]]), player.GetComponent<Player_HJH>());
+        player.transform.position = new Vector3(player.transform.position.x + dx[list[rand]], player.transform.position.y + dy[list[rand]], player.transform.position.z);
+
         Player_HJH p;
         if (player.TryGetComponent<Player_HJH>(out p))
         {
             GameObject shadow = Instantiate(p.playerShadow, playerTransform, Quaternion.identity);
             shadow.GetComponent<PlayerShadow_HJH>().StartFadeOut(p.animator);
             p.animator.Play("Walk");
-            if (x < 0) p.sr.flipX = false;
+            if (dx[rand] < 0) p.sr.flipX = false;
             else p.sr.flipX = true;
         }
         AudioPlayer.Instance.PlayClip(10);
@@ -436,27 +420,20 @@ public class CardManager : Singleton<CardManager>
     {
         Vector3 playerTransform = player.transform.position;
         Random.InitState(seed);
-        int x = Random.Range(-2, 3);
-        int y = Random.Range(-2, 3);
-        if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x + x, (int)player.transform.position.y + y)))
+        int[] dx = {-2, -1, 0, 1, 2, -2, -1, 0, 1, 2, -2, -1, 1, 2, -2, -1, 0, 1, 2, -2, -1, 0, 1, 2};
+        int[] dy = {-2, -2, -2, -2, -2, -1, -1, -1, -1, -1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2};
+        List<int> list = new List<int>();
+        for (int i = 0; i < 24; i++)
         {
-            GamePlayManager.Instance.gameBoard.Interact(new Vector2Int((int)player.transform.position.x + x, (int)player.transform.position.y + y), player.GetComponent<Player_HJH>());
-            player.transform.position = new Vector3(player.transform.position.x + x, player.transform.position.y + y, player.transform.position.z);
-        }
-        else
-        {
-            for (int i = -2; i < 3; i++)
+            if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x + dx[i], (int)player.transform.position.y + dy[i])))
             {
-                for (int j = -2; j < 3; j++)
-                {
-                    if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)player.transform.position.x + j, (int)player.transform.position.y + i)))
-                    {
-                        GamePlayManager.Instance.gameBoard.Interact(new Vector2Int((int)player.transform.position.x + j, (int)player.transform.position.y + i), player.GetComponent<Player_HJH>());
-                        player.transform.position = new Vector3(player.transform.position.x + j, player.transform.position.y + i, player.transform.position.z);
-                    }
-                }
+                list.Add(i);
             }
         }
+        int rand = Random.Range(0, list.Count);
+        GamePlayManager.Instance.gameBoard.Interact(new Vector2Int((int)player.transform.position.x + dx[list[rand]], (int)player.transform.position.y + dy[list[rand]]), player.GetComponent<Player_HJH>());
+        player.transform.position = new Vector3(player.transform.position.x + dx[list[rand]], player.transform.position.y + dy[list[rand]], player.transform.position.z);
+        
         Player_HJH p;
         if (player.TryGetComponent<Player_HJH>(out p))
         {
@@ -464,7 +441,7 @@ public class CardManager : Singleton<CardManager>
             shadow.GetComponent<PlayerShadow_HJH>().StartFadeOut(p.animator);
             p.animator.Play("Walk");
             
-            if (x < 0) p.sr.flipX = false;
+            if (dx[rand] < 0) p.sr.flipX = false;
             else p.sr.flipX = true;
         }
         AudioPlayer.Instance.PlayClip(10);
