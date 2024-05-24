@@ -219,6 +219,7 @@ public class Card_HJH : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
             Destroy(tileEffects[i]);
         }
         tileEffects.Clear();
+        Debug.Log(tileEffects.Count +" "+ gameObject.name);
 
         if (isDrag)
         {

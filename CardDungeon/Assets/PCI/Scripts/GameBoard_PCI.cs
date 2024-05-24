@@ -225,7 +225,7 @@ public class GameBoard_PCI : MonoBehaviour
 
         GamePlayManager.Instance.chaser = chaserObj.GetComponent<Chaser>();
 
-        //StartCoroutine(SuddenDeathTimer(chaserObj));
+        StartCoroutine(SuddenDeathTimer(chaserObj));
     }
 
     public void Clear()
