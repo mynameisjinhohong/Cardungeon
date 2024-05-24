@@ -331,18 +331,18 @@ public class GamePlayManager : Singleton<GamePlayManager>
                 case 0:
                 case 1:
                 case 2:
-                    gameBoard.Generate(m.cardIdx, 20, 20);
-                    break;
                 case 3:
                 case 4:
                 case 5:
+                    gameBoard.Generate(m.cardIdx, 14, 14);
+                    break;
                 case 6:
-                    gameBoard.Generate(m.cardIdx, 30, 30);
+                    gameBoard.Generate(m.cardIdx, 20, 20);
                     break;
                 case 7:
                 case 8:
                 default:
-                    gameBoard.Generate(m.cardIdx, 40, 40);
+                    gameBoard.Generate(m.cardIdx, 30, 30);
                     break;
             }
         }
