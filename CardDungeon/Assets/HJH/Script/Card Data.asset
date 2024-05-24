@@ -68,7 +68,7 @@ MonoBehaviour:
     description: "\uC544\uB798\uB85C \uD55C \uCE78\n\uC774\uB3D9\uD55C\uB2E4."
     cardIdx: 4
     enforceDescription: "\uC544\uB798\uB85C \uB450 \uCE78\n\uC774\uB3D9\uD55C\uB2E4."
-  - cardName: "\uD798\uAECF \uAE61\uCD1D"
+  - cardName: "\uB79C\uB364 \uAE61\uCD1D"
     useMP: 1
     cardType: {fileID: 21300000, guid: f6db1223d286f52428b38d93da6f7297, type: 3}
     bigCardType: {fileID: 21300000, guid: 04f0308d540937a4fab4f97e1a4a8431, type: 3}

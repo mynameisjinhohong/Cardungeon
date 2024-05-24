@@ -70,6 +70,7 @@ public class Player_HJH : MonoBehaviour
                 if (shield)
                 {
                     StopCoroutine(shieldCo);
+                    barrierPrefab.SetActive(false);
                     shield = false;
                 }
                 else
