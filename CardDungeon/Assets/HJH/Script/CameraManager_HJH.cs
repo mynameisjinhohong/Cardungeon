@@ -20,7 +20,7 @@ public class CameraManager_HJH : MonoBehaviour
             }
 
             int userIndex = GamePlayManager.Instance.myIdx;
-            Camera.main.transform.position = GamePlayManager.Instance.players[userIndex].transform.position;
+            Camera.main.transform.position = GamePlayManager.Instance.players[userIndex].transform.position + new Vector3(0.5f,0.5f,-10f);
             isShaking = false;
         }
     }
