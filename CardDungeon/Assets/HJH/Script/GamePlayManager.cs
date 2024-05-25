@@ -267,9 +267,9 @@ public class GamePlayManager : Singleton<GamePlayManager>
         }
         if (Backend.Match.OnMatchRelay == null)
         {
-            Backend.Match.OnMatchRelay = (MatchRelayEventArgs args) =>
+            Backend.Match.OnMatchRelay = (MatchRelayEventArgs args) => //서버로 보낸 메세지를 클라이언트에 콜백했을 때 호출되는 이벤트
             {
-                if (args.From.NickName == BackendManager.Instance.userInfo.Nickname)
+                if (args.From.NickName == BackendManager.Instance.userInfo.Nickname) //내가 나한테 보낸거면 무시해라
                 {
                     return;
                 }
@@ -282,9 +282,9 @@ public class GamePlayManager : Singleton<GamePlayManager>
                 }
                 else
                 {
-                    if (args.From.NickName == BackendManager.Instance.UserDataList[SuperGamerIdx].playerName)
+                    if (args.From.NickName == BackendManager.Instance.UserDataList[SuperGamerIdx].playerName) //지금 받은게 만약에 슈퍼게이머가 보낸거면
                     {
-                        if (msg.playerIdx == -10)
+                        if (msg.playerIdx == -10) //-10 플레이어 인덱스를 보내면 맵을 생성한다.
                         {
                             int head = BackendManager.Instance.UserDataList.Count;
                             switch (head)
@@ -311,7 +311,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
                         else
                         {
                             Debug.Log(msg.playerIdx + "  " + msg.cardIdx);
-                            CardRealGo(msg.playerIdx, msg.cardIdx);
+                            CardRealGo(msg.playerIdx, msg.cardIdx); //특정 카드를 사용한 플레이어를 받아서 실제 실행
                         }
                     }
                 }
