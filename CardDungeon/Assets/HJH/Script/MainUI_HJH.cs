@@ -427,12 +427,14 @@ public class MainUI_HJH : MonoBehaviour
                         card = threeList.transform.GetChild(i).gameObject;
                         break;
                 }
+                BigCard_HJH bigCard;
                 card.GetComponent<Button>().interactable = true;
                 card.GetComponent<Button>().onClick.RemoveAllListeners();
                 card.GetComponent<Button>().onClick.AddListener(EnforceEnd);
-                
-                card.GetComponent<BigCard_HJH>().idx = ran[i];
-                card.GetComponent<BigCard_HJH>().imOn = false;
+                bigCard = card.GetComponent<BigCard_HJH>();
+                bigCard.idx = ran[i];
+                bigCard.imOn = false;
+                bigCard.isDeleteCard = false;
                 card.transform.GetChild(4).gameObject.SetActive(false);
                 card.transform.GetChild(5).gameObject.SetActive(false);
                 if (ran[i] >= playerDeck.hand.Count + playerDeck.deck.Count)
@@ -595,9 +597,11 @@ public class MainUI_HJH : MonoBehaviour
             card.GetComponent<Button>().interactable = true;
             card.GetComponent<Button>().onClick.RemoveAllListeners();
             card.GetComponent<Button>().onClick.AddListener(DeleteEnd);
-            
-            card.GetComponent<BigCard_HJH>().idx = ran[i];
-            card.GetComponent<BigCard_HJH>().imOn = false;
+            BigCard_HJH bigCard;
+            bigCard = card.GetComponent<BigCard_HJH>();
+            bigCard.idx = ran[i];
+            bigCard.imOn = false;
+            bigCard.isDeleteCard = true;
             card.transform.GetChild(4).gameObject.SetActive(false);
             card.transform.GetChild(5).gameObject.SetActive(false);
             if (ran[i] >= playerDeck.hand.Count + playerDeck.deck.Count)

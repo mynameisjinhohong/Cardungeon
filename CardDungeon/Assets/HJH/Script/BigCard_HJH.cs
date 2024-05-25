@@ -12,17 +12,31 @@ public class BigCard_HJH : MonoBehaviour
     public void EnforceButton()
     {
         if (imOn)
-        {
-            Debug.Log(idx);
-            if (mainUi != null)
+        {   if(!isDeleteCard)
             {
-                mainUi.EnforceEnd();
+                if (mainUi != null)
+                {
+                    mainUi.EnforceEnd();
+                }
+                else
+                {
+                    mainUi = GamePlayManager.Instance.mainUi;
+                    mainUi.EnforceEnd();
+                }
             }
             else
             {
-                mainUi = GamePlayManager.Instance.mainUi;
-                mainUi.EnforceEnd();
+                if (mainUi != null)
+                {
+                    mainUi.DeleteEnd();
+                }
+                else
+                {
+                    mainUi = GamePlayManager.Instance.mainUi;
+                    mainUi.DeleteEnd();
+                }
             }
+
         }
         else
         {
