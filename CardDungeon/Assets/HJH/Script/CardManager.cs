@@ -603,14 +603,20 @@ public class CardManager : Singleton<CardManager>
     //Ä«µå 2Àå »Ì±â
     void Idx11Func(Transform player)
     {
-        GamePlayManager.Instance.playerDeck.DrawOne();
-        GamePlayManager.Instance.playerDeck.DrawOne();
+        if (player.gameObject.GetComponent<Player_HJH>().isMine)
+        {
+            GamePlayManager.Instance.playerDeck.DrawOne();
+            GamePlayManager.Instance.playerDeck.DrawOne();
+        }
     }
     //Ä«µå 3Àå »Ì±â
     void Idx11EnforceFunc(Transform player)
     {
-        GamePlayManager.Instance.playerDeck.DrawOne();
-        GamePlayManager.Instance.playerDeck.DrawOne();
-        GamePlayManager.Instance.playerDeck.DrawOne();
+        if (player.gameObject.GetComponent<Player_HJH>().isMine)
+        {
+            GamePlayManager.Instance.playerDeck.DrawOne();
+            GamePlayManager.Instance.playerDeck.DrawOne();
+            GamePlayManager.Instance.playerDeck.DrawOne();
+        }
     }
 }
