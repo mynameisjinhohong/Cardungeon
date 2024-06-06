@@ -12,7 +12,8 @@ public class BigCard_HJH : MonoBehaviour
     public void EnforceButton()
     {
         if (imOn)
-        {   if(!isDeleteCard)
+        {
+            if(!isDeleteCard) //만약에 카드 강화면
             {
                 if (mainUi != null)
                 {
@@ -24,7 +25,7 @@ public class BigCard_HJH : MonoBehaviour
                     mainUi.EnforceEnd();
                 }
             }
-            else
+            else //만약에 카드 삭제면
             {
                 if (mainUi != null)
                 {
@@ -45,13 +46,21 @@ public class BigCard_HJH : MonoBehaviour
                 if (transform.parent.GetChild(i) == transform)
                 {
                     transform.GetChild(4).gameObject.SetActive(true);
-                    transform.GetChild(5).gameObject.SetActive(true);
                     imOn = true;
+                    if (isDeleteCard)
+                    {
+                        transform.GetChild(6).gameObject.SetActive(true);
+                    }
+                    else
+                    {
+                        transform.GetChild(5).gameObject.SetActive(true);
+                    }
                 }
                 else
                 {
                     transform.parent.GetChild(i).GetChild(4).gameObject.SetActive(false);
                     transform.parent.GetChild(i).GetChild(5).gameObject.SetActive(false);
+                    transform.parent.GetChild(i).GetChild(6).gameObject.SetActive(false);
                     transform.parent.GetChild(i).GetComponent<BigCard_HJH>().imOn = false;
                 }
             }
