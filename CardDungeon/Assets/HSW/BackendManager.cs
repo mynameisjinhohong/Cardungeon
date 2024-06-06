@@ -564,8 +564,12 @@ public class BackendManager : Singleton<BackendManager>
     public void JoinMatchMakingServer()
     {
         Debug.Log("서버접속 시도");
-
-        Backend.Match.OnException = (Exception e) => { MatchController.Instance.ChangeUI(3); };
+        
+        Backend.Match.OnException = (Exception e) =>
+        {
+            MatchController.Instance.ChangeUI(3);
+            UserDataList.Clear();
+        };
 
         Backend.Match.OnJoinMatchMakingServer = (JoinChannelEventArgs args) => {
             Debug.Log(args.ErrInfo);
@@ -651,6 +655,8 @@ public class BackendManager : Singleton<BackendManager>
                         Debug.Log($"{second}초 뒤에 샌드박스 활성화가 됩니다.");
                         StartCoroutine(WaitFor10Seconds(second));
                     }
+                    
+                    UserDataList.Clear();
                 }
             } else if (args.ErrInfo == ErrorCode.Success) {
                 Debug.Log("3-3. OnMatchMakingResponse 매칭 성사 완료");
@@ -871,7 +877,7 @@ public class BackendManager : Singleton<BackendManager>
 
     public void JoinGameServer(MatchInGameRoomInfo gameRoomInfo) {
         
-        Backend.Match.OnSessionJoinInServer += (args) => {
+        Backend.Match.OnSessionJoinInServer = (args) => {
             Debug.Log(args.Session.NickName + "님이 인게임 서버 접속 요청");
             Debug.Log("4-1. JoinGameServer 인게임 서버 접속 요청");
             LeaveMatchMaking();
@@ -947,7 +953,9 @@ public class BackendManager : Singleton<BackendManager>
             ? allMatchCardList[matchIndex].matchHeadCount
             : (allMatchCardList[matchIndex].matchHeadCount / 2);
 
-        if (CheckHeadCount >= UserDataList.Count)
+        Debug.Log(CheckHeadCount + "몇명 접속완료해야함");
+        
+        if (CheckHeadCount >= UserDataList.Count + 1)
         {
             Backend.Match.OnMatchInGameStart = () => {
                 Debug.Log("전체 인원 연결 완료 인게임씬으로 이동 후 대기시간 이 후 게임 시작");
@@ -1304,10 +1312,11 @@ public class BackendManager : Singleton<BackendManager>
         });
     }
 
-    private void FindTeamMatchCard(int headCount)
+    public void FindTeamMatchCard(int headCount)
     {
         int findValue = headCount * 2;
 
+        //팀매치 카드와 인원 * 2로 조회
         for (int i = 0; i < allMatchCardList.Count; i++)
         {
             if (allMatchCardList[i].matchHeadCount == findValue &&

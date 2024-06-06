@@ -226,7 +226,10 @@ public class MatchController : Singleton<MatchController>
             }
         }
 
-        lobbyScript.userCount.text = BackendManager.Instance.UserDataList.Count + "/" + 5; 
+        lobbyScript.userCount.text = BackendManager.Instance.UserDataList.Count + "/" + 5;
+        
+        //여기말고 매치인덱스 맞춰줄수있는곳만 찾으면끝
+        //BackendManager.Instance.FindTeamMatchCard(BackendManager.Instance.UserDataList.Count);
     }
     
     IEnumerator RandomTipTextCor()
