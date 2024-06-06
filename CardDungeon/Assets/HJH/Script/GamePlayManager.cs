@@ -553,11 +553,16 @@ public class GamePlayManager : Singleton<GamePlayManager>
         string esacpeWin = "Å»Ãâ ¼º°ø!";
 
         mainUi.winTypeText.text = isEscape ? esacpeWin : allKillWin;
+
+        BackendManager.Instance.winUser = BackendManager.Instance.userInfo.Nickname;
     }
 
     public void GoTitle()
     {
         mainUi.winImage.SetActive(false);
+
+        BackendManager.Instance.MatchEnd();
+
         if (mainUi.winImage.TryGetComponent<Button>(out Button btn))
         {
             btn.onClick.RemoveListener(GoTitle);

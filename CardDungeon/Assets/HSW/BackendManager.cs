@@ -34,6 +34,8 @@ public class BackendManager : Singleton<BackendManager>
     public bool isMatching = false;
     public bool isMeSuperGamer = false;
 
+    public string winUser = "";
+
     [Header("전체 유저 데이터 리스트")] 
     public List<UserData> UserDataList;
     
@@ -41,6 +43,8 @@ public class BackendManager : Singleton<BackendManager>
     //public RoomSettingData roomSettingData;
 
     public bool isFastMatch;
+
+    public bool isPlayedUser;
 
     public string inviterName;
     
@@ -59,11 +63,12 @@ public class BackendManager : Singleton<BackendManager>
     {
         if (instance != null)
         {
-            Destroy(instance);
+            Destroy(gameObject);
+            return;
         }
         instance = this;
         // 모든 씬에서 유지
-        DontDestroyOnLoad(this.gameObject);
+        DontDestroyOnLoad(gameObject);
         //SetResolution();
 
         if (!PlayerPrefs.HasKey("UseAutoLogin"))
@@ -178,7 +183,24 @@ public class BackendManager : Singleton<BackendManager>
         }
         
     }
-    
+
+    public void ResetInGameData()
+    {
+        isLoadGame = false;
+        isMatching = false;
+        isMeSuperGamer = false;
+        isFastMatch = false;
+        isPlayedUser = false;
+
+        matchIndex = 0;
+
+        inviterName = "";
+        winUser = "";
+
+        UserDataList.Clear();
+        allMatchCardList.Clear();
+    }
+
     public void CheckLoginWayData()
     {
         if (PlayerPrefs.HasKey("LoginWay"))
@@ -868,27 +890,18 @@ public class BackendManager : Singleton<BackendManager>
     }
 
     public void JoinGameServer(MatchInGameRoomInfo gameRoomInfo) {
-        
-        Backend.Match.OnSessionJoinInServer += (args) => {
-            LeaveMatchMaking();
-            JoinGameRoom();
-            SceneManager.LoadScene(1);
-        };
-        
-        // Backend.Match.OnSessionJoinInServer = (JoinChannelEventArgs args) => {
-        //     if (args.ErrInfo == ErrorInfo.Success) {
-        //         Debug.Log("4-2. OnSessionJoinInServer 게임 서버 접속 성공 : " + args.ToString());
-        //         Debug.Log("이제 게임방에 접속할 수 있습니다!");
-        //     } else {
-        //         Debug.LogError("4-2. OnSessionJoinInServer 게임 서버 접속 실패 : " + args.ToString());
-        //         JoinGameServer(gameRoomInfo);
-        //     }
-        //     
-        //     // 게임 서버에 정상적으로 접속했으면 매칭 서버를 종료
-        //
-        // };
 
-        Debug.Log("4-1. JoinGameServer 인게임 서버 접속 요청");
+        if (!isPlayedUser)
+        {
+            Backend.Match.OnSessionJoinInServer += (args) => {
+
+                Debug.Log("4-1. JoinGameServer 인게임 서버 접속 요청");
+                LeaveMatchMaking();
+                JoinGameRoom();
+                SceneManager.LoadScene(1);
+                isPlayedUser = true;
+            };
+        }
         
         currentGameRoomInfo = gameRoomInfo;
         ErrorInfo errorInfo = null;
@@ -1039,8 +1052,10 @@ public class BackendManager : Singleton<BackendManager>
         matchGameResult.m_losers = new List<SessionId>();
         
         foreach (var session in inGameUserList) {
-            // 순서는 무관합니다.
-            matchGameResult.m_winners.Add(session.Value.m_sessionId);
+            if(session.Value.m_nickname == winUser)
+                matchGameResult.m_winners.Add(session.Value.m_sessionId);
+            else
+                matchGameResult.m_losers.Add(session.Value.m_sessionId);
         }
         
         Backend.Match.MatchEnd(matchGameResult);

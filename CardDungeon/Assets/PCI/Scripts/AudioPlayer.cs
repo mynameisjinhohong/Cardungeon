@@ -15,7 +15,7 @@ public class AudioPlayer : Singleton<AudioPlayer>
             Destroy(gameObject);
         }
         instance = this;
-        DontDestroyOnLoad(this.gameObject);
+        DontDestroyOnLoad(gameObject);
     }
 
     private void Update()
@@ -32,13 +32,13 @@ public class AudioPlayer : Singleton<AudioPlayer>
         }
     }
 
-    // ¿Ã∫•∆Æ ∏ÆΩ∫≥  µÓ∑œ
+    // Ïù¥Î≤§Ìä∏ Î¶¨Ïä§ÎÑà Îì±Î°ù
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    // ¿Ã∫•∆Æ ∏ÆΩ∫≥  ¡¶∞≈
+    // Ïù¥Î≤§Ìä∏ Î¶¨Ïä§ÎÑà Ï†úÍ±∞
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;

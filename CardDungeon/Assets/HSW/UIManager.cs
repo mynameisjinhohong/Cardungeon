@@ -46,11 +46,11 @@ public class UIManager : Singleton<UIManager>
     {
         if (instance != null)
         {
-            Destroy(instance);
+            Destroy(gameObject);
         }
         instance = this;
         // 모든 씬에서 유지
-        DontDestroyOnLoad(this.gameObject);
+        DontDestroyOnLoad(gameObject);
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)

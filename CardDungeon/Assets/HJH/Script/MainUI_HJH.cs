@@ -44,6 +44,8 @@ public class MainUI_HJH : MonoBehaviour
     public GameObject deckList;
     public GameObject dectContent;
     public GameObject cardPrefab;
+    public GameObject keyPadImageListObj;
+    
     public TMP_Text endText;
     int idx = 0;
 
@@ -94,6 +96,12 @@ public class MainUI_HJH : MonoBehaviour
     void Start()
     {
         StartCoroutine(ToonStart());
+        
+#if UNITY_STANDALONE_WIN
+        keyPadImageListObj.SetActive(true);
+#elif PLATFORM_ANDROID
+        keyPadImageListObj.SetActive(false);
+#endif
     }
 
     IEnumerator ToonStart()
@@ -863,6 +871,8 @@ public class MainUI_HJH : MonoBehaviour
     }
     public void GotoLobby()
     {
+        BackendManager.Instance.MatchEnd();
+        
         SceneManager.LoadScene(0);
     }
     public void LookAround()

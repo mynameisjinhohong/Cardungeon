@@ -74,12 +74,12 @@ public class MatchController : Singleton<MatchController>
     {
         if(_backendManager.checkLoginWayData != -1 && BackendManager.Instance.UseAutoLogin)
         {
-            Debug.Log("자동로그인 실행 테스트");
+            Debug.Log("자동로그인 실행");
             _backendManager.StartTokenLogin();
         }
         else
         {
-            Debug.Log("로그인 정보 없음");
+            Debug.Log("자동 로그인 꺼진 상태");
             TryLogin();
         }
     }
@@ -88,6 +88,7 @@ public class MatchController : Singleton<MatchController>
     {
         readyToPlay.gameObject.SetActive(false);
         LoginButtonListObj.gameObject.SetActive(true);
+        loginCheckButton.enabled = false;
     }
 
     public void ChangeUI(int index)
@@ -309,11 +310,20 @@ public class MatchController : Singleton<MatchController>
     {
         yield return new WaitUntil(() => _backendManager.isInitialize);
 
-        readyToPlay.gameObject.SetActive(true);
+        if (!_backendManager.isPlayedUser)
+        {
+            readyToPlay.gameObject.SetActive(true);
 
-        loginCheckButton.interactable = true;
-        
-        DataManager.Instance.Initialize();
+            loginCheckButton.interactable = true;
+
+            DataManager.Instance.Initialize();
+        }
+        else
+        {
+            ChangeUI(1);
+
+            _backendManager.ResetInGameData();
+        }
     }
 
     IEnumerator WaitMatchList()

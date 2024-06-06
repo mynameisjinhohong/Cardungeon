@@ -4241,6 +4241,7 @@ MonoBehaviour:
   deckList: {fileID: 704791869}
   dectContent: {fileID: 1317725566}
   cardPrefab: {fileID: 8574994598966932390, guid: 1ce410061526eff428e8fda2c10e6d4d, type: 3}
+  keyPadImageListObj: {fileID: 890549426}
   endText: {fileID: 689745227}
   icons:
   - {fileID: 21300000, guid: 1b0f3ec90c9b57d45a719df4b7fc1347, type: 3}

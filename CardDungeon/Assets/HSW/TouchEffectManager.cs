@@ -22,11 +22,11 @@ public class TouchEffectManager : Singleton<TouchEffectManager>
     {
         if (instance != null)
         {
-            Destroy(instance);
+            Destroy(gameObject);
         }
         instance = this;
         // 모든 씬에서 유지
-        DontDestroyOnLoad(this.gameObject);
+        DontDestroyOnLoad(gameObject);
     }
     
     void Update()
