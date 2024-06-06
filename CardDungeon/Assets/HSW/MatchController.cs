@@ -1,14 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Assets.SimpleGoogleSignIn.Scripts;
 using BackEnd;
 using BackEnd.Tcp;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -109,6 +106,8 @@ public class MatchController : Singleton<MatchController>
         
         if (index == 1)
         {
+            _backendManager.GetMatchList();
+            
             userNickNameText.text = BackendManager.Instance.userInfo.Nickname;
             
             blinkCoroutine = StartCoroutine(RabbitBlinkEye());
@@ -249,8 +248,6 @@ public class MatchController : Singleton<MatchController>
 
     public void CreateRoom()
     {
-        _backendManager.GetMatchList();
-
         _backendManager.CreateMatchRoom();
 
         BackendManager.Instance.UserDataList.Clear();
@@ -270,42 +267,6 @@ public class MatchController : Singleton<MatchController>
         ChangeUI(1);
     }
 
-    // public void FindMatchIndex()
-    // {
-    //     StartCoroutine(FindMatchIndexCor());
-    // }
-    //
-    // IEnumerator FindMatchIndexCor()
-    // {
-    //     yield return new WaitUntil(() => _backendManager.matchCardList.Count >= 7);
-    //
-    //     for (int i = 0; i < _backendManager.matchCardList.Count; i++)
-    //     {
-    //         if (_backendManager.matchCardList[i].matchHeadCount == BackendManager.Instance.UserDataList.Count * 2)
-    //         {
-    //             _backendManager.matchIndex = i;
-    //             
-    //             Debug.Log(i + "번째 매치카드 선택됨");
-    //             _backendManager.roomSettingData.roomIndexNum = i;
-    //         }
-    //     }
-    // }
-
-    public void FastMatch()
-    {
-        _backendManager.isFastMatch = true;
-        
-        _backendManager.GetMatchList();
-
-        _backendManager.matchIndex = 10;
-        
-        //_backendManager.roomSettingData.roomHeadCount = 2;
-
-        //_backendManager.roomSettingData.roomIndexNum = 0;
-
-        StartCoroutine(WaitMatchList());
-    }
-    
     IEnumerator WaitInitDataCor()
     {
         yield return new WaitUntil(() => _backendManager.isInitialize);
@@ -326,13 +287,6 @@ public class MatchController : Singleton<MatchController>
         }
     }
 
-    IEnumerator WaitMatchList()
-    {
-        yield return new WaitUntil(() => _backendManager.allMatchCardList.Count >= 11);
-        
-        _backendManager.CreateMatchRoom();
-    }
-    
     public void MatchCancel()
     {
         Backend.Match.CancelMatchMaking();

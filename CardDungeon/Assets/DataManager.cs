@@ -8,6 +8,8 @@ using UnityEngine;
 
 public class DataManager : Singleton<DataManager>
 {
+    private static DataManager instance;
+    
     public bool LoadStatus = false;
     
     public SystemLanguage systemLanguage;
@@ -26,6 +28,16 @@ public class DataManager : Singleton<DataManager>
     private bool isChangeServerTime = false;
     private float oldTime = 0;
     private DateTime serverTime;
+    
+    void Awake()
+    {
+        if (instance != null)
+        {
+            Destroy(gameObject);
+        }
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
     
     public void Initialize()
     {

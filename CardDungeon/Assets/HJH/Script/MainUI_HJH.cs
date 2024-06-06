@@ -871,8 +871,6 @@ public class MainUI_HJH : MonoBehaviour
     }
     public void GotoLobby()
     {
-        BackendManager.Instance.MatchEnd();
-        
         SceneManager.LoadScene(0);
     }
     public void LookAround()

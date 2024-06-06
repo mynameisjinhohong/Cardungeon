@@ -41,6 +41,8 @@ public class UIManager : Singleton<UIManager>
     public GameObject SettingPopupPrefab;
 
     public GameObject TutorialPopupPrefab;
+
+    public GameObject FastMatchingPopupPrefab;
     
     private void Awake()
     {
@@ -72,7 +74,14 @@ public class UIManager : Singleton<UIManager>
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            PopupListPop();
+            if (CurrentPopup.GetComponent<FastMatchUI>())
+            {
+                CurrentPopup.GetComponent<FastMatchUI>().CloseBtnAction();
+            }
+            else
+            {
+                PopupListPop();
+            }
         }
     }
 
@@ -127,7 +136,7 @@ public class UIManager : Singleton<UIManager>
             if (CurrentPopup != null && CurrentPopup.activeSelf)
             {
                 Destroy(CurrentPopup);
-                
+                    
                 PopupList.RemoveAt(PopupList.Count - 1);
 
                 if (PopupList.Count > 0)
@@ -195,5 +204,16 @@ public class UIManager : Singleton<UIManager>
         target.InvitedRoomToken = roomToken;
 
         PopupListAddABB(Popup, PopupListPop);
+    }
+
+    public void OpenAnimationUI(GameObject animatedUI)
+    {
+        GameObject targetUIObj = Instantiate(animatedUI, PopupListParent);
+        
+        PopupListAddABB(targetUIObj, PopupListPop);
+        
+        FastMatchUI targetUI = targetUIObj.GetComponent<FastMatchUI>();
+
+        targetUI.DoPanelAnim(true);
     }
 }

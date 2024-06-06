@@ -32,9 +32,8 @@ public class GamePlayManager : Singleton<GamePlayManager>
     // Start is called before the first frame update
     void Start()
     {
-        //SetResolution();
-        BackendManager.Instance.UserDataList.Clear();
-        
+        BackendManager.Instance.DoClassChoiceTime();
+
         StartCoroutine(WaitforGameStart());
     }
 
