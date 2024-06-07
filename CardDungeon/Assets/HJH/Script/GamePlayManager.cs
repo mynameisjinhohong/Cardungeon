@@ -20,7 +20,6 @@ public class GamePlayManager : Singleton<GamePlayManager>
     public GameBoard_PCI gameBoard;
     public GameObject playerPool;
     public Transform[] PlayerSpawnPosition;
-    public bool isDataCheck = false;
     #region 호스트
     public Queue<Message> messageQueue;
     #endregion
@@ -28,13 +27,35 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
     public GameObject chaserObj;
     public Chaser chaser;
+
+    public int classSelectedUser;
     
     // Start is called before the first frame update
     void Start()
     {
+        classSelectedUser = 0;
+        
         BackendManager.Instance.DoClassChoiceTime();
 
-        StartCoroutine(WaitforGameStart());
+        // 넘어온 정보를 토대로 유저 리스트 인덱스 정렬
+        BackendManager.Instance.UserDataList.Sort((UserData lhs, UserData rhs) =>
+        {
+            if (int.Parse(lhs.playerToken) < int.Parse(rhs.playerToken))
+            {
+                return 1;
+            }
+            else if (lhs.playerToken == rhs.playerToken)
+            {
+                return 0;
+            }
+            else
+            {
+                return -1;
+            }
+        });
+        
+        // 정렬된 인덱스로 플레이어 생성
+        DataInit();
     }
 
     public void SetResolution()
@@ -57,31 +78,6 @@ public class GamePlayManager : Singleton<GamePlayManager>
             float newHeight = ((float)deviceWidth / deviceHeight) / ((float)setWidth / setHeight); // 새로운 높이
             Camera.main.rect = new Rect(0f, (1f - newHeight) / 2f, 1f, newHeight); // 새로운 Rect 적용
         }
-    }
-    IEnumerator WaitforGameStart()
-    {
-        yield return new WaitUntil(() => BackendManager.Instance.isLoadGame);
-        BackendManager.Instance.UserDataList.Sort((UserData lhs, UserData rhs) =>
-        {
-            if (int.Parse(lhs.playerToken) < int.Parse(rhs.playerToken))
-            {
-                return 1;
-            }
-            else if (lhs.playerToken == rhs.playerToken)
-            {
-                return 0;
-            }
-            else
-            {
-                return -1;
-            }
-        });
-        DataInit();
-
-        yield return new WaitUntil(() => isDataCheck);
-
-        InitializeGame();
-        //서버랑 소통하고 나서 로컬 플레이어의 인덱스를 받아왔다는 가정 하에 코드 작성
     }
 
     public void DataInit()
@@ -132,7 +128,8 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
         mainUi.playerBG.color = colorList[myIdx];
         
-        isDataCheck = true;
+        // 플레이어 생성 완료 후 맵 생성 준비
+        InitializeGame();
     }
     public bool CardIdxCheckNoPlayer(int cardIdx, Transform playerPos)
     {
@@ -240,8 +237,6 @@ public class GamePlayManager : Singleton<GamePlayManager>
             }
         }
         return CheckNoPlayer(goPos);
-
-
     }
 
 
@@ -260,18 +255,11 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
     public void InitializeGame()
     {
-        if (BackendManager.Instance.isMeSuperGamer)
-        {
-            messageQueue = new Queue<Message>();
-        }
-        if (Backend.Match.OnMatchRelay == null)
-        {
-            Backend.Match.OnMatchRelay = (MatchRelayEventArgs args) => //서버로 보낸 메세지를 클라이언트에 콜백했을 때 호출되는 이벤트
+        // 서버에서 오는 메세지 수신할 준비
+        Backend.Match.OnMatchRelay = (MatchRelayEventArgs args) => //서버로 보낸 메세지를 클라이언트에 콜백했을 때 호출되는 이벤트
             {
-                if (args.From.NickName == BackendManager.Instance.userInfo.Nickname) //내가 나한테 보낸거면 무시해라
-                {
-                    return;
-                }
+                if (args.From.NickName == BackendManager.Instance.userInfo.Nickname) return;
+
                 var strByte = System.Text.Encoding.Default.GetString(args.BinaryUserData);
                 Message msg = JsonUtility.FromJson<Message>(strByte);
 
@@ -283,24 +271,28 @@ public class GamePlayManager : Singleton<GamePlayManager>
                 {
                     if (args.From.NickName == BackendManager.Instance.UserDataList[SuperGamerIdx].playerName) //지금 받은게 만약에 슈퍼게이머가 보낸거면
                     {
-                        if (msg.playerIdx == -10) //-10 플레이어 인덱스를 보내면 맵을 생성한다.
+                        if (msg.playerIdx == -10) //-10 플레이어 인덱스를 받으면 맵을 생성한다.
                         {
                             int head = BackendManager.Instance.UserDataList.Count;
                             switch (head)
                             {
-                                case 0:
-                                case 1:
                                 case 2:
+                                    gameBoard.Generate(msg.cardIdx, 12, 12);
+                                    break;
                                 case 3:
+                                    gameBoard.Generate(msg.cardIdx, 14, 14);
+                                    break;
                                 case 4:
+                                    gameBoard.Generate(msg.cardIdx, 14, 14);
+                                    break;
                                 case 5:
                                     gameBoard.Generate(msg.cardIdx, 14, 14);
                                     break;
                                 case 6:
-                                    gameBoard.Generate(msg.cardIdx, 20, 20);
-                                    break;
                                 case 7:
                                 case 8:
+                                    gameBoard.Generate(msg.cardIdx, 20, 20);
+                                    break;
                                 default:
                                     gameBoard.Generate(msg.cardIdx, 30, 30);
                                     break;
@@ -316,36 +308,6 @@ public class GamePlayManager : Singleton<GamePlayManager>
                 }
                 //Debug.Log($"서버에서 받은 데이터 : {args.From.NickName} : {msg.ToString()}");
             };
-        }
-        if (BackendManager.Instance.isMeSuperGamer)
-        {
-            Message m = new Message();
-            m.playerIdx = -10;
-            m.cardIdx = Random.Range(0, 100);
-            SendData(m);
-            CardManager.Instance.seed = m.cardIdx;
-            int head = BackendManager.Instance.UserDataList.Count;
-            switch (head)
-            {
-                case 0:
-                case 1:
-                case 2:
-                case 3:
-                case 4:
-                case 5:
-                    gameBoard.Generate(m.cardIdx, 14, 14);
-                    break;
-                case 6:
-                    gameBoard.Generate(m.cardIdx, 20, 20);
-                    break;
-                case 7:
-                case 8:
-                default:
-                    gameBoard.Generate(m.cardIdx, 30, 30);
-                    break;
-            }
-        }
-
         //gameRecord = new Stack<SessionId>();
         //GameManager.OnGameOver += OnGameOver;
         //GameManager.OnGameResult += OnGameResult;
@@ -386,7 +348,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
                 if (BackendManager.Instance.UserDataList[i].playerName == args.NewSuperUserRecord.m_nickname)
                 {
                     Debug.Log("새로운 슈퍼게이머는" + BackendManager.Instance.UserDataList[i].playerName + "님 입니다");
-
+        
                     BackendManager.Instance.UserDataList[i].isSuperGamer = true;
                     
                     BackendManager.Instance.isMeSuperGamer =
@@ -395,28 +357,53 @@ public class GamePlayManager : Singleton<GamePlayManager>
             }
         };
     }
-    // Update is called once per frame
+
+    public void CreateMap()
+    {
+        // 게임 시작시 슈퍼게이머는 방을 생성하라는 메세지를 보냄
+        if (BackendManager.Instance.isMeSuperGamer)
+        {
+            messageQueue = new Queue<Message>();
+            
+            Message m = new Message();
+            m.playerIdx = -10;
+            m.cardIdx = Random.Range(0, 100);
+            SendData(m);
+            CardManager.Instance.seed = m.cardIdx;
+            int head = BackendManager.Instance.UserDataList.Count;
+            switch (head)
+            {
+                case 2:
+                    gameBoard.Generate(m.cardIdx, 12, 12);
+                    break;
+                case 3:
+                    gameBoard.Generate(m.cardIdx, 14, 14);
+                    break;
+                case 4:
+                    gameBoard.Generate(m.cardIdx, 14, 14);
+                    break;
+                case 5:
+                    gameBoard.Generate(m.cardIdx, 14, 14);
+                    break;
+                case 6:
+                case 7:
+                case 8:
+                    gameBoard.Generate(m.cardIdx, 20, 20);
+                    break;
+                default:
+                    gameBoard.Generate(m.cardIdx, 30, 30);
+                    break;
+            }
+        }
+    }
     void Update()
     {
-        try
+        if (BackendManager.Instance != null)
         {
-            if (!isDataCheck)
-            {
-                Debug.LogWarning("isDataCheck is false, skipping Update.");
-                return;
-            }
-
-            if (BackendManager.Instance == null)
-            {
-                Debug.LogError("BackendManager.Instance is null.");
-                return;
-            }
-
             if (BackendManager.Instance.isMeSuperGamer)
             {
                 if (messageQueue == null)
                 {
-                    Debug.LogError("messageQueue is null.");
                     return;
                 }
 
@@ -431,13 +418,15 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
                     SendData(m);
                     Debug.Log($"Processing message for playerIdx: {m.playerIdx}, cardIdx: {m.cardIdx}");
+
+                    if (m.cardIdx <= -100)
+                    {
+                        Debug.Log($"{m.playerIdx}님이 {m.cardIdx} 클래스 선택");
+                    }
+                    
                     CardRealGo(m.playerIdx, m.cardIdx);
                 }
             }
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError($"Exception in Update: {e}");
         }
     }
     

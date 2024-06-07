@@ -571,7 +571,13 @@ public class BackendManager : Singleton<BackendManager>
     
     public void JoinMatchMakingServer()
     {
-        Debug.Log("서버접속 시도");
+        ErrorInfo errorInfo;
+        
+        if (Backend.Match.JoinMatchMakingServer(out errorInfo)) {
+            Debug.Log("1-1. JoinMatchMakingServer 요청 : " + errorInfo.ToString());
+        } else {
+            Debug.LogError("1-1. JoinMatchMakingServer 에러 : " + errorInfo.ToString());
+        }
         
         Backend.Match.OnException = (Exception e) =>
         {
@@ -590,14 +596,6 @@ public class BackendManager : Singleton<BackendManager>
                 Debug.LogError("1-2. OnJoinMatchMakingServer 실패");
             }
         };
-        
-        ErrorInfo errorInfo;
-        
-        if (Backend.Match.JoinMatchMakingServer(out errorInfo)) {
-            Debug.Log("1-1. JoinMatchMakingServer 요청 : " + errorInfo.ToString());
-        } else {
-            Debug.LogError("1-1. JoinMatchMakingServer 에러 : " + errorInfo.ToString());
-        }
     }
 
     public void CreateMatchRoom() {
@@ -649,12 +647,17 @@ public class BackendManager : Singleton<BackendManager>
 
     public void TryMatch()
     {
+        Debug.Log("3-1. RequestMatchMaking 매칭 신청 시작");
+            
+        Debug.Log("매칭 신청정보 : " + allMatchCardList[matchIndex].matchType + "/" + allMatchCardList[matchIndex].matchModeType + "/" + allMatchCardList[matchIndex].inDate);
+        Backend.Match.RequestMatchMaking(allMatchCardList[matchIndex].matchType, allMatchCardList[matchIndex].matchModeType, allMatchCardList[matchIndex].inDate);
+        
         Backend.Match.OnMatchMakingResponse = (MatchMakingResponseEventArgs args) => {
             if (args.ErrInfo == ErrorCode.Match_InProgress) {
-                
+
                 MatchController.instance.ChangeUI(3);
                 
-                Debug.Log("3-2. OnMatchMakingResponse 매칭 신청 진행중");
+                Debug.Log("3-2. OnMatchMakingResponse 매칭 신청");
 
                 // 샌드박스는 커스텀 매칭만 사용
                 if (!isFastMatch)
@@ -678,11 +681,6 @@ public class BackendManager : Singleton<BackendManager>
                 isMatching = false;
             }
         };
-        
-        Debug.Log("3-1. RequestMatchMaking 매칭 신청 시작");
-            
-        Debug.Log("매칭 신청정보 : " + allMatchCardList[matchIndex].matchType + "/" + allMatchCardList[matchIndex].matchModeType + "/" + allMatchCardList[matchIndex].inDate);
-        Backend.Match.RequestMatchMaking(allMatchCardList[matchIndex].matchType, allMatchCardList[matchIndex].matchModeType, allMatchCardList[matchIndex].inDate);
     }
 
     IEnumerator WaitFor10Seconds(int second) {
@@ -887,24 +885,39 @@ public class BackendManager : Singleton<BackendManager>
 
     public void JoinGameServer(MatchInGameRoomInfo gameRoomInfo) {
         
+        currentGameRoomInfo = gameRoomInfo;
+        ErrorInfo errorInfo = null;
+        
+        if(Backend.Match.JoinGameServer(currentGameRoomInfo.m_inGameServerEndPoint.m_address, currentGameRoomInfo.m_inGameServerEndPoint.m_port, false, out errorInfo) == false)
+        {
+            // 에러 확인
+            Debug.Log(errorInfo);
+            return;
+        }
+        
         Backend.Match.OnSessionJoinInServer = (args) => {
+            
+            Debug.Log(args.ErrInfo.Category);
             Debug.Log(args.Session.NickName + "님이 인게임 서버 접속 요청");
             Debug.Log("4-1. JoinGameServer 인게임 서버 접속 요청");
             LeaveMatchMaking();
             JoinGameRoom();
         };
-        
-        currentGameRoomInfo = gameRoomInfo;
-        ErrorInfo errorInfo = null;
-
-        if (Backend.Match.JoinGameServer(currentGameRoomInfo.m_inGameServerEndPoint.m_address, currentGameRoomInfo.m_inGameServerEndPoint.m_port, false, out errorInfo) == false) {
-            Debug.LogError("JoinGameServer 중 로컬 에러가 발생했습니다." + errorInfo);
-        }
+        //Debug.LogError("JoinGameServer 중 로컬 에러가 발생했습니다." + errorInfo);
     }
 
     public void JoinGameRoom() {
         
         Backend.Match.JoinGameRoom(currentGameRoomInfo.m_inGameRoomToken);
+        
+        Backend.Match.OnMatchInGameStart = () => {
+            Debug.Log($"5-1. JoinGameRoom 게임룸 접속 요청 : 토큰({currentGameRoomInfo.m_inGameRoomToken}");
+        };
+        
+        // 전체 유저의 수
+        int CheckHeadCount = allMatchCardList[matchIndex].matchModeType != MatchModeType.TeamOnTeam
+            ? allMatchCardList[matchIndex].matchHeadCount
+            : (allMatchCardList[matchIndex].matchHeadCount / 2);
         
         // 현재 연결된 게임룸의 유저 정보
         Backend.Match.OnSessionListInServer = (MatchInGameSessionListEventArgs args) => {
@@ -930,6 +943,14 @@ public class BackendManager : Singleton<BackendManager>
                     }
                     
                     UserDataList.Add(userData);
+                    
+                    // 모든 플레이어 연결 성공시 인게임씬으로 이동
+                    if (CheckHeadCount <= UserDataList.Count)
+                    {
+                        isPlayedUser = true;
+                
+                        SceneManager.LoadScene(1);
+                    }
                 }
             } else {
                 Debug.LogError("5-2. OnSessionListInServer : " + args.ToString());
@@ -953,33 +974,18 @@ public class BackendManager : Singleton<BackendManager>
                     userData.isSuperGamer = args.GameRecord.m_isSuperGamer;
 
                     UserDataList.Add(userData);
+
+                    if (CheckHeadCount <= UserDataList.Count)
+                    {
+                        isPlayedUser = true;
+                
+                        SceneManager.LoadScene(1);
+                    }
                 }
             } else {
                 Debug.LogError("5-3. OnMatchInGameAccess : " + args.ErrInfo.ToString());
             }
         };
-
-        int CheckHeadCount = allMatchCardList[matchIndex].matchModeType != MatchModeType.TeamOnTeam
-            ? allMatchCardList[matchIndex].matchHeadCount
-            : (allMatchCardList[matchIndex].matchHeadCount / 2);
-
-        Debug.Log(CheckHeadCount + "몇명 접속완료해야함");
-        
-        if (CheckHeadCount >= UserDataList.Count + 1)
-        {
-            Backend.Match.OnMatchInGameStart = () => {
-                Debug.Log("전체 인원 연결 완료 인게임씬으로 이동 후 대기시간 이 후 게임 시작");
-                Debug.Log($"5-1. JoinGameRoom 게임룸 접속 요청 : 토큰({currentGameRoomInfo.m_inGameRoomToken}");
-                
-                isPlayedUser = true;
-                
-                SceneManager.LoadScene(1);
-            };
-        }
-        else
-        {
-            Debug.Log("매칭 실패");
-        }
     }
 
     public void DoClassChoiceTime()
@@ -994,8 +1000,8 @@ public class BackendManager : Singleton<BackendManager>
         yield return new WaitForSeconds(waitTime);
 
         isLoadGame = true;
-        
-        //여기에 매치 대기 시간 외에 직업 선택 시간 추가
+
+        GamePlayManager.Instance.CreateMap();
     }
     
     // 릴레이할 데이터
