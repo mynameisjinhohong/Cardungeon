@@ -51,11 +51,19 @@ public class BackendManager : Singleton<BackendManager>
 
     [SerializeField]
     List<TransactionValue> transactionList = new List<TransactionValue>();
-    
+
+    private int currentSceneIndex;
     void Start()
     {
+        currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        
         if(!isInitialize)
             Initialize();
+
+        if (currentSceneIndex == 0)
+        {
+            
+        }
     }
     
     void Awake()
@@ -287,7 +295,7 @@ public class BackendManager : Singleton<BackendManager>
                 break;
             case 1 :
                 Debug.Log("1으로 로그인");
-                Example.Instance.SignIn();
+                Example.instance.SignIn();
                 break;
         }
         
@@ -404,7 +412,7 @@ public class BackendManager : Singleton<BackendManager>
                 userInfo.Nickname    = Backend.UserNickName;
                 userInfo.UID         = Backend.UID;
             
-                MatchController.Instance.ChangeUI(1);
+                MatchController.instance.ChangeUI(1);
             });
         }
     }
@@ -567,7 +575,9 @@ public class BackendManager : Singleton<BackendManager>
         
         Backend.Match.OnException = (Exception e) =>
         {
-            MatchController.Instance.ChangeUI(3);
+            if (isPlayedUser) return;
+            
+            MatchController.instance.ChangeUI(3);
             UserDataList.Clear();
         };
 
@@ -602,7 +612,7 @@ public class BackendManager : Singleton<BackendManager>
 
                 if (!isFastMatch)
                 {
-                    MatchController.Instance.ChangeUI(2);
+                    MatchController.instance.ChangeUI(2);
                 }
                 else
                 {
@@ -642,7 +652,7 @@ public class BackendManager : Singleton<BackendManager>
         Backend.Match.OnMatchMakingResponse = (MatchMakingResponseEventArgs args) => {
             if (args.ErrInfo == ErrorCode.Match_InProgress) {
                 
-                MatchController.Instance.ChangeUI(3);
+                MatchController.instance.ChangeUI(3);
                 
                 Debug.Log("3-2. OnMatchMakingResponse 매칭 신청 진행중");
 

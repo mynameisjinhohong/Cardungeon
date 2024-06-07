@@ -31,11 +31,11 @@ public class InvitePopup : MonoBehaviour
     {
         Backend.Match.AcceptInvitation(InvitedRoomID, InvitedRoomToken);
         Debug.Log(InvitedRoomToken + "구분" + InvitedRoomID);
-        MatchController.Instance.lobbyScript.roomNameText.text = BackendManager.Instance.inviterName + "의 방";
-        MatchController.Instance.lobbyScript.btn_Invite.interactable = false;
-        MatchController.Instance.lobbyScript.btn_MatchStart.interactable = false;
+        MatchController.instance.roomNameText.text = BackendManager.Instance.inviterName + "의 방";
+        MatchController.instance.btn_Invite.interactable = false;
+        MatchController.instance.btn_MatchStart.interactable = false;
         //방정보 동기화 해야함
-        MatchController.Instance.ChangeUI(2);
+        MatchController.instance.ChangeUI(2);
     }
     public void RefuseButtonClick()
     {

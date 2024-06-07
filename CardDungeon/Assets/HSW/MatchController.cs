@@ -9,44 +9,58 @@ using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-public class MatchController : Singleton<MatchController>
+public class MatchController : MonoBehaviour
 {
+    public static MatchController instance;
+    
+    private BackendManager _backendManager;
+    
     public List<GameObject> uIList;
     
-    public TextMeshProUGUI userNickNameText;
-
+    [Header("로그인")]
     public GameObject readyToPlay;
 
     public Button loginCheckButton;
     
     public GameObject LoginButtonListObj;
-
-    public TextMeshProUGUI TipText;
-
+    
+    [Header("메인 화면")]
+    public TextMeshProUGUI userNickNameText;
+    
     public GameObject Rabbit1;
     public GameObject Rabbit2;
 
+    [Header("커스텀 매칭 룸")]
+    public Transform DataPanelParent;
+    
+    public GameObject userInfoDataPanelObj;
+    
+    public GameObject emptyDataPanelObj;
+    
+    public GameObject tutorialPanelObj;
+
+    public TextMeshProUGUI userCount;
+    
+    public TextMeshProUGUI roomNameText;
+
+    public Button btn_Invite;
+
+    public Button btn_MatchStart;
+    
+    [Header("매칭 대기")]
+    public TextMeshProUGUI TipText;
+
     public List<String> TipStrings;
 
-    private BackendManager _backendManager;
-
-    public int currentUIIndex;
-    
-    [HideInInspector]
-    public UI_Lobby_PCI lobbyScript;
-
-    public Transform DataPanelParent;
-    public GameObject userInfoDataPanelObj;
-    public GameObject emptyDataPanelObj;
-    public GameObject tutorialPanelObj;
-    
+    //코루틴 관리
     private Coroutine blinkCoroutine;
     private Coroutine matchTextCoroutine;
     
     private void Awake()
     {
+        instance = this;
+        
         _backendManager = BackendManager.Instance;
-        lobbyScript = uIList[2].GetComponent<UI_Lobby_PCI>();
     }
 
     public void Start()
@@ -90,8 +104,6 @@ public class MatchController : Singleton<MatchController>
 
     public void ChangeUI(int index)
     {
-        currentUIIndex = index;
-        
         UIManager.Instance.AllPopupClear();
 
         for (int i = 0; i < uIList.Count; i++)
@@ -114,7 +126,7 @@ public class MatchController : Singleton<MatchController>
             
             _backendManager.JoinMatchMakingServer();
             
-            Backend.Match.OnMatchMakingRoomSomeoneInvited += (args) => {
+            Backend.Match.OnMatchMakingRoomSomeoneInvited = (args) => {
                 Debug.Log("초대받음");
 
                 //string inviter = args.InviteUserInfo.m_nickName + "님이 초대하셨습니다.\n초대를 수락하시면 매칭룸으로 이동합니다.";
@@ -171,8 +183,7 @@ public class MatchController : Singleton<MatchController>
             
             //매칭룸 접속 결과
             Backend.Match.OnMatchMakingResponse = (MatchMakingResponseEventArgs args) => {
-                Debug.Log("방정보" + args.RoomInfo + "카드정보" + args.MatchCardIndate + "원인" + args.Reason + "결과정보" + args.ErrInfo);
-            
+                
                 BackendManager.Instance.JoinGameServer(args.RoomInfo);
             };
             
@@ -206,6 +217,8 @@ public class MatchController : Singleton<MatchController>
 
     private void DataInit()
     {
+        if (BackendManager.Instance.isPlayedUser) return;
+        
         foreach (Transform child in DataPanelParent)
         {
             Destroy(child.gameObject);
@@ -226,10 +239,9 @@ public class MatchController : Singleton<MatchController>
             }
         }
 
-        lobbyScript.userCount.text = BackendManager.Instance.UserDataList.Count + "/" + 5;
+        userCount.text = BackendManager.Instance.UserDataList.Count + "/" + 5;
         
-        //여기말고 매치인덱스 맞춰줄수있는곳만 찾으면끝
-        //BackendManager.Instance.FindTeamMatchCard(BackendManager.Instance.UserDataList.Count);
+        BackendManager.Instance.FindTeamMatchCard(BackendManager.Instance.UserDataList.Count);
     }
     
     IEnumerator RandomTipTextCor()
@@ -337,10 +349,10 @@ public class MatchController : Singleton<MatchController>
 
     public void SelfDataInit()
     {
-        lobbyScript.roomNameText.text = BackendManager.Instance.userInfo.Nickname + "의 방";
-        lobbyScript.userCount.text = "1/5";
-        lobbyScript.btn_Invite.interactable = true;
-        lobbyScript.btn_MatchStart.interactable = true;
+        roomNameText.text = BackendManager.Instance.userInfo.Nickname + "의 방";
+        userCount.text = "1/5";
+        btn_Invite.interactable = true;
+        btn_MatchStart.interactable = true;
         
         GameObject getDataPanel = Instantiate(userInfoDataPanelObj, DataPanelParent);
 

@@ -51,9 +51,9 @@ public class CreateRoomPopup : MonoBehaviour
 
         //BackendManager.Instance.roomSettingData = settedData;
 
-        MatchController.Instance.CreateRoom();
+        MatchController.instance.CreateRoom();
 
-        MatchController.Instance.SelfDataInit();
+        MatchController.instance.SelfDataInit();
         
         RoomValueInit();
     }
@@ -131,17 +131,15 @@ public class CreateRoomPopup : MonoBehaviour
 
     private void RoomValueInit()
     {
-        UI_Lobby_PCI roomUIData = MatchController.Instance.uIList[2].GetComponent<UI_Lobby_PCI>();
-
         if (settedRoomName.text == "")
         {
-            roomUIData.roomNameText.text = BackendManager.Instance.userInfo.Nickname + "의 방";
+            MatchController.instance.roomNameText.text = BackendManager.Instance.userInfo.Nickname + "의 방";
             
             //BackendManager.Instance.roomSettingData.roomName = roomUIData.roomNameText.text;
         }
         else
         {
-            roomUIData.roomNameText.text = settedRoomName.text;
+            MatchController.instance.roomNameText.text = settedRoomName.text;
 
             //BackendManager.Instance.roomSettingData.roomName = roomUIData.roomNameText.text;
         }

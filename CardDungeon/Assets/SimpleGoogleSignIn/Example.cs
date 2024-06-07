@@ -7,15 +7,22 @@ using TMPro;
 
 namespace Assets.SimpleGoogleSignIn
 {
-    public class Example : Singleton<Example>
+    public class Example : MonoBehaviour
     {
+        public static Example instance;
+        
         public GoogleAuth GoogleAuth;
         private String Log;
         public String Output;
 
         [SerializeField]
         private UserInfo googleUserData;
-        
+
+        private void Awake()
+        {
+            instance = this;
+        }
+
         public void Start()
         {
             Application.logMessageReceived += (condition, _, _) => Log += condition + '\n';

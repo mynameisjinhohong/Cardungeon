@@ -35,7 +35,7 @@ public class GuestLoginPopup : MonoBehaviour
             PlayerPrefs.SetInt("LoginWay", 0);
             
             UIManager.Instance.PopupListPop();
-            MatchController.Instance.ChangeUI(1);
+            MatchController.instance.ChangeUI(1);
         }
         else
         {
