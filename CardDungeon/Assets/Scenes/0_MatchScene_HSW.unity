@@ -2926,7 +2926,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 8400000, guid: 9a5cf1fe36fa3e645a6509126da9719d, type: 2}
+  m_Texture: {fileID: 8400000, guid: b06cd2f9da0d063488116e7f009ead16, type: 2}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -4013,12 +4013,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serverType: 0
-  SuccessLoadDataCount: 0
+  successLoadDataCount: 0
   userInfo:
     UserIndate: 
     Nickname: 
     UID: 
-  LoadServerTime: 0
+  loadServerTime: 0
   checkLoginWayData: -1
   isInitialize: 0
   isLoadGame: 0
@@ -4027,12 +4027,14 @@ MonoBehaviour:
   isMatching: 0
   isMeSuperGamer: 0
   winUser: 
-  UserDataList: []
+  userDataList: []
   isFastMatch: 0
   isPlayedUser: 0
   isEscapeWin: 0
   inviterName: 
   allMatchCardList: []
+  inGameUserList:
+    m_keys: []
 --- !u!1 &1303124231
 GameObject:
   m_ObjectHideFlags: 0

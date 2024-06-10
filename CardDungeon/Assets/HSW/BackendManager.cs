@@ -10,6 +10,10 @@ using LitJson;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
+
+[Serializable]
+public class InGameUserDataDic : SerializableDictionary<string, MatchUserGameRecord> { }
 
 public class BackendManager : Singleton<BackendManager>
 {
@@ -19,12 +23,12 @@ public class BackendManager : Singleton<BackendManager>
 
     public ServerType serverType;
 
-    public int SuccessLoadDataCount = 0;
+    public int successLoadDataCount = 0;
     
     [Header("유저정보")]
     public UserInfo userInfo;
     
-    public bool LoadServerTime = false;
+    public bool loadServerTime = false;
     public int checkLoginWayData = -1;
     public bool isInitialize = false;
     public bool isLoadGame   = false;
@@ -36,8 +40,8 @@ public class BackendManager : Singleton<BackendManager>
     public string winUser = "";
 
     [Header("전체 유저 데이터 리스트")] 
-    public List<UserData> UserDataList;
-  
+    public List<UserData> userDataList;
+
     public bool isFastMatch;
 
     // 게임 종료후 메인 화면에서 플레이 했던 유저인지 체크하는 값
@@ -184,13 +188,15 @@ public class BackendManager : Singleton<BackendManager>
         isMeSuperGamer = false;
         isFastMatch = false;
         isPlayedUser = false;
-
+        
         matchIndex = -1;
 
         inviterName = "";
         winUser = "";
 
-        UserDataList.Clear();
+        inGameUserList.Clear();
+        userDataList.Clear();
+        userGradeList.Clear();
         allMatchCardList.Clear();
     }
 
@@ -544,7 +550,7 @@ public class BackendManager : Singleton<BackendManager>
                 string time = callback.GetReturnValuetoJSON()["utcTime"].ToString();
                 DateTime parsedDate = DateTime.Parse(time);
                 DataManager.Instance.SetLocalTime(parsedDate);
-                LoadServerTime = true;
+                loadServerTime = true;
             }
             else
             {
@@ -583,7 +589,7 @@ public class BackendManager : Singleton<BackendManager>
             if (isPlayedUser) return;
             
             MatchController.instance.ChangeUI(3);
-            UserDataList.Clear();
+            userDataList.Clear();
         };
 
         Backend.Match.OnJoinMatchMakingServer = (JoinChannelEventArgs args) => {
@@ -628,7 +634,7 @@ public class BackendManager : Singleton<BackendManager>
     {
         isMatching = true;
         
-        FindTeamMatchCard(UserDataList.Count);
+        FindTeamMatchCard(userDataList.Count);
 
         TryMatch();
     }
@@ -668,7 +674,7 @@ public class BackendManager : Singleton<BackendManager>
                         StartCoroutine(WaitFor10Seconds(second));
                     }
                     
-                    UserDataList.Clear();
+                    userDataList.Clear();
                 }
             } else if (args.ErrInfo == ErrorCode.Success) {
                 Debug.Log("3-3. OnMatchMakingResponse 매칭 성사 완료");
@@ -864,9 +870,11 @@ public class BackendManager : Singleton<BackendManager>
     
     MatchInGameRoomInfo currentGameRoomInfo;
     
-    // 유저가 나가도 보관하는 접속한 유저들의 리스트 
-    Dictionary<string, MatchUserGameRecord> inGameUserList = new Dictionary<string, MatchUserGameRecord>();
-
+    // 유저가 나가도 보관하는 접속한 유저들의 리스트
+    public InGameUserDataDic inGameUserList;
+    
+    public List<MatchUserGameRecord> userGradeList;
+    
     public void LeaveMatchMaking() {
         
         Backend.Match.LeaveMatchMakingServer();
@@ -920,11 +928,14 @@ public class BackendManager : Singleton<BackendManager>
         
         // 현재 연결된 게임룸의 유저 정보
         Backend.Match.OnSessionListInServer = (MatchInGameSessionListEventArgs args) => {
-            if (args.ErrInfo == ErrorCode.Success) {
+            if (args.ErrInfo == ErrorCode.Success)
+            {
+                inGameUserList = new InGameUserDataDic();
+                
                 Debug.Log("5-2. OnSessionListInServer 게임룸 접속 성공 : " + args.ToString());
 
                 Debug.Log(args.GameRecords.Count + "번째로 게임룸에 접속");
-
+                
                 foreach (var inGameUserData in args.GameRecords)
                 {
                     inGameUserList.Add(inGameUserData.m_nickname, inGameUserData);
@@ -941,10 +952,10 @@ public class BackendManager : Singleton<BackendManager>
                         isMeSuperGamer = userData.isSuperGamer;
                     }
                     
-                    UserDataList.Add(userData);
+                    userDataList.Add(userData);
                     
                     // 모든 플레이어 연결 성공시 인게임씬으로 이동
-                    if (CheckHeadCount <= UserDataList.Count)
+                    if (CheckHeadCount <= userDataList.Count)
                     {
                         isPlayedUser = true;
                 
@@ -972,9 +983,9 @@ public class BackendManager : Singleton<BackendManager>
                     userData.playerToken = args.GameRecord.m_sessionId.ToString();
                     userData.isSuperGamer = args.GameRecord.m_isSuperGamer;
 
-                    UserDataList.Add(userData);
+                    userDataList.Add(userData);
 
-                    if (CheckHeadCount <= UserDataList.Count)
+                    if (CheckHeadCount <= userDataList.Count)
                     {
                         isPlayedUser = true;
                 
@@ -1031,10 +1042,8 @@ public class BackendManager : Singleton<BackendManager>
         Backend.Match.SendDataToInGameRoom(dataByte);
     }
 
-    public void MatchEnd(bool EscapeWin)
+    public void SendResultToServer()
     {
-        if (winUser == "") return;
-        
         isInitialize = false;
 
         Debug.Log("8-1. MatchEnd 호출");
@@ -1042,24 +1051,54 @@ public class BackendManager : Singleton<BackendManager>
         matchGameResult.m_winners = new List<SessionId>();
         matchGameResult.m_losers = new List<SessionId>();
         
-        // 승리 유저 제외 전부 패배 처리
-        foreach (var session in inGameUserList) {
-            if(session.Value.m_nickname == winUser)
-                matchGameResult.m_winners.Add(session.Value.m_sessionId);
-            else
-                matchGameResult.m_losers.Add(session.Value.m_sessionId);
-        }
+        switch (allMatchCardList[matchIndex].matchModeType)
+        {
+            // 1:1 일때는 승자 패자 지정
+            case MatchModeType.OneOnOne:
+                foreach (var session in inGameUserList) {
+                    if(session.Value.m_nickname == winUser)
+                        matchGameResult.m_winners.Add(session.Value.m_sessionId);
+                    else
+                        matchGameResult.m_losers.Add(session.Value.m_sessionId);
+                }
+                break;
+            // 팀전(커스텀 매치) 일때는 승자만 승자팀 나머지는 전부 패자 팀으로 처리 (순서 상관 X )
+            case MatchModeType.TeamOnTeam:
+                foreach (var session in inGameUserList) {
+                    if(session.Value.m_nickname == winUser)
+                        matchGameResult.m_winners.Add(session.Value.m_sessionId);
+                    else
+                        matchGameResult.m_losers.Add(session.Value.m_sessionId);
+                }
+                break;
+            // 개인전 일떄는 1등부터 순서대로 처리
+            case MatchModeType.Melee:
 
-        isEscapeWin = EscapeWin;
-        
-        Backend.Match.MatchEnd(matchGameResult);
-        
+                if (isEscapeWin)
+                {
+                    // 열쇠 탈출하게 되면 탈출한사람 제외 패배처리
+                    foreach (var session in inGameUserList) {
+                        if(session.Value.m_nickname == winUser)
+                            matchGameResult.m_winners.Add(session.Value.m_sessionId);
+                        else
+                            matchGameResult.m_losers.Add(session.Value.m_sessionId);
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < userGradeList.Count; i++)
+                    {
+                        // 마지막 생존자를 1등으로 추가
+                        userGradeList.Reverse();
+                        matchGameResult.m_winners.Add(userGradeList[i].m_sessionId);
+                    }
+                }
+                break;
+            default :
+                break;
+        }
         GamePlayManager.Instance.chaser.Chase(false);
-        
-        isInitialize = false;
-        // 결과에 따라 승리, 패배 UI
-        Debug.Log(winUser == userInfo.Nickname + "이게 최종결과");
-        GamePlayManager.Instance.GameResult(Instance.winUser == userInfo.Nickname);
+        Backend.Match.MatchEnd(matchGameResult);
     }
     
     public void AddTransactionInsert(UserDataType table, Param param)
@@ -1119,7 +1158,7 @@ public class BackendManager : Singleton<BackendManager>
                         JsonData json = broInsert.GetReturnValuetoJSON()["putItem"];
                         for (int i = 0; i < json.Count; i++)
                             DataManager.Instance.SetRowInDate((UserDataType)Enum.Parse(typeof(UserDataType), json[i]["table"].ToString()), json[i]["inDate"].ToString());
-                        SuccessLoadDataCount += json.Count;
+                        successLoadDataCount += json.Count;
                     }
                     break;
                 case TransactionType.SetGet:
@@ -1165,7 +1204,7 @@ public class BackendManager : Singleton<BackendManager>
                     JsonData json = broInsert.GetReturnValuetoJSON()["putItem"];
                     for (int i = 0; i < json.Count; i++)
                         DataManager.Instance.SetRowInDate((UserDataType)Enum.Parse(typeof(UserDataType), json[i]["table"].ToString()), json[i]["inDate"].ToString());
-                    SuccessLoadDataCount += json.Count;
+                    successLoadDataCount += json.Count;
                 }
                 else
                 {
@@ -1219,7 +1258,7 @@ public class BackendManager : Singleton<BackendManager>
                         JsonData gameDataListJson = callback.GetFlattenJSON()["Responses"];
                         for (int j = 0; j < gameDataListJson.Count; j++)
                             DataManager.Instance.SetUserData(Enum.Parse<UserDataType>(actions[j].table), gameDataListJson[j]);
-                        SuccessLoadDataCount += gameDataListJson.Count;
+                        successLoadDataCount += gameDataListJson.Count;
                     }
                     else
                     {
@@ -1248,7 +1287,7 @@ public class BackendManager : Singleton<BackendManager>
                                             else
                                             {
                                                 DataManager.Instance.SetUserData(Enum.Parse<UserDataType>(actions[i].table), data[0]);
-                                                SuccessLoadDataCount++;
+                                                successLoadDataCount++;
                                             }
                                         }
                                         else

@@ -159,7 +159,7 @@ public class GameBoard_PCI : MonoBehaviour
         {
             int k = 0;
             
-            if (BackendManager.Instance.UserDataList.Count > 5)
+            if (BackendManager.Instance.userDataList.Count > 5)
             {
                 k = item.amount * 2;
             }

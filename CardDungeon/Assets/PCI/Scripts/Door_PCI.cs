@@ -10,7 +10,8 @@ public class Door_PCI : TileObject_PCI
         {
             BackendManager.Instance.winUser = player.PlayerName.text;
 
-            BackendManager.Instance.MatchEnd(true);
+            BackendManager.Instance.isEscapeWin = true;
+            BackendManager.Instance.SendResultToServer();
         }
     }
 }

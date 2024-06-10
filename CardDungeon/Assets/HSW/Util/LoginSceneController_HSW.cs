@@ -21,7 +21,7 @@ public class LoginSceneController_HSW : MonoBehaviour
 
     public void ChangeHostingUI(int index)
     {
-        if (BackendManager.Instance.LoadServerTime) return;
+        if (BackendManager.Instance.loadServerTime) return;
 
         for (int i = 0; i < LoginUIList.Count; i++)
         {

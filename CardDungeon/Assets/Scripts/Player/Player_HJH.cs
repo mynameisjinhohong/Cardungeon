@@ -22,7 +22,7 @@ public class Player_HJH : MonoBehaviour
     public string PlayerToken;
     public bool isSuperGamer;
     public bool isMine;
-    int hp;
+    public int hp;
     Vector2 myPos;
     bool cool;
     float currentTime;
@@ -98,9 +98,41 @@ public class Player_HJH : MonoBehaviour
             {
                 hp = maxHp;
             }
-            if (hp < 1 && PlayerName.text == BackendManager.Instance.userInfo.Nickname)
+            
+            // hp가 없으면 그 플레이어는 삭제, 만약 본인이면 즉시 패배 처리 UI보여주기
+            if (hp < 1)
             {
-                GamePlayManager.Instance.GameResult(false);
+                if (isMine)
+                {
+                    GamePlayManager.Instance.GameResult(false);
+                }
+
+                foreach (var userData in BackendManager.Instance.inGameUserList)
+                {
+                    if (userData.Value.m_nickname == PlayerName.text)
+                    {
+                        Debug.Log($"{userData.Value.m_nickname}님이 패배하였습니다!");
+                        BackendManager.Instance.userGradeList.Add(userData.Value);
+                        Debug.Log(BackendManager.Instance.userGradeList.Count + "리스트 크기확인");
+                    }
+                }
+
+                for (int i = 0; i < BackendManager.Instance.userDataList.Count; i++)
+                {
+                    if (BackendManager.Instance.userDataList[i].playerName == PlayerName.text)
+                    {
+                        BackendManager.Instance.userDataList.RemoveAt(i);
+                    }
+                }
+                
+                for (int i = 0; i < GamePlayManager.Instance.players.Count; i++)
+                {
+                    if (GamePlayManager.Instance.players[i].PlayerName.text == PlayerName.text)
+                    {
+                        Destroy(GamePlayManager.Instance.players[i].gameObject);
+                        GamePlayManager.Instance.players.RemoveAt(i);
+                    }
+                }
             }
         }
     }

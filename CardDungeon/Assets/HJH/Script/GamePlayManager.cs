@@ -3,6 +3,7 @@ using BackEnd;
 using BackEnd.Tcp;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -38,7 +39,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
         BackendManager.Instance.DoClassChoiceTime();
 
         // 넘어온 정보를 토대로 유저 리스트 인덱스 정렬
-        BackendManager.Instance.UserDataList.Sort((UserData lhs, UserData rhs) =>
+        BackendManager.Instance.userDataList.Sort((UserData lhs, UserData rhs) =>
         {
             if (int.Parse(lhs.playerToken) < int.Parse(rhs.playerToken))
             {
@@ -85,24 +86,24 @@ public class GamePlayManager : Singleton<GamePlayManager>
         players = new List<Player_HJH>();
         for (int i = 0; i < playerPrefabs.Count; i++)
         {
-            if (i < BackendManager.Instance.UserDataList.Count)
+            if (i < BackendManager.Instance.userDataList.Count)
             {
                 GameObject PlayerPrefab = Instantiate(playerPrefabs[i], PlayerSpawnPosition[i]);
                 Player_HJH playerHjh = PlayerPrefab.GetComponent<Player_HJH>();
                 players.Add(playerHjh);
-                playerHjh.isSuperGamer = BackendManager.Instance.UserDataList[i].isSuperGamer;
-                playerHjh.PlayerName.text = BackendManager.Instance.UserDataList[i].playerName;
+                playerHjh.isSuperGamer = BackendManager.Instance.userDataList[i].isSuperGamer;
+                playerHjh.PlayerName.text = BackendManager.Instance.userDataList[i].playerName;
 
-                if (BackendManager.Instance.userInfo.Nickname == BackendManager.Instance.UserDataList[i].playerName)
+                if (BackendManager.Instance.userInfo.Nickname == BackendManager.Instance.userDataList[i].playerName)
                 {
                     playerHjh.isMine = true;
                     mainUi.myPlayer = playerHjh;
                     mainUi.myPlayer.isMeIconObj.SetActive(true);
                     mainUi.myPlayer.KeysOnValueChanged += mainUi.SetKeysUI;
                 }
-                playerHjh.PlayerToken = BackendManager.Instance.UserDataList[i].playerToken;
+                playerHjh.PlayerToken = BackendManager.Instance.userDataList[i].playerToken;
 
-                if (BackendManager.Instance.UserDataList[i].isSuperGamer)
+                if (BackendManager.Instance.userDataList[i].isSuperGamer)
                 {
                     SuperGamerIdx = i;
                 }
@@ -112,9 +113,9 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
         }
 
-        for (int i = 0; i < BackendManager.Instance.UserDataList.Count; i++)
+        for (int i = 0; i < BackendManager.Instance.userDataList.Count; i++)
         {
-            if (BackendManager.Instance.userInfo.Nickname == BackendManager.Instance.UserDataList[i].playerName)
+            if (BackendManager.Instance.userInfo.Nickname == BackendManager.Instance.userDataList[i].playerName)
             {
                 myIdx = i;
 
@@ -131,130 +132,130 @@ public class GamePlayManager : Singleton<GamePlayManager>
         // 플레이어 생성 완료 후 맵 생성 준비
         InitializeGame();
     }
-    public bool CardIdxCheckNoPlayer(int cardIdx, Transform playerPos)
-    {
-        Vector2 goPos = new Vector2();
-        switch (Mathf.Abs(cardIdx))
-        {
-            case 1:
-                if(cardIdx > 0)
-                {
-                    goPos = new Vector2(playerPos.position.x, playerPos.position.y + 2);
-                }
-                else
-                {
-                    goPos = new Vector2(playerPos.position.x, playerPos.position.y + 1);
-                }
-                break;
-            case 2:
-                if (cardIdx > 0)
-                {
-                    goPos = new Vector2(playerPos.position.x + 2, playerPos.position.y);
-                }
-                else
-                {
-                    goPos = new Vector2(playerPos.position.x + 1, playerPos.position.y);
-                }
-                break;
-            case 3:
-                if (cardIdx > 0)
-                {
-                    goPos = new Vector2(playerPos.position.x - 2, playerPos.position.y);
-                }
-                else
-                {
-                    goPos = new Vector2(playerPos.position.x - 1, playerPos.position.y);
-                }
-                break;
-            case 4:
-                if (cardIdx > 0)
-                {
-                    goPos = new Vector2(playerPos.position.x, playerPos.position.y - 2);
-                }
-                else
-                {
-                    goPos = new Vector2(playerPos.position.x, playerPos.position.y - 1);
-                }
-                break;
-            case 5:
-                if (cardIdx > 0)
-                {
-                    goPos = new Vector2(playerPos.position.x, playerPos.position.y - 2);
-                }
-                else
-                {
-                    goPos = new Vector2(playerPos.position.x, playerPos.position.y - 1);
-                }
-                break;
-        }
-        if(Mathf.Abs(cardIdx) == 6)
-        {
-            if(cardIdx > 0)
-            {
-                Random.InitState(CardManager.Instance.seed);
-                int x = Random.Range(-2, 3);
-                int y = Random.Range(-2, 3);
-                if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)playerPos.transform.position.x + x, (int)playerPos.transform.position.y + y)))
-                {
-                    goPos = new Vector3(playerPos.transform.position.x + x, playerPos.transform.position.y + y, playerPos.transform.position.z);
-                }
-                else
-                {
-                    for (int i = -2; i < 3; i++)
-                    {
-                        for (int j = -2; j < 3; j++)
-                        {
-                            if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)playerPos.transform.position.x + j, (int)playerPos.transform.position.y + i)))
-                            {
-                                goPos = new Vector3(playerPos.transform.position.x + j, playerPos.transform.position.y + i, playerPos.transform.position.z);
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            {
-                Random.InitState(CardManager.Instance.seed);
-                int x = Random.Range(-3, 4);
-                int y = Random.Range(-3, 4);
-                if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)playerPos.transform.position.x + x, (int)playerPos.transform.position.y + y)))
-                {
-                    goPos = new Vector3(playerPos.transform.position.x + x, playerPos.transform.position.y + y, playerPos.transform.position.z);
-                }
-                else
-                {
-                    for (int i = -3; i < 4; i++)
-                    {
-                        for (int j = -3; j < 4; j++)
-                        {
-                            if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)playerPos.transform.position.x + j, (int)playerPos.transform.position.y + i)))
-                            {
-                                goPos = new Vector3(playerPos.transform.position.x + j, playerPos.transform.position.y + i, playerPos.transform.position.z);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return CheckNoPlayer(goPos);
-    }
-
-
-    public bool CheckNoPlayer(Vector2 goPos)
-    {
-        for (int i = 0; i < players.Count; i++)
-        {
-            Vector2 vec = new Vector2((int)players[i].transform.position.x, (int)players[i].transform.position.y);
-            if ((Vector2)goPos == vec)
-            {
-                return false;
-            }
-        }
-        return true;
-    }
+    // public bool CardIdxCheckNoPlayer(int cardIdx, Transform playerPos)
+    // {
+    //     Vector2 goPos = new Vector2();
+    //     switch (Mathf.Abs(cardIdx))
+    //     {
+    //         case 1:
+    //             if(cardIdx > 0)
+    //             {
+    //                 goPos = new Vector2(playerPos.position.x, playerPos.position.y + 2);
+    //             }
+    //             else
+    //             {
+    //                 goPos = new Vector2(playerPos.position.x, playerPos.position.y + 1);
+    //             }
+    //             break;
+    //         case 2:
+    //             if (cardIdx > 0)
+    //             {
+    //                 goPos = new Vector2(playerPos.position.x + 2, playerPos.position.y);
+    //             }
+    //             else
+    //             {
+    //                 goPos = new Vector2(playerPos.position.x + 1, playerPos.position.y);
+    //             }
+    //             break;
+    //         case 3:
+    //             if (cardIdx > 0)
+    //             {
+    //                 goPos = new Vector2(playerPos.position.x - 2, playerPos.position.y);
+    //             }
+    //             else
+    //             {
+    //                 goPos = new Vector2(playerPos.position.x - 1, playerPos.position.y);
+    //             }
+    //             break;
+    //         case 4:
+    //             if (cardIdx > 0)
+    //             {
+    //                 goPos = new Vector2(playerPos.position.x, playerPos.position.y - 2);
+    //             }
+    //             else
+    //             {
+    //                 goPos = new Vector2(playerPos.position.x, playerPos.position.y - 1);
+    //             }
+    //             break;
+    //         case 5:
+    //             if (cardIdx > 0)
+    //             {
+    //                 goPos = new Vector2(playerPos.position.x, playerPos.position.y - 2);
+    //             }
+    //             else
+    //             {
+    //                 goPos = new Vector2(playerPos.position.x, playerPos.position.y - 1);
+    //             }
+    //             break;
+    //     }
+    //     if(Mathf.Abs(cardIdx) == 6)
+    //     {
+    //         if(cardIdx > 0)
+    //         {
+    //             Random.InitState(CardManager.Instance.seed);
+    //             int x = Random.Range(-2, 3);
+    //             int y = Random.Range(-2, 3);
+    //             if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)playerPos.transform.position.x + x, (int)playerPos.transform.position.y + y)))
+    //             {
+    //                 goPos = new Vector3(playerPos.transform.position.x + x, playerPos.transform.position.y + y, playerPos.transform.position.z);
+    //             }
+    //             else
+    //             {
+    //                 for (int i = -2; i < 3; i++)
+    //                 {
+    //                     for (int j = -2; j < 3; j++)
+    //                     {
+    //                         if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)playerPos.transform.position.x + j, (int)playerPos.transform.position.y + i)))
+    //                         {
+    //                             goPos = new Vector3(playerPos.transform.position.x + j, playerPos.transform.position.y + i, playerPos.transform.position.z);
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //         else
+    //         {
+    //             Random.InitState(CardManager.Instance.seed);
+    //             int x = Random.Range(-3, 4);
+    //             int y = Random.Range(-3, 4);
+    //             if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)playerPos.transform.position.x + x, (int)playerPos.transform.position.y + y)))
+    //             {
+    //                 goPos = new Vector3(playerPos.transform.position.x + x, playerPos.transform.position.y + y, playerPos.transform.position.z);
+    //             }
+    //             else
+    //             {
+    //                 for (int i = -3; i < 4; i++)
+    //                 {
+    //                     for (int j = -3; j < 4; j++)
+    //                     {
+    //                         if (GamePlayManager.Instance.gameBoard.IsPathable(new Vector2Int((int)playerPos.transform.position.x + j, (int)playerPos.transform.position.y + i)))
+    //                         {
+    //                             goPos = new Vector3(playerPos.transform.position.x + j, playerPos.transform.position.y + i, playerPos.transform.position.z);
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     return CheckNoPlayer(goPos);
+    // }
+    // public bool CheckNoPlayer(Vector2 goPos)
+    // {
+    //     for (int i = 0; i < players.Count; i++)
+    //     {
+    //         Vector2 vec = new Vector2((int)players[i].transform.position.x, (int)players[i].transform.position.y);
+    //         if ((Vector2)goPos == vec)
+    //         {
+    //             return false;
+    //         }
+    //     }
+    //     return true;
+    // }
 
     public void InitializeGame()
     {
+        BackendManager.Instance.userGradeList = new List<MatchUserGameRecord>();
+
         // 서버에서 오는 메세지 수신할 준비
         Backend.Match.OnMatchRelay = (MatchRelayEventArgs args) => //서버로 보낸 메세지를 클라이언트에 콜백했을 때 호출되는 이벤트
             {
@@ -266,14 +267,32 @@ public class GamePlayManager : Singleton<GamePlayManager>
                 if (BackendManager.Instance.isMeSuperGamer)
                 {
                     messageQueue.Enqueue(msg);
+
+                    // 패배 처리 요청 받으면 모든 유저에게 정보 전송
+                    if (msg.playerIdx == -99)
+                    {
+                        if (BackendManager.Instance.winUser == "")
+                        {
+                            Debug.Log("승리유저 정보 비어있어서 리턴 처리");
+                            return;
+                        }
+                            
+                        Debug.Log($"{BackendManager.Instance.winUser}승리 처리 메세지 수신");
+                        BackendManager.Instance.SendResultToServer();
+                    }
+                    // 유저가 클래스 선택하면 슈퍼게이머도 수신
+                    else if (msg.cardIdx <= -100)
+                    {
+                        Debug.Log($"{msg.playerIdx}님이 {msg.cardIdx} 클래스 선택");
+                    }
                 }
                 else
                 {
-                    if (args.From.NickName == BackendManager.Instance.UserDataList[SuperGamerIdx].playerName) //지금 받은게 만약에 슈퍼게이머가 보낸거면
+                    if (args.From.NickName == BackendManager.Instance.userDataList[SuperGamerIdx].playerName) //지금 받은게 만약에 슈퍼게이머가 보낸거면
                     {
                         if (msg.playerIdx == -10) //-10 플레이어 인덱스를 받으면 맵을 생성한다.
                         {
-                            int head = BackendManager.Instance.UserDataList.Count;
+                            int head = BackendManager.Instance.userDataList.Count;
                             switch (head)
                             {
                                 case 2:
@@ -299,6 +318,10 @@ public class GamePlayManager : Singleton<GamePlayManager>
                             }
                             CardManager.Instance.seed = msg.cardIdx;
                         }
+                        else if (msg.cardIdx <= -100)
+                        {
+                            Debug.Log($"{msg.playerIdx}님이 {msg.cardIdx} 클래스 선택");
+                        }
                         else
                         {
                             Debug.Log(msg.playerIdx + "  " + msg.cardIdx);
@@ -321,39 +344,50 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
             int OutUserIndex = 0;
             
-            for (int i = 0; i < BackendManager.Instance.UserDataList.Count; i++)
+            BackendManager.Instance.userGradeList.Add(args.GameRecord);
+
+            for (int i = 0; i < BackendManager.Instance.userDataList.Count; i++)
             {
-                if (BackendManager.Instance.UserDataList[i].playerName == args.GameRecord.m_nickname)
+                if (BackendManager.Instance.userDataList[i].playerName == args.GameRecord.m_nickname)
                 {
                     OutUserIndex = i;
                 }
             }
 
-            BackendManager.Instance.UserDataList.RemoveAt(OutUserIndex);
+            BackendManager.Instance.userDataList.RemoveAt(OutUserIndex);
             
             Destroy(PlayerSpawnPosition[OutUserIndex].gameObject);
 
-            if (BackendManager.Instance.UserDataList.Count <= 1)
+            // 살아남은 유저가 한명일 경우 살아있는 유저를 결과처리 리스트에 넣고 슈퍼게이머에게 게임 종료 요청
+            if (BackendManager.Instance.userDataList.Count <= 1)
             {
-                Debug.Log("승리처리");
-                BackendManager.Instance.winUser = BackendManager.Instance.userInfo.Nickname;
-                BackendManager.Instance.MatchEnd(false);
+                BackendManager.Instance.winUser = BackendManager.Instance.userDataList[0].playerName; 
+                Debug.Log("다른유저가 모두 나가서 승리처리");
+                foreach (var userData in BackendManager.Instance.inGameUserList)
+                {
+                    if (userData.Value.m_nickname == BackendManager.Instance.userInfo.Nickname)
+                    {
+                        BackendManager.Instance.userGradeList.Add(userData.Value);
+                        BackendManager.Instance.winUser = BackendManager.Instance.userInfo.Nickname;
+                    }
+                }
+                SendToSuperGamerEndGame();
             }
         };
         
         Backend.Match.OnChangeSuperGamer = (MatchInGameChangeSuperGamerEventArgs args) => {
             Debug.Log("슈퍼게이머가 접속을 종료하여 슈퍼게이머를 재선정합니다");
             
-            for (int i = 0; i < BackendManager.Instance.UserDataList.Count; i++)
+            for (int i = 0; i < BackendManager.Instance.userDataList.Count; i++)
             {
-                if (BackendManager.Instance.UserDataList[i].playerName == args.NewSuperUserRecord.m_nickname)
+                if (BackendManager.Instance.userDataList[i].playerName == args.NewSuperUserRecord.m_nickname)
                 {
-                    Debug.Log("새로운 슈퍼게이머는" + BackendManager.Instance.UserDataList[i].playerName + "님 입니다");
+                    Debug.Log("새로운 슈퍼게이머는" + BackendManager.Instance.userDataList[i].playerName + "님 입니다");
         
-                    BackendManager.Instance.UserDataList[i].isSuperGamer = true;
+                    BackendManager.Instance.userDataList[i].isSuperGamer = true;
                     
                     BackendManager.Instance.isMeSuperGamer =
-                        BackendManager.Instance.UserDataList[i].playerName == BackendManager.Instance.userInfo.Nickname;
+                        BackendManager.Instance.userDataList[i].playerName == BackendManager.Instance.userInfo.Nickname;
                 }
             }
         };
@@ -371,6 +405,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
         Backend.Match.OnMatchResult = (MatchResultEventArgs args) => {
             if (args.ErrInfo == ErrorCode.Success) {
                 Debug.Log("8-2. OnMatchResult 성공 : " + args.ErrInfo.ToString());
+                GameResult(BackendManager.Instance.winUser == BackendManager.Instance.userInfo.Nickname);
             } else {
                 Debug.LogError("8-2. OnMatchResult 실패 : " + args.ErrInfo.ToString());
             }
@@ -389,7 +424,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
             m.cardIdx = Random.Range(0, 100);
             SendData(m);
             CardManager.Instance.seed = m.cardIdx;
-            int head = BackendManager.Instance.UserDataList.Count;
+            int head = BackendManager.Instance.userDataList.Count;
             switch (head)
             {
                 case 2:
@@ -415,6 +450,18 @@ public class GamePlayManager : Singleton<GamePlayManager>
             }
         }
     }
+    
+    public void SendToSuperGamerEndGame()
+    {
+        Debug.Log("승리처리 메세지 송신");
+        messageQueue = new Queue<Message>();
+            
+        Message m = new Message();
+        m.playerIdx = -99;
+        m.cardIdx = -99;
+        SendData(m);
+    }
+    
     void Update()
     {
         if (BackendManager.Instance != null)
@@ -434,15 +481,9 @@ public class GamePlayManager : Singleton<GamePlayManager>
                         Debug.LogError("Dequeued message is null.");
                         return;
                     }
-
                     SendData(m);
                     Debug.Log($"Processing message for playerIdx: {m.playerIdx}, cardIdx: {m.cardIdx}");
 
-                    if (m.cardIdx <= -100)
-                    {
-                        Debug.Log($"{m.playerIdx}님이 {m.cardIdx} 클래스 선택");
-                    }
-                    
                     CardRealGo(m.playerIdx, m.cardIdx);
                 }
             }
@@ -516,6 +557,8 @@ public class GamePlayManager : Singleton<GamePlayManager>
         }
         else
         {
+            if (players.Count <= 1) return;
+            
             CardManager.Instance.OnCardStart(players[playerIdx].transform, cardIdx);
         }
     }
@@ -535,22 +578,12 @@ public class GamePlayManager : Singleton<GamePlayManager>
                 }
             }
         }
-        for (int i = 0; i < players.Count; i++)
+
+        if (players.Count <= 1)
         {
-            // 내 체력은 무시하고 남들의 체력이 1이상이면 리턴시키는 구조
-            if (players[i].isMine)
-            {
-                BackendManager.Instance.winUser = players[i].GetComponent<Player_HJH>().PlayerName.text;
-                continue;
-            }
-            if (players[i].HP > 0)
-            {
-                Debug.Log(players[i].PlayerName.text + "체력있어서 리턴");
-                BackendManager.Instance.winUser = "";
-                return;
-            }
+            BackendManager.Instance.winUser = BackendManager.Instance.userDataList[0].playerName; 
             Debug.Log(BackendManager.Instance.winUser + "승리처리");
-            BackendManager.Instance.MatchEnd(false);
+            SendToSuperGamerEndGame();
         }
     }
 

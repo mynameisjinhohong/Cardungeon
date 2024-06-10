@@ -159,7 +159,7 @@ public class MatchController : MonoBehaviour
                 getdata.playerToken = args.UserInfo.m_sessionId.ToString();
                 getdata.isSuperGamer = false;
                 
-                BackendManager.Instance.UserDataList.Add(getdata);
+                BackendManager.Instance.userDataList.Add(getdata);
 
                 DataInit();
             };
@@ -175,7 +175,7 @@ public class MatchController : MonoBehaviour
                     getdata.playerToken = userInfo.m_sessionId.ToString();
                     getdata.isSuperGamer = false;
                     
-                    BackendManager.Instance.UserDataList.Add(getdata);
+                    BackendManager.Instance.userDataList.Add(getdata);
                 }
 
                 DataInit();
@@ -192,13 +192,13 @@ public class MatchController : MonoBehaviour
 
                 int leaveUserIndex = 0;
                 
-                for (int i = 0; i < BackendManager.Instance.UserDataList.Count; i++)
+                for (int i = 0; i < BackendManager.Instance.userDataList.Count; i++)
                 {
-                    if (BackendManager.Instance.UserDataList[i].playerName == args.UserInfo.m_nickName)
+                    if (BackendManager.Instance.userDataList[i].playerName == args.UserInfo.m_nickName)
                     {
                         leaveUserIndex = i;
                         
-                        BackendManager.Instance.UserDataList.RemoveAt(leaveUserIndex);
+                        BackendManager.Instance.userDataList.RemoveAt(leaveUserIndex);
                     }
                 }
                 
@@ -226,12 +226,12 @@ public class MatchController : MonoBehaviour
         
         for (int i = 0; i < 5; i++)
         {
-            if (i < BackendManager.Instance.UserDataList.Count)
+            if (i < BackendManager.Instance.userDataList.Count)
             {
                 GameObject userDataPanel = Instantiate(userInfoDataPanelObj, DataPanelParent);
 
                 userDataPanel.GetComponent<UI_UserIDPanel_PCI>().txt_userName.text =
-                    BackendManager.Instance.UserDataList[i].playerName;
+                    BackendManager.Instance.userDataList[i].playerName;
             }
             else
             {
@@ -239,9 +239,9 @@ public class MatchController : MonoBehaviour
             }
         }
 
-        userCount.text = BackendManager.Instance.UserDataList.Count + "/" + 5;
+        userCount.text = BackendManager.Instance.userDataList.Count + "/" + 5;
         
-        BackendManager.Instance.FindTeamMatchCard(BackendManager.Instance.UserDataList.Count);
+        BackendManager.Instance.FindTeamMatchCard(BackendManager.Instance.userDataList.Count);
     }
     
     IEnumerator RandomTipTextCor()
@@ -265,7 +265,7 @@ public class MatchController : MonoBehaviour
     {
         _backendManager.CreateMatchRoom();
 
-        BackendManager.Instance.UserDataList.Clear();
+        BackendManager.Instance.userDataList.Clear();
 
         foreach (Transform child in DataPanelParent.transform)
         {
@@ -278,7 +278,7 @@ public class MatchController : MonoBehaviour
     public void LeaveMatchingRoom()
     {
         Backend.Match.LeaveMatchMakingServer();
-        BackendManager.Instance.UserDataList.Clear();
+        BackendManager.Instance.userDataList.Clear();
         ChangeUI(1);
     }
 
@@ -286,6 +286,7 @@ public class MatchController : MonoBehaviour
     {
         yield return new WaitUntil(() => _backendManager.isInitialize);
 
+        //플레이를 마친 유저라면 메인화면으로 다시 이동
         if (!_backendManager.isPlayedUser)
         {
             readyToPlay.gameObject.SetActive(true);
@@ -366,7 +367,7 @@ public class MatchController : MonoBehaviour
         mydata.playerToken = "";
         mydata.isSuperGamer = false;
         
-        BackendManager.Instance.UserDataList.Add(mydata);
+        BackendManager.Instance.userDataList.Add(mydata);
 
         for (int i = 0; i < 4; i++)
         {
