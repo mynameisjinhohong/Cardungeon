@@ -37,13 +37,12 @@ public class BackendManager : Singleton<BackendManager>
 
     [Header("전체 유저 데이터 리스트")] 
     public List<UserData> UserDataList;
-    
-    //[Header("방정보")]
-    //public RoomSettingData roomSettingData;
-
+  
     public bool isFastMatch;
 
+    // 게임 종료후 메인 화면에서 플레이 했던 유저인지 체크하는 값
     public bool isPlayedUser;
+    public bool isEscapeWin;
 
     public string inviterName;
     
@@ -1032,35 +1031,35 @@ public class BackendManager : Singleton<BackendManager>
         Backend.Match.SendDataToInGameRoom(dataByte);
     }
 
-    public void MatchEnd() {
-        Backend.Match.OnLeaveInGameServer = (MatchInGameSessionEventArgs args) => {
-            if (args.ErrInfo == ErrorCode.Success) {
-                Debug.Log("OnLeaveInGameServer 인게임 서버 접속 종료 : " + args.ErrInfo.ToString());
-            } else {
-                Debug.LogError("OnLeaveInGameServer 인게임 서버 접속 종료 : " + args.ErrInfo + " / " + args.Reason);
-            }
-        };
+    public void MatchEnd(bool EscapeWin)
+    {
+        if (winUser == "") return;
         
-        Backend.Match.OnMatchResult = (MatchResultEventArgs args) => {
-            if (args.ErrInfo == ErrorCode.Success) {
-                Debug.Log("8-2. OnMatchResult 성공 : " + args.ErrInfo.ToString());
-            } else {
-                Debug.LogError("8-2. OnMatchResult 실패 : " + args.ErrInfo.ToString());
-            }
-        };        
+        isInitialize = false;
+
         Debug.Log("8-1. MatchEnd 호출");
         MatchGameResult matchGameResult = new MatchGameResult();
         matchGameResult.m_winners = new List<SessionId>();
         matchGameResult.m_losers = new List<SessionId>();
         
+        // 승리 유저 제외 전부 패배 처리
         foreach (var session in inGameUserList) {
             if(session.Value.m_nickname == winUser)
                 matchGameResult.m_winners.Add(session.Value.m_sessionId);
             else
                 matchGameResult.m_losers.Add(session.Value.m_sessionId);
         }
+
+        isEscapeWin = EscapeWin;
         
         Backend.Match.MatchEnd(matchGameResult);
+        
+        GamePlayManager.Instance.chaser.Chase(false);
+        
+        isInitialize = false;
+        // 결과에 따라 승리, 패배 UI
+        Debug.Log(winUser == userInfo.Nickname + "이게 최종결과");
+        GamePlayManager.Instance.GameResult(Instance.winUser == userInfo.Nickname);
     }
     
     public void AddTransactionInsert(UserDataType table, Param param)

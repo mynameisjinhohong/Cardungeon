@@ -8,14 +8,9 @@ public class Door_PCI : TileObject_PCI
     {
         if(player.Keys > 2)
         {
-            if (player.isMine)
-            { 
-                GamePlayManager.Instance.GameWin(true);
-            }
-            else
-            {
-                GamePlayManager.Instance.GameOver();
-            }
+            BackendManager.Instance.winUser = player.PlayerName.text;
+
+            BackendManager.Instance.MatchEnd(true);
         }
     }
 }

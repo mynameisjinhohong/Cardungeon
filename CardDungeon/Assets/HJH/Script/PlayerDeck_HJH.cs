@@ -175,14 +175,21 @@ public class PlayerDeck_HJH : MonoBehaviour
                     card.transform.GetChild(1).GetComponent<TMP_Text>().text = CardManager.Instance.cardList.cards[-hand[i]].useMP.ToString(); //나중에 변경
                     card.transform.GetChild(1).GetComponent<TMP_Text>().color = Color.yellow;
                     card.transform.GetChild(2).GetComponent<Image>().sprite = CardManager.Instance.cardList.cards[-hand[i]].itemImage;
-                    card.GetComponent<Card_HJH>().keyPadImage.gameObject.SetActive(false);
+
+                    #if PLATFORM_STANDALONE
+                    if(card.GetComponent<Card_HJH>().keyPadImage != null)
+                        card.GetComponent<Card_HJH>().keyPadImage.gameObject.SetActive(false);
+                    #endif
                 }
 
             }
             else
             {
-                keyPadImageList[i].SetActive(false);
-                
+                #if PLATFORM_STANDALONE
+                if(keyPadImageList[i] != null)
+                    keyPadImageList[i].SetActive(false);
+                #endif
+
                 GameObject card = cards[i];
                 card.SetActive(false);
             }

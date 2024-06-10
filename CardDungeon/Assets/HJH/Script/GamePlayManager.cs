@@ -336,7 +336,8 @@ public class GamePlayManager : Singleton<GamePlayManager>
             if (BackendManager.Instance.UserDataList.Count <= 1)
             {
                 Debug.Log("승리처리");
-                GameWin(false);
+                BackendManager.Instance.winUser = BackendManager.Instance.userInfo.Nickname;
+                BackendManager.Instance.MatchEnd(false);
             }
         };
         
@@ -354,6 +355,24 @@ public class GamePlayManager : Singleton<GamePlayManager>
                     BackendManager.Instance.isMeSuperGamer =
                         BackendManager.Instance.UserDataList[i].playerName == BackendManager.Instance.userInfo.Nickname;
                 }
+            }
+        };
+        
+        // 게임 종료후 서버 연결 끝났을때 호출
+        Backend.Match.OnLeaveInGameServer = (MatchInGameSessionEventArgs args) => {
+            if (args.ErrInfo == ErrorCode.Success) {
+                Debug.Log("OnLeaveInGameServer 인게임 서버 접속 종료 : " + args.ErrInfo.ToString());
+            } else {
+                Debug.LogError("OnLeaveInGameServer 인게임 서버 접속 종료 : " + args.ErrInfo + " / " + args.Reason);
+            }
+        };
+        
+        // 서버로 결과를 전송 완료 했을때 호출
+        Backend.Match.OnMatchResult = (MatchResultEventArgs args) => {
+            if (args.ErrInfo == ErrorCode.Success) {
+                Debug.Log("8-2. OnMatchResult 성공 : " + args.ErrInfo.ToString());
+            } else {
+                Debug.LogError("8-2. OnMatchResult 실패 : " + args.ErrInfo.ToString());
             }
         };
     }
@@ -462,6 +481,11 @@ public class GamePlayManager : Singleton<GamePlayManager>
         catch
         {
             Debug.Log("연결 끊어짐");
+            if (BackendManager.Instance.isInitialize)
+            {
+                BackendManager.Instance.isInitialize = false;
+                UIManager.Instance.OpenRecyclePopup("네트워크 에러", "서버와 연결이 종료 되었습니다.\n타이틀 화면으로 이동 합니다.", mainUi.GotoLobby);
+            }
         }
     }
 
@@ -496,16 +520,10 @@ public class GamePlayManager : Singleton<GamePlayManager>
         }
     }
 
-    public void GameOver()
-    {
-        Camera.main.transform.SetParent(null);
-        players[myIdx].gameObject.SetActive(false);
-        mainUi.GameOver();
-    }
-
-
     public void GoDamage(Vector2Int pos, int damage)
     {
+        if (!BackendManager.Instance.isInitialize) return;
+        
         for (int i = 0; i < players.Count; i++)
         {
             Vector2Int vec = new Vector2Int((int)players[i].transform.position.x, (int)players[i].transform.position.y);
@@ -519,44 +537,43 @@ public class GamePlayManager : Singleton<GamePlayManager>
         }
         for (int i = 0; i < players.Count; i++)
         {
-            if (players[i].isMine) continue;
+            // 내 체력은 무시하고 남들의 체력이 1이상이면 리턴시키는 구조
+            if (players[i].isMine)
+            {
+                BackendManager.Instance.winUser = players[i].GetComponent<Player_HJH>().PlayerName.text;
+                continue;
+            }
             if (players[i].HP > 0)
             {
+                Debug.Log(players[i].PlayerName.text + "체력있어서 리턴");
+                BackendManager.Instance.winUser = "";
                 return;
             }
+            Debug.Log(BackendManager.Instance.winUser + "승리처리");
+            BackendManager.Instance.MatchEnd(false);
         }
-        GameWin(false);
     }
 
-    public void GameWin(bool isEscape)
+    public void GameResult(bool isWin)
     {
-        mainUi.winImage.SetActive(true);
-        if (mainUi.winImage.TryGetComponent<Button>(out Button btn))
+        if (isWin)
         {
-            btn.onClick.AddListener(GoTitle);
+            string allKillWin = "승리 하였습니다!";
+
+            string esacpeWin = "탈출 성공!";
+
+            mainUi.winTypeText.text = BackendManager.Instance.isEscapeWin ? esacpeWin : allKillWin;
+        
+            mainUi.winImage.SetActive(true);
         }
-
-        string allKillWin = "승리하였습니다!";
-
-        string esacpeWin = "탈출 성공!";
-
-        mainUi.winTypeText.text = isEscape ? esacpeWin : allKillWin;
-
-        BackendManager.Instance.winUser = BackendManager.Instance.userInfo.Nickname;
-    }
-
-    public void GoTitle()
-    {
-        mainUi.winImage.SetActive(false);
-
-        BackendManager.Instance.MatchEnd();
-
-        if (mainUi.winImage.TryGetComponent<Button>(out Button btn))
+        else
         {
-            btn.onClick.RemoveListener(GoTitle);
+            Camera.main.transform.SetParent(null);
+            players[myIdx].gameObject.SetActive(false);
+            mainUi.gameOver.SetActive(true);
         }
     }
-    
+
     //재접속 코드 남겨둠
     // Backend.Match.IsGameRoomActivate( callback =>
     // {

@@ -79,7 +79,6 @@ public class MainUI_HJH : MonoBehaviour
     public Image keyIcon;
     
     public GameObject lookaroundbuttons;
-    bool gameOverBool = false;
     public GameObject[] gameOverFalseGameObject;
     public int m_lookAt;
 
@@ -125,7 +124,6 @@ public class MainUI_HJH : MonoBehaviour
                 playerIcon.sprite = icons[GamePlayManager.Instance.myIdx];
                 firstSet = true;
             }
-
         }
         int deckAmount = 0;
         deckAmount += playerDeck.deck.Count;
@@ -142,7 +140,7 @@ public class MainUI_HJH : MonoBehaviour
                 BigCardOff();
             }
         }
-        if (!gameOverBool)
+        if (BackendManager.Instance.isInitialize)
         {
             if (Input.GetKeyDown(KeyCode.Q))
             {
@@ -217,10 +215,12 @@ public class MainUI_HJH : MonoBehaviour
                 {
                     break;
                 }
-                if(i == GamePlayManager.Instance.players.Count - 1)
-                {
-                    GamePlayManager.Instance.GoTitle();
-                }
+                
+                // 패배 처리 조건 변경
+                // if(i == GamePlayManager.Instance.players.Count - 1)
+                // {
+                //     GamePlayManager.Instance.GoTitle();
+                // }
             }
         }
     }
@@ -864,11 +864,6 @@ public class MainUI_HJH : MonoBehaviour
         deckList.SetActive(false);
     }
     #endregion
-    public void GameOver()
-    {
-        gameOver.SetActive(true);
-        gameOverBool = true;
-    }
     public void GotoLobby()
     {
         SceneManager.LoadScene(0);

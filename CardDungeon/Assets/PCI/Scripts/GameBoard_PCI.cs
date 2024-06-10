@@ -236,7 +236,7 @@ public class GameBoard_PCI : MonoBehaviour
 
         GamePlayManager.Instance.chaser = chaserObj.GetComponent<Chaser>();
 
-        StartCoroutine(SuddenDeathTimer(chaserObj));
+        StartCoroutine(SuddenDeathTimer(GamePlayManager.Instance.chaser));
     }
 
     public void Clear()
@@ -335,14 +335,14 @@ public class GameBoard_PCI : MonoBehaviour
         return false;
     }
     
-    private IEnumerator SuddenDeathTimer(GameObject chaserObj)
+    private IEnumerator SuddenDeathTimer(Chaser chaser)
     {
         int timeValue = Random.Range(1, 4);
 
         yield return new WaitForSeconds(timeValue * 10);
 
-        chaserObj.GetComponent<Chaser>().StartChase();
-        
+        chaser.Chase(true);
+
         Debug.Log("추격 시작");
         
         GamePlayManager.Instance.mainUi.chaserWarning.SetActive(true);

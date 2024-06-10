@@ -8,15 +8,25 @@ public class Chaser : MonoBehaviour
 {
     public Animator animator;
     public SpriteRenderer chaserSR;
+    private Coroutine canMoveCor;
 
-    public void StartChase()
+    public void Chase(bool isOnOff)
     {
-        gameObject.SetActive(true);
+        gameObject.SetActive(isOnOff);
 
-        StartCoroutine(RanMove());
+        if (isOnOff)
+        {
+            if (canMoveCor == null)
+            {
+                canMoveCor = StartCoroutine(RanMoveCor());
+            } 
+        }
+        else
+        {
+            StopCoroutine(canMoveCor);   
+        }
     }
-
-    IEnumerator RanMove()
+    IEnumerator RanMoveCor()
     {
         while (true)
         {
@@ -24,11 +34,11 @@ public class Chaser : MonoBehaviour
 
             GamePlayManager.Instance.CardGo(9, ranIdx);
             
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(2f);
             
             GamePlayManager.Instance.CardGo(9, 8);
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(2f);
         }
     }
 }

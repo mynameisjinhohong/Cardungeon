@@ -98,16 +98,9 @@ public class Player_HJH : MonoBehaviour
             {
                 hp = maxHp;
             }
-            if (hp < 1)
+            if (hp < 1 && PlayerName.text == BackendManager.Instance.userInfo.Nickname)
             {
-                if (isMine)
-                {
-                    GamePlayManager.Instance.GameOver();
-                }
-                else
-                {
-                    gameObject.SetActive(false);
-                }
+                GamePlayManager.Instance.GameResult(false);
             }
         }
     }
