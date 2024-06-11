@@ -341,7 +341,7 @@ public class GameBoard_PCI : MonoBehaviour
 
         yield return new WaitForSeconds(timeValue * 10);
 
-        chaser.Chase(true);
+        chaser.gameObject.SetActive(true);
 
         Debug.Log("추격 시작");
         

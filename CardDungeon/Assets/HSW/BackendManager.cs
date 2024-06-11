@@ -1044,8 +1044,6 @@ public class BackendManager : Singleton<BackendManager>
 
     public void SendResultToServer()
     {
-        isInitialize = false;
-
         Debug.Log("8-1. MatchEnd 호출");
         MatchGameResult matchGameResult = new MatchGameResult();
         matchGameResult.m_winners = new List<SessionId>();
@@ -1097,8 +1095,9 @@ public class BackendManager : Singleton<BackendManager>
             default :
                 break;
         }
-        GamePlayManager.Instance.chaser.Chase(false);
+        
         Backend.Match.MatchEnd(matchGameResult);
+        Debug.Log("게임 종료 요청 완료");
     }
     
     public void AddTransactionInsert(UserDataType table, Param param)

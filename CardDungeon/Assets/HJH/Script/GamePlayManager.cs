@@ -30,7 +30,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
     public Chaser chaser;
 
     public int classSelectedUser;
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -401,7 +401,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
             }
         };
         
-        // 서버로 결과를 전송 완료 했을때 호출
+        // 서버로 결과를 전송 완료하여 게임을 종료처리
         Backend.Match.OnMatchResult = (MatchResultEventArgs args) => {
             if (args.ErrInfo == ErrorCode.Success) {
                 Debug.Log("8-2. OnMatchResult 성공 : " + args.ErrInfo.ToString());
@@ -453,13 +453,27 @@ public class GamePlayManager : Singleton<GamePlayManager>
     
     public void SendToSuperGamerEndGame()
     {
-        Debug.Log("승리처리 메세지 송신");
-        messageQueue = new Queue<Message>();
+        if (BackendManager.Instance.isMeSuperGamer)
+        {
+            if (BackendManager.Instance.winUser == "")
+            {
+                Debug.Log("승리유저 정보 비어있어서 리턴 처리");
+                return;
+            }
+                            
+            Debug.Log($"{BackendManager.Instance.winUser}승리 처리 메세지 수신");
+            BackendManager.Instance.SendResultToServer();
+        }
+        else
+        {
+            Debug.Log("승리처리 메세지 송신");
+            messageQueue = new Queue<Message>();
             
-        Message m = new Message();
-        m.playerIdx = -99;
-        m.cardIdx = -99;
-        SendData(m);
+            Message m = new Message();
+            m.playerIdx = -99;
+            m.cardIdx = -99;
+            SendData(m);
+        }
     }
     
     void Update()
@@ -521,10 +535,9 @@ public class GamePlayManager : Singleton<GamePlayManager>
         }
         catch
         {
-            Debug.Log("연결 끊어짐");
             if (BackendManager.Instance.isInitialize)
             {
-                BackendManager.Instance.isInitialize = false;
+                Debug.Log("연결 끊어짐");
                 UIManager.Instance.OpenRecyclePopup("네트워크 에러", "서버와 연결이 종료 되었습니다.\n타이틀 화면으로 이동 합니다.", mainUi.GotoLobby);
             }
         }
@@ -581,6 +594,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
         if (players.Count <= 1)
         {
+            BackendManager.Instance.isInitialize = false;
             BackendManager.Instance.winUser = BackendManager.Instance.userDataList[0].playerName; 
             Debug.Log(BackendManager.Instance.winUser + "승리처리");
             SendToSuperGamerEndGame();

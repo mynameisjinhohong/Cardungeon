@@ -866,6 +866,8 @@ public class MainUI_HJH : MonoBehaviour
     #endregion
     public void GotoLobby()
     {
+        BackendManager.Instance.isInitialize = true;
+        
         SceneManager.LoadScene(0);
     }
     public void LookAround()
