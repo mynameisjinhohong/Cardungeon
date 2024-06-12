@@ -15,6 +15,9 @@ public class UI_Setting_PCI : MonoBehaviour
     public Button btn_Confirm, btn_Cancel;
     public Toggle toggle_AutoLogin;
 
+    public GameObject screenModeObj;
+    public GameObject resolutionObj;
+    
     private FullScreenMode screenMode;
     private List<Resolution> resolutions;
     private int screenModeIdx = 0;
@@ -83,6 +86,14 @@ public class UI_Setting_PCI : MonoBehaviour
                 ResolutionIdx = i;
             }
         }
+
+        #if PLATFORM_STANDALONE_WIN
+        screenModeObj.SetActive(true);
+        resolutionObj.SetActive(true);
+        #elif PLATFORM_ANDROID
+        screenModeObj.SetActive(false);
+        resolutionObj.SetActive(false);
+        #endif
     }
 
     private void OnEnable()

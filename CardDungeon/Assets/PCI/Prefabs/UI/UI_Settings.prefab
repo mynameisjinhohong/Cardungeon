@@ -2027,6 +2027,8 @@ MonoBehaviour:
   btn_Confirm: {fileID: 8070688573962232056}
   btn_Cancel: {fileID: 5445162216803113765}
   toggle_AutoLogin: {fileID: 4858449958775514678}
+  screenModeObj: {fileID: 6722430803776307945}
+  resolutionObj: {fileID: 6811144539923730948}
 --- !u!1 &5376007465623268141
 GameObject:
   m_ObjectHideFlags: 0

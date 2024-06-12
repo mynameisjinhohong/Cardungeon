@@ -13,6 +13,7 @@ public class AudioPlayer : Singleton<AudioPlayer>
         if (instance != null)
         {
             Destroy(gameObject);
+            return;
         }
         instance = this;
         DontDestroyOnLoad(gameObject);

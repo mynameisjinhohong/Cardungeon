@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using BackEnd;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -868,7 +869,16 @@ public class MainUI_HJH : MonoBehaviour
     {
         BackendManager.Instance.isInitialize = true;
         
+        Backend.Match.LeaveGameServer();
+        
         SceneManager.LoadScene(0);
+    }
+
+    public void DoSurrender()
+    {
+        Debug.Log("내 hp 0으로 만들기");
+        GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].HP = 0;
+        Debug.Log($"{GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].PlayerName.text}의 체력 {GamePlayManager.Instance.players[GamePlayManager.Instance.myIdx].hp}");
     }
     public void LookAround()
     {

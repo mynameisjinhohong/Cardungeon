@@ -275,6 +275,16 @@ public class MatchController : MonoBehaviour
         SelfDataInit();
     }
 
+    public void FastMatchUIOpen()
+    {
+        UIManager.Instance.OpenPopup(UIManager.Instance.FastMatchingPopupPrefab);
+    }
+
+    public void InviteUIOpen()
+    {
+        UIManager.Instance.OpenPopup(UIManager.Instance.DoInvitePrefab);
+    }
+
     public void LeaveMatchingRoom()
     {
         Backend.Match.LeaveMatchMakingServer();
