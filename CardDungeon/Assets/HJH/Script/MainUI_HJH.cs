@@ -399,7 +399,6 @@ public class MainUI_HJH : MonoBehaviour
         functionTitleText.text = "카드 강화!";
         
         int[] ran = RandomCard(false);
-        Debug.Log(ran);
         if (ran != null)
         {
             allList.SetActive(true);
