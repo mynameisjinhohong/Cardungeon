@@ -158,7 +158,7 @@ public class GameBoard_PCI : MonoBehaviour
         foreach (var item in itemList.itemDataList)
         {
             int k = 0;
-            
+
             if (BackendManager.Instance.userDataList.Count <= 2)
             {
                 k = item.amount;
@@ -193,6 +193,9 @@ public class GameBoard_PCI : MonoBehaviour
                             var newItemObject = Instantiate(itemBoxPrefab, new Vector3(x, y, 0), Quaternion.identity, targetTile.transform);
                             newItemObject.SetData(item);
                             targetTile.AddTileObject(newItemObject);
+                            newItemObject.itemBoxFrame.SetActive(true);
+                            newItemObject.itemPotionFrame.SetActive(false);
+                            
                             k--;
                         }
                         else
@@ -202,6 +205,8 @@ public class GameBoard_PCI : MonoBehaviour
                             var newItemObject = Instantiate(itemPrefab, new Vector3(x, y, 0), Quaternion.identity, targetTile.transform);
                             newItemObject.SetData(item);
                             targetTile.AddTileObject(newItemObject);
+                            newItemObject.itemBoxFrame.SetActive(false);
+                            newItemObject.itemPotionFrame.SetActive(true);
                             k--;
                         }
                     }
