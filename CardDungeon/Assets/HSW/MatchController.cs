@@ -302,7 +302,7 @@ public class MatchController : MonoBehaviour
             readyToPlay.gameObject.SetActive(true);
 
             loginCheckButton.interactable = true;
-
+            
             DataManager.Instance.Initialize();
         }
         else
@@ -310,6 +310,8 @@ public class MatchController : MonoBehaviour
             ChangeUI(1);
 
             _backendManager.ResetInGameData();
+            
+            ADManager.Instance.ShowAD();
         }
     }
 

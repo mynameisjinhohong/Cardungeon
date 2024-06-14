@@ -28,6 +28,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
     public GameObject chaserObj;
     public Chaser chaser;
+    public bool isWaiting;
 
     public int classSelectedUser;
 
@@ -266,6 +267,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
                 if (BackendManager.Instance.isMeSuperGamer)
                 {
+                    Debug.Log("슈퍼게이머인 나는 메세지를 수신합니다");
                     messageQueue.Enqueue(msg);
 
                     // 패배 처리 요청 받으면 모든 유저에게 정보 전송
@@ -288,6 +290,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
                 }
                 else
                 {
+                    Debug.Log("슈퍼게이머가 아닌나는 메세지를 수신합니다");
                     if (args.From.NickName == BackendManager.Instance.userDataList[SuperGamerIdx].playerName) //지금 받은게 만약에 슈퍼게이머가 보낸거면
                     {
                         if (msg.playerIdx == -10) //-10 플레이어 인덱스를 받으면 맵을 생성한다.
@@ -299,11 +302,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
                                     gameBoard.Generate(msg.cardIdx, 12, 12);
                                     break;
                                 case 3:
-                                    gameBoard.Generate(msg.cardIdx, 14, 14);
-                                    break;
                                 case 4:
-                                    gameBoard.Generate(msg.cardIdx, 14, 14);
-                                    break;
                                 case 5:
                                     gameBoard.Generate(msg.cardIdx, 14, 14);
                                     break;
@@ -371,12 +370,14 @@ public class GamePlayManager : Singleton<GamePlayManager>
                         BackendManager.Instance.winUser = BackendManager.Instance.userInfo.Nickname;
                     }
                 }
+                
                 SendToSuperGamerEndGame();
             }
         };
         
         Backend.Match.OnChangeSuperGamer = (MatchInGameChangeSuperGamerEventArgs args) => {
-            Debug.Log("슈퍼게이머가 접속을 종료하여 슈퍼게이머를 재선정합니다");
+            
+            Debug.Log($"슈퍼 게이머였던 {args.OldSuperUserRecord}님이 접속을 종료하여 슈퍼게이머를 재선정합니다");
             
             for (int i = 0; i < BackendManager.Instance.userDataList.Count; i++)
             {
@@ -389,6 +390,26 @@ public class GamePlayManager : Singleton<GamePlayManager>
                     BackendManager.Instance.isMeSuperGamer =
                         BackendManager.Instance.userDataList[i].playerName == BackendManager.Instance.userInfo.Nickname;
                 }
+            }
+            
+            if (BackendManager.Instance.userDataList.Count <= 1)
+            {
+                BackendManager.Instance.winUser = BackendManager.Instance.userDataList[0].playerName; 
+                Debug.Log("다른유저가 모두 나가서 승리처리");
+                foreach (var userData in BackendManager.Instance.inGameUserList)
+                {
+                    if (userData.Value.m_nickname == BackendManager.Instance.userInfo.Nickname)
+                    {
+                        BackendManager.Instance.userGradeList.Add(userData.Value);
+                        BackendManager.Instance.winUser = BackendManager.Instance.userInfo.Nickname;
+                    }
+                }
+                
+                SendToSuperGamerEndGame();
+            }
+            else
+            {
+                UIManager.Instance.OpenIndicator();
             }
         };
         
@@ -431,11 +452,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
                     gameBoard.Generate(m.cardIdx, 12, 12);
                     break;
                 case 3:
-                    gameBoard.Generate(m.cardIdx, 14, 14);
-                    break;
                 case 4:
-                    gameBoard.Generate(m.cardIdx, 14, 14);
-                    break;
                 case 5:
                     gameBoard.Generate(m.cardIdx, 14, 14);
                     break;
@@ -462,18 +479,22 @@ public class GamePlayManager : Singleton<GamePlayManager>
             }
                             
             Debug.Log($"{BackendManager.Instance.winUser}승리 처리 메세지 수신");
+            
             BackendManager.Instance.SendResultToServer();
         }
         else
         {
             Debug.Log("승리처리 메세지 송신");
-            messageQueue = new Queue<Message>();
-            
             Message m = new Message();
             m.playerIdx = -99;
             m.cardIdx = -99;
             SendData(m);
         }
+    }
+
+    public void newSuperGamerMessageQueueInit()
+    {
+        messageQueue = new Queue<Message>();
     }
     
     void Update()
@@ -518,6 +539,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
     //    }
     //}
 
+    [Serializable]
     public class Message
     {
         public int playerIdx;

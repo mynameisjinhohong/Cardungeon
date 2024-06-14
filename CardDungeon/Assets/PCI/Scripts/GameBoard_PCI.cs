@@ -159,16 +159,19 @@ public class GameBoard_PCI : MonoBehaviour
         {
             int k = 0;
             
-            if (BackendManager.Instance.userDataList.Count > 5)
-            {
-                k = item.amount * 2;
-            }
-            else
+            if (BackendManager.Instance.userDataList.Count <= 2)
             {
                 k = item.amount;
             }
-            
-            
+            else if (BackendManager.Instance.userDataList.Count <= 5)
+            {
+                k = (int)(item.amount * 2f);
+            }
+            else if (BackendManager.Instance.userDataList.Count <= 8)
+            {
+                k = (int)(item.amount * 3f);
+            }
+
             while (k != 0)
             {
                 int x = UnityEngine.Random.Range(0, width);

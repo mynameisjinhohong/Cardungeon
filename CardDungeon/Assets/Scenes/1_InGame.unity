@@ -487,6 +487,7 @@ MonoBehaviour:
   - {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
   chaserObj: {fileID: 5898363691524700565, guid: ff58ab0ce393f2e47a4eafbe2891fe87, type: 3}
   chaser: {fileID: 0}
+  isWaiting: 0
   classSelectedUser: 0
 --- !u!4 &31816213
 Transform:
@@ -893,6 +894,22 @@ PrefabInstance:
       propertyPath: height
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 8787522441298779875, guid: e36e36b8cb80c004d8e7795049669df8, type: 3}
+      propertyPath: itemList.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8787522441298779875, guid: e36e36b8cb80c004d8e7795049669df8, type: 3}
+      propertyPath: itemList.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: bd343f981b4885642905df0531d05f11, type: 2}
+    - target: {fileID: 8787522441298779875, guid: e36e36b8cb80c004d8e7795049669df8, type: 3}
+      propertyPath: itemList.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 0f2ed1077e4f67540b63b0ce8c5c24dd, type: 2}
+    - target: {fileID: 8787522441298779875, guid: e36e36b8cb80c004d8e7795049669df8, type: 3}
+      propertyPath: itemList.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: e6b28c5881382474ea01c86243a6c5e7, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e36e36b8cb80c004d8e7795049669df8, type: 3}
 --- !u!4 &103219520 stripped

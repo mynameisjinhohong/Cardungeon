@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using BackEnd.Tcp;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class UIManager : Singleton<UIManager>
 {
@@ -43,6 +45,13 @@ public class UIManager : Singleton<UIManager>
     public GameObject TutorialPopupPrefab;
 
     public GameObject FastMatchingPopupPrefab;
+
+    public GameObject IndicatorPopupPrefab;
+
+    private Coroutine indicatorCoroutine;
+
+    public Sprite indicatorImage1;
+    public Sprite indicatorImage2;
     
     private void Awake()
     {
@@ -215,5 +224,63 @@ public class UIManager : Singleton<UIManager>
         FastMatchUI targetUI = targetUIObj.GetComponent<FastMatchUI>();
 
         targetUI.DoPanelAnim(true);
+    }
+
+    public void OpenIndicator()
+    {
+        if (indicatorCoroutine == null)
+        {
+            indicatorCoroutine = StartCoroutine(WaitSuperGamerSetCor());
+        }
+        else
+        {
+            StopCoroutine(indicatorCoroutine);
+            
+            indicatorCoroutine = StartCoroutine(WaitSuperGamerSetCor());
+        }
+    }
+
+    IEnumerator WaitSuperGamerSetCor()
+    {
+        GameObject indicator = Instantiate(IndicatorPopupPrefab, PopupListParent);
+        
+        Image indicatorImg = indicator.GetComponent<Image>();
+        
+        bool isSuperGamerSetted = false;
+
+        while (true)
+        {
+            isSuperGamerSetted = TryFindSuperGamer();
+
+            indicatorImg.sprite = indicatorImage1;
+            
+            yield return new WaitForSeconds(1);
+
+            indicatorImg.sprite = indicatorImage2;
+            
+            if (isSuperGamerSetted)
+            {
+                if (BackendManager.Instance.isMeSuperGamer)
+                    GamePlayManager.Instance.newSuperGamerMessageQueueInit();
+                
+                yield return new WaitForSeconds(1);
+                
+                Destroy(indicator);
+                break;
+            }
+        }
+    }
+
+    bool TryFindSuperGamer()
+    {
+        for (int i = 0; i < BackendManager.Instance.userDataList.Count; i++)
+        {
+            if (BackendManager.Instance.userDataList[i].isSuperGamer)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

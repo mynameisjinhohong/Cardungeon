@@ -2194,7 +2194,7 @@ MonoBehaviour:
   AccountSignUpPrefab: {fileID: 853597947298320963, guid: 11b9020a17c24a34d82b5f92c63ef819, type: 3}
   FindIDPrefab: {fileID: 4557327945877872313, guid: 58c443f8429c49243a255e3cc952fa5a, type: 3}
   ResetPWPrefab: {fileID: 4557327945877872313, guid: 2fa3223a6d9991749b93ed3b3c730ab4, type: 3}
-  GoogleLoginPrefab: {fileID: 5097887765796371620, guid: 513dbdf03e01cc5448020e691f5f3234, type: 3}
+  DoInvitePrefab: {fileID: 0}
   GuestLoginPrefab: {fileID: 5097887765796371620, guid: 919e8e8d821778049b2e069557afa5f7, type: 3}
   NickNamePrefab: {fileID: 5097887765796371620, guid: 919e8e8d821778049b2e069557afa5f7, type: 3}
   RecyclePopupPrefab: {fileID: 5097887765796371620, guid: 35c811efe1a2a6f438b0ed61269621f5, type: 3}
@@ -2202,6 +2202,9 @@ MonoBehaviour:
   SettingPopupPrefab: {fileID: 4861372906580432593, guid: e61276f7826ad3446a3b4c15e8576136, type: 3}
   TutorialPopupPrefab: {fileID: 6867880555949617580, guid: 5c3a3c9cf385e79469854aa664800969, type: 3}
   FastMatchingPopupPrefab: {fileID: 8411772894507834047, guid: 6b1acb024ac51e14db59e879aef39771, type: 3}
+  IndicatorPopupPrefab: {fileID: 6141055736511476953, guid: 186a4b938e18d6249b7a81f22ec4ad64, type: 3}
+  indicatorImage1: {fileID: 21300000, guid: 049f88e9bacbaa24c806a60cb45d2b6c, type: 3}
+  indicatorImage2: {fileID: 21300000, guid: 09d85e0f7eca2e245b36c91dcf8fb57c, type: 3}
 --- !u!4 &835534843
 Transform:
   m_ObjectHideFlags: 0
