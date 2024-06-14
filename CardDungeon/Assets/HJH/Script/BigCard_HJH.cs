@@ -49,11 +49,13 @@ public class BigCard_HJH : MonoBehaviour
                     imOn = true;
                     if (isDeleteCard)
                     {
+                        transform.GetChild(5).gameObject.SetActive(false);
                         transform.GetChild(6).gameObject.SetActive(true);
                     }
                     else
                     {
                         transform.GetChild(5).gameObject.SetActive(true);
+                        transform.GetChild(6).gameObject.SetActive(false);
                     }
                 }
                 else
@@ -66,6 +68,13 @@ public class BigCard_HJH : MonoBehaviour
             }
         }
     }
-    
-    
+    private void OnEnable()
+    {
+        imOn= false;
+        transform.GetChild(4).gameObject.SetActive(false);
+        transform.GetChild(5).gameObject.SetActive(false);
+        transform.GetChild(6).gameObject.SetActive(false);
+    }
+
+
 }
