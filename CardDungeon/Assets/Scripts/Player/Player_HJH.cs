@@ -102,6 +102,15 @@ public class Player_HJH : MonoBehaviour
             // hp가 없으면 그 플레이어는 삭제, 만약 본인이면 즉시 패배 처리 UI보여주기
             if (hp < 1)
             {
+                // 열쇠 흩뿌리기
+                for(int i = 0; i < keys; i++)
+                {
+                    int _x = UnityEngine.Random.Range(0, GamePlayManager.Instance.gameBoard.width);
+                    int _y = UnityEngine.Random.Range(0, GamePlayManager.Instance.gameBoard.height);
+                    GamePlayManager.Instance.gameBoard.AddKeyObject(new Vector2Int(_x, _y));
+                }
+
+
                 if (isMine)
                 {
                     GamePlayManager.Instance.GameResult(false);

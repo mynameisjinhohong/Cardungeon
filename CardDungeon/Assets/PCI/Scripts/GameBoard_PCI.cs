@@ -259,6 +259,14 @@ public class GameBoard_PCI : MonoBehaviour
         }
     }
 
+    public void AddKeyObject(Vector2Int target)
+    {
+        var targetTile = board[target.x, target.y];
+        var newTileObject = Instantiate(itemPrefab, new Vector3(target.x, target.y, 0), Quaternion.identity, targetTile.transform);
+        newTileObject.SetData(itemList.itemDataList[0]); // 하드코딩
+        targetTile.AddTileObject(newTileObject);
+    }
+
     public TileObject_PCI AddTileObject(Vector2Int target, TileObject_PCI prefab)
     {
         var targetTile = board[target.x, target.y];
