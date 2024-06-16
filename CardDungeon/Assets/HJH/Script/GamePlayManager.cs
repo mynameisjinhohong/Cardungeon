@@ -122,9 +122,18 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
                 Transform parentTransform = PlayerSpawnPosition[myIdx].transform;
 
+                if(Camera.main.TryGetComponent<CameraManager_HJH>(out var cam)){
+                    cam.target = parentTransform;
+                    cam.transform.position = parentTransform.position + new Vector3(0.5f, 0.5f, -10f);
+    }
+                else
+                {
+
+
                 Camera.main.transform.SetParent(parentTransform.GetChild(0));
 
                 Camera.main.transform.localPosition = new Vector3(0.5f, 0.5f, -10f);
+                }
             }
         }
 
@@ -637,7 +646,15 @@ public class GamePlayManager : Singleton<GamePlayManager>
         }
         else
         {
+            if(Camera.main.TryGetComponent<CameraManager_HJH>(out var cam))
+            {
+                cam.target = null;
+            }
+            else
+            {
+
             Camera.main.transform.SetParent(null);
+            }
             players[myIdx].gameObject.SetActive(false);
             mainUi.gameOver.SetActive(true);
         }

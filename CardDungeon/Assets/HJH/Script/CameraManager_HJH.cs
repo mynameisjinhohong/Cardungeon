@@ -5,6 +5,16 @@ using UnityEngine;
 public class CameraManager_HJH : MonoBehaviour
 {
     public bool isShaking = false;
+    public Transform target;
+
+    private void Update()
+    {
+        if(target != null)
+        {
+            transform.position = Vector3.Lerp(transform.position, target.position + new Vector3(0.5f, 0.5f, -10f), 0.5f);
+        }
+    }
+
     public IEnumerator Shake(float ShakeAmount, float ShakeTime)
     {
         if (!isShaking)
