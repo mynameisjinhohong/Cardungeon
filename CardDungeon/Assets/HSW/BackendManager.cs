@@ -54,6 +54,9 @@ public class BackendManager : Singleton<BackendManager>
 
     [SerializeField]
     List<TransactionValue> transactionList = new List<TransactionValue>();
+    
+    private Coroutine sandBoxMatchWaitCor;
+    private Coroutine matchLimitTimeCor;
 
     private int currentSceneIndex;
     void Start()
@@ -606,7 +609,20 @@ public class BackendManager : Singleton<BackendManager>
     public void CreateMatchRoom() {
         
         Debug.Log("2-1. CreateMatchRoom 요청");
-        Backend.Match.CreateMatchRoom();
+        try
+        {
+            Backend.Match.CreateMatchRoom();
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+
+            if (e != null)
+            {
+                UIManager.Instance.OpenRecyclePopup("네트워크 에러", "서버와 연결이 끊어 졌습니다.", Application.Quit);
+            }
+        }
+        
         
         Backend.Match.OnMatchMakingRoomCreate = (MatchMakingInteractionEventArgs args) => {
             if (args.ErrInfo == ErrorCode.Success)
@@ -635,8 +651,6 @@ public class BackendManager : Singleton<BackendManager>
         isMatching = true;
         
         FindTeamMatchCard(userDataList.Count);
-
-        TryMatch();
     }
 
     // 빠른 매칭 요청 ( 인원별 2, 4, 8 )
@@ -665,16 +679,35 @@ public class BackendManager : Singleton<BackendManager>
                 Debug.Log("3-2. OnMatchMakingResponse 매칭 신청");
 
                 // 샌드박스는 커스텀 매칭만 사용
+                MatchController.instance.timerText.gameObject.SetActive(isFastMatch);
+                
                 if (!isFastMatch)
                 {
                     int second = allMatchCardList[matchIndex].transit_to_sandbox_timeout_ms / 1000;
                     
                     if (second > 0) {
                         Debug.Log($"{second}초 뒤에 샌드박스 활성화가 됩니다.");
-                        StartCoroutine(WaitFor10Seconds(second));
+
+                        if (sandBoxMatchWaitCor != null)
+                        {
+                            StopCoroutine(sandBoxMatchWaitCor);
+                        }
+
+                        sandBoxMatchWaitCor = StartCoroutine(WaitFor10Seconds(second));
                     }
                     
                     userDataList.Clear();
+                }
+                else
+                {
+                    int minute = allMatchCardList[matchIndex].match_timeout_m;
+
+                    if (matchLimitTimeCor != null)
+                    {
+                        StopCoroutine(matchLimitTimeCor);
+                    }
+                    
+                    matchLimitTimeCor = StartCoroutine(WaitForMatchLimitTime(minute));
                 }
             } else if (args.ErrInfo == ErrorCode.Success) {
                 Debug.Log("3-3. OnMatchMakingResponse 매칭 성사 완료");
@@ -693,8 +726,28 @@ public class BackendManager : Singleton<BackendManager>
         for (int i = 0; i < second; i++)
         {
             if (!isMatching) break;
+            Debug.Log($"{i}초 경과");
+            yield return delay;
+        }
+    }
+    
+    IEnumerator WaitForMatchLimitTime(int minute) {
+        var delay = new WaitForSeconds(1.0f);
+
+        int second = minute * 60;
+        
+        for (int i = 0; i < second; i++)
+        {
+            if (!isMatching) break;
             
             Debug.Log($"{i}초 경과");
+
+            MatchController.instance.FormatTime(i);
+            
+            if (i >= second)
+            {
+                UIManager.Instance.OpenRecyclePopup("시스템 메세지", "매칭 실패 다시 시도 해주세요.", MatchController.instance.MatchCancel);
+            }
             yield return delay;
         }
     }
@@ -1374,6 +1427,12 @@ public class BackendManager : Singleton<BackendManager>
 
     public void FindTeamMatchCard(int headCount)
     {
+        if (headCount <= 1)
+        {
+            UIManager.Instance.OpenRecyclePopup("시스템 메세지", "커스텀 매치는 2인 이상 부터\n플레이 가능합니다.", null);
+            return;
+        }
+        
         int findValue = headCount * 2;
 
         //팀매치 카드와 인원 * 2로 조회
@@ -1385,6 +1444,8 @@ public class BackendManager : Singleton<BackendManager>
                 matchIndex = i;
             }
         }
+        
+        TryMatch();
     }
 
     private void FindFastMatchCard(int headCount)

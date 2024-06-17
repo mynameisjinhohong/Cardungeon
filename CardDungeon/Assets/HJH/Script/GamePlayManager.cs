@@ -306,6 +306,9 @@ public class GamePlayManager : Singleton<GamePlayManager>
                         if (msg.playerIdx == -10) //-10 플레이어 인덱스를 받으면 맵을 생성한다.
                         {
                             int head = BackendManager.Instance.userDataList.Count;
+                            
+                            Debug.Log($"맵생성 수신{head}");
+                            
                             switch (head)
                             {
                                 case 1:

@@ -194,12 +194,9 @@ public class UIManager : Singleton<UIManager>
         target.title.text    = title;
         target.descript.text = descript;
 
-        if (target.action == null)
-            target.action = PopupListPop;
-        else
-            target.action = action;
+        target.action = (action != null) ? action : PopupListPop;
 
-        PopupListAddNoneABB(Popup);
+        PopupListAddABB(Popup, action);
     }
 
     public void OpenInvitePopup(String title, SessionId sessionID, string roomToken)

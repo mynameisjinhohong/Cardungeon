@@ -52,6 +52,8 @@ public class MatchController : MonoBehaviour
 
     public List<String> TipStrings;
 
+    public TextMeshProUGUI timerText;
+
     //코루틴 관리
     private Coroutine blinkCoroutine;
     private Coroutine matchTextCoroutine;
@@ -215,6 +217,14 @@ public class MatchController : MonoBehaviour
         }
     }
 
+    public void FormatTime(int totalSeconds)
+    {
+        int minutes = totalSeconds / 60;
+        int seconds = totalSeconds % 60;
+        
+        timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+    }
+    
     private void DataInit()
     {
         if (BackendManager.Instance.isPlayedUser) return;

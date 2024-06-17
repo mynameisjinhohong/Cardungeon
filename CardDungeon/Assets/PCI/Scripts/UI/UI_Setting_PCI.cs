@@ -169,7 +169,9 @@ public class UI_Setting_PCI : MonoBehaviour
 
     private void ConfirmSetting()
     {
-        Screen.SetResolution(resolutions[resolutionIdx].width, resolutions[resolutionIdx].height, screenMode, resolutions[resolutionIdx].refreshRate);
+        #if PLATFORM_STANDALONE_WIN
+            Screen.SetResolution(resolutions[resolutionIdx].width, resolutions[resolutionIdx].height, screenMode, resolutions[resolutionIdx].refreshRate);
+        #endif
         
         UIManager.Instance.PopupListPop();
     }
@@ -180,7 +182,11 @@ public class UI_Setting_PCI : MonoBehaviour
         ResolutionIdx = temp_resolutionIdx;
         sld_BgmSlider.value = temp_bgm;
         sld_SfxSlider.value = temp_sfx;
+        
+#if PLATFORM_STANDALONE_WIN
         Screen.SetResolution(resolutions[resolutionIdx].width, resolutions[resolutionIdx].height, screenMode, resolutions[resolutionIdx].refreshRate);
+#endif
+        
         AudioPlayer.Instance.bgmPlayer.volume = sld_BgmSlider.value;
         AudioPlayer.Instance.sfxPlayer.volume = sld_SfxSlider.value;
         
