@@ -935,7 +935,7 @@ public class BackendManager : Singleton<BackendManager>
                 Debug.Log("5-2. OnSessionListInServer 게임룸 접속 성공 : " + args.ToString());
 
                 Debug.Log(args.GameRecords.Count + "번째로 게임룸에 접속");
-                
+
                 foreach (var inGameUserData in args.GameRecords)
                 {
                     inGameUserList.Add(inGameUserData.m_nickname, inGameUserData);
@@ -954,6 +954,13 @@ public class BackendManager : Singleton<BackendManager>
                     
                     userDataList.Add(userData);
                     
+                    if (serverType == ServerType.Dev)
+                    {
+                        isPlayedUser = true;
+                
+                        SceneManager.LoadScene(1);
+                    }
+                    
                     // 모든 플레이어 연결 성공시 인게임씬으로 이동
                     if (CheckHeadCount <= userDataList.Count)
                     {
@@ -962,38 +969,38 @@ public class BackendManager : Singleton<BackendManager>
                         SceneManager.LoadScene(1);
                     }
                 }
+                
+                // 추가로 접속하는 유저의 정보
+                Backend.Match.OnMatchInGameAccess = (MatchInGameSessionEventArgs args) => {
+                    if (args.ErrInfo == ErrorCode.Success) {
+                        Debug.Log($"5-3. OnMatchInGameAccess - 했습니다 : {args.GameRecord.m_nickname}({args.GameRecord.m_sessionId})");
+                
+                        //추가로 접속된 유저가 이미 리스트에 있는지 확인 후 리스트에 정보 추가
+                        if (!inGameUserList.ContainsKey(args.GameRecord.m_nickname))
+                        {
+                            inGameUserList.Add(args.GameRecord.m_nickname, args.GameRecord);
+                    
+                            UserData userData = new UserData();
+                    
+                            userData.playerName = args.GameRecord.m_nickname;
+                            userData.playerToken = args.GameRecord.m_sessionId.ToString();
+                            userData.isSuperGamer = args.GameRecord.m_isSuperGamer;
+
+                            userDataList.Add(userData);
+
+                            if (CheckHeadCount <= userDataList.Count)
+                            {
+                                isPlayedUser = true;
+                
+                                SceneManager.LoadScene(1);
+                            }
+                        }
+                    } else {
+                        Debug.LogError("5-3. OnMatchInGameAccess : " + args.ErrInfo.ToString());
+                    }
+                };
             } else {
                 Debug.LogError("5-2. OnSessionListInServer : " + args.ToString());
-            }
-        };
-
-        // 추가로 접속하는 유저의 정보
-        Backend.Match.OnMatchInGameAccess = (MatchInGameSessionEventArgs args) => {
-            if (args.ErrInfo == ErrorCode.Success) {
-                Debug.Log($"5-3. OnMatchInGameAccess - 했습니다 : {args.GameRecord.m_nickname}({args.GameRecord.m_sessionId})");
-                
-                //추가로 접속된 유저가 이미 리스트에 있는지 확인 후 리스트에 정보 추가
-                if (!inGameUserList.ContainsKey(args.GameRecord.m_nickname))
-                {
-                    inGameUserList.Add(args.GameRecord.m_nickname, args.GameRecord);
-                    
-                    UserData userData = new UserData();
-                    
-                    userData.playerName = args.GameRecord.m_nickname;
-                    userData.playerToken = args.GameRecord.m_sessionId.ToString();
-                    userData.isSuperGamer = args.GameRecord.m_isSuperGamer;
-
-                    userDataList.Add(userData);
-
-                    if (CheckHeadCount <= userDataList.Count)
-                    {
-                        isPlayedUser = true;
-                
-                        SceneManager.LoadScene(1);
-                    }
-                }
-            } else {
-                Debug.LogError("5-3. OnMatchInGameAccess : " + args.ErrInfo.ToString());
             }
         };
     }

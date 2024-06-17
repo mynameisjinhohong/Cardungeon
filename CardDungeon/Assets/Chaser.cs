@@ -12,7 +12,10 @@ public class Chaser : MonoBehaviour
     void Start()
     {
         Debug.Log("추격자 생성대기 시작");
-        StartCoroutine(WaitChase());
+        if (GamePlayManager.Instance.isUseChaser)
+        {
+            StartCoroutine(WaitChase());
+        }
     }
 
     IEnumerator WaitChase()

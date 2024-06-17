@@ -26,6 +26,8 @@ public class GamePlayManager : Singleton<GamePlayManager>
     #endregion
     public List<Color> colorList;
 
+    public bool isUseChaser;
+    public bool isSoloTest;
     public GameObject chaserObj;
     public Chaser chaser;
     public bool isWaiting;
@@ -122,17 +124,16 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
                 Transform parentTransform = PlayerSpawnPosition[myIdx].transform;
 
-                if(Camera.main.TryGetComponent<CameraManager_HJH>(out var cam)){
+                if(Camera.main.TryGetComponent<CameraManager_HJH>(out var cam))
+                {
                     cam.target = parentTransform;
                     cam.transform.position = parentTransform.position + new Vector3(0.5f, 0.5f, -10f);
-    }
+                }
                 else
                 {
+                    Camera.main.transform.SetParent(parentTransform.GetChild(0));
 
-
-                Camera.main.transform.SetParent(parentTransform.GetChild(0));
-
-                Camera.main.transform.localPosition = new Vector3(0.5f, 0.5f, -10f);
+                    Camera.main.transform.localPosition = new Vector3(0.5f, 0.5f, -10f);
                 }
             }
         }
@@ -307,6 +308,9 @@ public class GamePlayManager : Singleton<GamePlayManager>
                             int head = BackendManager.Instance.userDataList.Count;
                             switch (head)
                             {
+                                case 1:
+                                    gameBoard.Generate(msg.cardIdx, 12, 12);
+                                    break;
                                 case 2:
                                     gameBoard.Generate(msg.cardIdx, 12, 12);
                                     break;
@@ -457,6 +461,9 @@ public class GamePlayManager : Singleton<GamePlayManager>
             int head = BackendManager.Instance.userDataList.Count;
             switch (head)
             {
+                case 1:
+                    gameBoard.Generate(m.cardIdx, 12, 12);
+                    break;
                 case 2:
                     gameBoard.Generate(m.cardIdx, 12, 12);
                     break;
@@ -601,7 +608,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
         }
         else
         {
-            if (players.Count <= 1) return;
+            if (players.Count <= 1 && !isSoloTest) return;
             
             CardManager.Instance.OnCardStart(players[playerIdx].transform, cardIdx);
         }

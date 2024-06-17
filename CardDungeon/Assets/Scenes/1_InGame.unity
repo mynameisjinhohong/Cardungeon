@@ -485,6 +485,8 @@ MonoBehaviour:
   - {r: 0.16078432, g: 0.20000002, b: 0.49411768, a: 1}
   - {r: 0.7019608, g: 0.19215688, b: 0.77647066, a: 1}
   - {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  isUseChaser: 0
+  isSoloTest: 1
   chaserObj: {fileID: 5898363691524700565, guid: ff58ab0ce393f2e47a4eafbe2891fe87, type: 3}
   chaser: {fileID: 0}
   isWaiting: 0
@@ -8302,6 +8304,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isShaking: 0
+  target: {fileID: 0}
 --- !u!114 &980392495
 MonoBehaviour:
   m_ObjectHideFlags: 0
