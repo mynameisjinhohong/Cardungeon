@@ -263,7 +263,20 @@ public class GameBoard_PCI : MonoBehaviour
     {
         var targetTile = board[target.x, target.y];
         var newTileObject = Instantiate(itemPrefab, new Vector3(target.x, target.y, 0), Quaternion.identity, targetTile.transform);
-        newTileObject.SetData(itemList.itemDataList[0]); // 하드코딩
+        ItemData_PCI data = null;
+        foreach(var item in itemList.itemDataList)
+        {
+            if(item.name == "Key")
+            {
+                data = item;
+            }
+        }
+        if(data == null)
+        {
+            Debug.LogError("열쇠 데이터를 찾을 수 없습니다");
+            return;
+        }
+        newTileObject.SetData(data);
         targetTile.AddTileObject(newTileObject);
     }
 
