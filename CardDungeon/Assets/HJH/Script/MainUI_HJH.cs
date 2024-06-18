@@ -905,7 +905,7 @@ public class MainUI_HJH : MonoBehaviour
         LookSetting();
         if(Camera.main.TryGetComponent<CameraManager_HJH>(out var cam))
         {
-            cam.target = GamePlayManager.Instance.players[m_lookAt].transform;
+            cam.target = GamePlayManager.Instance.players[m_lookAt].transform.GetChild(0);
             cam.transform.position = cam.target.transform.position + new Vector3(0.5f, 0.5f, -10);
         }
         else
@@ -947,7 +947,7 @@ public class MainUI_HJH : MonoBehaviour
         m_lookAt = idx;
         if(Camera.main.TryGetComponent<CameraManager_HJH>(out var cam))
         {
-            cam.target = GamePlayManager.Instance.players[idx].transform;
+            cam.target = GamePlayManager.Instance.players[idx].transform.GetChild(0);
             cam.transform.position = cam.target.position + new Vector3(0.5f, 0.5f, -10);
         }
         else
