@@ -75,6 +75,8 @@ public class MainUI_HJH : MonoBehaviour
 
     public bool reRollNow = false;
 
+    // ¿­¼è UI
+    public List<GameObject> keyList = new List<GameObject>();
     public TMP_Text currentKeyText;
     public TMP_Text maxKeyText;
     public Image keyIcon;
@@ -988,6 +990,12 @@ public class MainUI_HJH : MonoBehaviour
     {
         try
         {
+            if(value < 4)
+            {
+                keyList[value - 1].SetActive(true);
+                keyList[value + 2].SetActive(false);
+            }
+            /*
             int displayedValue = value > 3 ? 3 : value;
 
             if (value >= 3)
@@ -1004,6 +1012,7 @@ public class MainUI_HJH : MonoBehaviour
             }
             
             currentKeyText.text = $"{displayedValue}";
+            */
         }
         catch (System.Exception e)
         {
