@@ -1420,16 +1420,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 535a40d91144eb445a2ad2045b40c6c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LoadStatus: 0
-  systemLanguage: 23
-  userData:
+  loadStatus: 0
+  chartFileNameList: []
+  userBattleData:
     RowIndate: 
-    totalBattleCount: 0
-    winCount: 0
-    winRate: 0
-    LastConnect: 
-  TimeValue: 
-  ServerTimeValue: 
+    totalBattleData:
+      totalBattleCount: 0
+      totalWinCount: 0
+      totalWinRate: 0
+    battleDataList: []
+  userInvenData:
+    RowIndate: 
+    isADRemoved: 0
+    itemDataList: []
+  userAchievementData:
+    RowIndate: 
+    achievementDataList: []
+  userDailyData:
+    RowIndate: 
+    freeADTicket: 0
+    freeRerollTicket: 0
 --- !u!4 &617561356
 Transform:
   m_ObjectHideFlags: 0
@@ -2787,8 +2797,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1050002805}
-  - component: {fileID: 1050002806}
   - component: {fileID: 1050002808}
+  - component: {fileID: 1050002806}
   - component: {fileID: 1050002807}
   m_Layer: 5
   m_Name: Video Player
@@ -2829,7 +2839,7 @@ VideoPlayer:
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 0}
-  m_TargetTexture: {fileID: 8400000, guid: b06cd2f9da0d063488116e7f009ead16, type: 2}
+  m_TargetTexture: {fileID: 8400000, guid: 9a5cf1fe36fa3e645a6509126da9719d, type: 2}
   m_TimeReference: 0
   m_TargetMaterialRenderer: {fileID: 0}
   m_TargetMaterialProperty: <noninit>
@@ -2846,7 +2856,7 @@ VideoPlayer:
   m_EnabledAudioTracks: 01
   m_DirectAudioMutes: 00
   m_ControlledAudioTrackCount: 1
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_SkipOnDrop: 1
   m_Looping: 1
   m_WaitForFirstFrame: 1
@@ -2872,7 +2882,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 8400000, guid: b06cd2f9da0d063488116e7f009ead16, type: 2}
+  m_Texture: {fileID: 8400000, guid: 9a5cf1fe36fa3e645a6509126da9719d, type: 2}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -3959,7 +3969,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 571dc6ae682c74040b783d43bf5b61d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serverType: 0
+  serverType: 1
   successLoadDataCount: 0
   userInfo:
     UserIndate: 
@@ -3968,6 +3978,7 @@ MonoBehaviour:
   loadServerTime: 0
   checkLoginWayData: -1
   isInitialize: 0
+  isLogined: 0
   isLoadGame: 0
   UseAutoLogin: 1
   matchIndex: -1
@@ -4686,9 +4697,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1579323643}
   - component: {fileID: 1579323646}
-  - component: {fileID: 1579323645}
-  - component: {fileID: 1579323644}
   - component: {fileID: 1579323647}
+  - component: {fileID: 1579323644}
+  - component: {fileID: 1579323645}
   m_Layer: 5
   m_Name: WaitVideo
   m_TagString: Untagged
@@ -5903,7 +5914,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1841941305}
         m_TargetAssemblyTypeName: MatchController, Assembly-CSharp
-        m_MethodName: MatchCancel
+        m_MethodName: UserMatchCancel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5999,6 +6010,7 @@ MonoBehaviour:
   roomNameText: {fileID: 8913298501845650667}
   btn_Invite: {fileID: 6833632608797785096}
   btn_MatchStart: {fileID: 8913298501967253567}
+  matchingVideo: {fileID: 0}
   TipText: {fileID: 795801641}
   TipStrings: []
   timerText: {fileID: 1849246698}

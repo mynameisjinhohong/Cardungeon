@@ -362,7 +362,7 @@ GameObject:
   - component: {fileID: 8458103338118245301}
   - component: {fileID: 299648111094135785}
   m_Layer: 5
-  m_Name: GuestLoginPopup
+  m_Name: NameUpdatePopup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -643,8 +643,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 299648111094135785}
-        m_TargetAssemblyTypeName: GuestLoginPopup, Assembly-CSharp
-        m_MethodName: UpdateNickname
+        m_TargetAssemblyTypeName: NickNameInputPopup, Assembly-CSharp
+        m_MethodName: TryNicknameUpdate
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

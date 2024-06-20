@@ -92,7 +92,7 @@ public class AccountLoginPopup : MonoBehaviour
             {
                 Debug.Log("계정 로그인 성공");
                 PlayerPrefs.SetInt("LoginWay", 0);
-                BackendManager.Instance.GetUserInfo();
+                BackendManager.Instance.CheckNickNameCreated();
             }
             else
             {

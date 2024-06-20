@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using Assets.SimpleGoogleSignIn.Scripts;
 using BackEnd;
+using GooglePlayGames;
+using GooglePlayGames.BasicApi;
 using TMPro;
 
 namespace Assets.SimpleGoogleSignIn
@@ -31,8 +33,13 @@ namespace Assets.SimpleGoogleSignIn
 
         public void SignIn()
         {
-            GoogleAuth.SignIn(OnSignIn, caching: true);
-            Debug.Log("로그인 시도 버튼 눌림");
+            #if PLATFORM_STANDALONE_WIN
+                        GoogleAuth.SignIn(OnSignIn, caching: true);
+                        Debug.Log("로그인 시도 버튼 눌림");
+            #elif PLATFORM_ANDROID
+                        BackendManager.Instance.GoogleLoginSetting();
+            #endif
+
         }
 
         public void SignOut()

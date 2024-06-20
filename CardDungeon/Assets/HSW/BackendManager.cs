@@ -6,6 +6,8 @@ using Assets.SimpleGoogleSignIn;
 using Assets.SimpleGoogleSignIn.Scripts;
 using BackEnd;
 using BackEnd.Tcp;
+using GooglePlayGames;
+using GooglePlayGames.BasicApi;
 using LitJson;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -28,14 +30,15 @@ public class BackendManager : Singleton<BackendManager>
     [Header("유저정보")]
     public UserInfo userInfo;
     
-    public bool loadServerTime = false;
+    public bool loadServerTime   = false;
     public int checkLoginWayData = -1;
-    public bool isInitialize = false;
-    public bool isLoadGame   = false;
-    public bool UseAutoLogin = false; 
-    public int matchIndex = 0;
-    public bool isMatching = false;
-    public bool isMeSuperGamer = false;
+    public bool isInitialize     = false;
+    public bool isLogined        = false;
+    public bool isLoadGame       = false;
+    public bool UseAutoLogin     = false; 
+    public int matchIndex        = 0;
+    public bool isMatching       = false;
+    public bool isMeSuperGamer   = false;
 
     public string winUser = "";
 
@@ -133,8 +136,8 @@ public class BackendManager : Singleton<BackendManager>
         }
         else
         {
-            settings.clientAppID     = "c06c8520-a268-11ee-9006-8513c03d25496583";
-            settings.signatureKey    = "c06c8521-a268-11ee-9006-8513c03d25496583";
+            settings.clientAppID     = "3cde6b10-2e77-11ef-9300-214337633e707823";
+            settings.signatureKey    = "3cde6b11-2e77-11ef-9300-214337633e707823";
             settings.functionAuthKey = "";
             settings.isAllPlatform   = true;
             settings.sendLogReport   = true;
@@ -186,11 +189,12 @@ public class BackendManager : Singleton<BackendManager>
 
     public void ResetInGameData()
     {
-        isLoadGame = false;
-        isMatching = false;
+        isLoadGame     = false;
+        isLogined      = false;
+        isMatching     = false;
         isMeSuperGamer = false;
-        isFastMatch = false;
-        isPlayedUser = false;
+        isFastMatch    = false;
+        isPlayedUser   = false;
         
         matchIndex = -1;
 
@@ -226,6 +230,69 @@ public class BackendManager : Singleton<BackendManager>
     //     StartCoroutine((LoginProcess(bro, LoginType.Guest)));
     //     PlayerPrefs.SetInt("LoginWay", 0);
     // }
+    
+    public void GoogleLoginSetting()
+    {
+        // GPGS 플러그인 설정
+        PlayGamesClientConfiguration config = new PlayGamesClientConfiguration
+                .Builder()
+            .RequestServerAuthCode(false)
+            .RequestEmail() // 이메일 권한을 얻고 싶지 않다면 해당 줄(RequestEmail)을 지워주세요.
+            .RequestIdToken()
+            .Build();
+        //커스텀 된 정보로 GPGS 초기화
+        PlayGamesPlatform.InitializeInstance(config);
+        PlayGamesPlatform.DebugLogEnabled = true; // 디버그 로그를 보고 싶지 않다면 false로 바꿔주세요.
+        //GPGS 시작.
+        PlayGamesPlatform.Activate();
+        
+        GoogleLoginSequense();
+    }
+    
+    public void GoogleLoginSequense()
+    {
+        if (Social.localUser.authenticated == true)
+        {
+            BackendReturnObject bro = Backend.BMember.AuthorizeFederation(GetTokens(), FederationType.Google, "gpgs");
+            Debug.LogError($"{bro.IsSuccess()} {bro.GetStatusCode()} {bro.GetErrorCode()} {bro.GetMessage()}");
+            if(bro.IsSuccess())
+                StartCoroutine((LoginProcess(bro, LoginType.Google)));
+        }
+        else
+        {
+            Social.localUser.Authenticate((bool success) => {
+                if (success)
+                {
+                    BackendReturnObject bro = Backend.BMember.AuthorizeFederation(GetTokens(), FederationType.Google, "gpgs");
+                    Debug.LogError($"{bro.IsSuccess()} {bro.GetStatusCode()} {bro.GetErrorCode()} {bro.GetMessage()}");
+                    if (bro.IsSuccess())
+                    {
+                        StartCoroutine(LoginProcess(bro, LoginType.Google));
+                        PlayerPrefs.SetInt("LoginWay", 1);
+                    }
+                }
+                else
+                {
+                    // ?????? ????
+                    Debug.Log("Login failed for some reason");
+                }
+            });
+        }
+    }
+    
+    public string GetTokens()
+    {
+        if (PlayGamesPlatform.Instance.localUser.authenticated)
+        {
+            string _IDtoken = ((PlayGamesLocalUser)Social.localUser).GetIdToken();
+            return _IDtoken;
+        }
+        else
+        {
+            Debug.Log("Token get Failed. PlayGamesPlatform.Instance.localUser.authenticated :  fail");
+            return null;
+        }
+    }
     private IEnumerator Polling()
     {
         while (true)
@@ -238,8 +305,6 @@ public class BackendManager : Singleton<BackendManager>
 
     public void TryCustomSignin(string id, string pw, string email)
     {
-        GameObject nicknamePopup = UIManager.Instance.NickNamePrefab;
-        
         Backend.BMember.CustomSignUp ( id, pw, callback => {
             if(callback.IsSuccess())
             {
@@ -250,12 +315,11 @@ public class BackendManager : Singleton<BackendManager>
                     UIManager.Instance.PopupListPop();
                 
                     UIManager.Instance.PopupListPop();
-                
-                    Debug.Log("신규 회원으로 시작합니다");
-                    SetNewUserDataSaveToServer();
 
                     // 닉네임 생성 팝업 만들기
-                    UIManager.Instance.OpenPopup(nicknamePopup);
+                    UIManager.Instance.OpenPopup(UIManager.Instance.NickNamePrefab);
+
+                    DataManager.Instance.SetUserDefaultData();
 
                     PlayerPrefs.SetInt("LoginWay", 0);
 
@@ -364,44 +428,37 @@ public class BackendManager : Singleton<BackendManager>
         switch (type)
         {
             case LoginType.Custom:
-                GetUserInfo();
-                Debug.LogError("계정 로그인에 성공했습니다.");
+                Debug.LogError("커스텀 로그인, 데이터 입력");
                 break;
-            case LoginType.Auto:
-                GetUserInfo();
-                Debug.LogError("자동 로그인에 성공했습니다.");
+            case LoginType.Google:
+                Debug.LogError("구글 로그인, 데이터 입력");
                 break;
         }
         userInfo.UserIndate = Backend.UserInDate;
         GetServerTime();
-        DataManager.Instance.SetDefaultData();
         
-        if (type == LoginType.Auto)
+        switch (bro.GetStatusCode())
         {
-            switch (bro.GetStatusCode())
-            {
-                case "201": //로그인
-                    Debug.Log("자동 로그인 하여 서버에서 유저 데이터 불러오기 성공");
-                    GetUserDataFromServer();
-                    InsertLog(GameLogType.Login, $"{type}/{Application.version}");
-                    break;
-            }
+            case "200": //로그인
+                Debug.Log("기존 유저 로그인 성공");
+                InsertLog(GameLogType.Login, $"{type}/{Application.version}");
+                break;
+            case "201": //로그인
+                Debug.Log("신규 유저 로그인 성공");
+                InsertLog(GameLogType.Login, $"{type}/{Application.version}");
+                // 구글 로그인 초회 실행시 오토 로그인 
+                PlayerPrefs.SetInt("UseAutoLogin", 1);
+                break;
         }
-        else
-        {
-            switch (bro.GetStatusCode())
-            {
-                case "200": //로그인
-                    Debug.Log("일반 로그인");
-                    GetUserDataFromServer();
-                    InsertLog(GameLogType.Login, $"{type}/{Application.version}");
-                    break;
-            }
-        }
-        DataManager.Instance.DataLoadComplete();
+        
+        //푸시 알림 수신 하는 부분
+        //SetupManager.Instance.RegistPush();();
         
         StartCoroutine(nameof(RefreshToken));
+        
+        CheckNickNameCreated();
     }
+
 
     public void CheckNickNameCreated()
     {
@@ -411,24 +468,87 @@ public class BackendManager : Singleton<BackendManager>
         }
         else
         {
-            Backend.BMember.GetUserInfo((callback) =>
-            {
-                JsonData json = callback.GetReturnValuetoJSON()["row"];
-                Debug.LogError(callback.GetReturnValue());
-                Debug.Log(Backend.UserNickName + Backend.UserInDate);
-                userInfo.UserIndate  = Backend.UserInDate;
-                userInfo.Nickname    = Backend.UserNickName;
-                userInfo.UID         = Backend.UID;
-            
-                MatchController.instance.ChangeUI(1);
-            });
+            Debug.Log("데이터 서버로부터 수신 후 메인씬으로 이동 요청");
+            GetUserInfo();
         }
     }
-    
-    public void SetNewUserDataSaveToServer()
+
+    public void GetUserInfo()
     {
-        DataManager.Instance.SaveAllDataAtFirst();
+        Backend.BMember.GetUserInfo((callback) =>
+        {
+            isLogined = true;
+            
+            JsonData json = callback.GetReturnValuetoJSON()["row"];
+            Debug.LogError(callback.GetReturnValue());
+            Debug.Log(Backend.UserNickName + Backend.UserInDate);
+            userInfo.UserIndate  = Backend.UserInDate;
+            userInfo.Nickname    = Backend.UserNickName;
+            userInfo.UID         = Backend.UID;
+            
+            GetUserDataFromServer();
+            
+            MatchController.instance.ChangeUI(1);
+        });
     }
+    
+    // 로그인 완료시 발생하는 이벤트들 초회 실행 후 씬이동 이후에도 잘돌아가는지 확인
+    public void MainUIEvents()
+    {
+        Debug.Log("메인UI 이벤트 모두 동작 실행");
+        
+        // 방만들기 누를시
+        Backend.Match.OnMatchMakingRoomCreate = (MatchMakingInteractionEventArgs args) => {
+            if (args.ErrInfo == ErrorCode.Success)
+            {
+                Debug.Log("2-2. OnMatchMakingRoomCreate 성공");
+
+                if (!isFastMatch)
+                {
+                    Debug.Log("커스텀 매칭 UI로 이동");
+                    MatchController.instance.ChangeUI(2);
+                }
+                else
+                {
+                    Debug.Log("빠른 매칭 실행");
+                    TryMatch();
+                }
+            }
+            else
+            { 
+                Debug.LogError("2-2. OnMatchMakingRoomCreate 실패");
+            }
+        };
+        
+        // 에러 메세지 확인
+        // Backend.Match.OnException = (Exception e) =>
+        // {
+        //     if (isPlayedUser) return;
+        //     
+        //     if(e.)
+        //     MatchController.instance.ChangeUI(3);
+        //     //userDataList.Clear();
+        // };
+        
+        // 초대 오면 팝업 생성
+        Backend.Match.OnMatchMakingRoomSomeoneInvited = (args) =>
+        {
+            UIManager.Instance.OpenInvitePopup(args.InviteUserInfo.m_nickName, args.RoomId, args.RoomToken);
+        };
+        
+
+        // 매치 서버 접속 완료되면 발생
+        Backend.Match.OnJoinMatchMakingServer = (JoinChannelEventArgs args) => {
+            Debug.Log(args.ErrInfo);
+            
+            if (args.ErrInfo == ErrorInfo.Success) {
+                Debug.Log("1-2. OnJoinMatchMakingServer 성공");
+            } else {
+                Debug.LogError("1-2. OnJoinMatchMakingServer 실패");
+            }
+        };
+    }
+    
     public void GuestIdDelete()
     {
         if (Backend.BMember.GetGuestID().Length > 0)
@@ -551,8 +671,8 @@ public class BackendManager : Singleton<BackendManager>
             if (callback.IsSuccess())
             {
                 string time = callback.GetReturnValuetoJSON()["utcTime"].ToString();
-                DateTime parsedDate = DateTime.Parse(time);
-                DataManager.Instance.SetLocalTime(parsedDate);
+                // DateTime parsedDate = DateTime.Parse(time);
+                // DataManager.Instance.SetLocalTime(parsedDate);
                 loadServerTime = true;
             }
             else
@@ -563,10 +683,7 @@ public class BackendManager : Singleton<BackendManager>
         });
     }
     
-    public void GetUserInfo()
-    {
-        CheckNickNameCreated();
-    }
+
     
     [Header("전체 매치카드 리스트")]
     public List<MatchCard> allMatchCardList = new List<MatchCard>();
@@ -583,66 +700,26 @@ public class BackendManager : Singleton<BackendManager>
         
         if (Backend.Match.JoinMatchMakingServer(out errorInfo)) {
             Debug.Log("1-1. JoinMatchMakingServer 요청 : " + errorInfo.ToString());
+
+            if (isLogined)
+            {
+                MainUIEvents();
+            }
+            else
+            {
+                Debug.LogError("로그인 확인 실패, 메인UI 이벤트 실행 실패");
+            }
+            
         } else {
             Debug.LogError("1-1. JoinMatchMakingServer 에러 : " + errorInfo.ToString());
         }
-        
-        Backend.Match.OnException = (Exception e) =>
-        {
-            if (isPlayedUser) return;
-            
-            MatchController.instance.ChangeUI(3);
-            userDataList.Clear();
-        };
-
-        Backend.Match.OnJoinMatchMakingServer = (JoinChannelEventArgs args) => {
-            Debug.Log(args.ErrInfo);
-            
-            if (args.ErrInfo == ErrorInfo.Success) {
-                Debug.Log("1-2. OnJoinMatchMakingServer 성공");
-            } else {
-                Debug.LogError("1-2. OnJoinMatchMakingServer 실패");
-            }
-        };
     }
 
     public void CreateMatchRoom() {
         
         Debug.Log("2-1. CreateMatchRoom 요청");
-        try
-        {
-            Backend.Match.CreateMatchRoom();
-        }
-        catch (Exception e)
-        {
-            Debug.Log(e);
-
-            if (e != null)
-            {
-                UIManager.Instance.OpenRecyclePopup("네트워크 에러", "서버와 연결이 끊어 졌습니다.", Application.Quit);
-            }
-        }
         
-        
-        Backend.Match.OnMatchMakingRoomCreate = (MatchMakingInteractionEventArgs args) => {
-            if (args.ErrInfo == ErrorCode.Success)
-            {
-                Debug.Log("2-2. OnMatchMakingRoomCreate 성공");
-
-                if (!isFastMatch)
-                {
-                    MatchController.instance.ChangeUI(2);
-                }
-                else
-                {
-                    TryMatch();
-                }
-            }
-            else
-            { 
-                Debug.LogError("2-2. OnMatchMakingRoomCreate 실패");
-            }
-        };
+        Backend.Match.CreateMatchRoom();
     }
     
     // 초대해서 시작하는 경우 매칭 요청
@@ -744,9 +821,10 @@ public class BackendManager : Singleton<BackendManager>
 
             MatchController.instance.FormatTime(i);
             
-            if (i >= second)
+            if (i >= (second - 1))
             {
-                UIManager.Instance.OpenRecyclePopup("시스템 메세지", "매칭 실패 다시 시도 해주세요.", MatchController.instance.MatchCancel);
+                UIManager.Instance.OpenRecyclePopup("시스템 메세지", "매칭 실패 다시 시도 해주세요.", MatchController.instance.TimeOverMatchCancel);
+                break;
             }
             yield return delay;
         }
@@ -1170,22 +1248,32 @@ public class BackendManager : Singleton<BackendManager>
             SendTransaction(TransactionType.Insert);
     }
     
+    public void AddTransactionUpdate(UserDataType table, string indate, Param param)
+    {
+        for (int i = 0; i < transactionList.Count; i++)
+            if (transactionList[i].table.ToString() == table.ToString())
+                transactionList.RemoveAt(i);
+        transactionList.Add(TransactionValue.SetUpdateV2(table.ToString(), indate, Backend.UserInDate,  param));
+        if (transactionList.Count > 9)
+            SendTransaction(TransactionType.Update, DataManager.Instance.userBattleData);
+    }
+
+    public void AddTransactionSetGet(UserDataType table)
+    {
+        for (int i = 0; i < transactionList.Count; i++)
+            if (transactionList[i].table == table.ToString())
+                transactionList.RemoveAt(i);
+        transactionList.Add(TransactionValue.SetGet(table.ToString(), new Where()));
+        if (transactionList.Count > 9)
+            SendTransaction(TransactionType.SetGet);
+    }
+    
     public void GetUserDataFromServer()
     {
         transactionList.Clear();
         for(int i = 0; i < Enum.GetValues(typeof(UserDataType)).Length; i++)
             AddTransactionSetGet((UserDataType)i);
-        SendTransaction(TransactionType.SetGet, DataManager.Instance.userData);
-    }
-    
-    public void AddTransactionSetGet(UserDataType table)
-    {
-        for (int i = 0; i < transactionList.Count; i++)
-            if (transactionList[i].table.ToString() == table.ToString())
-                transactionList.RemoveAt(i);
-        transactionList.Add(TransactionValue.SetGet(table.ToString(), new Where()));
-        if (transactionList.Count > 9)
-            SendTransaction(TransactionType.SetGet);
+        SendTransaction(TransactionType.SetGet, this);
     }
     
     public BackendReturnObject SendTransaction(TransactionType type)
@@ -1338,8 +1426,17 @@ public class BackendManager : Singleton<BackendManager>
                                                 //insert 필요
                                                 switch (actions[i].table)
                                                 {
-                                                    case "UserBattleInfo":
-                                                        DataManager.Instance.SaveUserBattleInfo(ServerSaveType.Insert);
+                                                    case "UserBattleData":
+                                                        DataManager.Instance.SaveUserBattleData(ServerSaveType.Insert);
+                                                        break;
+                                                    case "UserInvenData":
+                                                        DataManager.Instance.SaveUserInvenData(ServerSaveType.Insert);
+                                                        break;
+                                                    case "UserAchievementData":
+                                                        DataManager.Instance.SaveUserAchievementData(ServerSaveType.Insert);
+                                                        break;
+                                                    case "DailyData":
+                                                        DataManager.Instance.SaveDailyData(ServerSaveType.Insert);
                                                         break;
                                                 }
                                             }
@@ -1354,7 +1451,7 @@ public class BackendManager : Singleton<BackendManager>
                                             Debug.LogError($"GetData {bro.IsSuccess()} {bro.GetStatusCode()} {bro.GetErrorCode()} {bro.GetMessage()}");
                                         }
                                     }
-                                    SendTransaction(TransactionType.Insert, DataManager.Instance.userData);
+                                    SendTransaction(TransactionType.Insert, DataManager.Instance.userBattleData);
                                 }
                                 break;
                         }
@@ -1366,16 +1463,6 @@ public class BackendManager : Singleton<BackendManager>
         return bro;
     }
     
-    public void AddTransactionUpdate(UserDataType table, string indate, Param param)
-    {
-        for (int i = 0; i < transactionList.Count; i++)
-            if (transactionList[i].table.ToString() == table.ToString())
-                transactionList.RemoveAt(i);
-        transactionList.Add(TransactionValue.SetUpdateV2(table.ToString(), indate, Backend.UserInDate,  param));
-        if (transactionList.Count > 9)
-            SendTransaction(TransactionType.Update, DataManager.Instance.userData);
-    }
-
     public void FindID_WithEmail(string email)
     {
         Backend.BMember.FindCustomID( email, ( callback ) =>

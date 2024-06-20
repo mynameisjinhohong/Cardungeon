@@ -5,28 +5,33 @@ using BackEnd;
 using LitJson;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class DataManager : Singleton<DataManager>
 {
     private static DataManager instance;
     
-    public bool LoadStatus = false;
-    
-    public SystemLanguage systemLanguage;
+    public bool loadStatus = false;
 
-    List<Dictionary<string, object>> DataDic = new List<Dictionary<string, object>>();
+    public List<string> chartFileNameList = new();
     
-    public UserBattleInfo          userData             = new();
- 
+    //public SystemLanguage systemLanguage;
+
+    List<Dictionary<string, object>> dataDic = new();
+
+    // 유저 데이터
+    public UserBattleData      userBattleData      = new();
+    public UserInvenData       userInvenData       = new();
+    public UserAchievementData userAchievementData = new();
+    public UserDailyData       userDailyData       = new();
+    
     public DateTime LocalTime;
-    
-    public string TimeValue;
-    
-    public string ServerTimeValue;
     
     private bool isServerTimeUpdate = false;
     private bool isChangeServerTime = false;
+    
     private float oldTime = 0;
+    
     private DateTime serverTime;
     
     void Awake()
@@ -38,34 +43,52 @@ public class DataManager : Singleton<DataManager>
         instance = this;
         DontDestroyOnLoad(gameObject);
     }
-    
-    public void Initialize()
+
+    private void Start()
     {
-        SetData();
-        DataDic.Clear();
+        Initialize();
     }
 
-    public void SetDefaultData()
+    public void Initialize()
     {
-        SetUserData();
+        //SetData();
+        dataDic.Clear();
     }
-    
-    public void SetLocalTime(DateTime servertime)
+
+    // 유저 초기 값 설정
+    public void SetUserDefaultData()
     {
-        if (serverTime < servertime)
+        BackendManager.Instance.userInfo.Nickname = Backend.UserNickName;
+        
+        // BattleData
+        TotalBattleData totalData = new();
+        
+        totalData.totalBattleCount = 0;
+        totalData.totalWinCount    = 0;
+        totalData.totalWinRate     = 0;
+
+        userBattleData.totalBattleData = totalData;
+        
+        for (int i = 0; i < 3; i++)
         {
-            Debug.Log("시간 업데이트 확인" + servertime);
-            serverTime = servertime;
-            userData.LastConnect = serverTime.ToString();
-            isServerTimeUpdate = true;
-            isChangeServerTime = true;
+            BattleData data  = new();
+            data.mapIndex    = i;
+            data.battleCount = 0;
+            data.winCount    = 0;
+            data.winRate     = 0;
+            
+            userBattleData.battleDataList.Add(data);
         }
-        else
-        {
-            Debug.Log("조건 틀려서 업데이트 안함");
-        }
+        
+        // InvenData
+        userInvenData.isADRemoved = false;
+        
+        userDailyData.freeRerollTicket = false;
+        userDailyData.freeADTicket     = false;
+
+        SaveAllDataAtFirst();
     }
-    
+
     private void FixedUpdate()
     {
         if (isServerTimeUpdate)
@@ -81,93 +104,220 @@ public class DataManager : Singleton<DataManager>
             oldTime = Time.fixedUnscaledTime;
 
             LocalTime = LocalTime.AddMilliseconds(delta * 1000.0f);
-
-            TimeValue = LocalTime.ToString();
-
-            ServerTimeValue = serverTime.ToString();
         }
     }
-
+    
     public void SetData()
     {
-        systemLanguage = SystemLanguage.Korean;
-        
-        // for (int i = 0; i < (int)ServerDataType.LastTable; i++)
-        // {
-        //     ChartFileNameList.Add(((ServerDataType)i).ToString());
-        // }
+        // 아이템 정보, 업적 정보, 클래스 정보, 맵 정보 테이블 불러 올것
     }
 
-    public void SetUserData()
-    {
-        BackendManager.Instance.userInfo.Nickname = Backend.UserNickName;
-        
-        userData.LastConnect = LocalTime.ToString();
-        userData.totalBattleCount = 0;
-        userData.winCount = 0;
-        userData.winRate = 0;
-    }
-    
+    // 각 데이터별 불러오기 처리
     public void SetUserData(UserDataType type, JsonData json)
     {
         switch (type)
         {
-            case UserDataType.UserBattleInfo:
-                userData.RowIndate            = json["inDate"].ToString();
-                         
-                userData.totalBattleCount     = Int32.Parse(json["totalBattleCount"].ToString());
-                userData.winCount             = Int32.Parse(json["winCount"].ToString());
-                userData.winRate              = float.Parse(json["winRate"].ToString());
+            case UserDataType.UserBattleData:
+                userBattleData.RowIndate                        = json["inDate"].ToString();
 
-                userData.LastConnect          = json["LastConnect"].ToString();
+                userBattleData.totalBattleData.totalBattleCount = int.Parse(json["TotalBattleData"]["totalBattleCount"].ToString());
+                userBattleData.totalBattleData.totalWinCount    = int.Parse(json["TotalBattleData"]["totalWinCount"].ToString());
+                userBattleData.totalBattleData.totalWinRate     = float.Parse(json["TotalBattleData"]["totalWinRate"].ToString());
+
+                //if (json["BattleData"].Count <= 1) return;
+                
+                for (int j = 0; j < json["BattleData"].Count; j++)
+                {
+                    BattleData getBattleData = new();
+                    
+                    getBattleData.mapIndex    = int.Parse(json["BattleData"][j]["mapIndex"].ToString());
+                    getBattleData.battleCount = int.Parse(json["BattleData"][j]["battleCount"].ToString());
+                    getBattleData.winCount    = int.Parse(json["BattleData"][j]["winCount"].ToString());
+                    getBattleData.winRate     = float.Parse(json["BattleData"][j]["winRate"].ToString());
+                    
+                    userBattleData.battleDataList.Add(getBattleData);
+                }
+                SaveUserBattleData(ServerSaveType.Update);
+                break;
+            case UserDataType.UserInvenData:
+                userInvenData.RowIndate                 = json["inDate"].ToString();
+                
+                userInvenData.isADRemoved               = bool.Parse(json["isADRemoved"].ToString());
+
+                //if (json["ItemData"].Count <= 1) return;
+
+                for (int i = 0; i < userInvenData.itemDataList.Count; i++)
+                {
+                    for (int j = 0; j < json["ItemData"].Count; j++)
+                    {
+                        if (userInvenData.itemDataList[i].itemIndex == int.Parse(json["ItemData"][j]["itemIndex"].ToString()))
+                        {
+                            userInvenData.itemDataList[i].itemAmount = int.Parse(json["ItemData"][j]["itemAmount"].ToString());
+                        }
+                    }
+                }
+                
+                SaveUserInvenData(ServerSaveType.Update);
+                break;
+            case UserDataType.UserAchievementData:
+                userAchievementData.RowIndate = json["inDate"].ToString();
+
+                //if (json["AchievementData"].Count <= 1) return;
+                
+                for (int i = 0; i < userAchievementData.achievementDataList.Count; i++)
+                {
+                    for (int j = 0; j < json["AchievementData"].Count; j++)
+                    {
+                        if (userAchievementData.achievementDataList[i].achievementID == int.Parse(json["AchievementData"][j]["achievementID"].ToString()))
+                        {
+                            userAchievementData.achievementDataList[i].currentPoint = int.Parse(json["AchievementData"][j]["currentPoint"].ToString());
+                            userAchievementData.achievementDataList[i].maxPoint = int.Parse(json["AchievementData"][j]["maxPoint"].ToString());
+                        }
+                    }
+                }
+                SaveUserAchievementData(ServerSaveType.Update);
+                break;
+            case UserDataType.UserDailyData:
+                userDailyData.RowIndate = json["inDate"].ToString();
+
+                userDailyData.freeADTicket = bool.Parse(json["freeADTicket"].ToString());
+                userDailyData.freeRerollTicket = bool.Parse(json["freeRerollTicket"].ToString());
+                    
+                SaveDailyData(ServerSaveType.Update);
                 break;
         }
     }
 
-    public void SaveUserBattleInfo(ServerSaveType type)
+    // 유저 배틀 정보 저장
+    public void SaveUserBattleData(ServerSaveType type)
     {
-        userData.LastConnect = LocalTime.ToString("yyyy-MM-dd HH:mm:ss");
-        Param paramUserData = new Param();
-        paramUserData.Add("totalBattleCount", userData.totalBattleCount);
-        paramUserData.Add("winCount", userData.winCount);
-        paramUserData.Add("winRate", userData.winRate);
-        paramUserData.Add("LastConnect", userData.LastConnect);
+        Param paramUserBattleData = new Param();
+        
+        TotalBattleData totalBattleData  = new();
+
+        totalBattleData.totalBattleCount = userBattleData.totalBattleData.totalBattleCount;
+        totalBattleData.totalWinCount    = userBattleData.totalBattleData.totalWinCount;
+        totalBattleData.totalWinRate     = userBattleData.totalBattleData.totalWinRate;
+        
+        paramUserBattleData.Add("TotalBattleData", totalBattleData);
+        
+        List<BattleData> tempBattleDataList = new();
+        
+        for (int i = 0; i < userBattleData.battleDataList.Count; i++)
+        {
+            BattleData battleData  = new();
+            
+            battleData.mapIndex    = userBattleData.battleDataList[i].mapIndex;
+            battleData.battleCount = userBattleData.battleDataList[i].battleCount;
+            battleData.winCount    = userBattleData.battleDataList[i].winCount;
+            battleData.winRate     = userBattleData.battleDataList[i].winRate;
+            
+            tempBattleDataList.Add(battleData);
+        }
+
+        paramUserBattleData.Add("BattleData", tempBattleDataList);
+        
         if(type == ServerSaveType.Insert)
-            BackendManager.Instance.AddTransactionInsert(UserDataType.UserBattleInfo, paramUserData);
+            BackendManager.Instance.AddTransactionInsert(UserDataType.UserBattleData, paramUserBattleData);
         else
-            BackendManager.Instance.AddTransactionUpdate(UserDataType.UserBattleInfo, userData.RowIndate, paramUserData);
+            BackendManager.Instance.AddTransactionUpdate(UserDataType.UserBattleData, userBattleData.RowIndate, paramUserBattleData);
+        
+        //BackendManager.Instance.SendTransaction(TransactionType.Insert, userBattleData);
     }
     
-    public void SaveAllDataAtFirst()
+    // 유저 인벤토리 정보 저장
+    public void SaveUserInvenData(ServerSaveType type)
     {
-        Debug.Log("신규 데이터 삽입");
-        SaveUserBattleInfo(ServerSaveType.Insert);
+        Param paramUserInvenData = new Param();
 
-        BackendManager.Instance.SendTransaction(TransactionType.Insert, userData);
+        List<ItemData> tempInvenDataList = new();
+        
+        paramUserInvenData.Add("isADRemoved", userInvenData.isADRemoved);
+        
+        for (int i = 0; i < userInvenData.itemDataList.Count; i++)
+        {
+            ItemData itemData  = new();
+            
+            itemData.itemIndex   = userInvenData.itemDataList[i].itemIndex;
+            itemData.itemAmount  = userInvenData.itemDataList[i].itemAmount;
+            
+            tempInvenDataList.Add(itemData);
+        }
+        
+        paramUserInvenData.Add("ItemData", tempInvenDataList);
+        
+        if(type == ServerSaveType.Insert)
+            BackendManager.Instance.AddTransactionInsert(UserDataType.UserInvenData, paramUserInvenData);
+        else
+            BackendManager.Instance.AddTransactionUpdate(UserDataType.UserInvenData, userInvenData.RowIndate, paramUserInvenData);
+        
+        //BackendManager.Instance.SendTransaction(TransactionType.Insert, userInvenData);
     }
+    
+    // 유저 업적 달성 정보 저장
+    public void SaveUserAchievementData(ServerSaveType type)
+    {
+        Param paramUserAchievementData = new Param();
+        
+        List<AchievementData> tempAchievementDataList = new();
+        
+        for (int i = 0; i < userAchievementData.achievementDataList.Count; i++)
+        {
+            AchievementData achievementData  = new();
+            
+            achievementData.achievementID   = userAchievementData.achievementDataList[i].achievementID;
+            achievementData.currentPoint    = userAchievementData.achievementDataList[i].currentPoint;
+            achievementData.maxPoint        = userAchievementData.achievementDataList[i].maxPoint;
+            
+            tempAchievementDataList.Add(achievementData);
+        }
+        
+        paramUserAchievementData.Add("AchievementData", tempAchievementDataList);
+        
+        if(type == ServerSaveType.Insert)
+            BackendManager.Instance.AddTransactionInsert(UserDataType.UserAchievementData, paramUserAchievementData);
+        else
+            BackendManager.Instance.AddTransactionUpdate(UserDataType.UserAchievementData, userAchievementData.RowIndate, paramUserAchievementData);
+        
+        //BackendManager.Instance.SendTransaction(TransactionType.Insert, userAchievementData);
+    }
+
+    public void SaveDailyData(ServerSaveType type)
+    {
+        Param paramDailyData = new Param();
+
+        paramDailyData.Add("freeADTicket", userDailyData.freeADTicket);
+        paramDailyData.Add("freeRerollTicket", userDailyData.freeRerollTicket);
+
+        if(type == ServerSaveType.Insert)
+            BackendManager.Instance.AddTransactionInsert(UserDataType.UserDailyData, paramDailyData);
+        else
+            BackendManager.Instance.AddTransactionUpdate(UserDataType.UserDailyData, userDailyData.RowIndate, paramDailyData);
+        
+        //BackendManager.Instance.SendTransaction(TransactionType.Insert, userDailyData);
+    }
+    
     public void SetRowInDate(UserDataType table, string inDate)
     {
         switch (table)
         {
-            case UserDataType.UserBattleInfo:
-                userData.RowIndate          = inDate;
+            case UserDataType.UserBattleData:
+                userBattleData.RowIndate      = inDate;
+                break;
+            case UserDataType.UserInvenData:
+                userInvenData.RowIndate       = inDate;
+                break;
+            case UserDataType.UserAchievementData:
+                userAchievementData.RowIndate = inDate;
+                break;
+            case UserDataType.UserDailyData:
+                userDailyData.RowIndate       = inDate;
                 break;
         }
     }
-    
-    
-    public void DataLoadComplete()
-    {
-        // 푸시 정보 설정
-        // SetupManager.Instance.RegistPush();
-        // SetOffLineReward(DateTime.Parse(userData.LastConnect));
-        // CheckMissionRefresh();
-        
-        //StartCoroutine(nameof(AutoSave));
-    }
-    
-    private WaitForSeconds saveDelay = new WaitForSeconds(60f);
-    private TimeSpan playerTimeOneMin = new TimeSpan(0, 1, 0);
+
+    //private WaitForSeconds saveDelay = new WaitForSeconds(60f);
+    //private TimeSpan playerTimeOneMin = new TimeSpan(0, 1, 0);
     // private IEnumerator AutoSave()
     // {
     //     while (true)
@@ -175,5 +325,32 @@ public class DataManager : Singleton<DataManager>
     //         yield return saveDelay;
     //         userInfo.PlayTime = userInfo.PlayTime.Add(playerTimeOneMin);
     //     }
+    // }
+    
+    public void SaveAllDataAtFirst()
+    {
+        Debug.Log("신규 유저 기본 데이터 삽입");
+        SaveUserBattleData(ServerSaveType.Insert);
+        SaveUserInvenData(ServerSaveType.Insert);
+        SaveUserAchievementData(ServerSaveType.Insert);
+        SaveDailyData(ServerSaveType.Insert);
+
+        BackendManager.Instance.SendTransaction(TransactionType.Insert, this);
+    }
+
+    public void SaveAllData()
+    {
+        Debug.Log("기존 데이터 업데이트");
+        SaveUserBattleData(ServerSaveType.Update);
+        SaveUserInvenData(ServerSaveType.Update);
+        SaveUserAchievementData(ServerSaveType.Update);
+        SaveDailyData(ServerSaveType.Insert);
+
+        BackendManager.Instance.SendTransaction(TransactionType.Update, this);
+    }
+
+    // public float WinRateCal(int battleCount, int winCount)
+    // {
+    //     return 
     // }
 }

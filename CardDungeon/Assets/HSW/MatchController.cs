@@ -7,6 +7,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Video;
 using Random = UnityEngine.Random;
 
 public class MatchController : MonoBehaviour
@@ -46,8 +47,10 @@ public class MatchController : MonoBehaviour
     public Button btn_Invite;
 
     public Button btn_MatchStart;
-    
+
     [Header("매칭 대기")]
+    public VideoPlayer matchingVideo;
+    
     public TextMeshProUGUI TipText;
 
     public List<String> TipStrings;
@@ -128,16 +131,6 @@ public class MatchController : MonoBehaviour
             
             _backendManager.JoinMatchMakingServer();
             
-            Backend.Match.OnMatchMakingRoomSomeoneInvited = (args) => {
-                Debug.Log("초대받음");
-
-                //string inviter = args.InviteUserInfo.m_nickName + "님이 초대하셨습니다.\n초대를 수락하시면 매칭룸으로 이동합니다.";
-
-                //Debug.Log(inviter+"가 초대" + args.RoomId + args.RoomToken);
-                BackendManager.Instance.inviterName = args.InviteUserInfo.m_nickName;
-                UIManager.Instance.OpenInvitePopup(args.InviteUserInfo.m_nickName, args.RoomId, args.RoomToken); 
-            };
-            
             if(PlayerPrefs.GetInt("isFirstPlay") != 1)
             {
                 UIManager.Instance.OpenPopup(tutorialPanelObj);
@@ -214,6 +207,9 @@ public class MatchController : MonoBehaviour
                 StopCoroutine(matchTextCoroutine);
             
             matchTextCoroutine = StartCoroutine(RandomTipTextCor());
+            
+            if(!matchingVideo.isPlaying)
+                matchingVideo.Play();
         }
     }
 
@@ -325,11 +321,22 @@ public class MatchController : MonoBehaviour
         }
     }
 
-    public void MatchCancel()
+    public void UserMatchCancel()
     {
         Backend.Match.CancelMatchMaking();
 
         _backendManager.LeaveMatchMaking();
+
+        _backendManager.isMatching = false;
+        
+        ChangeUI(1);
+    }
+    
+    public void TimeOverMatchCancel()
+    {
+        _backendManager.LeaveMatchMaking();
+
+        _backendManager.isMatching = false;
         
         ChangeUI(1);
     }

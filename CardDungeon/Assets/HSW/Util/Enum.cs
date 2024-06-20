@@ -18,7 +18,15 @@ public enum TransactionType
 
 public enum UserDataType
 {
-    UserBattleInfo
+    UserBattleData,
+    UserInvenData,
+    UserAchievementData,
+    UserDailyData
+}
+
+public enum TableDataType
+{
+    
 }
 
 public enum ServerState
