@@ -24,6 +24,7 @@ public class BackendManager : Singleton<BackendManager>
     private Thread serverCheckThread;
 
     public ServerType serverType;
+    public LoginType loginType;
 
     public int successLoadDataCount = 0;
     
@@ -359,15 +360,20 @@ public class BackendManager : Singleton<BackendManager>
         switch (checkLoginWayData)
         {
             case 0 :
-                Debug.Log("0으로 로그인");
+                Debug.Log("커스텀 계정으로 자동 로그인");
                 Backend.BMember.LoginWithTheBackendToken((callback) =>
                 {
-                    StartCoroutine(LoginProcess(callback, LoginType.Auto));
+                    if(PlayerPrefs.GetInt("LoginWay") == 0)
+                        StartCoroutine(LoginProcess(callback, LoginType.Custom));
                 });
                 break;
             case 1 :
-                Debug.Log("1으로 로그인");
-                Example.instance.SignIn();
+                Debug.Log("구글 계정으로 자동 로그인");
+                Backend.BMember.LoginWithTheBackendToken((callback) =>
+                {
+                    if(PlayerPrefs.GetInt("LoginWay") == 1)
+                        StartCoroutine(LoginProcess(callback, LoginType.Google));
+                });
                 break;
         }
         
@@ -429,8 +435,10 @@ public class BackendManager : Singleton<BackendManager>
         {
             case LoginType.Custom:
                 Debug.LogError("커스텀 로그인, 데이터 입력");
+                loginType = LoginType.Custom;
                 break;
             case LoginType.Google:
+                loginType = LoginType.Google;
                 Debug.LogError("구글 로그인, 데이터 입력");
                 break;
         }
@@ -1547,6 +1555,11 @@ public class BackendManager : Singleton<BackendManager>
                 matchIndex = i;
             }
         }
+    }
+
+    public void GoogleSignOut()
+    {
+        //GoogleSignIn.DefaultInstance.SignOut();
     }
 }
 

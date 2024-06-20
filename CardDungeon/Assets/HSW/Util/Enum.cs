@@ -5,8 +5,7 @@ using UnityEngine;
 public enum LoginType
 {
     Custom,
-    Google,
-    Auto
+    Google
 }
 
 public enum TransactionType

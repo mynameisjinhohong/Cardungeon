@@ -17,6 +17,7 @@ public class UI_Setting_PCI : MonoBehaviour
 
     public GameObject screenModeObj;
     public GameObject resolutionObj;
+    public GameObject googleLogoutObj;
     
     private FullScreenMode screenMode;
     private List<Resolution> resolutions;
@@ -94,6 +95,8 @@ public class UI_Setting_PCI : MonoBehaviour
         screenModeObj.SetActive(false);
         resolutionObj.SetActive(false);
         #endif
+
+        //googleLogoutObj.SetActive(BackendManager.Instance.loginType == LoginType.Google);
     }
 
     private void OnEnable()
@@ -160,6 +163,11 @@ public class UI_Setting_PCI : MonoBehaviour
     {
         AudioPlayer.Instance.sfxPlayer.volume = value;
         AudioPlayer.Instance.PlayClip(1);
+    }
+    
+    private void GoogleSignOut()
+    {
+        //GoogleSignIn.DefaultInstance.SignOut();
     }
 
     // private void CopyEmail()

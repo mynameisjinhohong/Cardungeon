@@ -126,6 +126,8 @@ public class DataManager : Singleton<DataManager>
 
                 //if (json["BattleData"].Count <= 1) return;
                 
+                userBattleData.battleDataList.Clear();
+                
                 for (int j = 0; j < json["BattleData"].Count; j++)
                 {
                     BattleData getBattleData = new();
@@ -144,17 +146,16 @@ public class DataManager : Singleton<DataManager>
                 
                 userInvenData.isADRemoved               = bool.Parse(json["isADRemoved"].ToString());
 
-                //if (json["ItemData"].Count <= 1) return;
-
-                for (int i = 0; i < userInvenData.itemDataList.Count; i++)
+                userInvenData.itemDataList.Clear();
+                
+                for (int j = 0; j < json["ItemData"].Count; j++)
                 {
-                    for (int j = 0; j < json["ItemData"].Count; j++)
-                    {
-                        if (userInvenData.itemDataList[i].itemIndex == int.Parse(json["ItemData"][j]["itemIndex"].ToString()))
-                        {
-                            userInvenData.itemDataList[i].itemAmount = int.Parse(json["ItemData"][j]["itemAmount"].ToString());
-                        }
-                    }
+                    ItemData getItemData   = new();
+                    
+                    getItemData.itemIndex  = int.Parse(json["ItemData"][j]["itemIndex"].ToString());
+                    getItemData.itemAmount = int.Parse(json["ItemData"][j]["itemAmount"].ToString());
+                    
+                    userInvenData.itemDataList.Add(getItemData);
                 }
                 
                 SaveUserInvenData(ServerSaveType.Update);
@@ -162,25 +163,25 @@ public class DataManager : Singleton<DataManager>
             case UserDataType.UserAchievementData:
                 userAchievementData.RowIndate = json["inDate"].ToString();
 
-                //if (json["AchievementData"].Count <= 1) return;
+                userAchievementData.achievementDataList.Clear();
                 
-                for (int i = 0; i < userAchievementData.achievementDataList.Count; i++)
+                for (int j = 0; j < json["AchievementData"].Count; j++)
                 {
-                    for (int j = 0; j < json["AchievementData"].Count; j++)
-                    {
-                        if (userAchievementData.achievementDataList[i].achievementID == int.Parse(json["AchievementData"][j]["achievementID"].ToString()))
-                        {
-                            userAchievementData.achievementDataList[i].currentPoint = int.Parse(json["AchievementData"][j]["currentPoint"].ToString());
-                            userAchievementData.achievementDataList[i].maxPoint = int.Parse(json["AchievementData"][j]["maxPoint"].ToString());
-                        }
-                    }
+                    AchievementData getAchievementData = new();
+
+                    getAchievementData.achievementID   = int.Parse(json["AchievementData"][j]["achievementID"].ToString());
+                    getAchievementData.currentPoint    = int.Parse(json["AchievementData"][j]["currentPoint"].ToString());
+                    getAchievementData.maxPoint        = int.Parse(json["AchievementData"][j]["maxPoint"].ToString());
+                    
+                    userAchievementData.achievementDataList.Add(getAchievementData);
                 }
+
                 SaveUserAchievementData(ServerSaveType.Update);
                 break;
             case UserDataType.UserDailyData:
                 userDailyData.RowIndate = json["inDate"].ToString();
 
-                userDailyData.freeADTicket = bool.Parse(json["freeADTicket"].ToString());
+                userDailyData.freeADTicket     = bool.Parse(json["freeADTicket"].ToString());
                 userDailyData.freeRerollTicket = bool.Parse(json["freeRerollTicket"].ToString());
                     
                 SaveDailyData(ServerSaveType.Update);

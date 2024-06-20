@@ -404,4 +404,30 @@ public class MatchController : MonoBehaviour
         }
     }
 
+    public void OpenCSWeb()
+    {
+        BackEnd.Support.Android.Question.OpenQuestionView(Backend.Question.GetQuestionAuthorize().ToString(), BackendManager.Instance.userInfo.UserIndate, 0, 0,0, 0);
+        //BackEnd.Support.iOS.Question.OpenQuestionView(string questionAuthorize, string myIndate, int left, int top, int right, int bottom) -> bool
+        
+        BackendReturnObject bro = Backend.Question.GetQuestionAuthorize();
+        string questionAuthorize = bro.GetReturnValuetoJSON()["authorize"].ToString();
+
+
+        BackendReturnObject bro2 = Backend.BMember.GetUserInfo();
+        string myIndate = bro2.GetReturnValuetoJSON()["row"]["inDate"].ToString();
+
+        bool isQuestionViewOpen = false;
+
+// margin(빈 여백)이 10인 1대1 문의 창을 생성합니다.
+#if UNITY_ANDROID
+        isQuestionViewOpen =  BackEnd.Support.Android.Question.OpenQuestionView(questionAuthorize, myIndate, 10, 10, 10, 10);
+#elif UNITY_IOS
+  isQuestionViewOpen = BackEnd.Support.iOS.Question.OpenQuestionView(questionAuthorize, myIndate, 10, 10, 10, 10);
+#endif
+        if(isQuestionViewOpen)
+        {
+            Debug.Log("1대1 문의 창이 생성되었습니다");
+        }
+    }
+    
 }
