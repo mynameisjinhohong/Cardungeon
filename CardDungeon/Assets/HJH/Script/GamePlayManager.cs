@@ -391,7 +391,8 @@ public class GamePlayManager : Singleton<GamePlayManager>
                     }
                 }
                 
-                SendToSuperGamerEndGame();
+                BackendManager.Instance.SendResultToServer();
+                //SendToSuperGamerEndGame();
             }
         };
         
@@ -493,26 +494,27 @@ public class GamePlayManager : Singleton<GamePlayManager>
     
     public void SendToSuperGamerEndGame()
     {
-        if (BackendManager.Instance.isMeSuperGamer)
-        {
-            if (BackendManager.Instance.winUser == "")
-            {
-                Debug.Log("승리유저 정보 비어있어서 리턴 처리");
-                return;
-            }
-                            
-            Debug.Log($"{BackendManager.Instance.winUser}승리 처리 메세지 수신");
-            
-            BackendManager.Instance.SendResultToServer();
-        }
-        else
-        {
-            Debug.Log("승리처리 메세지 송신");
-            Message m = new Message();
-            m.playerIdx = -99;
-            m.cardIdx = -99;
-            SendData(m);
-        }
+        // if (BackendManager.Instance.isMeSuperGamer)
+        // {
+        //     if (BackendManager.Instance.winUser == "")
+        //     {
+        //         Debug.Log("승리유저 정보 비어있어서 리턴 처리");
+        //         return;
+        //     }
+        //                     
+        //     Debug.Log($"{BackendManager.Instance.winUser}승리 처리 메세지 수신");
+        //     
+        //     BackendManager.Instance.SendResultToServer();
+        // }
+        // else
+        // {
+        //
+        // }
+        Debug.Log("승리처리 메세지 슈퍼 게이머에게 송신");
+        Message m = new Message();
+        m.playerIdx = -99;
+        m.cardIdx = -99;
+        SendData(m);
     }
 
     public void newSuperGamerMessageQueueInit()
@@ -615,7 +617,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
         }
         else
         {
-            if (players.Count <= 1 && !isSoloTest) return;
+            if (players.Count <= 1 || !isSoloTest) return;
             
             CardManager.Instance.OnCardStart(players[playerIdx].transform, cardIdx);
         }
@@ -666,8 +668,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
             }
             else
             {
-
-            Camera.main.transform.SetParent(null);
+                Camera.main.transform.SetParent(null);
             }
             players[myIdx].gameObject.SetActive(false);
             mainUi.gameOver.SetActive(true);
