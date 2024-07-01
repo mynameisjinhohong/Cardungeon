@@ -6048,7 +6048,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1841941305}
         m_TargetAssemblyTypeName: MatchController, Assembly-CSharp
-        m_MethodName: UserMatchCancel
+        m_MethodName: MatchingCancel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6133,6 +6133,7 @@ MonoBehaviour:
   readyToPlay: {fileID: 1696366202}
   loginCheckButton: {fileID: 1579323644}
   LoginButtonListObj: {fileID: 1405447783}
+  googleLoginBtn: {fileID: 653894386}
   userNickNameText: {fileID: 129180674}
   Rabbit1: {fileID: 2070873575}
   Rabbit2: {fileID: 1505109940}

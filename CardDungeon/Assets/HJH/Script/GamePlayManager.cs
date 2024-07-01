@@ -343,6 +343,10 @@ public class GamePlayManager : Singleton<GamePlayManager>
                             CardRealGo(msg.playerIdx, msg.cardIdx); //특정 카드를 사용한 플레이어를 받아서 실제 실행
                         }
                     }
+                    else
+                    {
+                        Debug.Log("슈퍼게이머가 아닌 유저에게 수신함");
+                    }
                 }
                 //Debug.Log($"서버에서 받은 데이터 : {args.From.NickName} : {msg.ToString()}");
             };

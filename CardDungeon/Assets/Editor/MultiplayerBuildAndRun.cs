@@ -27,6 +27,24 @@ public class MultiplayerBuildAndRun
     {
         PerformWin64Build(4);
     }
+    
+    [MenuItem("Tools/Run Multiplayer/Win64/5 Players")]
+    static void PerformWin64Build5()
+    {
+        PerformWin64Build(5);
+    }
+    
+    [MenuItem("Tools/Run Multiplayer/Win64/6 Players")]
+    static void PerformWin64Build6()
+    {
+        PerformWin64Build(6);
+    }
+    
+    [MenuItem("Tools/Run Multiplayer/Win64/7 Players")]
+    static void PerformWin64Build7()
+    {
+        PerformWin64Build(7);
+    }
 
     static void PerformWin64Build(int playerCount)
     {
@@ -40,6 +58,7 @@ public class MultiplayerBuildAndRun
                 BuildTarget.StandaloneWindows64, BuildOptions.AutoRunPlayer);
         }
     }
+
     #endregion
 
     // #region Mac
@@ -89,6 +108,12 @@ public class MultiplayerBuildAndRun
     // }
     // #endregion
 
+    static void RunAndroidBuild(string apkPath)
+    {
+        System.Diagnostics.Process.Start("adb", "install -r " + apkPath);
+        System.Diagnostics.Process.Start("adb", "shell am start -n com.yourcompany.yourgame/com.unity3d.player.UnityPlayerActivity");
+    }
+    
     static string GetProjectName()
     {
         string[] s = Application.dataPath.Split('/');

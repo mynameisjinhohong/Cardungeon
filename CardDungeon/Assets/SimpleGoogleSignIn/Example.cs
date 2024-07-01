@@ -34,8 +34,8 @@ namespace Assets.SimpleGoogleSignIn
         public void SignIn()
         {
             #if PLATFORM_STANDALONE_WIN
-                        GoogleAuth.SignIn(OnSignIn, caching: true);
-                        Debug.Log("로그인 시도 버튼 눌림");
+                        // GoogleAuth.SignIn(OnSignIn, caching: true);
+                        // Debug.Log("로그인 시도 버튼 눌림");
             #elif PLATFORM_ANDROID
                         BackendManager.Instance.GoogleLoginSetting();
             #endif

@@ -184,6 +184,8 @@ public class BackendManager : Singleton<BackendManager>
         else
         {
             Debug.Log("Initialize Failed : " + bro);
+
+            UIManager.Instance.OpenRecyclePopup("네트워크 에러", $"에러코드{bro.GetErrorCode()}\n고객센터로 문의해주세요", Application.Quit);
         }
         
     }
@@ -205,7 +207,6 @@ public class BackendManager : Singleton<BackendManager>
         inGameUserList.Clear();
         userDataList.Clear();
         userGradeList.Clear();
-        allMatchCardList.Clear();
     }
 
     public void CheckLoginWayData()
@@ -234,7 +235,8 @@ public class BackendManager : Singleton<BackendManager>
     
     public void GoogleLoginSetting()
     {
-        // GPGS 플러그인 설정
+#if PLATFORM_ANDROID
+                // GPGS 플러그인 설정
         PlayGamesClientConfiguration config = new PlayGamesClientConfiguration
                 .Builder()
             .RequestServerAuthCode(false)
@@ -248,6 +250,7 @@ public class BackendManager : Singleton<BackendManager>
         PlayGamesPlatform.Activate();
         
         GoogleLoginSequense();
+#endif
     }
     
     public void GoogleLoginSequense()
@@ -283,7 +286,8 @@ public class BackendManager : Singleton<BackendManager>
     
     public string GetTokens()
     {
-        if (PlayGamesPlatform.Instance.localUser.authenticated)
+#if PLATFORM_ANDROID
+                if (PlayGamesPlatform.Instance.localUser.authenticated)
         {
             string _IDtoken = ((PlayGamesLocalUser)Social.localUser).GetIdToken();
             return _IDtoken;
@@ -293,6 +297,8 @@ public class BackendManager : Singleton<BackendManager>
             Debug.Log("Token get Failed. PlayGamesPlatform.Instance.localUser.authenticated :  fail");
             return null;
         }
+#endif
+        return null;
     }
     private IEnumerator Polling()
     {
@@ -524,35 +530,200 @@ public class BackendManager : Singleton<BackendManager>
             }
             else
             { 
-                Debug.LogError("2-2. OnMatchMakingRoomCreate 실패");
+                Debug.LogError($"$2-2.{args.Reason}로 인해 OnMatchMakingRoomCreate 실패\n에러코드 : {args.ErrInfo}");
+                LeaveMatchMaking();
             }
         };
         
-        // 에러 메세지 확인
-        // Backend.Match.OnException = (Exception e) =>
-        // {
-        //     if (isPlayedUser) return;
-        //     
-        //     if(e.)
-        //     MatchController.instance.ChangeUI(3);
-        //     //userDataList.Clear();
-        // };
+        // 커스텀 매치에서 추가 인원 접속체크
+        Backend.Match.OnMatchMakingRoomJoin = (MatchMakingGamerInfoInRoomEventArgs args) => {
+            // 본인 제외
+            if (args.UserInfo.m_nickName == userInfo.Nickname) return;
+                
+            Debug.Log(args.UserInfo.m_nickName + "님이 매칭방 접속");
+            Debug.Log(args.ErrInfo + args.Reason);
+                
+            UserData getdata = new UserData();
+
+            getdata.playerName = args.UserInfo.m_nickName;
+            getdata.playerToken = args.UserInfo.m_sessionId.ToString();
+            getdata.isSuperGamer = false;
+                
+            userDataList.Add(getdata);
+
+            MatchController.instance.DataInit();
+        };
         
-        // 초대 오면 팝업 생성
-        Backend.Match.OnMatchMakingRoomSomeoneInvited = (args) =>
-        {
+        // 커스텀 매치에서 나가는 인원 이벤트
+        Backend.Match.OnMatchMakingRoomLeave = (MatchMakingGamerInfoInRoomEventArgs args) => {
+            Debug.Log(args.UserInfo.m_nickName + "님이 나감");
+
+            int leaveUserIndex = 0;
+                
+            for (int i = 0; i < BackendManager.Instance.userDataList.Count; i++)
+            {
+                if (BackendManager.Instance.userDataList[i].playerName == args.UserInfo.m_nickName)
+                {
+                    leaveUserIndex = i;
+                        
+                    BackendManager.Instance.userDataList.RemoveAt(leaveUserIndex);
+                }
+            }
+                
+            MatchController.instance.DataInit();
+        };
+
+        // 커스텀 매치 입장시 방에 있는 유저 정보 로드 이벤트
+        Backend.Match.OnMatchMakingRoomUserList = (MatchMakingGamerInfoListInRoomEventArgs args) => {
+
+            foreach (var userInfo in args.UserInfos)
+            {
+                UserData getdata = new UserData();
+
+                getdata.playerName = userInfo.m_nickName;
+                getdata.playerToken = userInfo.m_sessionId.ToString();
+                getdata.isSuperGamer = false;
+                    
+                BackendManager.Instance.userDataList.Add(getdata);
+            }
+
+            MatchController.instance.DataInit();
+        };
+        
+        // 매칭 종료 이벤트
+        Backend.Match.OnLeaveMatchMakingServer = (LeaveChannelEventArgs args) => {
+            Debug.Log("OnLeaveMatchMakingServer - 매칭 서버 접속 종료 : " + args.ToString());
+            
+            Debug.Log($"5-a. LeaveMatchMakingServer 매치메이킹 서버 접속 종료 요청");
+
+            isFastMatch = false;
+
+            isMatching = false;
+            
+            if(!isPlayedUser)
+                MatchController.instance.ChangeUI(1);
+        };
+        
+        // 매칭 결과 이벤트
+        Backend.Match.OnMatchMakingResponse = (MatchMakingResponseEventArgs args) => {
+            if (args.ErrInfo == ErrorCode.Match_InProgress) {
+
+                MatchController.instance.ChangeUI(3);
+                
+                Debug.Log("3-2. OnMatchMakingResponse 매칭 신청");
+
+                // 샌드박스는 커스텀 매칭만 사용
+                MatchController.instance.timerText.gameObject.SetActive(isFastMatch);
+                
+                if (!isFastMatch)
+                {
+                    int second = allMatchCardList[matchIndex].transit_to_sandbox_timeout_ms / 1000;
+                    
+                    if (second > 0) {
+                        Debug.Log($"{second}초 뒤에 샌드박스 활성화가 됩니다.");
+
+                        if (sandBoxMatchWaitCor != null)
+                        {
+                            StopCoroutine(sandBoxMatchWaitCor);
+                        }
+
+                        sandBoxMatchWaitCor = StartCoroutine(WaitFor10Seconds(second));
+                    }
+                    
+                    userDataList.Clear();
+                    
+                    JoinGameServer(args.RoomInfo);
+                }
+                else
+                {
+                    int minute = allMatchCardList[matchIndex].match_timeout_m;
+
+                    if (matchLimitTimeCor != null)
+                    {
+                        StopCoroutine(matchLimitTimeCor);
+                    }
+                    
+                    matchLimitTimeCor = StartCoroutine(WaitForMatchLimitTime(minute));
+                }
+            } else if (args.ErrInfo == ErrorCode.Success) {
+                Debug.Log("3-3. OnMatchMakingResponse 매칭 성사 완료");
+                JoinGameServer(args.RoomInfo);
+
+            }
+            else {
+
+                Debug.LogError("3-2. OnMatchMakingResponse 매칭 신청 진행중 에러 발생 : " + args.ErrInfo + args.Reason + args.ToString());
+                UIManager.Instance.OpenRecyclePopup("시스템 메세지", "매칭 신청 진행중 에러 발생" + args.ErrInfo, null);
+            }
+        };
+        
+        // 초대 오면 팝업 생성 이벤트
+        Backend.Match.OnMatchMakingRoomSomeoneInvited = (args) => {
             UIManager.Instance.OpenInvitePopup(args.InviteUserInfo.m_nickName, args.RoomId, args.RoomToken);
         };
         
-
-        // 매치 서버 접속 완료되면 발생
+        // 매치 서버 접속 완료되면 발생 이벤트
         Backend.Match.OnJoinMatchMakingServer = (JoinChannelEventArgs args) => {
             Debug.Log(args.ErrInfo);
             
             if (args.ErrInfo == ErrorInfo.Success) {
                 Debug.Log("1-2. OnJoinMatchMakingServer 성공");
             } else {
-                Debug.LogError("1-2. OnJoinMatchMakingServer 실패");
+                if (args.ErrInfo.Category == ErrorCode.AuthenticationFailed)
+                {
+                    UIManager.Instance.OpenRecyclePopup("네트워크 에러", "다른 기기로 로그인이 확인되어 종료 합니다.", Application.Quit);
+                }
+                else
+                {
+                    Debug.LogError($"1-2. 이유 : {args.ErrInfo.Reason} 카테고리 : {args.ErrInfo.Category} OnJoinMatchMakingServer 실패");
+                }
+            }
+        };
+        
+        // 인게임 서버 접속 이벤트
+        Backend.Match.OnSessionJoinInServer = (args) => {
+            
+            Debug.Log(args.ErrInfo.Category);
+            Debug.Log(args.Session.NickName + "님이 인게임 서버 접속 요청");
+            Debug.Log("4-1. JoinGameServer 인게임 서버 접속 요청");
+            isPlayedUser = true;
+            
+            LeaveMatchMaking();
+            JoinGameRoom();
+        };
+        
+        // 인게임에 접속자 발생시 이벤트
+        Backend.Match.OnMatchInGameAccess = (MatchInGameSessionEventArgs args) => {
+            if (args.ErrInfo == ErrorCode.Success) {
+                Debug.Log($"5-3. OnMatchInGameAccess - 했습니다 : {args.GameRecord.m_nickname}({args.GameRecord.m_sessionId})");
+                
+                //추가로 접속된 유저가 이미 리스트에 있는지 확인 후 리스트에 정보 추가
+                if (!inGameUserList.ContainsKey(args.GameRecord.m_nickname))
+                {
+                    inGameUserList.Add(args.GameRecord.m_nickname, args.GameRecord);
+                    
+                    UserData userData = new UserData();
+                    
+                    userData.playerName = args.GameRecord.m_nickname;
+                    userData.playerToken = args.GameRecord.m_sessionId.ToString();
+                    userData.isSuperGamer = args.GameRecord.m_isSuperGamer;
+
+                    userDataList.Add(userData);
+
+                    // 전체 유저의 수
+                    int CheckHeadCount = allMatchCardList[matchIndex].matchModeType != MatchModeType.TeamOnTeam
+                        ? allMatchCardList[matchIndex].matchHeadCount
+                        : (allMatchCardList[matchIndex].matchHeadCount / 2);
+                    
+                    if (CheckHeadCount <= userDataList.Count)
+                    {
+                        isPlayedUser = true;
+                
+                        SceneManager.LoadScene(1);
+                    }
+                }
+            } else {
+                Debug.LogError("5-3. OnMatchInGameAccess : " + args.ErrInfo.ToString());
             }
         };
     }
@@ -691,8 +862,6 @@ public class BackendManager : Singleton<BackendManager>
         });
     }
     
-
-    
     [Header("전체 매치카드 리스트")]
     public List<MatchCard> allMatchCardList = new List<MatchCard>();
 
@@ -722,7 +891,7 @@ public class BackendManager : Singleton<BackendManager>
             Debug.LogError("1-1. JoinMatchMakingServer 에러 : " + errorInfo.ToString());
         }
     }
-
+    
     public void CreateMatchRoom() {
         
         Debug.Log("2-1. CreateMatchRoom 요청");
@@ -733,9 +902,16 @@ public class BackendManager : Singleton<BackendManager>
     // 초대해서 시작하는 경우 매칭 요청
     public void RequestMatchMaking()
     {
-        isMatching = true;
+        if (userDataList.Count <= 1)
+        {
+            UIManager.Instance.OpenRecyclePopup("시스템 메세지", "커스텀 매치는 2인 이상 부터\n플레이 가능합니다.", null);
+            return;
+        }
         
-        FindTeamMatchCard(userDataList.Count);
+        if (allMatchCardList[matchIndex].matchHeadCount / 2 == userDataList.Count)
+        {
+            TryMatch();
+        }
     }
 
     // 빠른 매칭 요청 ( 인원별 2, 4, 8 )
@@ -743,7 +919,6 @@ public class BackendManager : Singleton<BackendManager>
     {
         FindFastMatchCard(headCount);
         
-        isMatching = true;
         isFastMatch = true;
         
         CreateMatchRoom();
@@ -752,58 +927,10 @@ public class BackendManager : Singleton<BackendManager>
     public void TryMatch()
     {
         Debug.Log("3-1. RequestMatchMaking 매칭 신청 시작");
-            
-        Debug.Log("매칭 신청정보 : " + allMatchCardList[matchIndex].matchType + "/" + allMatchCardList[matchIndex].matchModeType + "/" + allMatchCardList[matchIndex].inDate);
-        Backend.Match.RequestMatchMaking(allMatchCardList[matchIndex].matchType, allMatchCardList[matchIndex].matchModeType, allMatchCardList[matchIndex].inDate);
         
-        Backend.Match.OnMatchMakingResponse = (MatchMakingResponseEventArgs args) => {
-            if (args.ErrInfo == ErrorCode.Match_InProgress) {
+        isMatching = true;
 
-                MatchController.instance.ChangeUI(3);
-                
-                Debug.Log("3-2. OnMatchMakingResponse 매칭 신청");
-
-                // 샌드박스는 커스텀 매칭만 사용
-                MatchController.instance.timerText.gameObject.SetActive(isFastMatch);
-                
-                if (!isFastMatch)
-                {
-                    int second = allMatchCardList[matchIndex].transit_to_sandbox_timeout_ms / 1000;
-                    
-                    if (second > 0) {
-                        Debug.Log($"{second}초 뒤에 샌드박스 활성화가 됩니다.");
-
-                        if (sandBoxMatchWaitCor != null)
-                        {
-                            StopCoroutine(sandBoxMatchWaitCor);
-                        }
-
-                        sandBoxMatchWaitCor = StartCoroutine(WaitFor10Seconds(second));
-                    }
-                    
-                    userDataList.Clear();
-                }
-                else
-                {
-                    int minute = allMatchCardList[matchIndex].match_timeout_m;
-
-                    if (matchLimitTimeCor != null)
-                    {
-                        StopCoroutine(matchLimitTimeCor);
-                    }
-                    
-                    matchLimitTimeCor = StartCoroutine(WaitForMatchLimitTime(minute));
-                }
-            } else if (args.ErrInfo == ErrorCode.Success) {
-                Debug.Log("3-3. OnMatchMakingResponse 매칭 성사 완료");
-                JoinGameServer(args.RoomInfo);
-                isMatching = false;
-            } else {
-                Debug.LogError("3-2. OnMatchMakingResponse 매칭 신청 진행중 에러 발생 : " + args.ErrInfo + args.Reason + args.ToString());
-                UIManager.Instance.OpenRecyclePopup("시스템 메세지", "매칭 신청 진행중 에러 발생" + args.ErrInfo, null);
-                isMatching = false;
-            }
-        };
+        Backend.Match.RequestMatchMaking(allMatchCardList[matchIndex].matchType, allMatchCardList[matchIndex].matchModeType, allMatchCardList[matchIndex].inDate);
     }
 
     IEnumerator WaitFor10Seconds(int second) {
@@ -831,7 +958,7 @@ public class BackendManager : Singleton<BackendManager>
             
             if (i >= (second - 1))
             {
-                UIManager.Instance.OpenRecyclePopup("시스템 메세지", "매칭 실패 다시 시도 해주세요.", MatchController.instance.TimeOverMatchCancel);
+                UIManager.Instance.OpenRecyclePopup("시스템 메세지", "매칭 실패 다시 시도 해주세요.", MatchController.instance.MatchingCancel);
                 break;
             }
             yield return delay;
@@ -840,14 +967,12 @@ public class BackendManager : Singleton<BackendManager>
 
     public void GetMatchList()
     {
-        allMatchCardList.Clear();
-
         Backend.Match.GetMatchList( callback => {
             if (!callback.IsSuccess()) {
                 Debug.LogError("Backend.Match.GetMatchList Error : " + callback);
                 return;
             }
-
+            
             JsonData matchCardListJson = callback.FlattenRows();
 
             Debug.Log("Backend.Match.GetMatchList : " + callback);
@@ -1017,16 +1142,6 @@ public class BackendManager : Singleton<BackendManager>
     public void LeaveMatchMaking() {
         
         Backend.Match.LeaveMatchMakingServer();
-        
-        Backend.Match.OnLeaveMatchMakingServer = (LeaveChannelEventArgs args) => {
-            Debug.Log("OnLeaveMatchMakingServer - 매칭 서버 접속 종료 : " + args.ToString());
-            
-            Debug.Log($"5-a. LeaveMatchMakingServer 매치메이킹 서버 접속 종료 요청");
-
-            isFastMatch = false;
-
-            isMatching = false;
-        };
     }
 
     public void JoinGameServer(MatchInGameRoomInfo gameRoomInfo) {
@@ -1041,14 +1156,7 @@ public class BackendManager : Singleton<BackendManager>
             return;
         }
         
-        Backend.Match.OnSessionJoinInServer = (args) => {
-            
-            Debug.Log(args.ErrInfo.Category);
-            Debug.Log(args.Session.NickName + "님이 인게임 서버 접속 요청");
-            Debug.Log("4-1. JoinGameServer 인게임 서버 접속 요청");
-            LeaveMatchMaking();
-            JoinGameRoom();
-        };
+
         //Debug.LogError("JoinGameServer 중 로컬 에러가 발생했습니다." + errorInfo);
     }
 
@@ -1056,6 +1164,7 @@ public class BackendManager : Singleton<BackendManager>
         
         Backend.Match.JoinGameRoom(currentGameRoomInfo.m_inGameRoomToken);
         
+        // 인게임 시작 대기 이벤트
         Backend.Match.OnMatchInGameStart = () => {
             Debug.Log($"5-1. JoinGameRoom 게임룸 접속 요청 : 토큰({currentGameRoomInfo.m_inGameRoomToken}");
         };
@@ -1093,51 +1202,12 @@ public class BackendManager : Singleton<BackendManager>
                     
                     userDataList.Add(userData);
                     
-                    if (serverType == ServerType.Dev)
-                    {
-                        isPlayedUser = true;
-                
-                        SceneManager.LoadScene(1);
-                    }
-                    
                     // 모든 플레이어 연결 성공시 인게임씬으로 이동
                     if (CheckHeadCount <= userDataList.Count)
                     {
-                        isPlayedUser = true;
-                
                         SceneManager.LoadScene(1);
                     }
                 }
-                
-                // 추가로 접속하는 유저의 정보
-                Backend.Match.OnMatchInGameAccess = (MatchInGameSessionEventArgs args) => {
-                    if (args.ErrInfo == ErrorCode.Success) {
-                        Debug.Log($"5-3. OnMatchInGameAccess - 했습니다 : {args.GameRecord.m_nickname}({args.GameRecord.m_sessionId})");
-                
-                        //추가로 접속된 유저가 이미 리스트에 있는지 확인 후 리스트에 정보 추가
-                        if (!inGameUserList.ContainsKey(args.GameRecord.m_nickname))
-                        {
-                            inGameUserList.Add(args.GameRecord.m_nickname, args.GameRecord);
-                    
-                            UserData userData = new UserData();
-                    
-                            userData.playerName = args.GameRecord.m_nickname;
-                            userData.playerToken = args.GameRecord.m_sessionId.ToString();
-                            userData.isSuperGamer = args.GameRecord.m_isSuperGamer;
-
-                            userDataList.Add(userData);
-
-                            if (CheckHeadCount <= userDataList.Count)
-                            {
-                                isPlayedUser = true;
-                
-                                SceneManager.LoadScene(1);
-                            }
-                        }
-                    } else {
-                        Debug.LogError("5-3. OnMatchInGameAccess : " + args.ErrInfo.ToString());
-                    }
-                };
             } else {
                 Debug.LogError("5-2. OnSessionListInServer : " + args.ToString());
             }
@@ -1522,12 +1592,6 @@ public class BackendManager : Singleton<BackendManager>
 
     public void FindTeamMatchCard(int headCount)
     {
-        if (headCount <= 1)
-        {
-            UIManager.Instance.OpenRecyclePopup("시스템 메세지", "커스텀 매치는 2인 이상 부터\n플레이 가능합니다.", null);
-            return;
-        }
-        
         int findValue = headCount * 2;
 
         //팀매치 카드와 인원 * 2로 조회
@@ -1539,8 +1603,6 @@ public class BackendManager : Singleton<BackendManager>
                 matchIndex = i;
             }
         }
-        
-        TryMatch();
     }
 
     private void FindFastMatchCard(int headCount)

@@ -24,6 +24,8 @@ public class MatchController : MonoBehaviour
     public Button loginCheckButton;
     
     public GameObject LoginButtonListObj;
+
+    public Button googleLoginBtn;
     
     [Header("메인 화면")]
     public TextMeshProUGUI userNickNameText;
@@ -70,6 +72,13 @@ public class MatchController : MonoBehaviour
 
     public void Start()
     {
+        // 일단 윈도우 버전은 구글 로그인 막아둡니다.
+        #if PLATFORM_ANDROID
+        googleLoginBtn.interactable = true;
+        #endif
+        googleLoginBtn.interactable = false;
+
+        
         StartCoroutine(WaitInitDataCor());
 
         TipStrings.Add("뒤끝 서버가\n토끼들의 성장을 돕고있어요");
@@ -123,84 +132,25 @@ public class MatchController : MonoBehaviour
         
         if (index == 1)
         {
-            _backendManager.GetMatchList();
+            BackendManager.Instance.userDataList.Clear();
             
             userNickNameText.text = BackendManager.Instance.userInfo.Nickname;
             
             blinkCoroutine = StartCoroutine(RabbitBlinkEye());
             
-            _backendManager.JoinMatchMakingServer();
-            
             if(PlayerPrefs.GetInt("isFirstPlay") != 1)
             {
                 UIManager.Instance.OpenPopup(tutorialPanelObj);
             }
-        }
-
-        if (index == 2)
-        {
-            // 추가 인원 접속체크
-            Backend.Match.OnMatchMakingRoomJoin = (MatchMakingGamerInfoInRoomEventArgs args) =>
+            
+            if (!_backendManager.isMatching)
             {
-                // 본인 제외
-                if (args.UserInfo.m_nickName == BackendManager.Instance.userInfo.Nickname) return;
+                _backendManager.GetMatchList();
                 
-                Debug.Log(args.UserInfo.m_nickName + "님이 매칭방 접속");
-                Debug.Log(args.ErrInfo + args.Reason);
-                
-                UserData getdata = new UserData();
-
-                getdata.playerName = args.UserInfo.m_nickName;
-                getdata.playerToken = args.UserInfo.m_sessionId.ToString();
-                getdata.isSuperGamer = false;
-                
-                BackendManager.Instance.userDataList.Add(getdata);
-
-                DataInit();
-            };
-            
-            // 방 입장시 방에 있는 유저 정보 로드
-            Backend.Match.OnMatchMakingRoomUserList = (MatchMakingGamerInfoListInRoomEventArgs args) => {
-
-                foreach (var userInfo in args.UserInfos)
-                {
-                    UserData getdata = new UserData();
-
-                    getdata.playerName = userInfo.m_nickName;
-                    getdata.playerToken = userInfo.m_sessionId.ToString();
-                    getdata.isSuperGamer = false;
-                    
-                    BackendManager.Instance.userDataList.Add(getdata);
-                }
-
-                DataInit();
-            };
-            
-            //매칭룸 접속 결과
-            Backend.Match.OnMatchMakingResponse = (MatchMakingResponseEventArgs args) => {
-                
-                BackendManager.Instance.JoinGameServer(args.RoomInfo);
-            };
-            
-            Backend.Match.OnMatchMakingRoomLeave = (MatchMakingGamerInfoInRoomEventArgs args) => {
-                Debug.Log(args.UserInfo.m_nickName + "님이 나감");
-
-                int leaveUserIndex = 0;
-                
-                for (int i = 0; i < BackendManager.Instance.userDataList.Count; i++)
-                {
-                    if (BackendManager.Instance.userDataList[i].playerName == args.UserInfo.m_nickName)
-                    {
-                        leaveUserIndex = i;
-                        
-                        BackendManager.Instance.userDataList.RemoveAt(leaveUserIndex);
-                    }
-                }
-                
-                DataInit();
-            };
+                _backendManager.JoinMatchMakingServer();
+            }
         }
-
+        
         if (index == 3)
         {
             if(matchTextCoroutine != null)
@@ -221,7 +171,7 @@ public class MatchController : MonoBehaviour
         timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
     
-    private void DataInit()
+    public void DataInit()
     {
         if (BackendManager.Instance.isPlayedUser) return;
         
@@ -293,9 +243,7 @@ public class MatchController : MonoBehaviour
 
     public void LeaveMatchingRoom()
     {
-        Backend.Match.LeaveMatchMakingServer();
-        BackendManager.Instance.userDataList.Clear();
-        ChangeUI(1);
+        _backendManager.LeaveMatchMaking();
     }
 
     IEnumerator WaitInitDataCor()
@@ -321,24 +269,11 @@ public class MatchController : MonoBehaviour
         }
     }
 
-    public void UserMatchCancel()
+    public void MatchingCancel()
     {
         Backend.Match.CancelMatchMaking();
-
-        _backendManager.LeaveMatchMaking();
-
-        _backendManager.isMatching = false;
         
-        ChangeUI(1);
-    }
-    
-    public void TimeOverMatchCancel()
-    {
-        _backendManager.LeaveMatchMaking();
-
-        _backendManager.isMatching = false;
-        
-        ChangeUI(1);
+        LeaveMatchingRoom();
     }
 
     IEnumerator RabbitBlinkEye()
@@ -406,7 +341,10 @@ public class MatchController : MonoBehaviour
 
     public void OpenCSWeb()
     {
-        BackEnd.Support.Android.Question.OpenQuestionView(Backend.Question.GetQuestionAuthorize().ToString(), BackendManager.Instance.userInfo.UserIndate, 0, 0,0, 0);
+// margin(빈 여백)이 10인 1대1 문의 창을 생성합니다.
+#if UNITY_ANDROID
+        isQuestionViewOpen =  BackEnd.Support.Android.Question.OpenQuestionView(questionAuthorize, myIndate, 10, 10, 10, 10);
+                BackEnd.Support.Android.Question.OpenQuestionView(Backend.Question.GetQuestionAuthorize().ToString(), BackendManager.Instance.userInfo.UserIndate, 0, 0,0, 0);
         //BackEnd.Support.iOS.Question.OpenQuestionView(string questionAuthorize, string myIndate, int left, int top, int right, int bottom) -> bool
         
         BackendReturnObject bro = Backend.Question.GetQuestionAuthorize();
@@ -417,17 +355,13 @@ public class MatchController : MonoBehaviour
         string myIndate = bro2.GetReturnValuetoJSON()["row"]["inDate"].ToString();
 
         bool isQuestionViewOpen = false;
-
-// margin(빈 여백)이 10인 1대1 문의 창을 생성합니다.
-#if UNITY_ANDROID
-        isQuestionViewOpen =  BackEnd.Support.Android.Question.OpenQuestionView(questionAuthorize, myIndate, 10, 10, 10, 10);
-#elif UNITY_IOS
-  isQuestionViewOpen = BackEnd.Support.iOS.Question.OpenQuestionView(questionAuthorize, myIndate, 10, 10, 10, 10);
-#endif
+        
         if(isQuestionViewOpen)
         {
             Debug.Log("1대1 문의 창이 생성되었습니다");
         }
+#endif
+        UIManager.Instance.OpenRecyclePopup("시스템 메세지", "현재 윈도우 버전은 지원하지 않습니다.", null);
     }
     
 }
