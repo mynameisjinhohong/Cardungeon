@@ -531,7 +531,7 @@ public class BackendManager : Singleton<BackendManager>
             else
             { 
                 Debug.LogError($"$2-2.{args.Reason}로 인해 OnMatchMakingRoomCreate 실패\n에러코드 : {args.ErrInfo}");
-                LeaveMatchMaking();
+                Backend.Match.LeaveMatchRoom();
             }
         };
         

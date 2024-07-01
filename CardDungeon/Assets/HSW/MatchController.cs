@@ -269,6 +269,11 @@ public class MatchController : MonoBehaviour
         }
     }
 
+    public void CustomMatchStart()
+    {
+        _backendManager.RequestMatchMaking();
+    }
+    
     public void MatchingCancel()
     {
         Backend.Match.CancelMatchMaking();
