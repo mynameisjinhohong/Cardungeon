@@ -722,6 +722,16 @@ public class BackendManager : Singleton<BackendManager>
                         SceneManager.LoadScene(1);
                     }
                 }
+                
+                // 1인 디버깅용
+                if (serverType == ServerType.Dev &&
+                    allMatchCardList[matchIndex].matchModeType == MatchModeType.OneOnOne)
+                {
+                    isPlayedUser = true;
+                
+                    SceneManager.LoadScene(1);
+                }
+                
             } else {
                 Debug.LogError("5-3. OnMatchInGameAccess : " + args.ErrInfo.ToString());
             }

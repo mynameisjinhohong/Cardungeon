@@ -59,7 +59,8 @@ public class GameBoard_PCI : MonoBehaviour
         this.width = width;
         this.height = height;
         generate= true;
-        offset = new (int, int)[] { (padding, padding), (padding, height / 2), (padding, height - padding), (width / 2, padding), (width / 2, height - padding), (width - padding, padding), (width - padding, height / 2), (width - padding, height - padding) };
+        // ¼ø¼­ : ¼­, µ¿, ºÏ, ³², ¼­ºÏ, µ¿ºÏ, ¼­³², µ¿³²
+        offset = new (int, int)[] { (padding, height / 2), (width - padding, height / 2), (width / 2, padding), (width / 2, height - padding), (padding, padding), (width - padding, padding),  (padding, height - padding), (width - padding, height - padding)};
         board = new Tile_PCI[width, height];
         int[,] tempBoard = new int[width, height];
 

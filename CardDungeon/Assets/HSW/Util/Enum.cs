@@ -66,3 +66,10 @@ public enum CurrentUIStatus
     ABBPopup,
     NoneABBPopup
 }
+
+public enum MapSize
+{
+    S,
+    M,
+    L
+}

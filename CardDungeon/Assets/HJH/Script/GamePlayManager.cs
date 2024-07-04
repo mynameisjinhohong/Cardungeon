@@ -319,16 +319,16 @@ public class GamePlayManager : Singleton<GamePlayManager>
                                     break;
                                 case 3:
                                 case 4:
-                                case 5:
-                                    gameBoard.Generate(msg.cardIdx, 14, 14);
+                                    gameBoard.Generate(msg.cardIdx, 16, 16);
                                     break;
+                                case 5:
                                 case 6:
                                 case 7:
                                 case 8:
                                     gameBoard.Generate(msg.cardIdx, 20, 20);
                                     break;
                                 default:
-                                    gameBoard.Generate(msg.cardIdx, 30, 30);
+                                    UIManager.Instance.OpenRecyclePopup("시스템 에러", "맵 생성 실패", Application.Quit);
                                     break;
                             }
                             CardManager.Instance.seed = msg.cardIdx;
@@ -477,16 +477,16 @@ public class GamePlayManager : Singleton<GamePlayManager>
                     break;
                 case 3:
                 case 4:
-                case 5:
-                    gameBoard.Generate(m.cardIdx, 14, 14);
+                    gameBoard.Generate(m.cardIdx, 16, 16);
                     break;
+                case 5:
                 case 6:
                 case 7:
                 case 8:
                     gameBoard.Generate(m.cardIdx, 20, 20);
                     break;
                 default:
-                    gameBoard.Generate(m.cardIdx, 30, 30);
+                    UIManager.Instance.OpenRecyclePopup("시스템 에러", "맵 생성 실패", Application.Quit);
                     break;
             }
         }

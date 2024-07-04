@@ -466,6 +466,7 @@ MonoBehaviour:
   myIdx: 0
   SuperGamerIdx: 0
   gameBoard: {fileID: 103219521}
+  mapSize: 0
   playerPool: {fileID: 531361958}
   PlayerSpawnPosition:
   - {fileID: 103219528}
@@ -895,6 +896,10 @@ PrefabInstance:
     - target: {fileID: 8787522441298779875, guid: e36e36b8cb80c004d8e7795049669df8, type: 3}
       propertyPath: height
       value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8787522441298779875, guid: e36e36b8cb80c004d8e7795049669df8, type: 3}
+      propertyPath: padding
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8787522441298779875, guid: e36e36b8cb80c004d8e7795049669df8, type: 3}
       propertyPath: itemList.Array.size
