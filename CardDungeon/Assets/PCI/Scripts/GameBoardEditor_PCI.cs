@@ -11,11 +11,16 @@ public class GameBoardEditor_PCI : Editor
     {
         base.OnInspectorGUI();
 
+        int headCount = 0;
+
         GameBoard_PCI gameBoard = (GameBoard_PCI)target;
         if (GUILayout.Button("Generate"))
         {
+            headCount = GamePlayManager.Instance.testValue;
+            
             int rand = Random.Range(0, 100);
-            gameBoard.Generate(rand);
+            // 일단 생성기는 비활성화
+            gameBoard.Generate(rand, headCount);
         }
     }
 }

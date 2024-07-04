@@ -31,10 +31,10 @@ public class GameBoard_PCI : MonoBehaviour
 
     [Header("Generate Settings")]
     [SerializeField]
-    [Range(20, 40)]
+    [Range(12, 16)]
     public int width, height;
     [SerializeField]
-    [Range(2, 5)]
+    [Range(1, 4)]
     private int padding;
     (int, int)[] offset;
 
@@ -49,22 +49,57 @@ public class GameBoard_PCI : MonoBehaviour
         offset = new (int, int)[] { (padding, padding), (padding, height / 2), (padding, height - padding), (width / 2, padding), (width / 2, height - padding), (width - padding, padding), (width - padding, height / 2), (width - padding, height - padding) };
     }
 
-    public void Generate(int seed)
+    public void Generate(int seed, int headCount)
     {
-        Generate(seed, width, height);
+        Generate(seed, width, height, headCount);
     }
 
-    public void Generate(int seed, int width, int height)
+    public void Generate(int seed, int width, int height, int headCount)
     {
+        switch (headCount)
+        {
+            case 1:
+                padding = 1; 
+                break;
+            case 2:
+                padding = 1;
+                break;
+            case 4:
+                padding = 2; 
+                break;
+            case 8:
+                padding = 3; 
+                break;
+        }
+        
         this.width = width;
         this.height = height;
         generate= true;
-        // 순서 : 서, 동, 북, 남, 서북, 동북, 서남, 동남
-        offset = new (int, int)[] { (padding, height / 2), (width - padding, height / 2), (width / 2, padding), (width / 2, height - padding), (padding, padding), (width - padding, padding),  (padding, height - padding), (width - padding, height - padding)};
+        
+        offset = new (int, int)[]
+        {
+            // 서 북
+            (padding, height - padding),
+            // 동 남
+            (width - padding, padding),
+            // 서 남
+            (padding, padding),
+            // 동 북
+            (width - padding, height - padding),
+            // 서
+            (padding, height / 2),
+            // 동
+            (width - padding, height / 2),
+            // 남
+            (width / 2, padding),
+            // 북
+            (width / 2, height - padding)
+        };
         board = new Tile_PCI[width, height];
+        
         int[,] tempBoard = new int[width, height];
 
-        UnityEngine.Random.InitState(seed);
+        Random.InitState(seed);
         // Logic
         for(int i = 1; i < 9; i++)
         {
@@ -75,7 +110,7 @@ public class GameBoard_PCI : MonoBehaviour
                 tempBoard[curPos.Item1, curPos.Item2] = i;
                 if (curPos == (width / 2, height / 2)) break;
 
-                float rand = UnityEngine.Random.Range(0f, 1f);
+                float rand = Random.Range(0f, 1f);
                 (int, int) nextPos;
                 if (rand < 0.25f)
                 {
@@ -99,17 +134,23 @@ public class GameBoard_PCI : MonoBehaviour
                 curPos = nextPos;
             }
         }
+        
+        // 맵의 안쪽으로 더 많이 타일을 채우도록 수정한 부분
         for (int i = 0; i < 8; i++)
         {
             (int, int) curPos = offset[i];
-            for (int x = -2; x <= 2; x++)
-            {
-                for (int y = -2; y <= 2; y++)
-                {
-                    if (Mathf.Abs(x + y) == 4) continue;
-                    tempBoard[curPos.Item1 + x, curPos.Item2 + y] = 1;
-                }
-            }
+            
+            tempBoard[curPos.Item1, curPos.Item2] = 1;
+            // for (int x = -2; x <= 2; x++) // 채우는 범위를 확장
+            // {
+            //     for (int y = -2; y <= 2; y++) // 채우는 범위를 확장
+            //     {
+            //         if (Mathf.Abs(x + y) == 2) continue; // 기존 조건 유지
+            //         tempBoard[curPos.Item1 + x, curPos.Item2 + y] = 1;
+            //         
+            //         Debug.Log($"{curPos.Item1 + x},{curPos.Item2 + y}");
+            //     }
+            // }
         }
 
         // Render
@@ -134,13 +175,13 @@ public class GameBoard_PCI : MonoBehaviour
                 int y = Mathf.Abs(j - height/2);
                 int r = x*x + y*y;
                 r = (128 * r) / ((width+height)*(width+height));
-                int randi = UnityEngine.Random.Range(0, 4);
+                int randi = Random.Range(0, 4);
                 newTile.spriteRenderer.sprite = tileSprites[Mathf.Clamp(8-r + randi, 0, tileSprites.Count)];
                 board[i, j] = newTile;
                 if(tempBoard[i, j] == 0)
                 {
                     // 10% 확률로 파괴 불가능한 오브젝트 생성
-                    float randf = UnityEngine.Random.value;
+                    float randf = Random.value;
                     if(randf < 0.1f)
                     {
                         var newTileObject = Instantiate(undestructablePrefab, new Vector3(i, j, 0), Quaternion.identity, newTile.transform);
@@ -160,23 +201,26 @@ public class GameBoard_PCI : MonoBehaviour
         {
             int k = 0;
 
-            if (BackendManager.Instance.userDataList.Count <= 2)
+            switch (headCount)
             {
-                k = item.amount;
+                case 1:
+                    k = item.amount;
+                    break;
+                case 2:
+                    k = item.amount;
+                    break;
+                case 4:
+                    k = (int)(item.amount * 2f);
+                    break;
+                case 8:
+                    k = (int)(item.amount * 3f);
+                    break;
             }
-            else if (BackendManager.Instance.userDataList.Count <= 5)
-            {
-                k = (int)(item.amount * 2f);
-            }
-            else if (BackendManager.Instance.userDataList.Count <= 8)
-            {
-                k = (int)(item.amount * 3f);
-            }
-
+            
             while (k != 0)
             {
-                int x = UnityEngine.Random.Range(0, width);
-                int y = UnityEngine.Random.Range(0, height);
+                int x = Random.Range(0, width);
+                int y = Random.Range(0, height);
 
                 bool flag = true;
                 for(int i = 0; i < 8; i++)
@@ -187,7 +231,7 @@ public class GameBoard_PCI : MonoBehaviour
                 {
                     if (!IsInteractable(new Vector2Int(x, y)))
                     {
-                        if (UnityEngine.Random.value < 0.5f)
+                        if (Random.value < 0.5f)
                         {
                             // 아이템 박스 생성
                             var targetTile = board[x, y];
@@ -226,8 +270,8 @@ public class GameBoard_PCI : MonoBehaviour
         int chaserY = 0;
         while (!isPositionFound)
         {
-            int ranPosX = UnityEngine.Random.Range(1, 4);
-            int ranPosY = UnityEngine.Random.Range(1, 4);
+            int ranPosX = Random.Range(1, 4);
+            int ranPosY = Random.Range(1, 4);
 
             chaserX = (width / 2) + ranPosX;
             chaserY = (height / 2) + ranPosY;

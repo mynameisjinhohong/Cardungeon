@@ -75,10 +75,10 @@ public class MatchController : MonoBehaviour
         // 일단 윈도우 버전은 구글 로그인 막아둡니다.
         #if PLATFORM_ANDROID
         googleLoginBtn.interactable = true;
-        #endif
+        #elif PLATFORM_STANDALONE
         googleLoginBtn.interactable = false;
+        #endif
 
-        
         StartCoroutine(WaitInitDataCor());
 
         TipStrings.Add("뒤끝 서버가\n토끼들의 성장을 돕고있어요");
@@ -348,9 +348,7 @@ public class MatchController : MonoBehaviour
     {
 // margin(빈 여백)이 10인 1대1 문의 창을 생성합니다.
 #if UNITY_ANDROID
-        isQuestionViewOpen =  BackEnd.Support.Android.Question.OpenQuestionView(questionAuthorize, myIndate, 10, 10, 10, 10);
-                BackEnd.Support.Android.Question.OpenQuestionView(Backend.Question.GetQuestionAuthorize().ToString(), BackendManager.Instance.userInfo.UserIndate, 0, 0,0, 0);
-        //BackEnd.Support.iOS.Question.OpenQuestionView(string questionAuthorize, string myIndate, int left, int top, int right, int bottom) -> bool
+        bool isQuestionViewOpen = false;
         
         BackendReturnObject bro = Backend.Question.GetQuestionAuthorize();
         string questionAuthorize = bro.GetReturnValuetoJSON()["authorize"].ToString();
@@ -358,8 +356,10 @@ public class MatchController : MonoBehaviour
 
         BackendReturnObject bro2 = Backend.BMember.GetUserInfo();
         string myIndate = bro2.GetReturnValuetoJSON()["row"]["inDate"].ToString();
-
-        bool isQuestionViewOpen = false;
+        
+        isQuestionViewOpen =  BackEnd.Support.Android.Question.OpenQuestionView(questionAuthorize, myIndate, 10, 10, 10, 10);
+                BackEnd.Support.Android.Question.OpenQuestionView(Backend.Question.GetQuestionAuthorize().ToString(), BackendManager.Instance.userInfo.UserIndate, 0, 0,0, 0);
+        //BackEnd.Support.iOS.Question.OpenQuestionView(string questionAuthorize, string myIndate, int left, int top, int right, int bottom) -> bool
         
         if(isQuestionViewOpen)
         {

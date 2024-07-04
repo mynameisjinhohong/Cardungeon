@@ -33,7 +33,10 @@ public class GamePlayManager : Singleton<GamePlayManager>
     public bool isWaiting;
 
     public int classSelectedUser;
-
+    
+    //맵 생성 디버깅용값
+    public int testValue;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -312,20 +315,20 @@ public class GamePlayManager : Singleton<GamePlayManager>
                             switch (head)
                             {
                                 case 1:
-                                    gameBoard.Generate(msg.cardIdx, 12, 12);
+                                    gameBoard.Generate(msg.cardIdx, 12, 12, 2);
                                     break;
                                 case 2:
-                                    gameBoard.Generate(msg.cardIdx, 12, 12);
+                                    gameBoard.Generate(msg.cardIdx, 12, 12, 2);
                                     break;
                                 case 3:
                                 case 4:
-                                    gameBoard.Generate(msg.cardIdx, 16, 16);
+                                    gameBoard.Generate(msg.cardIdx, 14, 14, 4);
                                     break;
                                 case 5:
                                 case 6:
                                 case 7:
                                 case 8:
-                                    gameBoard.Generate(msg.cardIdx, 20, 20);
+                                    gameBoard.Generate(msg.cardIdx, 16, 16, 8);
                                     break;
                                 default:
                                     UIManager.Instance.OpenRecyclePopup("시스템 에러", "맵 생성 실패", Application.Quit);
@@ -470,20 +473,20 @@ public class GamePlayManager : Singleton<GamePlayManager>
             switch (head)
             {
                 case 1:
-                    gameBoard.Generate(m.cardIdx, 12, 12);
+                    gameBoard.Generate(m.cardIdx, 12, 12, 2);
                     break;
                 case 2:
-                    gameBoard.Generate(m.cardIdx, 12, 12);
+                    gameBoard.Generate(m.cardIdx, 12, 12, 2);
                     break;
                 case 3:
                 case 4:
-                    gameBoard.Generate(m.cardIdx, 16, 16);
+                    gameBoard.Generate(m.cardIdx, 14, 14, 4);
                     break;
                 case 5:
                 case 6:
                 case 7:
                 case 8:
-                    gameBoard.Generate(m.cardIdx, 20, 20);
+                    gameBoard.Generate(m.cardIdx, 16, 16, 8);
                     break;
                 default:
                     UIManager.Instance.OpenRecyclePopup("시스템 에러", "맵 생성 실패", Application.Quit);
