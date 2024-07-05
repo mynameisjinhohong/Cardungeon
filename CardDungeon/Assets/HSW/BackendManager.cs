@@ -198,6 +198,7 @@ public class BackendManager : Singleton<BackendManager>
         isMeSuperGamer = false;
         isFastMatch    = false;
         isPlayedUser   = false;
+        isEscapeWin    = false;
         
         matchIndex = -1;
 
@@ -1300,12 +1301,12 @@ public class BackendManager : Singleton<BackendManager>
 
                 if (isEscapeWin)
                 {
-                    // 열쇠 탈출하게 되면 탈출한사람 제외 패배처리
+                    // 열쇠 탈출하게 되면 탈출한사람 1등 나머지는 순서대로
                     foreach (var session in inGameUserList) {
                         if(session.Value.m_nickname == winUser)
                             matchGameResult.m_winners.Add(session.Value.m_sessionId);
                         else
-                            matchGameResult.m_losers.Add(session.Value.m_sessionId);
+                            matchGameResult.m_winners.Add(session.Value.m_sessionId);
                     }
                 }
                 else
@@ -1314,6 +1315,7 @@ public class BackendManager : Singleton<BackendManager>
                     {
                         // 마지막 생존자를 1등으로 추가
                         userGradeList.Reverse();
+                        
                         matchGameResult.m_winners.Add(userGradeList[i].m_sessionId);
                     }
                 }
@@ -1322,6 +1324,16 @@ public class BackendManager : Singleton<BackendManager>
                 break;
         }
 
+        foreach (var session in matchGameResult.m_winners)
+        {
+            Debug.Log("승리유저 : " + session);
+        }
+        
+        foreach (var session in matchGameResult.m_losers)
+        {
+            Debug.Log("패배유저 : " + session);
+        }
+        
         if (userGradeList.Count == userDataList.Count)
         {
             Backend.Match.MatchEnd(matchGameResult);

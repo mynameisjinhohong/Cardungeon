@@ -33,6 +33,8 @@ public class GamePlayManager : Singleton<GamePlayManager>
     public bool isWaiting;
 
     public int classSelectedUser;
+
+    public int errorCount;
     
     //맵 생성 디버깅용값
     public int testValue;
@@ -89,6 +91,8 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
     public void DataInit()
     {
+        errorCount = 0;
+        
         players = new List<Player_HJH>();
         for (int i = 0; i < playerPrefabs.Count; i++)
         {
@@ -475,6 +479,16 @@ public class GamePlayManager : Singleton<GamePlayManager>
             else
             {
                 Debug.LogError($"8-2. OnMatchResult 실패, 코드 : {args.ErrInfo} 이유 : {args.Reason}");
+                
+                foreach (var userData in BackendManager.Instance.inGameUserList)
+                {
+                    Debug.Log("실제유저 데이터 : " + userData.Value.m_nickname);
+                }
+
+                foreach (var grade in BackendManager.Instance.userGradeList)
+                {
+                    Debug.Log("입력된 결과 데이터 : " + grade.m_nickname);   
+                }
             }
         };
     }
@@ -496,6 +510,8 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
         if (remainPlayerCount <= 1)
         {
+            Debug.Log("남은 유저가 한명이라 종료 처리");
+            
             BackendManager.Instance.winUser = remainPlayerNickname;
 
             // 다나가고 마지막 남은 유저가 슈퍼게이머라면 서버로 결과 바로 전송
@@ -564,19 +580,6 @@ public class GamePlayManager : Singleton<GamePlayManager>
     
     public void SendToSuperGamerEndGame()
     {
-        foreach (var userData in BackendManager.Instance.inGameUserList)
-        {
-            if (userData.Value.m_nickname == BackendManager.Instance.userInfo.Nickname)
-            {
-                BackendManager.Instance.userGradeList.Add(userData.Value);
-                
-                if(BackendManager.Instance.winUser == "")
-                    BackendManager.Instance.winUser = BackendManager.Instance.userInfo.Nickname;
-                
-                Debug.Log(BackendManager.Instance.userGradeList.Count + "마지막 남은유저가 보내는 패배처리 리스트크기");
-            }
-        }
-        
         Debug.Log("승리처리 메세지 슈퍼 게이머에게 송신");
         Message m = new Message();
         m.playerIdx = -99;
@@ -643,18 +646,8 @@ public class GamePlayManager : Singleton<GamePlayManager>
     {
         var jsonData = JsonUtility.ToJson(mes); // 클래스를 json으로 변환해주는 함수
         var dataByte = System.Text.Encoding.UTF8.GetBytes(jsonData); // json을 byte[]로 변환해주는 함수
-        try
-        {
-            Backend.Match.SendDataToInGameRoom(dataByte);
-        }
-        catch
-        {
-            if (BackendManager.Instance.winUser == "")
-            {
-                Debug.Log("연결 끊어짐");
-                UIManager.Instance.OpenRecyclePopup("네트워크 에러", "서버와 연결이 종료 되었습니다.\n타이틀 화면으로 이동 합니다.", mainUi.GotoLobby);
-            }
-        }
+
+        Backend.Match.SendDataToInGameRoom(dataByte);
     }
 
 
