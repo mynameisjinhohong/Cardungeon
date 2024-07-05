@@ -59,10 +59,10 @@ public class GameBoard_PCI : MonoBehaviour
         switch (headCount)
         {
             case 1:
-                padding = 1; 
+                padding = 2; 
                 break;
             case 2:
-                padding = 1;
+                padding = 2;
                 break;
             case 4:
                 padding = 2; 

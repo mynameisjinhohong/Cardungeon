@@ -4373,6 +4373,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: c527e03410ec85b47ab9cf1e54fa781a, type: 3}
   - {fileID: 21300000, guid: b388392f476b1924b948880dbea1f764, type: 3}
   gameOver: {fileID: 1245222690}
+  lookAroundBtn: {fileID: 1128330879}
   ToonList:
   - {fileID: 21300000, guid: e6b87396779ee314386db10024a9710e, type: 3}
   - {fileID: 21300000, guid: f24d40ac0e03b9b48b27891363a4ae98, type: 3}

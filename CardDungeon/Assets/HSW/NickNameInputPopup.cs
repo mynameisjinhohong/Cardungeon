@@ -31,6 +31,12 @@ public class NickNameInputPopup : MonoBehaviour
 
     bool checkNicknameUsable()
     {
+        if (nicknameInput.text.Length >= 8)
+        {
+            UIManager.Instance.OpenRecyclePopup("안내", "닉네임은 최대 7글자까지 가능합니다.", null);
+            return false;
+        }
+        
         return true;
     }
 }

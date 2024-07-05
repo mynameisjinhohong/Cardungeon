@@ -560,13 +560,13 @@ public class BackendManager : Singleton<BackendManager>
 
             int leaveUserIndex = 0;
                 
-            for (int i = 0; i < BackendManager.Instance.userDataList.Count; i++)
+            for (int i = 0; i < userDataList.Count; i++)
             {
-                if (BackendManager.Instance.userDataList[i].playerName == args.UserInfo.m_nickName)
+                if (userDataList[i].playerName == args.UserInfo.m_nickName)
                 {
                     leaveUserIndex = i;
                         
-                    BackendManager.Instance.userDataList.RemoveAt(leaveUserIndex);
+                    userDataList.RemoveAt(leaveUserIndex);
                 }
             }
                 
@@ -1321,9 +1321,16 @@ public class BackendManager : Singleton<BackendManager>
             default :
                 break;
         }
-        
-        Backend.Match.MatchEnd(matchGameResult);
-        Debug.Log("게임 종료 요청 완료");
+
+        if (userGradeList.Count == userDataList.Count)
+        {
+            Backend.Match.MatchEnd(matchGameResult);
+            Debug.Log("게임 종료 요청 완료");
+        }
+        else 
+        {
+            Debug.Log("인원수가 달라 게임 종료 요청 실패");
+        }
     }
     
     public void AddTransactionInsert(UserDataType table, Param param)

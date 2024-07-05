@@ -365,8 +365,9 @@ public class MatchController : MonoBehaviour
         {
             Debug.Log("1대1 문의 창이 생성되었습니다");
         }
+#elif UNITY_STANDALONE_WIN
+UIManager.Instance.OpenRecyclePopup("시스템 메세지", "현재 윈도우 버전은 지원하지 않습니다.", null);
 #endif
-        UIManager.Instance.OpenRecyclePopup("시스템 메세지", "현재 윈도우 버전은 지원하지 않습니다.", null);
     }
     
 }

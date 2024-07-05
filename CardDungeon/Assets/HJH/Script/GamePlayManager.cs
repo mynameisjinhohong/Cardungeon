@@ -273,17 +273,22 @@ public class GamePlayManager : Singleton<GamePlayManager>
         // 서버에서 오는 메세지 수신할 준비
         Backend.Match.OnMatchRelay = (MatchRelayEventArgs args) => //서버로 보낸 메세지를 클라이언트에 콜백했을 때 호출되는 이벤트
             {
-                if (args.From.NickName == BackendManager.Instance.userInfo.Nickname) return;
+                // 내가 보낸 메세지는 무시 처리
+                if (args.From.NickName == BackendManager.Instance.userInfo.Nickname)
+                {
+                    Debug.Log("내가 보낸 메세지 무시");
+                    return;
+                }
 
                 var strByte = System.Text.Encoding.Default.GetString(args.BinaryUserData);
                 Message msg = JsonUtility.FromJson<Message>(strByte);
 
                 if (BackendManager.Instance.isMeSuperGamer)
                 {
-                    Debug.Log("슈퍼게이머인 나는 메세지를 수신합니다");
+                    Debug.Log("슈퍼게이머인 나는 메세지를 송신 합니다");
                     messageQueue.Enqueue(msg);
 
-                    // 패배 처리 요청 받으면 모든 유저에게 정보 전송
+                    // 슈퍼게이머가 패배 처리 요청 받으면 모든 유저에게 정보 전송
                     if (msg.playerIdx == -99)
                     {
                         if (BackendManager.Instance.winUser == "")
@@ -303,8 +308,9 @@ public class GamePlayManager : Singleton<GamePlayManager>
                 }
                 else
                 {
-                    Debug.Log("슈퍼게이머가 아닌나는 메세지를 수신합니다");
-                    if (args.From.NickName == BackendManager.Instance.userDataList[SuperGamerIdx].playerName) //지금 받은게 만약에 슈퍼게이머가 보낸거면
+                    Debug.Log("슈퍼게이머가 아닌  나는 메세지를 수신합니다");
+                    //지금 받은게 만약에 슈퍼게이머가 보낸거면
+                    if (args.From.NickName == BackendManager.Instance.userDataList[SuperGamerIdx].playerName) 
                     {
                         if (msg.playerIdx == -10) //-10 플레이어 인덱스를 받으면 맵을 생성한다.
                         {
@@ -340,7 +346,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
                         {
                             Debug.Log($"{msg.playerIdx}님이 {msg.cardIdx} 클래스 선택");
                         }
-                        else
+                        else if (msg.playerIdx <= 9)
                         {
                             Debug.Log(msg.playerIdx + "  " + msg.cardIdx);
                             CardRealGo(msg.playerIdx, msg.cardIdx); //특정 카드를 사용한 플레이어를 받아서 실제 실행
@@ -366,8 +372,6 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
             int OutUserIndex = 0;
             
-            BackendManager.Instance.userGradeList.Add(args.GameRecord);
-
             for (int i = 0; i < BackendManager.Instance.userDataList.Count; i++)
             {
                 if (BackendManager.Instance.userDataList[i].playerName == args.GameRecord.m_nickname)
@@ -376,27 +380,47 @@ public class GamePlayManager : Singleton<GamePlayManager>
                 }
             }
 
-            BackendManager.Instance.userDataList.RemoveAt(OutUserIndex);
+            //BackendManager.Instance.userDataList.RemoveAt(OutUserIndex);
+            //Destroy(PlayerSpawnPosition[OutUserIndex].gameObject);
             
-            Destroy(PlayerSpawnPosition[OutUserIndex].gameObject);
-
-            // 살아남은 유저가 한명일 경우 살아있는 유저를 결과처리 리스트에 넣고 슈퍼게이머에게 게임 종료 요청
-            if (BackendManager.Instance.userDataList.Count <= 1)
+            // 나간유저 hp 0 처리, 비활성화
+            players[OutUserIndex].hp = 0;
+            PlayerSpawnPosition[OutUserIndex].gameObject.SetActive(false);
+            
+            foreach (var userData in BackendManager.Instance.inGameUserList)
             {
-                BackendManager.Instance.winUser = BackendManager.Instance.userDataList[0].playerName; 
-                Debug.Log("다른유저가 모두 나가서 승리처리");
-                foreach (var userData in BackendManager.Instance.inGameUserList)
+                if (userData.Value.m_nickname == players[OutUserIndex].PlayerName.text)
                 {
-                    if (userData.Value.m_nickname == BackendManager.Instance.userInfo.Nickname)
-                    {
+                    Debug.Log($"{userData.Value.m_nickname}님이 탈주하여 패배처리");
+                    
+                    // 이미 패배한 유저라면 리스트에 넣지 않음
+                    if(!BackendManager.Instance.userGradeList.Contains(userData.Value))
                         BackendManager.Instance.userGradeList.Add(userData.Value);
-                        BackendManager.Instance.winUser = BackendManager.Instance.userInfo.Nickname;
-                    }
+                    
+                    Debug.Log(BackendManager.Instance.userGradeList.Count + "리스트 크기확인");
                 }
-                
-                BackendManager.Instance.SendResultToServer();
-                //SendToSuperGamerEndGame();
             }
+            
+            // 승리 조건 체크
+            CheckAllUsersHP();
+            
+            // 살아남은 유저가 한명일 경우 살아있는 유저를 결과처리 리스트에 넣고 슈퍼게이머에게 게임 종료 요청
+            //if (BackendManager.Instance.userDataList.Count <= 1)
+            //{
+            //    BackendManager.Instance.winUser = BackendManager.Instance.userDataList[0].playerName; 
+            //    Debug.Log("다른유저가 모두 나가서 승리처리");
+            //    foreach (var userData in BackendManager.Instance.inGameUserList)
+            //    {
+            //        if (userData.Value.m_nickname == BackendManager.Instance.userInfo.Nickname)
+            //        {
+            //            BackendManager.Instance.userGradeList.Add(userData.Value);
+            //            BackendManager.Instance.winUser = BackendManager.Instance.userInfo.Nickname;
+            //        }
+            //    }
+            //    
+            //    BackendManager.Instance.SendResultToServer();
+            //    SendToSuperGamerEndGame();
+            //}
         };
         
         Backend.Match.OnChangeSuperGamer = (MatchInGameChangeSuperGamerEventArgs args) => {
@@ -410,31 +434,25 @@ public class GamePlayManager : Singleton<GamePlayManager>
                     Debug.Log("새로운 슈퍼게이머는" + BackendManager.Instance.userDataList[i].playerName + "님 입니다");
         
                     BackendManager.Instance.userDataList[i].isSuperGamer = true;
+
+                    SuperGamerIdx = i;
                     
-                    BackendManager.Instance.isMeSuperGamer =
-                        BackendManager.Instance.userDataList[i].playerName == BackendManager.Instance.userInfo.Nickname;
+                    if (BackendManager.Instance.userDataList[i].playerName == BackendManager.Instance.userInfo.Nickname)
+                    {
+                        BackendManager.Instance.isMeSuperGamer = true;
+                    }
+                    else
+                    {
+                        BackendManager.Instance.isMeSuperGamer = false;
+                    }
+                }
+                else
+                {
+                    BackendManager.Instance.userDataList[i].isSuperGamer = false;
                 }
             }
             
-            if (BackendManager.Instance.userDataList.Count <= 1)
-            {
-                BackendManager.Instance.winUser = BackendManager.Instance.userDataList[0].playerName; 
-                Debug.Log("다른유저가 모두 나가서 승리처리");
-                foreach (var userData in BackendManager.Instance.inGameUserList)
-                {
-                    if (userData.Value.m_nickname == BackendManager.Instance.userInfo.Nickname)
-                    {
-                        BackendManager.Instance.userGradeList.Add(userData.Value);
-                        BackendManager.Instance.winUser = BackendManager.Instance.userInfo.Nickname;
-                    }
-                }
-                
-                SendToSuperGamerEndGame();
-            }
-            else
-            {
-                UIManager.Instance.OpenIndicator();
-            }
+            UIManager.Instance.OpenIndicator();
         };
         
         // 게임 종료후 서버 연결 끝났을때 호출
@@ -447,16 +465,65 @@ public class GamePlayManager : Singleton<GamePlayManager>
         };
         
         // 서버로 결과를 전송 완료하여 게임을 종료처리
-        Backend.Match.OnMatchResult = (MatchResultEventArgs args) => {
-            if (args.ErrInfo == ErrorCode.Success) {
+        Backend.Match.OnMatchResult = (MatchResultEventArgs args) =>
+        {
+            if (args.ErrInfo == ErrorCode.Success)
+            {
                 Debug.Log("8-2. OnMatchResult 성공 : " + args.ErrInfo.ToString());
                 GameResult(BackendManager.Instance.winUser == BackendManager.Instance.userInfo.Nickname);
-            } else {
-                Debug.LogError("8-2. OnMatchResult 실패 : " + args.ErrInfo.ToString());
+            }
+            else
+            {
+                Debug.LogError($"8-2. OnMatchResult 실패, 코드 : {args.ErrInfo} 이유 : {args.Reason}");
             }
         };
     }
+    public void CheckAllUsersHP()
+    {
+        int remainPlayerCount = 0;
 
+        string remainPlayerNickname = "";
+        
+        for (int i = 0; i < players.Count; i++)
+        {
+            if (players[i].hp >= 1)
+            {
+                remainPlayerNickname = players[i].PlayerName.text;
+                
+                remainPlayerCount++;
+            }
+        }
+
+        if (remainPlayerCount <= 1)
+        {
+            BackendManager.Instance.winUser = remainPlayerNickname;
+
+            // 다나가고 마지막 남은 유저가 슈퍼게이머라면 서버로 결과 바로 전송
+            if (BackendManager.Instance.isMeSuperGamer)
+            {
+                foreach (var userData in BackendManager.Instance.inGameUserList)
+                {
+                    // 승리유저와 마지막 남은 유저의 닉네임이 같은지 체크
+                    if (userData.Value.m_nickname == BackendManager.Instance.winUser)
+                    {
+                        // 마지막에 패배리스트에 넣음
+                        if(!BackendManager.Instance.userGradeList.Contains(userData.Value))
+                            BackendManager.Instance.userGradeList.Add(userData.Value);
+                        
+                        Debug.Log(BackendManager.Instance.userGradeList.Count + "마지막 남은유저가 보내는 패배처리 리스트크기");
+                    }
+                }
+                
+                BackendManager.Instance.SendResultToServer();
+            }
+            else
+            {
+                // 슈퍼게이머가 관전중인 상태에 승리처리
+                SendToSuperGamerEndGame();
+            }
+        }
+    }
+    
     public void CreateMap()
     {
         // 게임 시작시 슈퍼게이머는 방을 생성하라는 메세지를 보냄
@@ -497,22 +564,19 @@ public class GamePlayManager : Singleton<GamePlayManager>
     
     public void SendToSuperGamerEndGame()
     {
-        // if (BackendManager.Instance.isMeSuperGamer)
-        // {
-        //     if (BackendManager.Instance.winUser == "")
-        //     {
-        //         Debug.Log("승리유저 정보 비어있어서 리턴 처리");
-        //         return;
-        //     }
-        //                     
-        //     Debug.Log($"{BackendManager.Instance.winUser}승리 처리 메세지 수신");
-        //     
-        //     BackendManager.Instance.SendResultToServer();
-        // }
-        // else
-        // {
-        //
-        // }
+        foreach (var userData in BackendManager.Instance.inGameUserList)
+        {
+            if (userData.Value.m_nickname == BackendManager.Instance.userInfo.Nickname)
+            {
+                BackendManager.Instance.userGradeList.Add(userData.Value);
+                
+                if(BackendManager.Instance.winUser == "")
+                    BackendManager.Instance.winUser = BackendManager.Instance.userInfo.Nickname;
+                
+                Debug.Log(BackendManager.Instance.userGradeList.Count + "마지막 남은유저가 보내는 패배처리 리스트크기");
+            }
+        }
+        
         Debug.Log("승리처리 메세지 슈퍼 게이머에게 송신");
         Message m = new Message();
         m.playerIdx = -99;
@@ -585,7 +649,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
         }
         catch
         {
-            if (BackendManager.Instance.isInitialize)
+            if (BackendManager.Instance.winUser == "")
             {
                 Debug.Log("연결 끊어짐");
                 UIManager.Instance.OpenRecyclePopup("네트워크 에러", "서버와 연결이 종료 되었습니다.\n타이틀 화면으로 이동 합니다.", mainUi.GotoLobby);
@@ -620,7 +684,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
         }
         else
         {
-            if (players.Count <= 1 || !isSoloTest) return;
+            //if (players.Count <= 1) return;
             
             CardManager.Instance.OnCardStart(players[playerIdx].transform, cardIdx);
         }
@@ -642,13 +706,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
             }
         }
 
-        if (players.Count <= 1)
-        {
-            BackendManager.Instance.isInitialize = false;
-            BackendManager.Instance.winUser = BackendManager.Instance.userDataList[0].playerName; 
-            Debug.Log(BackendManager.Instance.winUser + "승리처리");
-            SendToSuperGamerEndGame();
-        }
+        CheckAllUsersHP();
     }
 
     public void GameResult(bool isWin)
@@ -662,6 +720,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
             mainUi.winTypeText.text = BackendManager.Instance.isEscapeWin ? esacpeWin : allKillWin;
         
             mainUi.winImage.SetActive(true);
+            mainUi.gameOver.SetActive(false);
         }
         else
         {
@@ -674,7 +733,11 @@ public class GamePlayManager : Singleton<GamePlayManager>
                 Camera.main.transform.SetParent(null);
             }
             players[myIdx].gameObject.SetActive(false);
+            
             mainUi.gameOver.SetActive(true);
+            mainUi.winImage.SetActive(false);
+            
+            mainUi.lookAroundBtn.interactable = BackendManager.Instance.winUser == "";
         }
     }
 

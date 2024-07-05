@@ -103,6 +103,9 @@ public class Player_HJH : MonoBehaviour
             if (hp < 1)
             {
                 // 열쇠 흩뿌리기
+                
+                keys = 0;
+                
                 for(int i = 0; i < keys; i++)
                 {
                     int _x = UnityEngine.Random.Range(0, GamePlayManager.Instance.gameBoard.width);
@@ -121,7 +124,10 @@ public class Player_HJH : MonoBehaviour
                     if (userData.Value.m_nickname == PlayerName.text)
                     {
                         Debug.Log($"{userData.Value.m_nickname}님이 패배하였습니다!");
-                        BackendManager.Instance.userGradeList.Add(userData.Value);
+                        
+                        if(!BackendManager.Instance.userGradeList.Contains(userData.Value))
+                            BackendManager.Instance.userGradeList.Add(userData.Value);
+                        
                         Debug.Log(BackendManager.Instance.userGradeList.Count + "리스트 크기확인");
                     }
                 }
@@ -130,7 +136,7 @@ public class Player_HJH : MonoBehaviour
                 {
                     if (BackendManager.Instance.userDataList[i].playerName == PlayerName.text)
                     {
-                        BackendManager.Instance.userDataList.RemoveAt(i);
+                        //BackendManager.Instance.userDataList.RemoveAt(i);
                     }
                 }
                 
@@ -138,8 +144,8 @@ public class Player_HJH : MonoBehaviour
                 {
                     if (GamePlayManager.Instance.players[i].PlayerName.text == PlayerName.text)
                     {
-                        Destroy(GamePlayManager.Instance.players[i].gameObject);
-                        GamePlayManager.Instance.players.RemoveAt(i);
+                        GamePlayManager.Instance.players[i].gameObject.SetActive(false);
+                        //GamePlayManager.Instance.players.RemoveAt(i);
                     }
                 }
             }

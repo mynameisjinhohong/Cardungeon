@@ -236,6 +236,8 @@ public class UIManager : Singleton<UIManager>
             StopCoroutine(indicatorCoroutine);
             
             indicatorCoroutine = StartCoroutine(WaitSuperGamerSetCor());
+            
+            GamePlayManager.Instance.CheckAllUsersHP();
         }
     }
 

@@ -55,6 +55,8 @@ public class MainUI_HJH : MonoBehaviour
 
     public GameObject gameOver;
 
+    public Button lookAroundBtn;
+
     public List<Sprite> ToonList;
 
     public Image Toon;
